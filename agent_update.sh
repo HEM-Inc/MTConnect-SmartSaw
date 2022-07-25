@@ -1,15 +1,14 @@
 #!/bin/sh
 
-echo "Printing the Working Directory... /n"
+echo "Printing the Working Directory..."
 pwd
-echo "/n"
+echo ""
 
-echo "Updating MTConnect Adapter... /n"
+echo "Updating MTConnect Adapter..."
 
 sudo systemctl stop adapter
 sudo cp -r ./adapter/. /etc/adapter/
 sudo cp -r ./afg/SmartSaw_DC.afg /etc/adapter/
-sudo chown -R adapter:adapter /etc/adapter
 sudo chmod +x /etc/adapter/Adapter
 sudo cp /etc/adapter/adapter.service /etc/systemd/system/
 
@@ -17,10 +16,10 @@ sudo systemctl daemon-reload
 sudo systemctl start adapter
 sudo systemctl status adapter
 
-echo "MTConnect Adapter Up and Running /n"
+echo "MTConnect Adapter Up and Running"
 
 
-echo "Updating MTConnect Agent... /n"
+echo "Updating MTConnect Agent..."
 
 sudo systemctl stop agent
 sudo cp -r ./agent/. /etc/mtconnect/agent/
@@ -36,5 +35,5 @@ sudo systemctl daemon-reload
 sudo systemctl start agent
 sudo systemctl status agent
 
-echo "MTConnect Agent Up and Running /n"
+echo "MTConnect Agent Up and Running"
 pwd
