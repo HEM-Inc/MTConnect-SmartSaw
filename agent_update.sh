@@ -17,7 +17,7 @@ sudo systemctl start adapter
 sudo systemctl status adapter
 
 echo "MTConnect Adapter Up and Running"
-
+echo ""
 
 echo "Updating MTConnect Agent..."
 
@@ -36,4 +36,3 @@ sudo systemctl start agent
 sudo systemctl status agent
 
 echo "MTConnect Agent Up and Running"
-pwd
