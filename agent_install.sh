@@ -2,6 +2,7 @@
 
 echo "Printing the Working Directory... /n"
 pwd
+echo "/n"
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL... /n"
 
@@ -14,7 +15,7 @@ sudo cp -r ./afg/SmartSaw_DC.afg /etc/adapter/
 sudo chmod +x /etc/adapter/Adapter
 sudo chown -R adapter:adapter /etc/adapter
 
-sudo /etc/adapter/adapter.service /etc/systemd/system/
+sudo cp /etc/adapter/adapter.service /etc/systemd/system/
 sudo systemctl enable adapter
 sudo systemctl start adapter
 sudo systemctl status adapter

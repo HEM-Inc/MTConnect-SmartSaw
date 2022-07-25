@@ -2,6 +2,7 @@
 
 echo "Printing the Working Directory... /n"
 pwd
+echo "/n"
 
 echo "Updating MTConnect Adapter... /n"
 
@@ -10,7 +11,7 @@ sudo cp -r ./adapter/. /etc/adapter/
 sudo cp -r ./afg/SmartSaw_DC.afg /etc/adapter/
 sudo chown -R adapter:adapter /etc/adapter
 sudo chmod +x /etc/adapter/Adapter
-sudo /etc/adapter/adapter.service /etc/systemd/system/
+sudo cp /etc/adapter/adapter.service /etc/systemd/system/
 
 sudo systemctl daemon-reload
 sudo systemctl start adapter
