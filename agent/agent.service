@@ -1,6 +1,6 @@
 [Unit]
 Description=MTConnect Agent
-After=network.target
+After=network.target multi-user.target
 
 [Service]
 Type=simple
@@ -16,4 +16,4 @@ StandardOutput=journal
 LimitCORE=10
 
 [Install]
-WantedBy=default.target
+WantedBy=multi-user.target
