@@ -5,7 +5,8 @@
 ############################################################
 Help(){
     # Display Help
-    echo "Add description of the script functions here."
+    echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
+    echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
     echo "Syntax: agent_install [-h|-a File_Name|-d File_Name]"
     echo "options:"

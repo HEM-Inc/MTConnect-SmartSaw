@@ -5,7 +5,10 @@
 ############################################################
 Help(){
     # Display Help
-    echo "Add description of the script functions here."
+    echo "This function installs the systemd files for the HEMsaw Adapter and the Agent."
+    echo "To securly set up the agent an mtconnect user and group is created. The agent"
+    echo "is run using this mtconnect group so that it has lower permissions, while the"
+    echo "adapter is run using the default permissions."
     echo
     echo "Syntax: agent_install [-h|-a File_Name|-d File_Name]"
     echo "options:"
