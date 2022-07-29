@@ -19,3 +19,12 @@ IF the agent has already be loaded then use the update script to update the file
 ``` bash
 bash agent_update.sh
 ```
+
+Help syntax for both the 'agent_install.sh' and 'agent_update.sh'.
+``` bash
+Syntax: agent_install [-h|-a File_Name|-d File_Name]
+options:
+-h             Print this Help.
+-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC.afg
+-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC.xml
+```
