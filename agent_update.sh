@@ -31,8 +31,8 @@ Device_File="SmartSaw_DC.xml"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts "h:a:d:" option; do
-    case $option in
+while getopts ":h:a:d:" option; do
+    case ${option} in
         h) # display Help
             Help
             exit;;
