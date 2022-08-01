@@ -7,7 +7,7 @@ This is a Repo for the released MTConnect agent and device file for the SmartSaw
 
 To get the agent working on the IPC for the first time the github repoistory needs to be cloned. 
 ``` bash 
-git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/MTConnect_SmartSaw_DC.git mtconnect
+git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/MTConnect_SmartSaw.git mtconnect
 ```
 
 After cloning the repository for the first time run the install script. This will locate the files into the correct locations and enable the systemctl service. Note if the agent is already created abd is an existing service then running this script can cause a lock file issue. 
