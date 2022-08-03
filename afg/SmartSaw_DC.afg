@@ -51,25 +51,25 @@ x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=2
 // x0_enhancer_0_freq = gParameter.BladeEnhancerDriveSideFrequency // Hz
 // x0_enhancer_1_freq = gParameter.BladeEnhancerIdleSideFrequency // Hz
 x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved,, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
+x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
 
 
 // *** Linear: Y0 Vise
 // y0_abs = TODO
 // y0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-// y0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved,, velocity = TODO, home = false) // refrences interlocked status
+// y0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = TODO, home = false) // refrences interlocked status
 
 
 // *** Linear: Y1 Infeed Vise
 y1_abs = convert_units(input=gMTConnectData.OutOfStockLaserDistance, conversionRate=25.4) // inches to mm
 y1_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-// y1_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved,, velocity = TODO, home = false) // refrences interlocked status
+// y1_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = TODO, home = false) // refrences interlocked status
 
 
 // *** Linear: Y2 Outfeed Vise
 // y2_abs = TODO
 // y2_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-// y2_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved,, velocity = TODO, home = false) // refrences interlocked status
+// y2_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = TODO, home = false) // refrences interlocked status
 
 
 // *** Linear: Z0 inFeed
@@ -80,7 +80,7 @@ z0_torque = servo_torque_from_percent(percent = gInfeedServoAxisData.Torque, max
 // z0_force =
 // z0_amp =
 z0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved,, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
+z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
 
 
 // *** Rotary: C0 Band Motor
