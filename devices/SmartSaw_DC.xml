@@ -336,28 +336,31 @@
                                 </DataItem>
                                 
                                 
-                                <!-- Choose one method -->
-                                <DataItem id="c0_cutwatcher_volt" type="VOLTAGE_DC" subType="ACTUAL" units="VOLT" category="SAMPLE">
+                                <!-- Choose one method
+                                <DataItem id="c0_cutwatcher_volt" type="VOLTAGE_DC" subType="ACTUAL"
+                                    units="VOLT" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                 </DataItem>
-                                
+                                -->
+
                                 <!-- Choose one method
-                                <DataItem id="c0_cutwatcher_amp" type="AMPERAGE_DC" subType="ACTUAL" units="AMPERE" category="SAMPLE">
+                                <DataItem id="c0_cutwatcher_amp" type="AMPERAGE_DC" subType="ACTUAL"
+                                    units="AMPERE" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">0.01</Filter>
                                     </Filters>
                                 </DataItem>
                                 -->
                                 
-                                <!-- Choose one method
-                                <DataItem id="c0_cutwatcher_dif" type="DISPLACEMENT" subType="ACTUAL" units="MILLIMETER" category="SAMPLE">
+                                <!-- Choose one method -->
+                                <DataItem id="c0_cutwatcher_dif" type="DISPLACEMENT" subType="ACTUAL"
+                                    units="MILLIMETER" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">0.01</Filter>
                                     </Filters>
                                 </DataItem>
-                                -->
                                 
                                 <!-- N/A
                                 <DataItem id="c0_gearbox_freq" type="FREQUENCY" units="HERTZ" 
