@@ -87,8 +87,8 @@ c0_speed = convert_bandmotor_units(input=gMTConnectData.BMVFDOutputFrequency, co
 c0_amp = convert_units(input=gMTConnectData.BMVFDOutputCurrent, conversionRate=0.01) // cA to A
 c0_tension = convert_units(input=gMTConnectData.BladeTensionPressureSensor, conversionRate=6894.7572932) // psi to Pa 
 // c0_tension_acw = convert_units(input=gMTConnectData.ACWBladeTensionPressureSensor, conversionRate=6894.7572932) // psi to Pa g
-// c0_cutwatcher_volt = gCutwatcherSensor.Distance // V
-c0_cutwatcher_dif = convert_units(input=gCutwatcherSensor.Distance, conversionRate=0.001) // micro meter to mm
+c0_cutwatcher_volt = convert_units(input=gCutwatcherSensor.Distance, conversionRate=0.001) // mV to V
+///c0_cutwatcher_dif = convert_units(input=gCutwatcherSensor.Distance, conversionRate=0.001) // micro meter to mm
 c0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 c0_state = gMTConnectData.BMState
 
