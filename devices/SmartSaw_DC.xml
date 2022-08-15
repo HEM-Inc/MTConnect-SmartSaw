@@ -157,8 +157,8 @@
                                     </Filters>
                                 </DataItem>
 
-								<!-- Not installed                            
-								<DataItem id="x0_enhancer_0_freq" type="FREQUENCY" units="HERTZ" category="SAMPLE">
+                                <!-- Not installed                            
+                                <DataItem id="x0_enhancer_0_freq" type="FREQUENCY" units="HERTZ" category="SAMPLE">
                                     <Relationships>
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_0_freq_spec"/>
                                     </Relationships>
@@ -169,7 +169,7 @@
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_1_freq_spec"/>
                                     </Relationships>
                                 </DataItem>
-                            	-->
+                                -->
                       
                                 <DataItem id="x0_state" type="AXIS_STATE" category="EVENT"/>
                                 <DataItem id="x0_axis_interlock" type="AXIS_INTERLOCK" category="EVENT"/>
@@ -296,6 +296,67 @@
                                 <Composition id="z0_motor" type="MOTOR"/>
                             </Compositions>
                         </Linear>
+
+                        <!-- N/A
+                        <Linear id="z2_material_stop" name="Z2">
+                            <Configuration>
+                                <Specifications>
+                                    <Specification type="VELOCITY" units="MILLIMETER/SECOND" id="z2_velocity_spec">
+                                        <Maximum>254</Maximum>
+                                        <Minimum>0</Minimum>
+                                    </Specification>
+                                    <ProcessSpecification type="POSITION" id="z2_position_spec"
+                                        units="MILLIMETER">
+                                        <SpecificationLimits>
+                                            <UpperLimit>3054.350</UpperLimit>
+                                            <LowerLimit>-0.100</LowerLimit>
+                                        </SpecificationLimits>
+                                    </ProcessSpecification>
+                                </Specifications>
+                            </Configuration>
+
+                            <DataItems>
+                                <DataItem id="z2_target" type="POSITION" subType="TARGET" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
+                                    <Filters>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
+                                    </Filters>
+                                    <Relationships>
+                                        <SpecificationRelationship type="LIMIT" idRef="z2_position_spec" name="z2_target_position_spec"/>
+                                    </Relationships>
+                                </DataItem>
+                                <DataItem id="z2_abs" type="POSITION" subType="ACTUAL" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
+                                    <Filters>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
+                                    </Filters>
+                                    <Relationships>
+                                        <SpecificationRelationship type="LIMIT" idRef="z2_position_spec" name="z2_actual_position_spec" />
+                                    </Relationships>
+                                </DataItem>
+                                <DataItem id="z2_vel" type="VELOCITY" subType="ACTUAL" category="SAMPLE" units="MILLIMETER/SECOND" coordinateSystemIdRef="machine_coordinates">
+                                    <Filters>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
+                                    </Filters>
+                                    <Relationships>
+                                        <SpecificationRelationship type="LIMIT" idRef="z2_velocity_spec" name="z2_velocity_spec"/>
+                                    </Relationships>
+                                </DataItem>
+
+                                <DataItem id="z2_torque" compositionId="z2_motor" type="TORQUE" units="NEWTON_METER" category="SAMPLE">
+                                    <Filters>
+                                        <Filter type="MINIMUM_DELTA">0.010</Filter>
+                                    </Filters>
+                                </DataItem>
+
+                                <DataItem id="z2_state" compositionId="z2_motor" type="AXIS_STATE" category="EVENT"/>
+                                <DataItem id="z2_axis_interlock" compositionId="z2_motor" type="AXIS_INTERLOCK" category="EVENT"/>
+                            </DataItems>
+                            <Compositions>
+                                <Composition id="z2_actuator" type="ACTUATOR"/>
+                                <Composition id="z2_motor" type="MOTOR"/>
+                            </Compositions>
+                        </Linear>
+                        -->
+
                         <!-- N/A
                         <Rotary id="a0_machine_head" name="A0">
                             <DataItems>
@@ -311,6 +372,7 @@
                             </DataItems>
                         </Rotary>
                         -->
+
                         <Rotary id="c0_machine" name="C0">
                             <DataItems>
                                 <DataItem id="c0_speed" compositionId="c0_motor" type="CUTTING_SPEED" subType="ACTUAL" category="SAMPLE" units="MILLIMETER/SECOND" coordinateSystemIdRef="machine_coordinates"/>
@@ -362,7 +424,7 @@
                                     </Filters>
                                 </DataItem>
                                 -->
-                                                                
+
                                 <!-- N/A
                                 <DataItem id="c0_gearbox_freq" type="FREQUENCY" units="HERTZ" 
                                     category="SAMPLE"/>
@@ -478,19 +540,19 @@
                             <Configuration>
                                 <Specifications>
                                     <Specification id="saw_envelope_x_spec" type="X_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>609.6</Maximum>
+                                        <Maximum>610</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_y_spec" type="Y_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>3048</Maximum>
+                                        <Maximum>610</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>508</Maximum>
+                                        <Maximum>3048</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_load_spec" type="MASS" units="KILOGRAM" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>4535.924</Maximum>
+                                        <Maximum>4545.454</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                 </Specifications>
