@@ -447,10 +447,6 @@
                         <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
                         <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 
-                        <!-- Need to determine how to pull from the PLC (4/27/2022 - Max) 
-                        <DataItem id="saw_system_cond" type="SYSTEM" category="CONDITION" name="system_cond"/>
-                        -->
-
                         <DataItem id="saw_blade_life" type="EQUIPMENT_TIMER" subType="WORKING" units="SECOND" category="SAMPLE" name="blade_life">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
