@@ -444,7 +444,8 @@
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
                         <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
-                        <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_cond"/>
+                        <DataItem id="saw_condition" type="SYSTEM_CONDITION" category="CONDITION" name="system_condition"/>
+                        <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 
                         <!-- Need to determine how to pull from the PLC (4/27/2022 - Max) 
                         <DataItem id="saw_system_cond" type="SYSTEM" category="CONDITION" name="system_cond"/>

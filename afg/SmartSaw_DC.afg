@@ -102,6 +102,7 @@ c0_state = gMTConnectData.BMState
 
 // ** Controller
 saw_estop = gMTConnectData.EStop
+saw_condition = cond system_condition(generalFault = gMachineErrorLevels.Fatal, generalWarning = gMachineErrorLevels.NonCritical)
 saw_comms_cond = cond communication_condition(ipcCommsError = gMTConnectData.IPCError)
 // saw_system_cond = cond
 saw_blade_life = gMachineTime.TotalBladeLifeSeconds
