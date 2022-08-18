@@ -303,13 +303,13 @@
                             <Configuration>
                                 <Specifications>
                                     <Specification type="VELOCITY" units="MILLIMETER/SECOND" id="z2_velocity_spec">
-                                        <Maximum>254</Maximum>
+                                        <Maximum>635</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <ProcessSpecification type="POSITION" id="z2_position_spec"
                                         units="MILLIMETER">
                                         <SpecificationLimits>
-                                            <UpperLimit>3054.350</UpperLimit>
+                                            <UpperLimit>15494.000</UpperLimit>
                                             <LowerLimit>-0.100</LowerLimit>
                                         </SpecificationLimits>
                                     </ProcessSpecification>
@@ -386,7 +386,7 @@
                                         <Filter type="MINIMUM_DELTA">0.010</Filter>
                                     </Filters>
                                 </DataItem>
-                                    -->
+
                                 <DataItem id="c0_tension" compositionId="c0_tensioner" type="PRESSURE" units="PASCAL" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
@@ -397,6 +397,7 @@
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
                                 </DataItem>
+                                -->
                                 
                                 
                                 <!-- Choose one method -->
@@ -538,11 +539,11 @@
                             <Configuration>
                                 <Specifications>
                                     <Specification id="saw_envelope_x_spec" type="X_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>610</Maximum>
+                                        <Maximum>635</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_y_spec" type="Y_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>610</Maximum>
+                                        <Maximum>762</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
