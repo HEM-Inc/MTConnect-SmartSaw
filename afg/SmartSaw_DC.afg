@@ -127,7 +127,7 @@ part_active_id = gActivePartBuffer.PartData.UUID
 part_active_remaining = gActivePartBuffer.RemainingQuantity
 part_active_target = gActivePartBuffer.PartData.Quantity
 
-cut_count_completed = gMTConnectData.CutCounter
+cut_count_complete = gMTConnectData.CutCounter
 
 
 // ** Systems

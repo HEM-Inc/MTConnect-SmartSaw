@@ -497,7 +497,7 @@
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/> 
 
-                                <DataItem id="cut_count_completed" type="PART_COUNT" subType="COMPLETED" category="EVENT"/>
+                                <DataItem id="cut_count_complete" type="PART_COUNT" subType="COMPLETE" category="EVENT"/>
                             </DataItems>
                         </Path>
                     </Components>
