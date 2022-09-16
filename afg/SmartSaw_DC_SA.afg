@@ -33,26 +33,25 @@ c0_cond = cond c0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
 
 
 // *** Linear: X0 Servo Head
-// x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
-// x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
-// x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches/s to mm/s
-// x0_force = convert_units(input=gArmAxisData.ForceOnBlade_LBF, conversionRate=4.4482216153) // lbs to N
-// x0_torque = servo_torque_from_percent(percent = gArmServoAxisData.AverageTorque, maxTorque = 1.2) // max torque in NM
-// x0_balance_pressure = convert_units(input=gMTConnectData.SCTPressureSensor, conversionRate=6894.7572932) // psi to Pa
-// x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
-// x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
-// x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-// x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
-
-
-// *** Linear: X0 Hydraulic Head
 x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
 x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
-x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches to mm
+x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches/s to mm/s
+x0_force = convert_units(input=gArmAxisData.ForceOnBlade_LBF, conversionRate=4.4482216153) // lbs to N
+x0_torque = servo_torque_from_percent(percent = gArmServoAxisData.AverageTorque, maxTorque = 1.2) // max torque in NM
 // x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
 // x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
 x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
+
+
+// *** Linear: X0 Hydraulic Head
+// x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
+// x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
+// x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches to mm
+// x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
+// x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
+// x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
+// x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
 
 
 // *** Linear: Y0 Vise

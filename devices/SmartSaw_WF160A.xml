@@ -8,7 +8,7 @@
     <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.0.0.0" 
         instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
-        <Device id="saw" uuid="HEMSaw_WF1827_SmartSaw" name="Saw">
+        <Device id="saw" uuid="HEMSaw_WF160A_SmartSaw" name="Saw">
         <Description manufacturer="HEMSaw">SmartSaw</Description>
             <DataItems>
                 <DataItem id="saw_avail" name="avail" type="AVAILABILITY" category="EVENT"/>
@@ -495,7 +495,7 @@
 
                                 <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
-                                <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
+                                <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/> 
 
                                 <DataItem id="cut_count_complete" type="PART_COUNT" subType="COMPLETE" category="EVENT"/>
                             </DataItems>
@@ -542,11 +542,11 @@
                             <Configuration>
                                 <Specifications>
                                     <Specification id="saw_envelope_x_spec" type="X_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>457</Maximum>
+                                        <Maximum>635</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_y_spec" type="Y_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
-                                        <Maximum>686</Maximum>
+                                        <Maximum>762</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                     <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">

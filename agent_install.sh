@@ -13,8 +13,8 @@ Help(){
     echo "Syntax: agent_install [-h|-a File_Name|-d File_Name]"
     echo "options:"
     echo "-h             Print this Help."
-    echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC.afg"
-    echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC.xml"
+    echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
+    echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
 }
 
 ############################################################
@@ -25,9 +25,9 @@ Help(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run agent_install.sh as sudo" ; exit 1 ; fi
 
-# Set variables
-Afg_File="SmartSaw_DC.afg"
-Device_File="SmartSaw_DC.xml"
+# Set default variables
+Afg_File="SmartSaw_DC_HA.afg"
+Device_File="SmartSaw_DC_HA.xml"
 
 ############################################################
 # Process the input options. Add options as needed.        #

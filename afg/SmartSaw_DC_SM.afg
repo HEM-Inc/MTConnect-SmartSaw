@@ -26,33 +26,32 @@ saw_plc_manufacturer = "OMRON"
 
 // ** Axes
 // x0_cond = cond x0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
-z0_cond = cond z0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
+// z0_cond = cond z0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
 // z2_cond = cond z2_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
 c0_cond = cond c0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
 
 
 
 // *** Linear: X0 Servo Head
-// x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
-// x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
-// x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches/s to mm/s
-// x0_force = convert_units(input=gArmAxisData.ForceOnBlade_LBF, conversionRate=4.4482216153) // lbs to N
-// x0_torque = servo_torque_from_percent(percent = gArmServoAxisData.AverageTorque, maxTorque = 1.2) // max torque in NM
-// x0_balance_pressure = convert_units(input=gMTConnectData.SCTPressureSensor, conversionRate=6894.7572932) // psi to Pa
-// x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
-// x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
-// x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-// x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
-
-
-// *** Linear: X0 Hydraulic Head
 x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
 x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
-x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches to mm
+x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches/s to mm/s
+x0_force = convert_units(input=gArmAxisData.ForceOnBlade_LBF, conversionRate=4.4482216153) // lbs to N
+x0_torque = servo_torque_from_percent(percent = gArmServoAxisData.AverageTorque, maxTorque = 1.2) // max torque in NM
 // x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
 // x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
 x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
+
+
+// *** Linear: X0 Hydraulic Head
+// x0_target = convert_units(input=gMTConnectData.ArmCommandedPosition, conversionRate=25.4) // inches to mm
+// x0_abs = convert_units(input=gArmAxisData.PresentPosition, conversionRate=25.4) // inches to mm
+// x0_vel = convert_units(input=gArmAxisData.AbsoluteVelocity_IPS, conversionRate=25.4) // inches to mm
+// x0_enhancer_0_freq = gParameter.Misc.BladeEnhancerDriveSideFrequency // Hz
+// x0_enhancer_1_freq = gParameter.Misc.BladeEnhancerIdleSideFrequency // Hz
+// x0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
+// x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gArmAxisData.AbsoluteVelocity_IPS, home = false) // refrences interlocked status
 
 
 // *** Linear: Y0 Vise
@@ -62,8 +61,8 @@ x0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, 
 
 
 // *** Linear: Y1 Infeed Vise
-y1_abs = convert_units(input=gMTConnectData.OutOfStockLaserDistance, conversionRate=25.4) // inches to mm
-y1_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
+// y1_abs = convert_units(input=gMTConnectData.OutOfStockLaserDistance, conversionRate=25.4) // inches to mm
+// y1_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 // y1_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = TODO, home = false) // refrences interlocked status
 
 
@@ -74,12 +73,12 @@ y1_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySw
 
 
 // *** Linear: Z0 inFeed
-z0_target = convert_units(input=gMTConnectData.InFeedCommandedPosition, conversionRate=25.4) // inches to mm 
-z0_abs = convert_units(input=gInfeedAxisData.PresentPosition, conversionRate=25.4) // inches to mm 
-z0_vel = convert_units(input=gInfeedAxisData.Velocity_IPS, conversionRate=25.4) // inches to mm 
-z0_torque = servo_torque_from_percent(percent = gInfeedServoAxisData.Torque, maxTorque = 1.2) // max torque in NM
-z0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
-z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
+// z0_target = convert_units(input=gMTConnectData.InFeedCommandedPosition, conversionRate=25.4) // inches to mm 
+// z0_abs = convert_units(input=gInfeedAxisData.PresentPosition, conversionRate=25.4) // inches to mm 
+// z0_vel = convert_units(input=gInfeedAxisData.Velocity_IPS, conversionRate=25.4) // inches to mm 
+// z0_torque = servo_torque_from_percent(percent = gInfeedServoAxisData.Torque, maxTorque = 1.2) // max torque in NM
+// z0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
+// z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
 
 // *** Linear: Z2 MaterialStop
 // z2_target = convert_units(input=gMTConnectData.MSCommandedPosition, conversionRate=25.4) // inches to mm 
@@ -115,17 +114,17 @@ saw_cpu_on_time = gMachineTime.TotalMachineOnTimeSeconds
 saw_execution = gMTConnectData.SawExecutionState
 // saw_wait = // See model.mtconnect.org for instructions on WAIT_STATE, type:EXECUTION st:INTERRUPTED, type:EXECUTION st:FEED_HOLD for flags
 saw_controller_mode = gMTConnectData.SawControllerMode
-saw_out_of_stock = cond end_of_bar_cond(barPresent = gAutoOperation.OutOfStock)
+// saw_out_of_stock = cond end_of_bar_cond(barPresent = gAutoOperation.OutOfStock)
 
-job_id = gActiveJobBuffer.JobData.UUID
-job_name = gActiveJobBuffer.JobData.Name
-job_active_part_number = gActiveJobBuffer.PartPositionInJob
-job_repetitions = gActiveJobBuffer.JobData.Repetitions
-job_remaining = gActiveJobBuffer.RemainingRepetitions
+// job_id = gActiveJobBuffer.JobData.UUID
+// job_name = gActiveJobBuffer.JobData.Name
+// job_active_part_number = gActiveJobBuffer.PartPositionInJob
+// job_repetitions = gActiveJobBuffer.JobData.Repetitions
+// job_remaining = gActiveJobBuffer.RemainingRepetitions
 
-part_active_id = gActivePartBuffer.PartData.UUID
-part_active_remaining = gActivePartBuffer.RemainingQuantity
-part_active_target = gActivePartBuffer.PartData.Quantity
+// part_active_id = gActivePartBuffer.PartData.UUID
+// part_active_remaining = gActivePartBuffer.RemainingQuantity
+// part_active_target = gActivePartBuffer.PartData.Quantity
 
 cut_count_complete = gMTConnectData.CutCounter
 
@@ -142,7 +141,7 @@ saw_hydraulic_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO
 saw_drive_door_state = gMTConnectData.VIO_DriveWheelDoorSensor
 saw_idle_door_state = gMTConnectData.VIO_IdleWheelDoorSensor
 // *** WorkEnvelope
-material_detection = gMTConnectData.MaterialDetection
+// material_detection = gMTConnectData.MaterialDetection
 
 // ** Auxiliaries
 // *** Saw Sensors
