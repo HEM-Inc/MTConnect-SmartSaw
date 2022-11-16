@@ -487,7 +487,8 @@
                                 <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
                                 <DataItem id="job_id" type="PART_ID" category="EVENT"/>
-                                <DataItem id="job_name" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
+                                <!-- TODO look into weather the program needs to be in the path and if it needs to be active -->
+                                <DataItem id="job_name" type="PROGRAM" subType="ACTIVE" category="EVENT"/> 
                                 <DataItem id="job_active_part_number" type="PART_ID" category="EVENT"/>
                                 <DataItem id="job_repetitions" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="job_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
