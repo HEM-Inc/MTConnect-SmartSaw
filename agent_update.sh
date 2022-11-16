@@ -74,7 +74,7 @@ echo "Updating MTConnect Agent..."
 systemctl stop agent
 cp -r ./agent/. /etc/mtconnect/agent/
 sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-rm -rf /etc/adapter/SmartSaw_*.xml
+rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
 cp -r ./devices/$Device_File /etc/mtconnect/devices/
 cp -r ./schema/. /etc/mtconnect/schema/
 cp -r ./styles/. /etc/mtconnect/styles/
