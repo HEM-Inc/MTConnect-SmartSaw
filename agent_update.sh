@@ -57,6 +57,7 @@ echo "Updating MTConnect Adapter..."
 
 systemctl stop adapter
 cp -r ./adapter/. /etc/adapter/
+rm -rf /etc/adapter/SmartSaw_*.afg
 cp -r ./afg/$Afg_File /etc/adapter/
 chmod +x /etc/adapter/Adapter
 cp /etc/adapter/adapter.service /etc/systemd/system/
