@@ -25,6 +25,12 @@ Help(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run agent_install.sh as sudo" ; exit 1 ; fi
 
+if id "mtconnect" &>/dev/null; 
+    then echo 'mtconnect user found, run bash agent_update.sh instead'; exit 1 
+else
+    echo 'User not found, continuing install...'
+fi
+
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
