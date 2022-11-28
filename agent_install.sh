@@ -94,6 +94,7 @@ sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
 cp -r ./devices/$Device_File /etc/mtconnect/devices/
 cp -r ./schema/. /etc/mtconnect/schema/
 cp -r ./styles/. /etc/mtconnect/styles/
+cp -r ./ruby/. /etc/mtconnect/ruby/
 chown -R mtconnect:mtconnect /etc/mtconnect
 
 cp /etc/mtconnect/agent/agent.service /etc/systemd/system/

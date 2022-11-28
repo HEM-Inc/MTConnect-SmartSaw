@@ -78,6 +78,7 @@ rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
 cp -r ./devices/$Device_File /etc/mtconnect/devices/
 cp -r ./schema/. /etc/mtconnect/schema/
 cp -r ./styles/. /etc/mtconnect/styles/
+cp -r ./ruby/. /etc/mtconnect/ruby/
 chown -R mtconnect:mtconnect /etc/mtconnect
 cp agent/agent /usr/bin/
 chmod +x /usr/bin/agent
