@@ -386,7 +386,9 @@
                                         <Filter type="MINIMUM_DELTA">0.010</Filter>
                                     </Filters>
                                 </DataItem>
-                                    -->
+                                -->
+
+                                <!--                            
                                 <DataItem id="c0_tension" compositionId="c0_tensioner" type="PRESSURE" units="PASCAL" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
@@ -396,8 +398,8 @@
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
-                                </DataItem>
-                                
+                                </DataItem> 
+                                -->
                                 
                                 <!-- Choose one method -->
                                 <DataItem id="c0_cutwatcher_volt" type="VOLTAGE_DC" subType="ACTUAL"
