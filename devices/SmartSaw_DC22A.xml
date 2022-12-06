@@ -45,11 +45,13 @@
                             <Translation>0 0 0</Translation>
                             <Rotation>0 0 0</Rotation>
                         </Transformation>
+                    </CoordinateSystem>
                     <CoordinateSystem id="work_coordinates" type="TASK" parentIdRef="machine_coordinates">
                         <Transformation>
                             <Translation>0 0 0</Translation>
                             <Rotation>0 0 0</Rotation>
                         </Transformation>
+                    </CoordinateSystem>
                 </CoordinateSystems>
             </Configuration>
             <Components>
