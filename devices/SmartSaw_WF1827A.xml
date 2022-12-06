@@ -28,10 +28,28 @@
             </DataItems>
             <Configuration>
                 <CoordinateSystems>
-                    <CoordinateSystem id="world_coordinates" type="WORLD"></CoordinateSystem>
-                    <CoordinateSystem id="base_coordinates" type="BASE"></CoordinateSystem>
-                    <CoordinateSystem id="machine_coordinates" type="MACHINE" parentIdRef="base_coordinates"></CoordinateSystem>
-                    <CoordinateSystem id="work_coordinates" type="TASK" parentIdRef="machine_coordinates"></CoordinateSystem>
+                    <CoordinateSystem id="world_coordinates" type="WORLD">
+                        <Transformation>
+                            <Translation>0 0 0</Translation>
+                            <Rotation>0 0 0</Rotation>
+                        </Transformation>
+                    </CoordinateSystem>
+                    <CoordinateSystem id="base_coordinates" type="BASE">
+                        <Transformation>
+                            <Translation>0 0 0</Translation>
+                            <Rotation>0 0 0</Rotation>
+                        </Transformation>
+                    </CoordinateSystem>
+                    <CoordinateSystem id="machine_coordinates" type="MACHINE" parentIdRef="base_coordinates">
+                        <Transformation>
+                            <Translation>0 0 0</Translation>
+                            <Rotation>0 0 0</Rotation>
+                        </Transformation>
+                    <CoordinateSystem id="work_coordinates" type="TASK" parentIdRef="machine_coordinates">
+                        <Transformation>
+                            <Translation>0 0 0</Translation>
+                            <Rotation>0 0 0</Rotation>
+                        </Transformation>
                 </CoordinateSystems>
             </Configuration>
             <Components>
