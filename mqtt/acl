@@ -2,10 +2,8 @@
 topic read $SYS/#
 
 # Allow anonymous to read MTConnect
-topic read device/#
-topic read sample/#
+topic read mtconnect/#
 
 # Allow secure readwrite to the broker from MTConnect using the mtconnect user
 user mtconnect
-topic device/#
-topic sample/#
+topic mtconnect/#

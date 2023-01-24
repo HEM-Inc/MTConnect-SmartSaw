@@ -11,7 +11,6 @@ Help(){
     echo "options:"
     echo "-h             Print this Help."
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
-    echo "-a             Add the latest mosquitto repo ' ppa:mosquitto-dev/mosquitto-ppa'"
 }
 
 ############################################################
@@ -28,13 +27,11 @@ Config_File="mosquitto.conf"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:c:h" option; do
+while getopts ":c:h" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
-        a) # Enter an AFG file name
-            apt-add-repository ppa:mosquitto-dev/mosquitto-ppa;;
         c) # Enter a Config file name
             Config_File=$OPTARG;;
         \?) # Invalid option
@@ -44,6 +41,7 @@ while getopts ":a:c:h" option; do
 done
 
 echo "Adding the mosquitto service..."
+# apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
 apt update
 apt install mosquitto mosquitto-clients
 apt clean

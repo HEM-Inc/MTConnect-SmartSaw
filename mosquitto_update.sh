@@ -11,16 +11,6 @@ Help(){
     echo "options:"
     echo "-h             Print this Help."
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
-    echo "-u             Upgrade the mosquitto program"
-}
-
-############################################################
-# UpgradeBroker                                            #
-############################################################
-UpgradeBroker(){
-    apt update
-    apt upgrade mosquitto mosquitto-clients
-    apt clean
 }
 
 ############################################################
@@ -37,13 +27,11 @@ Config_File="mosquitto.conf"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":u:c:h" option; do
+while getopts ":c:h" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
-        u) # Enter an AFG file name
-            UpgradeBroker;;
         c) # Enter a Device file name
             Config_File=$OPTARG;;
         \?) # Invalid option
