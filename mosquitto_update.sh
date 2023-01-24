@@ -20,7 +20,7 @@ Help(){
 UpgradeBroker(){
     apt update
     apt upgrade mosquitto mosquitto-clients
-    apt clean;;
+    apt clean
 }
 
 ############################################################
