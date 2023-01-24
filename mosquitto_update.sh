@@ -15,6 +15,15 @@ Help(){
 }
 
 ############################################################
+# UpgradeBroker                                            #
+############################################################
+UpgradeBroker(){
+    apt update
+    apt upgrade mosquitto mosquitto-clients
+    apt clean;;
+}
+
+############################################################
 ############################################################
 # Main program                                             #
 ############################################################
@@ -34,9 +43,7 @@ while getopts ":u:c:h" option; do
             Help
             exit;;
         u) # Enter an AFG file name
-            apt update
-            apt upgrade mosquitto mosquitto-clients
-            apt clean;;
+            UpgradeBroker;;
         c) # Enter a Device file name
             Config_File=$OPTARG;;
         \?) # Invalid option
