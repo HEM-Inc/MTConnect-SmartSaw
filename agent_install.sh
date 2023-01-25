@@ -10,11 +10,12 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name]"
+    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name]"
     echo "options:"
     echo "-h             Print this Help."
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
+    echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
 }
 
 ############################################################
@@ -34,12 +35,13 @@ fi
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
+Mqtt_Config_File="mosquitto.conf"
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:h" option; do
+while getopts ":a:d:c:h" option; do
     case ${option} in
         h) # display Help
             Help
@@ -48,6 +50,8 @@ while getopts ":a:d:h" option; do
             Afg_File=$OPTARG;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
+        c) # Enter a Config file name
+            Mqtt_Config_File=$OPTARG;;
         \?) # Invalid option
             Help
             exit;;
@@ -59,6 +63,7 @@ echo "Printing the Working Directory and options..."
 echo "Present directory = " pwd
 echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
+echo "Mosquitto Config file = "$Mqtt_Config_File
 echo ""
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
@@ -103,3 +108,22 @@ systemctl start agent
 systemctl status agent
 
 echo "MTConnect Agent Up and Running"
+
+echo "Installing the mosquitto service..."
+# apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+apt update
+apt install mosquitto mosquitto-clients
+apt clean
+
+echo "Adding mtconnect user to access control list"
+touch /etc/mosquitto/passwd
+mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+cp ./mqtt/acl /etc/mosquitto/acl
+
+cp ./mqtt/$Mqtt_Config_File /etc/mosquitto/conf.d/
+
+systemctl stop mosquitto
+systemctl start mosquitto
+systemctl status mosquitto
+
+echo "Mosquitto MQTT Broker Up and Running"

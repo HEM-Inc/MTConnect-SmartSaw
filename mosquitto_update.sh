@@ -45,5 +45,8 @@ echo "Config file = "$Config_File
 
 cp ./mqtt/$Config_File /etc/mosquitto/conf.d/
 
+systemctl stop mosquitto
+systemctl start mosquitto
+systemctl status mosquitto
 
-service mosquitto stop && service mosquitto start && service mosquitto status
+echo "Mosquitto Updated and Running"
