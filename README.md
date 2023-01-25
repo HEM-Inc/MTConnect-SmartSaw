@@ -12,19 +12,38 @@ git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/M
 
 After cloning the repository for the first time run the install script. This will locate the files into the correct locations and enable the systemctl service. Note if the agent is already created abd is an existing service then running this script can cause a lock file issue. 
 ``` bash
-bash agent_install.sh
+sudo bash agent_install.sh
 ```
 
 IF the agent has already be loaded then use the update script to update the files and restart the service. 
 ``` bash
-bash agent_update.sh
+sudo bash agent_update.sh
+sudo bash mosquitto_update.sh
 ```
 
-Help syntax for both the 'agent_install.sh' and 'agent_update.sh'.
+Help syntax for the 'agent_install.sh.
 ``` bash
-Syntax: agent_install [-h|-a File_Name|-d File_Name]
+Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name]
 options:
 -h             Print this Help.
 -a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC.afg
 -d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC.xml
+-c File_Name   Declare the config file name; Defaults to - mosquitto.conf
+```
+
+Help syntax for the 'agent_update.sh.
+``` bash
+Syntax: agent_update [-h|-a File_Name|-d File_Name]
+options:
+-h             Print this Help.
+-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC.afg
+-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC.xml
+```
+
+Help syntax for the 'mosquitto_update.sh.
+``` bash
+Syntax: mosquitto_update [-h|-c File_Name]
+options:
+-h             Print this Help.
+-c File_Name   Declare the config file name; Defaults to - mosquitto.conf
 ```
