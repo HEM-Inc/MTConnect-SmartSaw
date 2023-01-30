@@ -246,12 +246,12 @@
                       <img style="width:12px;" src="/styles/icon-minus.webp" />
                     </xsl:when>
                     <xsl:otherwise>
-                      &#8198;
+                      &#8196;
                     </xsl:otherwise>
                   </xsl:choose>
-                  <!-- &#8198; -->
+                  <!-- &#8196; -->
                   <!-- narrow space - see https://stackoverflow.com/questions/8515365/are-there-other-whitespace-codes-like-nbsp-for-half-spaces-em-spaces-en-space -->
-                  &#8198;
+                  &#8196;
                   <xsl:value-of select="$element" />
                 </div>
               </td>
@@ -500,12 +500,12 @@
                     <img style="width:12px;" src="/styles/icon-minus.webp" />
                   </xsl:when>
                   <xsl:otherwise>
-                    &#8198;
+                    &#8196;
                   </xsl:otherwise>
                 </xsl:choose>
-                <!-- &#8198; -->
+                <!-- &#8196; -->
                 <!-- narrow space - see https://stackoverflow.com/questions/8515365/are-there-other-whitespace-codes-like-nbsp-for-half-spaces-em-spaces-en-space -->
-                &#8198;
+                &#8196;
                 <xsl:value-of select="$element" />
               </td>
 
