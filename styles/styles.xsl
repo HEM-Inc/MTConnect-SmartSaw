@@ -202,6 +202,7 @@
           <th>Category</th>
           <th>Type</th>
           <th>SubType</th>
+          <th>Value</th>
           <th>Units</th>
         </thead>
         <tbody>
@@ -214,6 +215,19 @@
                 <xsl:when test="$element='Header' or $element='Agent' or $element='Device'">
                   font-weight:bold;
                 </xsl:when>
+              </xsl:choose>
+            </xsl:variable>
+
+            <!-- get value -->
+            <xsl:variable name="value">
+              <xsl:choose>
+                <xsl:when test="local-name()='Normal'">NORMAL</xsl:when>
+                <xsl:when test="local-name()='Warning'">WARNING</xsl:when>
+                <xsl:when test="local-name()='Fault'">FAULT</xsl:when>
+                <xsl:when test="local-name()='Unavailable'">UNAVAILABLE</xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="text()" />
+                </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
 
@@ -256,6 +270,9 @@
               </td>
               <td>
                 <xsl:value-of select="@subType" />
+              </td>
+              <td>
+                <xsl:value-of select="$value" />
               </td>
               <td>
                 <xsl:value-of select="@units" />
