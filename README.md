@@ -21,7 +21,7 @@ sudo bash agent_update.sh
 sudo bash mosquitto_update.sh
 ```
 
-Help syntax for the 'agent_install.sh.
+Help syntax for the `agent_install.sh`.
 ``` bash
 Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name]
 options:
@@ -31,7 +31,7 @@ options:
 -c File_Name   Declare the config file name; Defaults to - mosquitto.conf
 ```
 
-Help syntax for the 'agent_update.sh.
+Help syntax for the `agent_update.sh`.
 ``` bash
 Syntax: agent_update [-h|-a File_Name|-d File_Name]
 options:
@@ -40,7 +40,7 @@ options:
 -d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC.xml
 ```
 
-Help syntax for the 'mosquitto_update.sh.
+Help syntax for the `mosquitto_update.sh`.
 ``` bash
 Syntax: mosquitto_update [-h|-c File_Name]
 options:
