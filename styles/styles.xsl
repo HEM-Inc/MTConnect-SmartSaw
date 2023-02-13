@@ -38,7 +38,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" style="padding: 5px 10px;" href="https://mtconnect.org" target="_blank" rel="noopener noreferrer">
+            <a class="navbar-brand" style="padding: 5px 10px;" href="https://www.hemsaw.com" target="_blank" rel="noopener noreferrer">
               <img alt="Brand" src="/styles/MTConnect_Logo.png" />
             </a>
           </div>
