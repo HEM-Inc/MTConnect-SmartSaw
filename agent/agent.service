@@ -8,6 +8,7 @@ WorkingDirectory=/etc/mtconnect/agent
 ExecStart=/usr/bin/agent run agent.cfg
 User=mtconnect
 Group=mtconnect
+RuntimeMaxSec=86400s
 Restart=always
 RestartSec=2
 StartLimitInterval=90s
