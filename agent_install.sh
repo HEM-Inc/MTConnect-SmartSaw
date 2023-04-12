@@ -111,7 +111,7 @@ echo "MTConnect Agent Up and Running"
 
 echo "Installing the mosquitto service..."
 # apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-apt update
+apt update -y
 apt install mosquitto mosquitto-clients
 apt clean
 
