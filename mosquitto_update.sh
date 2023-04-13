@@ -40,13 +40,52 @@ while getopts ":c:h" option; do
     esac
 done
 
-echo "Printing the Working Directory and options..."
+############################################################
+# Service exists function                                  #
+############################################################
+
+service_exists() {
+    local n=$1
+    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+echo "Printing the options..."
 echo "Config file = "$Config_File
 
-cp ./mqtt/$Config_File /etc/mosquitto/conf.d/
+if service_exists mosquitto; then
+    echo "Updating Mosquitto..."
+    cp ./mqtt/$Config_File /etc/mosquitto/conf.d/
 
-systemctl stop mosquitto
-systemctl start mosquitto
-systemctl status mosquitto
+    systemctl stop mosquitto
+    systemctl start mosquitto
+    systemctl status mosquitto
 
-echo "Mosquitto Updated and Running"
+    echo "Mosquitto Updated and Running"
+else
+    echo "Installing the mosquitto service..."
+    # apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+    apt update -y
+    apt install mosquitto mosquitto-clients
+    apt clean
+
+    echo "Adding mtconnect user to access control list"
+    touch /etc/mosquitto/passwd
+    mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+    cp ./mqtt/acl /etc/mosquitto/acl
+
+    cp ./mqtt/$Mqtt_Config_File /etc/mosquitto/conf.d/
+
+    systemctl stop mosquitto
+    systemctl start mosquitto
+    systemctl status mosquitto
+
+    echo "Mosquitto MQTT Broker Up and Running"
+fi
+
+
+
+
