@@ -10,12 +10,13 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name]"
+    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-s Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
+    echo "-s Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
 
 ############################################################
@@ -36,12 +37,13 @@ fi
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Mqtt_Config_File="mosquitto.conf"
+Serial_Number="SmartSaw"
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:c:h" option; do
+while getopts ":a:d:c:s:h" option; do
     case ${option} in
         h) # display Help
             Help
@@ -52,6 +54,8 @@ while getopts ":a:d:c:h" option; do
             Device_File=$OPTARG;;
         c) # Enter a Config file name
             Mqtt_Config_File=$OPTARG;;
+        s) # Enter a serial number for the UUID
+            Serial_Number=$OPTARG;;
         \?) # Invalid option
             Help
             exit;;
@@ -64,6 +68,7 @@ echo "Present directory = " pwd
 echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
 echo "Mosquitto Config file = "$Mqtt_Config_File
+echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo ""
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
@@ -97,6 +102,7 @@ chmod +x /usr/bin/agent
 cp -r ./agent/. /etc/mtconnect/agent/
 sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
 cp -r ./devices/$Device_File /etc/mtconnect/devices/
+sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
 cp -r ./schema/. /etc/mtconnect/schema/
 cp -r ./styles/. /etc/mtconnect/styles/
 cp -r ./ruby/. /etc/mtconnect/ruby/
