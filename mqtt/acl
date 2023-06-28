@@ -6,5 +6,5 @@ topic read $SYS/#
 topic mtconnect/#
 
 # Allow secure readwrite to the broker from MTConnect using the mtconnect user
-# user mtconnect
-# topic mtconnect/#
+user mtconnect
+topic mtconnect/#

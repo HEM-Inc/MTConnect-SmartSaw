@@ -17,7 +17,7 @@ Help(){
 ############################################################
 # ACL                                                     #
 ############################################################
-ACL(){
+Update_ACL(){
     # Re-add the ACL and restart with updated ACL
     echo "Re-adding the access control list"
     # mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
@@ -38,13 +38,14 @@ Config_File="mosquitto.conf"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":c:a:h" option; do
+while getopts ":c:ah" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
         a) # Re-add the ACL and restart with updated ACL
-            ACL;;
+            Update_ACL
+            ;;
         c) # Enter a Device file name
             Config_File=$OPTARG;;
         \?) # Invalid option
