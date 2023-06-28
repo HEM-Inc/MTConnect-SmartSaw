@@ -7,10 +7,21 @@ Help(){
     # Display Help
     echo "This function installs the systemd files for the mosquitto service."
     echo
-    echo "Syntax: mosquitto_update [-h|-c File_Name]"
+    echo "Syntax: mosquitto_update [-h|-a|-c File_Name]"
     echo "options:"
     echo "-h             Print this Help."
+    echo "-a             Re-add the ACL and restart with updated ACL"
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
+}
+
+############################################################
+# ACL                                                     #
+############################################################
+ACL(){
+    # Re-add the ACL and restart with updated ACL
+    echo "Re-adding the access control list"
+    # mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+    cp ./mqtt/acl /etc/mosquitto/acl
 }
 
 ############################################################
@@ -27,11 +38,13 @@ Config_File="mosquitto.conf"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":c:h" option; do
+while getopts ":c:a:h" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
+        a) # Re-add the ACL and restart with updated ACL
+            ACL;;
         c) # Enter a Device file name
             Config_File=$OPTARG;;
         \?) # Invalid option

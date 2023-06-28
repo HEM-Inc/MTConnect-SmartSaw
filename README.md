@@ -44,8 +44,9 @@ options:
 
 Help syntax for the `mosquitto_update.sh`.
 ``` bash
-Syntax: mosquitto_update [-h|-c File_Name]
+Syntax: mosquitto_update [-h|-a|-c File_Name]
 options:
 -h                  Print this Help.
+-a                  Re-add the ACL and restart with updated ACL
 -c File_Name        Declare the config file name; Defaults to - mosquitto.conf
 ```
