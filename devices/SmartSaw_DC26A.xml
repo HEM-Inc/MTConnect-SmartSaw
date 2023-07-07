@@ -509,11 +509,11 @@
                                 <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
                                 <DataItem id="job_id" type="PART_ID" category="EVENT"/>
-                                <DataItem id="job_name" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
-                                <DataItem id="job_active_part_number" type="PART_ID" category="EVENT"/>
+                                <DataItem id="job_name" type="PROGRAM" subType="MAIN" category="EVENT"/> 
+                                <DataItem id="job_active_part_number" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
                                 <DataItem id="job_repetitions" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="job_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
-
+                                
                                 <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>

@@ -508,13 +508,13 @@
 
                                 <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
+                                <!-- TODO look into weather the JOB name should be program.main and the part active ID should be program.active-->
                                 <DataItem id="job_id" type="PART_ID" category="EVENT"/>
-                                <!-- TODO look into weather the program needs to be in the path and if it needs to be active -->
-                                <DataItem id="job_name" type="PROGRAM" subType="ACTIVE" category="EVENT"/> 
-                                <DataItem id="job_active_part_number" type="PART_ID" category="EVENT"/>
+                                <DataItem id="job_name" type="PROGRAM" subType="MAIN" category="EVENT"/> 
+                                <DataItem id="job_active_part_number" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
                                 <DataItem id="job_repetitions" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="job_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
-
+                                
                                 <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
