@@ -10,13 +10,13 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-s Serial_number]"
+    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
-    echo "-s Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
 
 ############################################################
@@ -43,7 +43,7 @@ Serial_Number="SmartSaw"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:c:s:h" option; do
+while getopts ":a:d:c:u:h" option; do
     case ${option} in
         h) # display Help
             Help
@@ -54,7 +54,7 @@ while getopts ":a:d:c:s:h" option; do
             Device_File=$OPTARG;;
         c) # Enter a Config file name
             Mqtt_Config_File=$OPTARG;;
-        s) # Enter a serial number for the UUID
+        u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
         \?) # Invalid option
             Help
@@ -62,6 +62,7 @@ while getopts ":a:d:c:s:h" option; do
     esac
 done
 
+### TODO Look at adding an option to the install or update scripts to create an https secure version of the agent
 
 echo "Printing the Working Directory and options..."
 echo "Present directory = " pwd

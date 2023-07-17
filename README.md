@@ -23,23 +23,23 @@ sudo bash mosquitto_update.sh
 
 Help syntax for the `agent_install.sh`.
 ``` bash
-Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-s Serial_number]
+Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]
 options:
 -h                  Print this Help.
 -a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 -d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 -c File_Name        Declare the config file name; Defaults to - mosquitto.conf
--s Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
+-u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
 ```
 
 Help syntax for the `agent_update.sh`.
 ``` bash
-Syntax: agent_update [-h|-a File_Name|-d File_Name]
+Syntax: agent_update [-h|-a File_Name|-d File_Name|-u Serial_number]
 options:
 -h                  Print this Help.
 -a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 -d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
--s Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
+-u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
 ```
 
 Help syntax for the `mosquitto_update.sh`.

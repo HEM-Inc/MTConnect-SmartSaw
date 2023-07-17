@@ -8,12 +8,12 @@ Help(){
     echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: agent_update [-h|-a File_Name|-d File_Name]"
+    echo "Syntax: agent_update [-h|-a File_Name|-d File_Name|-u Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
-    echo "-s Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
 
 ############################################################
@@ -33,7 +33,7 @@ Serial_Number="SmartSaw"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:s:h" option; do
+while getopts ":a:d:u:h" option; do
     case ${option} in
         h) # display Help
             Help
@@ -42,13 +42,15 @@ while getopts ":a:d:s:h" option; do
             Afg_File=$OPTARG;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
-        s) # Enter a serial number for the UUID
+        u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
         \?) # Invalid option
             Help
             exit;;
     esac
 done
+
+### TODO Look at adding an option to the install or update scripts to create an https secure version of the agent
 
 echo "Printing the Working Directory and options..."
 echo "Present directory = " pwd
