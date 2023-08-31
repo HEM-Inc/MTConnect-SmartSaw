@@ -23,30 +23,25 @@ sudo bash mosquitto_update.sh
 
 Help syntax for the `agent_install.sh`.
 ``` bash
-Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]
+Syntax: ssInstall [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]
 options:
--h                  Print this Help.
 -a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 -d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 -c File_Name        Declare the config file name; Defaults to - mosquitto.conf
 -u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
+-h                  Print this Help.
 ```
 
 Help syntax for the `agent_update.sh`.
 ``` bash
-Syntax: agent_update [-h|-a File_Name|-d File_Name|-u Serial_number]
+Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-c File_Name|-h]
 options:
--h                  Print this Help.
--a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
--d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
--u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
-```
-
-Help syntax for the `mosquitto_update.sh`.
-``` bash
-Syntax: mosquitto_update [-h|-a|-c File_Name]
-options:
--h                  Print this Help.
--a                  Re-add the ACL and restart with updated ACL
--c File_Name        Declare the config file name; Defaults to - mosquitto.conf
+-H                Update the HEMsaw adapter application
+-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
+-A                Update the MTConnect Agent application
+-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
+-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
+-M                Update the mosquitto broker application
+-c File_Name      Declare the config file name; Defaults to - mosquitto.conf
+-h                Print this Help.
 ```

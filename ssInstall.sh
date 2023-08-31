@@ -65,7 +65,6 @@ done
 ### TODO Look at adding an option to the install or update scripts to create an https secure version of the agent
 
 echo "Printing the Working Directory and options..."
-echo "Present directory = " pwd
 echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
 echo "Mosquitto Config file = "$Mqtt_Config_File
