@@ -125,17 +125,17 @@ while getopts ":a:d:u:c:HAMh" option; do
             Help
             exit;;
         H) # Update the Adapter
-            run_update_adapter = true;;
+            run_update_adapter=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
         A) # Update the Agent
-            run_update_agent = true;;
+            run_update_agent=true;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
         M) # Update Mosquitto
-            run_update_mosquitto = true;;
+            run_update_mosquitto=true;;
         c) # Enter a Device file name
             Config_File=$OPTARG;;
         \?) # Invalid option
