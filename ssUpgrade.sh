@@ -158,16 +158,23 @@ service_exists() {
 }
 
 echo "Printing the options..."
-echo "AFG file = "$Afg_File
-echo "MTConnect Agent file = "$Device_File
-echo "MTConnect UUID = HEMSaw_"$Serial_Number
-echo "Config file = "$Config_File
+echo "Update Adapter set to run = "$run_update_adapter
+echo "Update MTConnect Agent set to run = "$run_update_agent
+echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
+if $run_update_adapter; then
+    echo "AFG file = "$Afg_File
+elif $run_update_agent; then
+    echo "MTConnect Agent file = "$Device_File
+    echo "MTConnect UUID = HEMSaw_"$Serial_Number
+elif $run_update_mosquitto; then
+    echo "Config file = "$Config_File
+fi
 
-if run_update_adapter; then
+if $run_update_adapter; then
     Update_Adapter
-elif run_update_agent; then
+elif $run_update_agent; then
     Update_Agent
-elif run_update_mosquitto; then
+elif $run_update_mosquitto; then
     Update_Mosquitto
 fi
 
