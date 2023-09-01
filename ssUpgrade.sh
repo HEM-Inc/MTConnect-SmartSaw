@@ -72,13 +72,14 @@ Update_Mosquitto(){
         cp ./mqtt/acl /etc/mosquitto/acl
 
         systemctl stop mosquitto
+        systemctl daemon-reload
         systemctl start mosquitto
         systemctl status mosquitto
 
         echo "Mosquitto Updated and Running"
     else
         echo "Installing the mosquitto service..."
-        # apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+        apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
         apt update -y
         apt install mosquitto mosquitto-clients
         apt clean
@@ -163,10 +164,12 @@ echo "Update MTConnect Agent set to run = "$run_update_agent
 echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
 if $run_update_adapter; then
     echo "AFG file = "$Afg_File
-elif $run_update_agent; then
+fi
+if $run_update_agent; then
     echo "MTConnect Agent file = "$Device_File
     echo "MTConnect UUID = HEMSaw_"$Serial_Number
-elif $run_update_mosquitto; then
+fi
+if $run_update_mosquitto; then
     echo "Config file = "$Config_File
 fi
 
