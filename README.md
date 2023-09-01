@@ -12,13 +12,12 @@ git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/M
 
 After cloning the repository for the first time run the install script. This will locate the files into the correct locations and enable the systemctl service. Note if the agent is already created abd is an existing service then running this script can cause a lock file issue. 
 ``` bash
-sudo bash agent_install.sh
+sudo bash ssInstall.sh
 ```
 
 IF the agent has already be loaded then use the update script to update the files and restart the service. 
 ``` bash
-sudo bash agent_update.sh
-sudo bash mosquitto_update.sh
+sudo bash ssUpgrade.sh
 ```
 
 Help syntax for the `agent_install.sh`.
