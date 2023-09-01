@@ -172,9 +172,11 @@ fi
 
 if $run_update_adapter; then
     Update_Adapter
-elif $run_update_agent; then
+fi
+if $run_update_agent; then
     Update_Agent
-elif $run_update_mosquitto; then
+fi
+if $run_update_mosquitto; then
     Update_Mosquitto
 fi
 
