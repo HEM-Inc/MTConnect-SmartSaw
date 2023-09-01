@@ -173,6 +173,7 @@ if $run_update_mosquitto; then
     echo "Config file = "$Config_File
 fi
 
+echo ""
 if $run_update_adapter; then
     Update_Adapter
 fi
