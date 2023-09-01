@@ -63,6 +63,7 @@ Update_Agent(){
     systemctl status agent
 
     echo "MTConnect Agent Up and Running"
+    echo ""
 }
 
 Update_Mosquitto(){
