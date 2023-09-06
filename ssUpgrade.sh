@@ -106,7 +106,7 @@ Update_Mosquitto(){
 ############################################################
 ############################################################
 
-if [[ $(id -u) -ne 0 ]] ; then echo "Please run mosquitto_update.sh as sudo" ; exit 1 ; fi
+if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
