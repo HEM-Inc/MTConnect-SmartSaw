@@ -20,7 +20,7 @@ IF the agent has already be loaded then use the update script to update the file
 sudo bash ssUpgrade.sh
 ```
 
-Help syntax for the `agent_install.sh`.
+Help syntax for the `ssInstall.sh`.
 ``` bash
 Syntax: ssInstall [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]
 options:
@@ -31,7 +31,7 @@ options:
 -h                  Print this Help.
 ```
 
-Help syntax for the `agent_update.sh`.
+Help syntax for the `ssUpgrade.sh`.
 ``` bash
 Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-c File_Name|-h]
 options:
