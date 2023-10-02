@@ -54,8 +54,13 @@ Update_Agent(){
     cp -r ./styles/. /etc/mtconnect/styles/
     cp -r ./ruby/. /etc/mtconnect/ruby/
     chown -R mtconnect:mtconnect /etc/mtconnect
-    cp agent/agent /usr/bin/
-    chmod +x /usr/bin/agent
+    
+    tar -xf mtcagent_dist.tar.gz
+    cp agent_dist/mtcagent_dist/bin/* /usr/bin
+    cp agent_dist/mtcagent_dist/lib/* /usr/lib
+    rm -rf agent_dist/mtcagent_dist/
+    chmod +x /usr/bin/mtcagent
+
     cp /etc/mtconnect/agent/agent.service /etc/systemd/system/
 
     systemctl daemon-reload

@@ -5,7 +5,7 @@ After=network.target multi-user.target
 [Service]
 Type=simple
 WorkingDirectory=/etc/mtconnect/agent
-ExecStart=/usr/bin/agent run agent.cfg
+ExecStart=/usr/bin/mtcagent run agent.cfg
 User=mtconnect
 Group=mtconnect
 RuntimeMaxSec=86400s

@@ -96,8 +96,12 @@ mkdir -p /etc/mtconnect/agent/
 mkdir -p /etc/mtconnect/devices/
 mkdir -p /etc/mtconnect/schema/
 mkdir -p /etc/mtconnect/styles/
-cp agent/agent /usr/bin/
-chmod +x /usr/bin/agent
+
+tar xf mtcagent_dist.tar.gz
+cp agent_dist/mtcagent_dist/bin/* /usr/bin
+cp agent_dist/mtcagent_dist/lib/* /usr/lib 
+rm -rf agent_dist/mtcagent_dist/
+chmod +x /usr/bin/mtcagent
 
 cp -r ./agent/. /etc/mtconnect/agent/
 sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
