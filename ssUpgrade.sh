@@ -55,7 +55,7 @@ Update_Agent(){
     cp -r ./ruby/. /etc/mtconnect/ruby/
     chown -R mtconnect:mtconnect /etc/mtconnect
     
-    tar -xf mtcagent_dist.tar.gz
+    tar -xf agent_dist/mtcagent_dist.tar.gz
     cp agent_dist/mtcagent_dist/bin/* /usr/bin
     cp agent_dist/mtcagent_dist/lib/* /usr/lib
     rm -rf agent_dist/mtcagent_dist/
