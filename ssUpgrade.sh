@@ -26,11 +26,15 @@ Help(){
 ############################################################
 RunAsDocker(){
     if service_exists docker; then
+        echo "Stopping the Docker image..."
+        docker-compose down
+
         echo "Stopping the daemons..."
         systemctl stop mosquitto
         systemctl stop agent
 
         echo "Starting up the Docker image"
+        docker-compose pull
         docker-compose up -d 
     else
         echo "Installing Docker..."
