@@ -38,6 +38,9 @@ RunAsDocker(){
         apt install -y docker-compose
         apt clean
 
+        touch /etc/mosquitto/passwd
+        mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+
         echo "Stopping the daemons..."
         systemctl stop mosquitto
         systemctl stop agent
