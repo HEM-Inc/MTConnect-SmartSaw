@@ -48,6 +48,7 @@ RunAsDocker(){
         echo "Starting up the Docker image"
         docker-compose up -d 
     fi
+    docker-compose logs
 }
 
 
