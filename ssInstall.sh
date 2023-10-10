@@ -23,27 +23,41 @@ Help(){
 ############################################################
 # Docker                                                   #
 ############################################################
+
 RunAsDocker(){
-    echo "Stopping the daemons..."
-    systemctl stop mosquitto
-    systemctl stop agent
+    if service_exists docker; then
+        echo "Stopping the daemons..."
+        systemctl stop mosquitto
+        systemctl stop agent
 
-    echo "Starting up the Docker image"
-    docker-compose up -d 
+        echo "Starting up the Docker image"
+        docker-compose up -d 
+    else
+        echo "Installing Docker..."
+        apt update -y
+        apt install docker-compose
+        apt clean
 
+        echo "Stopping the daemons..."
+        systemctl stop mosquitto
+        systemctl stop agent
+
+        echo "Starting up the Docker image"
+        docker-compose up -d 
+    fi
 }
+
 
 ############################################################
 # Installers                                               #
 ############################################################
 
 RunAsDaemon(){
-    echo "Installing Docker for future use..."
-    apt update -y
-    apt install docker-compose
-    apt clean
-    echo "Shutting down any old Docker containers"
-    docker-compose down
+
+    if service_exists docker; then
+        echo "Shutting down any old Docker containers"
+        docker-compose down
+    fi
 
     echo "Installing MTConnect and setting it as a SystemCTL..."
 
@@ -99,6 +113,18 @@ RunAsDaemon(){
 }
 
 
+############################################################
+# Service exists function                                  #
+############################################################
+
+service_exists() {
+    local n=$1
+    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 ############################################################
 ############################################################

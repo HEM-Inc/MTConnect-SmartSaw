@@ -25,13 +25,26 @@ Help(){
 # Docker                                                   #
 ############################################################
 RunAsDocker(){
-    echo "Stopping the daemons..."
-    systemctl stop mosquitto
-    systemctl stop agent
+    if service_exists docker; then
+        echo "Stopping the daemons..."
+        systemctl stop mosquitto
+        systemctl stop agent
 
-    echo "Starting up the Docker image"
-    docker-compose up -d 
+        echo "Starting up the Docker image"
+        docker-compose up -d 
+    else
+        echo "Installing Docker for future use..."
+        apt update -y
+        apt install docker-compose
+        apt clean
 
+        echo "Stopping the daemons..."
+        systemctl stop mosquitto
+        systemctl stop agent
+
+        echo "Starting up the Docker image"
+        docker-compose up -d 
+    fi
 }
 
 ############################################################
@@ -181,6 +194,13 @@ service_exists() {
     fi
 }
 
+
+############################################################
+############################################################
+# Main program                                             #
+############################################################
+############################################################
+
 echo "Printing the options..."
 echo "Update Adapter set to run = "$run_update_adapter
 echo "Update MTConnect Agent set to run = "$run_update_agent
@@ -207,6 +227,18 @@ fi
 if $run_update_mosquitto; then
     Update_Mosquitto
 fi
+
+if $run_update_adapter; then
+    RunAsDocker
+else
+    if service_exists docker; then
+        echo "Shutting down any old Docker containers"
+        docker-compose down
+    fi
+    systemctl start mosquitto
+    systemctl start agent
+fi
+
 
 
 
