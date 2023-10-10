@@ -25,9 +25,6 @@ Help(){
 ############################################################
 RunAsDocker(){
     if service_exists docker; then
-        echo "Stopping the Docker image..."
-        docker-compose down
-
         echo "Stopping the daemons..."
         systemctl stop mosquitto
         systemctl stop agent
