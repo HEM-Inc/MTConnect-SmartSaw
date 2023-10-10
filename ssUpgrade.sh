@@ -132,7 +132,7 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
 
         cp ./mqtt/config/$Mqtt_Config_File /etc/mosquitto/conf.d/
-        sed -i "29 i\- \"/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf\"" /etc/mtconnect/devices/$Device_File
+        sed -i "29 i\- \"/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf\"" ./docker-compose.yml
 
         systemctl stop mosquitto
         systemctl start mosquitto
