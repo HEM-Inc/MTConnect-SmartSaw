@@ -43,6 +43,7 @@ RunAsDocker(){
 
         touch /etc/mosquitto/passwd
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+        chmod 0700 /etc/mosquitto/passwd
 
         echo "Stopping the daemons..."
         systemctl stop mosquitto
@@ -132,6 +133,7 @@ Update_Mosquitto(){
         chmod 0700 /etc/mosquitto/passwd
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
+
 
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
