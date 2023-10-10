@@ -10,7 +10,6 @@ services:
       - DEBIAN_FRONTEND=noninteractive
     ports: 
       - 5000:5000/tcp
-      - 1883:1883/tcp
     entrypoint: "/usr/bin/mtcagent run /etc/mtconnect/data/dockerAgent.cfg"
     working_dir: "/etc/mtconnect/"
     restart: unless-stopped
@@ -18,7 +17,22 @@ services:
       - '/etc/mtconnect/agent/dockerAgent.cfg:/etc/mtconnect/data/dockerAgent.cfg'
       - '/etc/mtconnect/devices/:/etc/mtconnect/data/devices'
       - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
-      - '/etc/mosquitto/:/etc/mosquitto'
+    networks:
+      mtc_net:
+        ipv4_address: 10.5.11.2
+
+  mosquitto:
+    container_name: mosquitto
+    hostname: mosquitto
+    image: eclipse-mosquitto:latest
+    volumes:
+      - "/etc/mosquitto/:/etc/mosquitto"
+    ports:
+      - 1883:1883/tcp
+    networks:
+      mtc_net:
+        ipv4_address: 10.5.11.3
+
   watchtower:
     container_name: watchtower
     hostname: watchtower
@@ -35,3 +49,10 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
+
+networks:
+  mtc_net:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.11.0/29
