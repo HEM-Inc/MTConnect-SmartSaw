@@ -228,6 +228,12 @@ if $run_update_mosquitto; then
 fi
 
 echo ""
+if service_exists docker; then
+    echo "Shutting down any old Docker containers"
+    docker-compose down
+fi
+
+echo ""
 if $run_update_adapter; then
     Update_Adapter
 fi
@@ -240,13 +246,6 @@ fi
 
 if $run_Docker; then
     RunAsDocker
-else
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        docker-compose down
-    fi
-    systemctl start mosquitto
-    systemctl start agent
 fi
 
 
