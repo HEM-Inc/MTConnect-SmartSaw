@@ -10,14 +10,95 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]"
+    echo "Syntax: agent_install [-h|-D|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
+    echo "-D             Use a Docker image for the Agent and MQTT Broker"
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
     echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
+
+############################################################
+# Docker                                                   #
+############################################################
+RunAsDocker(){
+    echo "Stopping the daemons..."
+    systemctl stop mosquitto
+    systemctl stop agent
+
+    echo "Starting up the Docker image"
+    docker-compose up -d 
+
+}
+
+############################################################
+# Installers                                               #
+############################################################
+
+RunAsDaemon(){
+    echo "Installing Docker for future use..."
+    apt update -y
+    apt install docker-compose
+    apt clean
+    echo "Shutting down any old Docker containers"
+    docker-compose down
+
+    echo "Installing MTConnect and setting it as a SystemCTL..."
+
+    useradd -r -s /bin/false mtconnect
+    mkdir /var/log/mtconnect
+    chown mtconnect:mtconnect /var/log/mtconnect
+
+    mkdir -p /etc/mtconnect/
+    mkdir -p /etc/mtconnect/agent/
+    mkdir -p /etc/mtconnect/devices/
+    mkdir -p /etc/mtconnect/schema/
+    mkdir -p /etc/mtconnect/styles/
+
+    tar -xf agent_dist/mtcagent_dist.tar.gz -C agent_dist/
+    cp agent_dist/mtcagent_dist/bin/* /usr/bin
+    cp agent_dist/mtcagent_dist/lib/* /usr/lib 
+    rm -rf agent_dist/mtcagent_dist/
+    chmod +x /usr/bin/mtcagent
+
+    cp -r ./agent/. /etc/mtconnect/agent/
+    sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+    cp -r ./devices/$Device_File /etc/mtconnect/devices/
+    sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
+    cp -r ./schema/. /etc/mtconnect/schema/
+    cp -r ./styles/. /etc/mtconnect/styles/
+    cp -r ./ruby/. /etc/mtconnect/ruby/
+    chown -R mtconnect:mtconnect /etc/mtconnect
+
+    cp /etc/mtconnect/agent/agent.service /etc/systemd/system/
+    systemctl enable agent
+    systemctl start agent
+    systemctl status agent
+
+    echo "MTConnect Agent Up and Running"
+
+    echo "Installing the mosquitto service..."
+    apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+    apt update -y
+    apt install mosquitto mosquitto-clients
+    apt clean
+
+    echo "Adding mtconnect user to access control list"
+    touch /etc/mosquitto/passwd
+    mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+    cp ./mqtt/acl /etc/mosquitto/acl
+
+    cp ./mqtt/$Mqtt_Config_File /etc/mosquitto/conf.d/
+
+    systemctl stop mosquitto
+    systemctl start mosquitto
+    systemctl status mosquitto
+    echo "Mosquitto MQTT Broker Up and Running"
+}
+
+
 
 ############################################################
 ############################################################
@@ -38,16 +119,19 @@ Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Mqtt_Config_File="mosquitto.conf"
 Serial_Number="SmartSaw"
+run_Docker=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:c:u:h" option; do
+while getopts ":a:d:c:u:Dh" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
+        D) # use a docker image for mqtt and Agent
+            run_Docker=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
         d) # Enter a Device file name
@@ -69,6 +153,7 @@ echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
 echo "Mosquitto Config file = "$Mqtt_Config_File
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
+echo "Run Docker = "$run_Docker
 echo ""
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
@@ -85,55 +170,8 @@ systemctl status adapter
 
 echo "MTConnect Adapter Up and Running"
 
-echo "Installing MTConnect and setting it as a SystemCTL..."
+RunAsDaemon
 
-useradd -r -s /bin/false mtconnect
-mkdir /var/log/mtconnect
-chown mtconnect:mtconnect /var/log/mtconnect
-
-mkdir -p /etc/mtconnect/
-mkdir -p /etc/mtconnect/agent/
-mkdir -p /etc/mtconnect/devices/
-mkdir -p /etc/mtconnect/schema/
-mkdir -p /etc/mtconnect/styles/
-
-tar -xf agent_dist/mtcagent_dist.tar.gz -C agent_dist/
-cp agent_dist/mtcagent_dist/bin/* /usr/bin
-cp agent_dist/mtcagent_dist/lib/* /usr/lib 
-rm -rf agent_dist/mtcagent_dist/
-chmod +x /usr/bin/mtcagent
-
-cp -r ./agent/. /etc/mtconnect/agent/
-sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-cp -r ./devices/$Device_File /etc/mtconnect/devices/
-sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-cp -r ./schema/. /etc/mtconnect/schema/
-cp -r ./styles/. /etc/mtconnect/styles/
-cp -r ./ruby/. /etc/mtconnect/ruby/
-chown -R mtconnect:mtconnect /etc/mtconnect
-
-cp /etc/mtconnect/agent/agent.service /etc/systemd/system/
-systemctl enable agent
-systemctl start agent
-systemctl status agent
-
-echo "MTConnect Agent Up and Running"
-
-echo "Installing the mosquitto service..."
-apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-apt update -y
-apt install mosquitto mosquitto-clients
-apt clean
-
-echo "Adding mtconnect user to access control list"
-touch /etc/mosquitto/passwd
-mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
-cp ./mqtt/acl /etc/mosquitto/acl
-
-cp ./mqtt/$Mqtt_Config_File /etc/mosquitto/conf.d/
-
-systemctl stop mosquitto
-systemctl start mosquitto
-systemctl status mosquitto
-
-echo "Mosquitto MQTT Broker Up and Running"
+if $run_update_adapter; then
+    RunAsDocker
+fi

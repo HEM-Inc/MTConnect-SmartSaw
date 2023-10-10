@@ -8,8 +8,9 @@ Help(){
     echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-c File_Name|-h]"
+    echo "Syntax: ssUpgrade [-D|-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-c File_Name|-h]"
     echo "options:"
+    echo "-D                Use a Docker image for the Agent and MQTT Broker"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-A                Update the MTConnect Agent application"
@@ -18,6 +19,19 @@ Help(){
     echo "-M                Update the mosquitto broker application"
     echo "-c File_Name      Declare the config file name; Defaults to - mosquitto.conf"
     echo "-h                Print this Help."
+}
+
+############################################################
+# Docker                                                   #
+############################################################
+RunAsDocker(){
+    echo "Stopping the daemons..."
+    systemctl stop mosquitto
+    systemctl stop agent
+
+    echo "Starting up the Docker image"
+    docker-compose up -d 
+
 }
 
 ############################################################
@@ -121,16 +135,19 @@ Config_File="mosquitto.conf"
 run_update_adapter=false
 run_update_agent=false
 run_update_mosquitto=false
+run_Docker=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:c:HAMh" option; do
+while getopts ":a:d:u:c:DHAMh" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
+        D) # use a docker image for mqtt and Agent
+            run_Docker=true;;
         H) # Update the Adapter
             run_update_adapter=true;;
         a) # Enter an AFG file name
@@ -168,6 +185,7 @@ echo "Printing the options..."
 echo "Update Adapter set to run = "$run_update_adapter
 echo "Update MTConnect Agent set to run = "$run_update_agent
 echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
+echo "Run Docker = "$run_Docker
 if $run_update_adapter; then
     echo "AFG file = "$Afg_File
 fi
