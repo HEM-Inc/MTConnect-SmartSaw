@@ -110,8 +110,8 @@ Update_Agent(){
 Update_Mosquitto(){
     if service_exists mosquitto; then
         echo "Updating Mosquitto files..."
-        cp ./mqtt/$Config_File /etc/mosquitto/conf.d/
-        cp ./mqtt/acl /etc/mosquitto/acl
+        cp ./mqtt/config/$Config_File /etc/mosquitto/conf.d/
+        cp ./mqtt/data/acl /etc/mosquitto/acl
 
         systemctl stop mosquitto
         systemctl daemon-reload
@@ -129,9 +129,10 @@ Update_Mosquitto(){
         echo "Adding mtconnect user to access control list"
         touch /etc/mosquitto/passwd
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
-        cp ./mqtt/acl /etc/mosquitto/acl
+        cp ./mqtt/data/acl /etc/mosquitto/acl
 
-        cp ./mqtt/$Mqtt_Config_File /etc/mosquitto/conf.d/
+        cp ./mqtt/config/$Mqtt_Config_File /etc/mosquitto/conf.d/
+        sed -i "29 i\- \"/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf\"" /etc/mtconnect/devices/$Device_File
 
         systemctl stop mosquitto
         systemctl start mosquitto
