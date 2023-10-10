@@ -33,9 +33,9 @@ RunAsDocker(){
         echo "Starting up the Docker image"
         docker-compose up -d 
     else
-        echo "Installing Docker for future use..."
+        echo "Installing Docker..."
         apt update -y
-        apt install docker-compose
+        apt install -y docker-compose
         apt clean
 
         echo "Stopping the daemons..."
@@ -114,7 +114,7 @@ Update_Mosquitto(){
         echo "Installing the mosquitto service..."
         apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
         apt update -y
-        apt install mosquitto mosquitto-clients
+        apt install -y mosquitto mosquitto-clients
         apt clean
 
         echo "Adding mtconnect user to access control list"
