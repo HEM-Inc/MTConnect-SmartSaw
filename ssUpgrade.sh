@@ -111,6 +111,7 @@ Update_Mosquitto(){
         echo "Updating Mosquitto files..."
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
         cp ./mqtt/data/acl /etc/mosquitto/acl
+        chmod 0700 /etc/mosquitto/acl
 
         systemctl stop mosquitto
         systemctl daemon-reload
@@ -128,7 +129,9 @@ Update_Mosquitto(){
         echo "Adding mtconnect user to access control list"
         touch /etc/mosquitto/passwd
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+        chmod 0700 /etc/mosquitto/passwd
         cp ./mqtt/data/acl /etc/mosquitto/acl
+        chmod 0700 /etc/mosquitto/acl
 
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
