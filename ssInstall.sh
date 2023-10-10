@@ -10,13 +10,12 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-D|-a File_Name|-d File_Name|-c File_Name|-u Serial_number]"
+    echo "Syntax: agent_install [-h|-D|-a File_Name|-d File_Name|-u Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
     echo "-D             Use a Docker image for the Agent and MQTT Broker"
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
-    echo "-c File_Name   Declare the config file name; Defaults to - mosquitto.conf"
     echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
 
@@ -109,8 +108,7 @@ RunAsDaemon(){
     mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
     cp ./mqtt/data/acl /etc/mosquitto/acl
 
-    cp ./mqtt/config/$Mqtt_Config_File /etc/mosquitto/conf.d/
-    sed -i "29 i\- \"/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf\"" ./docker-compose.yml
+    cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
     systemctl stop mosquitto
     systemctl start mosquitto
@@ -149,7 +147,6 @@ fi
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
-Mqtt_Config_File="mosquitto.conf"
 Serial_Number="SmartSaw"
 run_Docker=false
 
@@ -157,7 +154,7 @@ run_Docker=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:c:u:Dh" option; do
+while getopts ":a:d:u:Dh" option; do
     case ${option} in
         h) # display Help
             Help
@@ -168,8 +165,6 @@ while getopts ":a:d:c:u:Dh" option; do
             Afg_File=$OPTARG;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
-        c) # Enter a Config file name
-            Mqtt_Config_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
         \?) # Invalid option
@@ -183,7 +178,7 @@ done
 echo "Printing the Working Directory and options..."
 echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
-echo "Mosquitto Config file = "$Mqtt_Config_File
+echo "Mosquitto Config file = mosquitto.conf"
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo "Run Docker = "$run_Docker
 echo ""

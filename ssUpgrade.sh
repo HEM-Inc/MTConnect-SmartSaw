@@ -8,7 +8,7 @@ Help(){
     echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade [-D|-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-c File_Name|-h]"
+    echo "Syntax: ssUpgrade [-D|-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-h]"
     echo "options:"
     echo "-D                Use a Docker image for the Agent and MQTT Broker"
     echo "-H                Update the HEMsaw adapter application"
@@ -17,7 +17,6 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the mosquitto broker application"
-    echo "-c File_Name      Declare the config file name; Defaults to - mosquitto.conf"
     echo "-h                Print this Help."
 }
 
@@ -110,7 +109,7 @@ Update_Agent(){
 Update_Mosquitto(){
     if service_exists mosquitto; then
         echo "Updating Mosquitto files..."
-        cp ./mqtt/config/$Config_File /etc/mosquitto/conf.d/
+        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
         cp ./mqtt/data/acl /etc/mosquitto/acl
 
         systemctl stop mosquitto
@@ -131,8 +130,7 @@ Update_Mosquitto(){
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
         cp ./mqtt/data/acl /etc/mosquitto/acl
 
-        cp ./mqtt/config/$Mqtt_Config_File /etc/mosquitto/conf.d/
-        sed -i "29 i\- \"/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf\"" ./docker-compose.yml
+        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
         systemctl stop mosquitto
         systemctl start mosquitto
@@ -154,7 +152,6 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ;
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
-Config_File="mosquitto.conf"
 run_update_adapter=false
 run_update_agent=false
 run_update_mosquitto=false
@@ -164,7 +161,7 @@ run_Docker=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:c:DHAMh" option; do
+while getopts ":a:d:u:DHAMh" option; do
     case ${option} in
         h) # display Help
             Help
@@ -183,8 +180,6 @@ while getopts ":a:d:u:c:DHAMh" option; do
             Serial_Number=$OPTARG;;
         M) # Update Mosquitto
             run_update_mosquitto=true;;
-        c) # Enter a Device file name
-            Config_File=$OPTARG;;
         \?) # Invalid option
             Help
             exit;;
@@ -224,7 +219,7 @@ if $run_update_agent; then
     echo "MTConnect UUID = HEMSaw_"$Serial_Number
 fi
 if $run_update_mosquitto; then
-    echo "Config file = "$Config_File
+    echo "Config file = mosquitto.conf"
 fi
 
 echo ""

@@ -26,7 +26,7 @@ services:
     hostname: mosquitto
     image: eclipse-mosquitto:latest
     volumes:
-      # - "/etc/mosquitto/conf.d/$Mqtt_Config_File:/mosquitto/config/mosquitto.conf"
+      - "/etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
       - "/etc/mosquitto/passwd:/mosquitto/data/passwd"
       - "/etc/mosquitto/acl:/mosquitto/data/acl"
     ports:
