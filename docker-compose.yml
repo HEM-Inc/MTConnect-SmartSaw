@@ -15,7 +15,7 @@ services:
     working_dir: "/etc/mtconnect/"
     restart: unless-stopped
     volumes:
-      - '/etc/mtconnect/agent/agent.cfg:/etc/mtconnect/data/agent.cfg'
+      - '/etc/mtconnect/agent/dockerAgent.cfg:/etc/mtconnect/data/agent.cfg'
       - '/etc/mtconnect/devices/:/etc/mtconnect/data/devices'
       - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
       - '/etc/mosquitto/:/etc/mosquitto'
