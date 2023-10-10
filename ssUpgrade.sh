@@ -228,7 +228,7 @@ if $run_update_mosquitto; then
     Update_Mosquitto
 fi
 
-if $run_update_adapter; then
+if $run_Docker; then
     RunAsDocker
 else
     if service_exists docker; then
