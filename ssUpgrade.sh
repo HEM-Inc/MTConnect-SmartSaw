@@ -109,13 +109,15 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
 
-        docker run -d --pull=always --restart=unless-stopped \
-            --name mosquitto \
-            -p 1883:1883/tcp \
-            -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
-            -v /etc/mosquitto/acl:/mosquitto/data/acl \
-            -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
-            eclipse-mosquitto:latest
+        if !run_Docker; then
+            docker run -d --pull=always --restart=unless-stopped \
+                --name mosquitto \
+                -p 1883:1883/tcp \
+                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+                -v /etc/mosquitto/acl:/mosquitto/data/acl \
+                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+                eclipse-mosquitto:latest
+        fi
 
         echo "Mosquitto Updated and Running"
     else
@@ -133,14 +135,16 @@ Update_Mosquitto(){
 
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
-        # docker pull eclipse-mosquitto:latest
-        docker run -d --pull=always --restart=unless-stopped \
-            --name mosquitto \
-            -p 1883:1883/tcp \
-            -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
-            -v /etc/mosquitto/acl:/mosquitto/data/acl \
-            -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
-            eclipse-mosquitto:latest
+        if !run_Docker; then
+            # docker pull eclipse-mosquitto:latest
+            docker run -d --pull=always --restart=unless-stopped \
+                --name mosquitto \
+                -p 1883:1883/tcp \
+                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+                -v /etc/mosquitto/acl:/mosquitto/data/acl \
+                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+                eclipse-mosquitto:latest
+        fi
 
         echo "Mosquitto MQTT Broker Up and Running"
     fi
