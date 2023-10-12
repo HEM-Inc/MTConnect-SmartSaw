@@ -34,7 +34,7 @@ RunAsDocker(){
         docker-compose up -d 
     else
         echo "Installing Docker..."
-        apt update -y
+        apt update
         apt install -y docker-compose
         apt clean
 
@@ -111,7 +111,7 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
 
-        apt update -y
+        apt update
         apt upgrade -y
 
         systemctl stop mosquitto
@@ -123,7 +123,7 @@ Update_Mosquitto(){
     else
         echo "Installing the mosquitto service..."
         apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-        apt update -y
+        apt update
         apt install -y mosquitto mosquitto-clients
         apt clean
 

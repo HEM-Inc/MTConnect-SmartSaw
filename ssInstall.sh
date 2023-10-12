@@ -29,14 +29,14 @@ RunAsDocker(){
         systemctl stop mosquitto
         systemctl stop agent
 
-        apt update -y
+        apt update
         apt upgrade -y
 
         echo "Starting up the Docker image"
         docker-compose up -d 
     else
         echo "Installing Docker..."
-        apt update -y
+        apt update
         apt install -y docker-compose
         apt clean
 
@@ -103,7 +103,7 @@ RunAsDaemon(){
 
     echo "Installing the mosquitto service..."
     apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-    apt update -y
+    apt update
     apt install -y mosquitto mosquitto-clients
     apt clean
 
