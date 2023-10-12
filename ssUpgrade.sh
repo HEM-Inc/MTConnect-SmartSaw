@@ -231,7 +231,8 @@ fi
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    docker-compose down || docker stop mosquitto && docker rm mosquitto
+    docker-compose down
+    docker stop mosquitto && docker rm mosquitto
 fi
 
 echo ""

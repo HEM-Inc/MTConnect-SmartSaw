@@ -66,11 +66,6 @@ RunMosquitto(){
                 -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
                 eclipse-mosquitto:latest
             
-            echo "Check to verify container is running:"
-            docker ps
-            docker logs mosquitto
-
-            echo ""
             echo "Mosquitto Updated and Running"
         else
             echo "Installing the mosquitto service..."
@@ -218,7 +213,8 @@ echo ""
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    docker-compose down || docker stop mosquitto && docker rm mosquitto
+    docker-compose down
+    docker stop mosquitto && docker rm mosquitto
 fi
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
