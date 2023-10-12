@@ -27,8 +27,8 @@ services:
     image: eclipse-mosquitto:latest
     volumes:
       - "/etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
-      - "/mosquitto/data/passwd:/mosquitto/data/passwd"
-      - "/mosquitto/data/acl:/mosquitto/data/acl"
+      - "/etc/mosquitto/passwd:/etc/mosquitto/passwd"
+      - "/etc/mosquitto/acl:/etc/mosquitto/acl"
     ports:
       - 1883:1883/tcp
     restart: unless-stopped

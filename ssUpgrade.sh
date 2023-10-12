@@ -108,8 +108,8 @@ Update_Mosquitto(){
     if service_exists mosquitto; then
         echo "Updating Mosquitto files..."
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-        cp ./mqtt/data/acl /mosquitto/data/acl
-        chmod 0700 /mosquitto/data/acl
+        cp ./mqtt/data/acl /etc/mosquitto/acl
+        chmod 0700 /etc/mosquitto/acl
 
         apt update -y
         apt upgrade -y
@@ -128,12 +128,11 @@ Update_Mosquitto(){
         apt clean
 
         echo "Adding mtconnect user to access control list"
-        mkdir -p /mosquitto/data/
-        touch /mosquitto/data/passwd
-        mosquitto_passwd -b /mosquitto/data/passwd mtconnect mtconnect
-        chmod 0700 /mosquitto/data/passwd
-        cp ./mqtt/data/acl /mosquitto/data/acl
-        chmod 0700 /mosquitto/data/acl
+        touch /etc/mosquitto/passwd
+        mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+        chmod 0700 /etc/mosquitto/passwd
+        cp ./mqtt/data/acl /etc/mosquitto/acl
+        chmod 0700 /etc/mosquitto/acl
 
 
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
