@@ -19,7 +19,7 @@ services:
       - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
     networks:
       mtc_net:
-        ipv4_address: 10.5.11.2
+        ipv4_address: 10.10.10.2
 
   mosquitto:
     container_name: mosquitto
@@ -34,7 +34,7 @@ services:
     restart: unless-stopped
     networks:
       mtc_net:
-        ipv4_address: 10.5.11.3
+        ipv4_address: 10.10.10.3
 
   watchtower:
     container_name: watchtower
@@ -58,4 +58,4 @@ networks:
     driver: bridge
     ipam:
      config:
-       - subnet: 10.5.11.0/29
+       - subnet: 10.10.10.0/29
