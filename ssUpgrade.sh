@@ -26,7 +26,6 @@ Help(){
 RunAsDocker(){
     if service_exists docker; then
         echo "Stopping the daemons..."
-        systemctl stop mosquitto
         systemctl stop agent
 
         echo "Starting up the Docker image"
@@ -43,7 +42,6 @@ RunAsDocker(){
         chmod 0700 /etc/mosquitto/passwd
 
         echo "Stopping the daemons..."
-        systemctl stop mosquitto
         systemctl stop agent
 
         echo "Starting up the Docker image"
@@ -105,7 +103,7 @@ Update_Agent(){
 }
 
 Update_Mosquitto(){
-    if service_exists mosquitto; then
+    if service_exists docker && test -f /etc/mosquitto/passwd; then
         echo "Updating Mosquitto files..."
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
         cp ./mqtt/data/acl /etc/mosquitto/acl
@@ -114,17 +112,20 @@ Update_Mosquitto(){
         apt update
         apt upgrade -y
 
-        systemctl stop mosquitto
-        systemctl daemon-reload
-        systemctl start mosquitto
-        systemctl status mosquitto
+        docker stop mosquitto
+        docker run -d --pull=always --restart=unless-stopped \
+            --name mosquitto \
+            -p 1883:1883/tcp \
+            -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+            -v /etc/mosquitto/acl:/mosquitto/data/acl \
+            -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+            eclipse-mosquitto:latest
 
         echo "Mosquitto Updated and Running"
     else
         echo "Installing the mosquitto service..."
-        apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
         apt update
-        apt install -y mosquitto mosquitto-clients
+        apt install -y docker-compose
         apt clean
 
         echo "Adding mtconnect user to access control list"
@@ -134,12 +135,16 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
 
-
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
-        systemctl stop mosquitto
-        systemctl start mosquitto
-        systemctl status mosquitto
+        # docker pull eclipse-mosquitto:latest
+        docker run -d --pull=always --restart=unless-stopped \
+            --name mosquitto \
+            -p 1883:1883/tcp \
+            -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+            -v /etc/mosquitto/acl:/mosquitto/data/acl \
+            -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+            eclipse-mosquitto:latest
 
         echo "Mosquitto MQTT Broker Up and Running"
     fi

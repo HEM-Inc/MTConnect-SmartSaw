@@ -53,6 +53,53 @@ RunAsDocker(){
     fi
     docker-compose logs
 }
+RunMosquitto(){
+    if service_exists docker && test -f /etc/mosquitto/passwd; then
+            echo "Updating Mosquitto files and image..."
+            cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+            cp ./mqtt/data/acl /etc/mosquitto/acl
+            chmod 0700 /etc/mosquitto/acl
+
+            apt update
+            apt upgrade -y
+
+            docker stop mosquitto
+            docker run -d --pull=always --restart=unless-stopped \
+                --name mosquitto \
+                -p 1883:1883/tcp \
+                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+                -v /etc/mosquitto/acl:/mosquitto/data/acl \
+                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+                eclipse-mosquitto:latest
+
+            echo "Mosquitto Updated and Running"
+        else
+            echo "Installing the mosquitto service..."
+            apt update
+            apt install -y docker-compose
+            apt clean
+
+            echo "Adding mtconnect user to access control list"
+            touch /etc/mosquitto/passwd
+            mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
+            chmod 0700 /etc/mosquitto/passwd
+            cp ./mqtt/data/acl /etc/mosquitto/acl
+            chmod 0700 /etc/mosquitto/acl
+
+            cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+
+            # docker pull eclipse-mosquitto:latest
+            docker run -d --pull=always --restart=unless-stopped \
+                --name mosquitto \
+                -p 1883:1883/tcp \
+                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
+                -v /etc/mosquitto/acl:/mosquitto/data/acl \
+                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
+                eclipse-mosquitto:latest
+
+            echo "Mosquitto MQTT Broker Up and Running"
+        fi
+    }
 
 
 ############################################################
@@ -100,26 +147,6 @@ RunAsDaemon(){
     systemctl status agent
 
     echo "MTConnect Agent Up and Running"
-
-    echo "Installing the mosquitto service..."
-    apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
-    apt update
-    apt install -y mosquitto mosquitto-clients
-    apt clean
-
-    echo "Adding mtconnect user to access control list"
-    touch /etc/mosquitto/passwd
-    mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
-    chmod 0700 /etc/mosquitto/passwd
-    cp ./mqtt/data/acl /etc/mosquitto/acl
-    chmod 0700 /etc/mosquitto/acl
-
-    cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-
-    systemctl stop mosquitto
-    systemctl start mosquitto
-    systemctl status mosquitto
-    echo "Mosquitto MQTT Broker Up and Running"
 }
 
 
@@ -207,4 +234,6 @@ RunAsDaemon
 
 if $run_update_adapter; then
     RunAsDocker
+else
+    RunMosquitto
 fi
