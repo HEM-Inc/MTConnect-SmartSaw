@@ -26,7 +26,6 @@ Help(){
 RunAsDocker(){
     if service_exists docker; then
         echo "Stopping the daemons..."
-        systemctl stop mosquitto
         systemctl stop agent
 
         apt update
@@ -45,7 +44,6 @@ RunAsDocker(){
         chmod 0700 /etc/mosquitto/passwd
 
         echo "Stopping the daemons..."
-        systemctl stop mosquitto
         systemctl stop agent
 
         echo "Starting up the Docker image"
@@ -67,7 +65,12 @@ RunMosquitto(){
                 -v /etc/mosquitto/acl:/mosquitto/data/acl \
                 -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
                 eclipse-mosquitto:latest
+            
+            echo "Check to verify container is running:"
+            docker ps
+            docker logs mosquitto
 
+            echo ""
             echo "Mosquitto Updated and Running"
         else
             echo "Installing the mosquitto service..."
@@ -92,7 +95,7 @@ RunMosquitto(){
                 -v /etc/mosquitto/acl:/mosquitto/data/acl \
                 -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
                 eclipse-mosquitto:latest
-
+            
             echo "Mosquitto MQTT Broker Up and Running"
         fi
     }
@@ -239,3 +242,7 @@ if $run_update_adapter; then
 else
     RunMosquitto
 fi
+
+echo ""
+echo "Check to verify containers are running:"
+docker ps

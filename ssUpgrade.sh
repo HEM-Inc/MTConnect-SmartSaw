@@ -248,3 +248,7 @@ fi
 if $run_Docker; then
     RunAsDocker
 fi
+
+echo ""
+echo "Check to verify containers are running:"
+docker ps
