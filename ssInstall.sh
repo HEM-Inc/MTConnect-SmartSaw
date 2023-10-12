@@ -29,6 +29,9 @@ RunAsDocker(){
         systemctl stop mosquitto
         systemctl stop agent
 
+        apt update -y
+        apt upgrade -y
+
         echo "Starting up the Docker image"
         docker-compose up -d 
     else

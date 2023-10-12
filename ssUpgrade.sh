@@ -111,6 +111,9 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
 
+        apt update -y
+        apt upgrade -y
+
         systemctl stop mosquitto
         systemctl daemon-reload
         systemctl start mosquitto
@@ -244,7 +247,3 @@ fi
 if $run_Docker; then
     RunAsDocker
 fi
-
-
-
-
