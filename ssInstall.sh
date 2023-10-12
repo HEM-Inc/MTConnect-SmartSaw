@@ -60,10 +60,6 @@ RunMosquitto(){
             cp ./mqtt/data/acl /etc/mosquitto/acl
             chmod 0700 /etc/mosquitto/acl
 
-            apt update
-            apt upgrade -y
-
-            docker stop mosquitto
             docker run -d --pull=always --restart=unless-stopped \
                 --name mosquitto \
                 -p 1883:1883/tcp \
@@ -215,6 +211,12 @@ echo "Mosquitto Config file = mosquitto.conf"
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo "Run Docker = "$run_Docker
 echo ""
+
+echo ""
+if service_exists docker; then
+    echo "Shutting down any old Docker containers"
+    docker-compose down || docker stop mosquitto && docker rm mosquitto
+fi
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
 
