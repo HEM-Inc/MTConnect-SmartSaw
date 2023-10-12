@@ -109,7 +109,7 @@ Update_Mosquitto(){
         cp ./mqtt/data/acl /etc/mosquitto/acl
         chmod 0700 /etc/mosquitto/acl
 
-        if ((!run_Docker)); then
+        if [ $run_Docker -eq 0 ]; then
             docker run -d --pull=always --restart=unless-stopped \
                 --name mosquitto \
                 -p 1883:1883/tcp \
@@ -135,7 +135,7 @@ Update_Mosquitto(){
 
         cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
-        if ((!run_Docker)); then
+        if [ $run_Docker -eq 0 ]; then
             # docker pull eclipse-mosquitto:latest
             docker run -d --pull=always --restart=unless-stopped \
                 --name mosquitto \
