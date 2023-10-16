@@ -1,8 +1,8 @@
 version: '3.5'
 services:
   agent:
-    container_name: mtcagent
-    hostname: mtcagent
+    container_name: mtc_agent
+    hostname: mtc_agent
     image: skibum1869/mtconnect_ubuntu_agent:latest
     user: agent
     environment:
@@ -17,9 +17,6 @@ services:
       - '/etc/mtconnect/agent/dockerAgent.cfg:/etc/mtconnect/data/dockerAgent.cfg'
       - '/etc/mtconnect/devices/:/etc/mtconnect/data/devices'
       - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
-    networks:
-      mtc_net:
-        ipv4_address: 10.10.10.2
 
   mosquitto:
     container_name: mosquitto
@@ -32,9 +29,6 @@ services:
     ports:
       - 1883:1883/tcp
     restart: unless-stopped
-    networks:
-      mtc_net:
-        ipv4_address: 10.10.10.3
 
   watchtower:
     container_name: watchtower
@@ -52,10 +46,3 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
-
-networks:
-  mtc_net:
-    driver: bridge
-    ipam:
-     config:
-       - subnet: 10.10.10.0/29
