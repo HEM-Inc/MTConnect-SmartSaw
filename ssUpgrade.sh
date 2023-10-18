@@ -63,8 +63,7 @@ Update_Adapter(){
 Update_Agent(){
     echo "Updating MTConnect Agent files..."
     cp -r ./agent/. /etc/mtconnect/agent/
-    sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-    sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/dockerAgent.cfg
+    sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
     rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
     cp -r ./devices/$Device_File /etc/mtconnect/devices/
     sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File

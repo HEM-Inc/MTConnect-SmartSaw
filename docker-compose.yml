@@ -10,11 +10,11 @@ services:
       - DEBIAN_FRONTEND=noninteractive
     ports: 
       - 5000:5000/tcp
-    entrypoint: "/usr/bin/mtcagent run /etc/mtconnect/data/dockerAgent.cfg"
+    entrypoint: "/usr/bin/mtcagent run /etc/mtconnect/data/agent.cfg"
     working_dir: "/etc/mtconnect/"
     restart: unless-stopped
     volumes:
-      - '/etc/mtconnect/agent/dockerAgent.cfg:/etc/mtconnect/data/dockerAgent.cfg'
+      - '/etc/mtconnect/agent/agent.cfg:/etc/mtconnect/data/agent.cfg'
       - '/etc/mtconnect/devices/:/etc/mtconnect/data/devices'
       - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
 
