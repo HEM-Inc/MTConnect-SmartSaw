@@ -52,6 +52,22 @@ RunAsDocker(){
 # Installers                                               #
 ############################################################
 
+RunAdapter(){
+    echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
+
+    mkdir -p /etc/adapter/
+    cp -r ./adapter/. /etc/adapter/
+    cp -r ./afg/$Afg_File /etc/adapter/
+    chmod +x /etc/adapter/Adapter
+
+    cp /etc/adapter/adapter.service /etc/systemd/system/
+    systemctl enable adapter
+    systemctl start adapter
+    systemctl status adapter
+
+    echo "MTConnect Adapter Up and Running"
+}
+
 RunMTCAgent(){
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
@@ -167,20 +183,8 @@ if service_exists docker; then
     docker-compose down
 fi
 
-echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
 
-mkdir -p /etc/adapter/
-cp -r ./adapter/. /etc/adapter/
-cp -r ./afg/$Afg_File /etc/adapter/
-chmod +x /etc/adapter/Adapter
-
-cp /etc/adapter/adapter.service /etc/systemd/system/
-systemctl enable adapter
-systemctl start adapter
-systemctl status adapter
-
-echo "MTConnect Adapter Up and Running"
-
+RunAdapter
 RunMTCAgent
 RunAsDocker
     
