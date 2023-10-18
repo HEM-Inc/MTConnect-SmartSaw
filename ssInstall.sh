@@ -10,10 +10,9 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-D|-a File_Name|-d File_Name|-u Serial_number]"
+    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-u Serial_number]"
     echo "options:"
     echo "-h             Print this Help."
-    echo "-D             Use a Docker image for the Agent and MQTT Broker"
     echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
@@ -39,10 +38,6 @@ RunAsDocker(){
         apt install -y docker-compose
         apt clean
 
-        touch /etc/mosquitto/passwd
-        mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
-        chmod 0700 /etc/mosquitto/passwd
-
         echo "Stopping the daemons..."
         systemctl stop agent
 
@@ -51,72 +46,19 @@ RunAsDocker(){
     fi
     docker-compose logs
 }
-RunMosquitto(){
-    if service_exists docker && test -f /etc/mosquitto/passwd; then
-        echo "Updating Mosquitto files..."
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-
-        if $run_Docker; then
-            echo "running compose for mosquitto"
-        else
-            docker run -d --pull=always --restart=unless-stopped \
-                --name mosquitto \
-                -p 1883:1883/tcp \
-                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
-                -v /etc/mosquitto/acl:/mosquitto/data/acl \
-                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
-                eclipse-mosquitto:latest
-        fi
-
-        echo "Mosquitto Updated and Running"
-    else
-        echo "Installing the mosquitto service..."
-        apt update
-        apt install -y docker-compose mosquitto mosquitto-clients
-        systemctl stop mosquitto
-        apt clean
-
-        echo "Adding mtconnect user to access control list"
-        touch /etc/mosquitto/passwd
-        mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
-        chmod 0700 /etc/mosquitto/passwd
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-
-        if $run_Docker; then
-            echo "running compose for mosquitto"
-        else
-            # docker pull eclipse-mosquitto:latest
-            docker run -d --pull=always --restart=unless-stopped \
-                --name mosquitto \
-                -p 1883:1883/tcp \
-                -v /etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf \
-                -v /etc/mosquitto/acl:/mosquitto/data/acl \
-                -v /etc/mosquitto/passwd:/mosquitto/data/passwd \
-                eclipse-mosquitto:latest
-        fi
-
-        echo "Mosquitto MQTT Broker Up and Running"
-    fi
-}
 
 
 ############################################################
 # Installers                                               #
 ############################################################
 
-RunAsDaemon(){
-
+RunMTCAgent(){
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
         docker-compose down
     fi
 
-    echo "Installing MTConnect and setting it as a SystemCTL..."
+    echo "Moving MTConnect Files..."
 
     useradd -r -s /bin/false mtconnect
     mkdir /var/log/mtconnect
@@ -128,12 +70,6 @@ RunAsDaemon(){
     mkdir -p /etc/mtconnect/schema/
     mkdir -p /etc/mtconnect/styles/
 
-    tar -xf agent_dist/mtcagent_dist.tar.gz -C agent_dist/
-    cp agent_dist/mtcagent_dist/bin/* /usr/bin
-    cp agent_dist/mtcagent_dist/lib/* /usr/lib 
-    rm -rf agent_dist/mtcagent_dist/
-    chmod +x /usr/bin/mtcagent
-
     cp -r ./agent/. /etc/mtconnect/agent/
     sed -i '1 i\Devices = ../devices/'$Device_File /etc/mtconnect/agent/agent.cfg
     sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/dockerAgent.cfg
@@ -144,12 +80,22 @@ RunAsDaemon(){
     cp -r ./ruby/. /etc/mtconnect/ruby/
     chown -R mtconnect:mtconnect /etc/mtconnect
 
-    cp /etc/mtconnect/agent/agent.service /etc/systemd/system/
-    systemctl enable agent
-    systemctl start agent
-    systemctl status agent
-
-    echo "MTConnect Agent Up and Running"
+    if test -f /etc/mosquitto/passwd; then
+        echo "Updating Mosquitto files..."
+        cp -u ./mqtt/data/passwd /etc/mosquitto
+        chmod 0700 /etc/mosquitto/passwd
+        cp -u ./mqtt/data/acl /etc/mosquitto
+        chmod 0700 /etc/mosquitto/acl
+        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+    else
+        echo "Updating Mosquitto files..."
+        mkdir -p /etc/mosquitto/conf.d/
+        cp -u ./mqtt/data/passwd /etc/mosquitto
+        chmod 0700 /etc/mosquitto/passwd
+        cp -u ./mqtt/data/acl /etc/mosquitto
+        chmod 0700 /etc/mosquitto/acl
+        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+    fi
 }
 
 
@@ -184,19 +130,16 @@ fi
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
-run_Docker=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:Dh" option; do
+while getopts ":a:d:u:h" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
-        D) # use a docker image for mqtt and Agent
-            run_Docker=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
         d) # Enter a Device file name
@@ -216,15 +159,12 @@ echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
 echo "Mosquitto Config file = mosquitto.conf"
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
-echo "Run Docker = "$run_Docker
 echo ""
 
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    systemctl stop mosquitto
     docker-compose down
-    docker stop mosquitto && docker rm mosquitto
 fi
 
 echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
@@ -241,13 +181,9 @@ systemctl status adapter
 
 echo "MTConnect Adapter Up and Running"
 
-RunAsDaemon
-
-if $run_update_adapter; then
-    RunAsDocker
-else
-    RunMosquitto
-fi
+RunMTCAgent
+RunAsDocker
+    
 
 echo ""
 echo "Check to verify containers are running:"
