@@ -30,7 +30,7 @@ RunAsDocker(){
 
         echo "Starting up the Docker image"
         docker-compose pull
-        docker-compose up -d 
+        docker-compose up --remove-orphans -d 
     else
         echo "Installing Docker..."
         apt update
@@ -45,7 +45,7 @@ RunAsDocker(){
         systemctl stop agent
 
         echo "Starting up the Docker image"
-        docker-compose up -d 
+        docker-compose up --remove-orphans -d 
     fi
     docker-compose logs
 }
@@ -260,4 +260,5 @@ fi
 
 echo ""
 echo "Check to verify containers are running:"
+docker system prune
 docker ps
