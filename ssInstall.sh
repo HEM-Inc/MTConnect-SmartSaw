@@ -54,8 +54,8 @@ RunAsDocker(){
 RunMosquitto(){
     if service_exists docker && test -f /etc/mosquitto/passwd; then
         echo "Updating Mosquitto files..."
-        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-        cp ./mqtt/data/acl /etc/mosquitto/acl
+        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        cp -u ./mqtt/data/acl /etc/mosquitto
         chmod 0700 /etc/mosquitto/acl
 
         if $run_Docker; then
@@ -82,10 +82,10 @@ RunMosquitto(){
         touch /etc/mosquitto/passwd
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
         chmod 0700 /etc/mosquitto/passwd
-        cp ./mqtt/data/acl /etc/mosquitto/acl
+        cp -u ./mqtt/data/acl /etc/mosquitto
         chmod 0700 /etc/mosquitto/acl
 
-        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
         if $run_Docker; then
             echo "running compose for mosquitto"

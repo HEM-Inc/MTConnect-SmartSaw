@@ -61,7 +61,7 @@ Update_Adapter(){
     rm -rf /etc/adapter/SmartSaw_*.afg
     cp -r ./afg/$Afg_File /etc/adapter/
     chmod +x /etc/adapter/Adapter
-    cp /etc/adapter/adapter.service /etc/systemd/system/
+    cp -u /etc/adapter/adapter.service /etc/systemd/system/
 
     systemctl daemon-reload
     systemctl start adapter
@@ -105,8 +105,8 @@ Update_Agent(){
 Update_Mosquitto(){
     if service_exists docker && test -f /etc/mosquitto/passwd; then
         echo "Updating Mosquitto files..."
-        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
-        cp ./mqtt/data/acl /etc/mosquitto/acl
+        cp -u  ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        cp -u  ./mqtt/data/acl /etc/mosquitto
         chmod 0700 /etc/mosquitto/acl
 
         if $run_Docker; then
@@ -133,10 +133,10 @@ Update_Mosquitto(){
         touch /etc/mosquitto/passwd
         mosquitto_passwd -b /etc/mosquitto/passwd mtconnect mtconnect
         chmod 0700 /etc/mosquitto/passwd
-        cp ./mqtt/data/acl /etc/mosquitto/acl
+        cp -u ./mqtt/data/acl /etc/mosquitto
         chmod 0700 /etc/mosquitto/acl
 
-        cp ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
 
         if $run_Docker; then
             echo "running compose for mosquitto"
