@@ -125,7 +125,8 @@ Update_Mosquitto(){
     else
         echo "Installing the mosquitto service..."
         apt update
-        apt install -y docker-compose
+        apt install -y docker-compose mosquitto mosquitto-clients
+        systemctl stop mosquitto
         apt clean
 
         echo "Adding mtconnect user to access control list"
@@ -239,6 +240,7 @@ fi
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
+    systemctl stop mosquitto
     docker-compose down
     docker stop mosquitto && docker rm mosquitto
 fi
