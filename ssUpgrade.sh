@@ -161,7 +161,6 @@ echo "Printing the options..."
 echo "Update Adapter set to run = "$run_update_adapter
 echo "Update MTConnect Agent set to run = "$run_update_agent
 echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
-echo "Run Docker = "$run_Docker
 if $run_update_adapter; then
     echo "AFG file = "$Afg_File
 fi
