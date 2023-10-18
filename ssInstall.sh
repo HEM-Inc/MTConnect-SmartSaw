@@ -249,5 +249,5 @@ fi
 
 echo ""
 echo "Check to verify containers are running:"
-docker system prune
+docker system prune -f
 docker ps
