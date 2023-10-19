@@ -116,7 +116,7 @@ service_exists() {
 
 user_exists() {
     local n=$1
-    if id -u "$n.user" &>/dev/null; then
+    if id -u "$n.user" > /dev/null 2>&1; then
         return 1
     else
         return 0
