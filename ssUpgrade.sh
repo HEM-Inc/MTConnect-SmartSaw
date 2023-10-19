@@ -8,21 +8,21 @@ Help(){
     echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-h]"
+    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-h]"
     echo "options:"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-A                Update the MTConnect Agent application"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-M                Update the mosquitto broker application"
+    echo "-M                Update the Mosquitto broker application"
     echo "-h                Print this Help."
 }
 
 ############################################################
 # Docker                                                   #
 ############################################################
-RunAsDocker(){
+RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
         docker-compose pull
@@ -61,17 +61,42 @@ Update_Adapter(){
 }
 
 Update_Agent(){
-    echo "Updating MTConnect Agent files..."
-    cp -r ./agent/. /etc/mtconnect/agent/
-    sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-    rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
-    cp -r ./devices/$Device_File /etc/mtconnect/devices/
-    sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-    cp -r ./schema/. /etc/mtconnect/schema/
-    cp -r ./styles/. /etc/mtconnect/styles/
-    cp -r ./ruby/. /etc/mtconnect/ruby/
-    chown -R mtconnect:mtconnect /etc/mtconnect
-    echo ""
+    if test -f ; then
+        echo "Updating MTConnect Agent files..."
+        cp -r ./agent/. /etc/mtconnect/agent/
+        sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+        rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
+        cp -r ./devices/$Device_File /etc/mtconnect/devices/
+        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
+        cp -r ./schema/. /etc/mtconnect/schema/
+        cp -r ./styles/. /etc/mtconnect/styles/
+        cp -r ./ruby/. /etc/mtconnect/ruby/
+        chown -R mtconnect:mtconnect /etc/mtconnect
+        echo ""
+    else
+        echo "Installing MTConnect Agent files..."
+
+        if ! user_exists mtconnect; then
+            useradd -r -s /bin/false mtconnect
+            chown mtconnect:mtconnect /var/log/mtconnect
+        fi
+
+        mkdir -p /etc/mtconnect/
+        mkdir -p /etc/mtconnect/agent/
+        mkdir -p /etc/mtconnect/devices/
+        mkdir -p /etc/mtconnect/schema/
+        mkdir -p /etc/mtconnect/styles/
+
+        cp -r ./agent/agent.cfg /etc/mtconnect/agent/
+        sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+        rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
+        cp -r ./devices/$Device_File /etc/mtconnect/devices/
+        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
+        cp -r ./schema/. /etc/mtconnect/schema/
+        cp -r ./styles/. /etc/mtconnect/styles/
+        cp -r ./ruby/. /etc/mtconnect/ruby/
+        chown -R mtconnect:mtconnect /etc/mtconnect
+        echo ""
 }
 
 Update_Mosquitto(){
@@ -100,6 +125,12 @@ Update_Mosquitto(){
 ############################################################
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
+
+if ! user_exists mtconnect; 
+    then echo 'mtconnect user not found, run bash ssInstall.sh instead'; exit 1 
+else
+    echo 'Mtconnect user found, continuing install...'
+fi
 
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
@@ -149,6 +180,15 @@ service_exists() {
     fi
 }
 
+user_exists() {
+    local n=$1
+    if [[ id -u "$n.user" &>/dev/null ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 
 ############################################################
 ############################################################
@@ -188,7 +228,7 @@ if $run_update_mosquitto; then
     Update_Mosquitto
 fi
 
-RunAsDocker
+RunDocker
 
 echo ""
 echo "Check to verify containers are running:"

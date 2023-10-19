@@ -10,49 +10,19 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: agent_install [-h|-a File_Name|-d File_Name|-u Serial_number]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-d File_Name|-u Serial_number]"
     echo "options:"
-    echo "-h             Print this Help."
-    echo "-a File_Name   Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
-    echo "-d File_Name   Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
-    echo "-u Serial_number   Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-h                    Print this Help."
+    echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
+    echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
+    echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
-
-############################################################
-# Docker                                                   #
-############################################################
-
-RunAsDocker(){
-    if service_exists docker; then
-        echo "Stopping the daemons..."
-        systemctl stop agent
-
-        apt update
-        apt upgrade -y
-
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
-    else
-        echo "Installing Docker..."
-        apt update
-        apt install -y docker-compose
-        apt clean
-
-        echo "Stopping the daemons..."
-        systemctl stop agent
-
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
-    fi
-    docker-compose logs
-}
-
 
 ############################################################
 # Installers                                               #
 ############################################################
 
-RunAdapter(){
+InstallAdapter(){
     echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
 
     mkdir -p /etc/adapter/
@@ -68,17 +38,17 @@ RunAdapter(){
     echo "MTConnect Adapter Up and Running"
 }
 
-RunMTCAgent(){
+InstallMTCAgent(){
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
         docker-compose down
     fi
 
     echo "Moving MTConnect Files..."
-
-    useradd -r -s /bin/false mtconnect
-    mkdir /var/log/mtconnect
-    chown mtconnect:mtconnect /var/log/mtconnect
+    if ! user_exists mtconnect; then
+        useradd -r -s /bin/false mtconnect
+        chown mtconnect:mtconnect /var/log/mtconnect
+    fi
 
     mkdir -p /etc/mtconnect/
     mkdir -p /etc/mtconnect/agent/
@@ -113,6 +83,31 @@ RunMTCAgent(){
     fi
 }
 
+InstallDocker(){
+    if service_exists docker; then
+        echo "Stopping the daemons..."
+        systemctl stop agent
+
+        apt update
+        apt upgrade -y
+
+        echo "Starting up the Docker image"
+        docker-compose up --remove-orphans -d 
+    else
+        echo "Installing Docker..."
+        apt update
+        apt install -y docker-compose
+        apt clean
+
+        echo "Stopping the daemons..."
+        systemctl stop agent
+
+        echo "Starting up the Docker image"
+        docker-compose up --remove-orphans -d 
+    fi
+    docker-compose logs
+}
+
 
 ############################################################
 # Service exists function                                  #
@@ -127,6 +122,15 @@ service_exists() {
     fi
 }
 
+user_exists() {
+    local n=$1
+    if [[ id -u "$n.user" &>/dev/null ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 ############################################################
 ############################################################
 # Main program                                             #
@@ -135,10 +139,10 @@ service_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if id "mtconnect" &>/dev/null; 
+if user_exists mtconnect; 
     then echo 'mtconnect user found, run bash ssUpgrade.sh instead'; exit 1 
 else
-    echo 'User not found, continuing install...'
+    echo 'Mtconnet user not found, continuing install...'
 fi
 
 # Set default variables
@@ -183,9 +187,9 @@ if service_exists docker; then
 fi
 
 
-RunAdapter
-RunMTCAgent
-RunAsDocker
+InstallAdapter
+InstallMTCAgent
+InstallDocker
     
 
 echo ""
