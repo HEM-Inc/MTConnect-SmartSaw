@@ -45,9 +45,8 @@ InstallMTCAgent(){
     fi
 
     echo "Moving MTConnect Files..."
-    if ! user_exists mtconnect; then
+    if ! id -u mtconnect > /dev/null 2>&1; then
         useradd -r -s /bin/false mtconnect
-        chown mtconnect:mtconnect /var/log/mtconnect
     fi
 
     mkdir -p /etc/mtconnect/
@@ -96,6 +95,7 @@ InstallDocker(){
     else
         echo "Installing Docker..."
         apt update
+        apt upgrade -y
         apt install -y docker-compose
         apt clean
 

@@ -78,7 +78,6 @@ Update_Agent(){
 
         if ! id -u mtconnect > /dev/null 2>&1; then
             useradd -r -s /bin/false mtconnect
-            chown mtconnect:mtconnect /var/log/mtconnect
         fi
 
         mkdir -p /etc/mtconnect/
