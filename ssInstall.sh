@@ -122,15 +122,6 @@ service_exists() {
     fi
 }
 
-user_exists() {
-    local n=$1
-    if id -u "$n.user" > /dev/null 2>&1; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 ############################################################
 ############################################################
 # Main program                                             #
@@ -139,7 +130,7 @@ user_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if user_exists mtconnect; 
+if id -u mtconnect > /dev/null 2>&1; 
     then echo 'mtconnect user found, run bash ssUpgrade.sh instead'; exit 1 
 else
     echo 'Mtconnet user not found, continuing install...'

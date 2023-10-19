@@ -76,7 +76,7 @@ Update_Agent(){
     else
         echo "Installing MTConnect Agent files..."
 
-        if ! user_exists mtconnect; then
+        if ! id -u mtconnect > /dev/null 2>&1; then
             useradd -r -s /bin/false mtconnect
             chown mtconnect:mtconnect /var/log/mtconnect
         fi
@@ -127,7 +127,7 @@ Update_Mosquitto(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
-if ! user_exists mtconnect; 
+if ! id -u mtconnect > /dev/null 2>&1; 
     then echo 'mtconnect user not found, run bash ssInstall.sh instead'; exit 1 
 else
     echo 'Mtconnect user found, continuing install...'
@@ -180,16 +180,6 @@ service_exists() {
         return 1
     fi
 }
-
-user_exists() {
-    local n=$1
-    if id -u "$n.user" > /dev/null 2>&1; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 
 ############################################################
 ############################################################

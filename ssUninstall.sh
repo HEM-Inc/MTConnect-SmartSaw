@@ -33,7 +33,7 @@ Uninstall_Agent(){
     echo "Uninstalling MTConnect Agent files..."
     systemctl stop agent
 
-    if user_exists mtconnect; then
+    if id -u mtconnect > /dev/null 2>&1; then
         userdel -f -r mtconnect
     fi
     
@@ -113,16 +113,6 @@ service_exists() {
         return 1
     fi
 }
-
-user_exists() {
-    local n=$1
-    if id -u "$n.user" > /dev/null 2>&1; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 
 
 ############################################################
