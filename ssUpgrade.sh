@@ -97,6 +97,7 @@ Update_Agent(){
         cp -r ./ruby/. /etc/mtconnect/ruby/
         chown -R mtconnect:mtconnect /etc/mtconnect
         echo ""
+    fi
 }
 
 Update_Mosquitto(){
