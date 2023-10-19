@@ -46,8 +46,8 @@ Uninstall_Agent(){
 }
 Uninstall_Mosquitto(){
     echo "Uninstalling Mosquitto files..."
-    apt purge mosquitto mosquitto-clients
-    apt autoremove
+    apt purge -y mosquitto mosquitto-clients
+    apt autoremove -y
     rm -rf /etc/mosquitto
     systemctl daemon-reload
     echo "<<Done>>"
@@ -60,8 +60,8 @@ Uninstall_Docker(){
     echo "Uninstalling MTConnect Adapter..."
     docker system prune --all --force --volumes
 
-    apt purge docker-compose docker
-    apt autoremove
+    apt purge -y docker-compose docker
+    apt autoremove -y
 }
 
 ############################################################
