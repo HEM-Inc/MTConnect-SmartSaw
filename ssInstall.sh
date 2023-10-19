@@ -84,9 +84,6 @@ InstallMTCAgent(){
 
 InstallDocker(){
     if service_exists docker; then
-        echo "Stopping the daemons..."
-        systemctl stop agent
-
         apt update
         apt upgrade -y
 
@@ -98,9 +95,6 @@ InstallDocker(){
         apt upgrade -y
         apt install -y docker-compose
         apt clean
-
-        echo "Stopping the daemons..."
-        systemctl stop agent
 
         echo "Starting up the Docker image"
         docker-compose up --remove-orphans -d 
