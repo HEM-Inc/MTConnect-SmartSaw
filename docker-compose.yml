@@ -1,6 +1,6 @@
 version: '3.5'
 services:
-  agent:
+  mtc_agent:
     container_name: mtc_agent
     hostname: mtc_agent
     image: hemsaw/mtconnect:latest
@@ -46,3 +46,11 @@ services:
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
+
+  restarter:
+    container_name: restarter
+    hostname: restarter
+    image: docker:cli
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    command: ["/bin/sh", "-c", "while true; do sleep 86400; docker restart mtc_agent; done"]
+    restart: unless-stopped
