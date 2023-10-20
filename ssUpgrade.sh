@@ -68,7 +68,6 @@ Update_Agent(){
         rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
         cp -r ./devices/$Device_File /etc/mtconnect/devices/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-        cp -r ./schema/. /etc/mtconnect/schema/
         cp -r ./styles/. /etc/mtconnect/styles/
         cp -r ./ruby/. /etc/mtconnect/ruby/
         chown -R mtconnect:mtconnect /etc/mtconnect
@@ -78,7 +77,6 @@ Update_Agent(){
         mkdir -p /etc/mtconnect/
         mkdir -p /etc/mtconnect/agent/
         mkdir -p /etc/mtconnect/devices/
-        mkdir -p /etc/mtconnect/schema/
         mkdir -p /etc/mtconnect/styles/
 
         cp -r ./agent/agent.cfg /etc/mtconnect/agent/
@@ -86,7 +84,6 @@ Update_Agent(){
         rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
         cp -r ./devices/$Device_File /etc/mtconnect/devices/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-        cp -r ./schema/. /etc/mtconnect/schema/
         cp -r ./styles/. /etc/mtconnect/styles/
         cp -r ./ruby/. /etc/mtconnect/ruby/
         echo ""
