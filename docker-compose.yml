@@ -3,20 +3,18 @@ services:
   mtc_agent:
     container_name: mtc_agent
     hostname: mtc_agent
-    image: hemsaw/mtconnect:latest
+    image: mtconnect/agent:latest
     user: agent
-    environment:
-      - TZ=Etc/UTC
-      - DEBIAN_FRONTEND=noninteractive
     ports: 
       - 5000:5000/tcp
-    entrypoint: "/usr/bin/mtcagent run /etc/mtconnect/data/agent.cfg"
-    working_dir: "/etc/mtconnect/"
+    entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
+    working_dir: "/home/agent"
     restart: unless-stopped
     volumes:
-      - '/etc/mtconnect/agent/agent.cfg:/etc/mtconnect/data/agent.cfg'
-      - '/etc/mtconnect/devices/:/etc/mtconnect/data/devices'
-      - '/etc/mtconnect/ruby/:/etc/mtconnect/data/ruby'
+      - '/etc/mtconnect/agent/agent.cfg:/mtconnect/config/agent.cfg'
+      - '/etc/mtconnect/devices/:/mtconnect/config/devices'
+      - '/etc/mtconnect/ruby/:/mtconnect/config/ruby'
+      - '/etc/mtconnect/styles/:/mtconnect/data/styles'
 
   mosquitto:
     container_name: mosquitto
@@ -28,6 +26,7 @@ services:
       - "/etc/mosquitto/acl:/mosquitto/data/acl"
     ports:
       - 1883:1883/tcp
+      - 9001:9001/tcp
     restart: unless-stopped
 
   watchtower:
@@ -47,10 +46,10 @@ services:
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
 
-  restarter:
-    container_name: restarter
-    hostname: restarter
-    image: docker:cli
-    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
-    command: ["/bin/sh", "-c", "while true; do sleep 86400; docker restart mtc_agent; done"]
-    restart: unless-stopped
+  # restarter:
+  #   container_name: restarter
+  #   hostname: restarter
+  #   image: docker:cli
+  #   volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+  #   command: ["/bin/sh", "-c", "while true; do sleep 86400; docker restart mtc_agent; done"]
+  #   restart: unless-stopped

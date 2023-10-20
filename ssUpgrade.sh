@@ -61,10 +61,10 @@ Update_Adapter(){
 }
 
 Update_Agent(){
-    if test -f ; then
+    if test -f /etc/mtconnect/agent/agent.cfg; then
         echo "Updating MTConnect Agent files..."
         cp -r ./agent/. /etc/mtconnect/agent/
-        sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
         rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
         cp -r ./devices/$Device_File /etc/mtconnect/devices/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
@@ -75,11 +75,6 @@ Update_Agent(){
         echo ""
     else
         echo "Installing MTConnect Agent files..."
-
-        if ! id -u mtconnect > /dev/null 2>&1; then
-            useradd -r -s /bin/false mtconnect
-        fi
-
         mkdir -p /etc/mtconnect/
         mkdir -p /etc/mtconnect/agent/
         mkdir -p /etc/mtconnect/devices/
@@ -87,14 +82,13 @@ Update_Agent(){
         mkdir -p /etc/mtconnect/styles/
 
         cp -r ./agent/agent.cfg /etc/mtconnect/agent/
-        sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
         rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
         cp -r ./devices/$Device_File /etc/mtconnect/devices/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
         cp -r ./schema/. /etc/mtconnect/schema/
         cp -r ./styles/. /etc/mtconnect/styles/
         cp -r ./ruby/. /etc/mtconnect/ruby/
-        chown -R mtconnect:mtconnect /etc/mtconnect
         echo ""
     fi
 }
@@ -126,10 +120,10 @@ Update_Mosquitto(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
-if ! id -u mtconnect > /dev/null 2>&1; 
-    then echo 'mtconnect user not found, run bash ssInstall.sh instead'; exit 1 
+if ! test -f /etc/mtconnect/agent/agent.cfg; 
+    then echo 'mtconnect agent.cfg not found, run bash ssInstall.sh instead'; exit 1 
 else
-    echo 'Mtconnect user found, continuing install...'
+    echo 'Mtconnect agent.cfg found, continuing install...'
 fi
 
 # Set default variables

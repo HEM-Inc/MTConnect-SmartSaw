@@ -45,10 +45,6 @@ InstallMTCAgent(){
     fi
 
     echo "Moving MTConnect Files..."
-    if ! id -u mtconnect > /dev/null 2>&1; then
-        useradd -r -s /bin/false mtconnect
-    fi
-
     mkdir -p /etc/mtconnect/
     mkdir -p /etc/mtconnect/agent/
     mkdir -p /etc/mtconnect/devices/
@@ -56,13 +52,12 @@ InstallMTCAgent(){
     mkdir -p /etc/mtconnect/styles/
 
     cp -r ./agent/. /etc/mtconnect/agent/
-    sed -i '1 i\Devices = /etc/mtconnect/data/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
+    sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
     cp -r ./devices/$Device_File /etc/mtconnect/devices/
     sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
     cp -r ./schema/. /etc/mtconnect/schema/
     cp -r ./styles/. /etc/mtconnect/styles/
     cp -r ./ruby/. /etc/mtconnect/ruby/
-    chown -R mtconnect:mtconnect /etc/mtconnect
 
     if test -f /etc/mosquitto/passwd; then
         echo "Updating Mosquitto files..."
@@ -124,10 +119,10 @@ service_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if id -u mtconnect > /dev/null 2>&1; 
-    then echo 'mtconnect user found, run bash ssUpgrade.sh instead'; exit 1 
+if test -f /etc/mtconnect/agent/agent.cfg; 
+    then echo 'mtconnect agent.cfg found, run bash ssUpgrade.sh instead'; exit 1 
 else
-    echo 'Mtconnet user not found, continuing install...'
+    echo 'Mtconnet agent.cfg not found, continuing install...'
 fi
 
 # Set default variables
