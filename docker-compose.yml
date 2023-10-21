@@ -11,10 +11,8 @@ services:
     working_dir: "/home/agent"
     restart: unless-stopped
     volumes:
-      - '/etc/mtconnect/agent/agent.cfg:/mtconnect/config/agent.cfg'
-      - '/etc/mtconnect/devices/:/mtconnect/config/devices'
-      - '/etc/mtconnect/ruby/:/mtconnect/config/ruby'
-      - '/etc/mtconnect/styles/:/mtconnect/data/styles'
+      - '/etc/mtconnect/config/:/mtconnect/config/'
+      - '/etc/mtconnect/data/:/mtconnect/config/data/'
 
   mosquitto:
     container_name: mosquitto

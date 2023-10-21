@@ -46,16 +46,16 @@ InstallMTCAgent(){
 
     echo "Moving MTConnect Files..."
     mkdir -p /etc/mtconnect/
-    mkdir -p /etc/mtconnect/agent/
-    mkdir -p /etc/mtconnect/devices/
-    mkdir -p /etc/mtconnect/styles/
+    mkdir -p /etc/mtconnect/config/
+    mkdir -p /etc/mtconnect/data/
 
-    cp -r ./agent/. /etc/mtconnect/agent/
-    sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-    cp -r ./devices/$Device_File /etc/mtconnect/devices/
-    sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-    cp -r ./styles/. /etc/mtconnect/styles/
-    cp -r ./ruby/. /etc/mtconnect/ruby/
+    cp -r ./agent/config/. /etc/mtconnect/config/
+    sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/config/agent.cfg
+    cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
+    sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
+    cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
+    cp -r ./agent/data/schemas/. /etc/mtconnect/data/schemas/
+    cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     if test -f /etc/mosquitto/passwd; then
         echo "Updating Mosquitto files..."

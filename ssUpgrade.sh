@@ -63,29 +63,27 @@ Update_Adapter(){
 Update_Agent(){
     if test -f /etc/mtconnect/agent/agent.cfg; then
         echo "Updating MTConnect Agent files..."
-        cp -r ./agent/. /etc/mtconnect/agent/
-        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-        rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
-        cp -r ./devices/$Device_File /etc/mtconnect/devices/
-        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-        cp -r ./styles/. /etc/mtconnect/styles/
-        cp -r ./ruby/. /etc/mtconnect/ruby/
-        chown -R mtconnect:mtconnect /etc/mtconnect
+        cp -r ./agent/config/. /etc/mtconnect/config/
+        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/config/agent.cfg
+        cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
+        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
+        cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
+        cp -r ./agent/data/schemas/. /etc/mtconnect/data/schemas/
+        cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         echo ""
     else
         echo "Installing MTConnect Agent files..."
         mkdir -p /etc/mtconnect/
-        mkdir -p /etc/mtconnect/agent/
-        mkdir -p /etc/mtconnect/devices/
-        mkdir -p /etc/mtconnect/styles/
+        mkdir -p /etc/mtconnect/config/
+        mkdir -p /etc/mtconnect/data/
 
-        cp -r ./agent/agent.cfg /etc/mtconnect/agent/
-        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/agent/agent.cfg
-        rm -rf /etc/mtconnect/devices/SmartSaw_*.xml
-        cp -r ./devices/$Device_File /etc/mtconnect/devices/
-        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/devices/$Device_File
-        cp -r ./styles/. /etc/mtconnect/styles/
-        cp -r ./ruby/. /etc/mtconnect/ruby/
+        cp -r ./agent/config/. /etc/mtconnect/config/
+        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/config/agent.cfg
+        cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
+        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
+        cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
+        cp -r ./agent/data/schemas/. /etc/mtconnect/data/schemas/
+        cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         echo ""
     fi
 }
