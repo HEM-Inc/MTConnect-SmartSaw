@@ -117,7 +117,7 @@ service_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if test -f /etc/mtconnect/agent/agent.cfg; 
+if test -f /etc/mtconnect/config/agent.cfg; 
     then echo 'mtconnect agent.cfg found, run bash ssUpgrade.sh instead'; exit 1 
 else
     echo 'Mtconnet agent.cfg not found, continuing install...'

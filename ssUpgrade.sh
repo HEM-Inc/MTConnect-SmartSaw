@@ -115,7 +115,7 @@ Update_Mosquitto(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
-if ! test -f /etc/mtconnect/agent/agent.cfg; 
+if ! test -f /etc/mtconnect/config/agent.cfg; 
     then echo 'mtconnect agent.cfg not found, run bash ssInstall.sh instead'; exit 1 
 else
     echo 'Mtconnect agent.cfg found, continuing install...'
