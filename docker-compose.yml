@@ -5,22 +5,26 @@ services:
     hostname: mtc_agent
     image: mtconnect/agent:latest
     user: agent
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - "/etc/mtconnect/config/:/mtconnect/config/"
+      - "/etc/mtconnect/data/styles/styles.xsl:/mtconnect/data/styles/styles.xsl"
+      - "/etc/mtconnect/data/styles/SSC_Logo.png:/mtconnect/data/styles/SSC_Logo.png"
+      - "/etc/mtconnect/data/ruby:/mtconnect/data/ruby"
+      # - "/etc/mtconnect/data/security:/mtconnect/data/security"
     ports: 
       - 5000:5000/tcp
     entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
     working_dir: "/home/agent"
     restart: unless-stopped
-    volumes:
-      - '/etc/mtconnect/config/:/mtconnect/config/'
-      - '/etc/mtconnect/data/styles/styles.xsl:/mtconnect/data/styles/styles.xsl'
-      - '/etc/mtconnect/data/styles/SSC_Logo.png:/mtconnect/data/styles/SSC_Logo.png'
-      - '/etc/mtconnect/data/ruby:/mtconnect/data/ruby'
-      # - '/etc/mtconnect/data/security:/mtconnect/data/security'
 
   mosquitto:
     container_name: mosquitto
     hostname: mosquitto
     image: eclipse-mosquitto:latest
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
     volumes:
       - "/etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
       - "/etc/mosquitto/passwd:/mosquitto/data/passwd"
