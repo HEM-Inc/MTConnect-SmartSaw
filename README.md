@@ -44,3 +44,15 @@ options:
 -c File_Name      Declare the config file name; Defaults to - mosquitto.conf
 -h                Print this Help.
 ```
+
+
+Help syntax for the `ssUninstall.sh`.
+``` bash
+Syntax: ssUninstall.sh [-H|-A|-M|-D|-h]
+options:
+-H                Uninstall the HEMsaw adapter application
+-A                Uninstall the MTConnect Agent application
+-M                Uninstall the Mosquitto broker application
+-D                Uninstall Docker
+-h                Print this Help.
+```

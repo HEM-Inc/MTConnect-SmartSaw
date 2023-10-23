@@ -12,7 +12,10 @@ services:
     restart: unless-stopped
     volumes:
       - '/etc/mtconnect/config/:/mtconnect/config/'
-      - '/etc/mtconnect/data/:/mtconnect/data/'
+      - '/etc/mtconnect/data/styles/styles.xsl:/mtconnect/data/styles/styles.xsl'
+      - '/etc/mtconnect/data/styles/SSC_Logo.png:/mtconnect/data/styles/SSC_Logo.png'
+      - '/etc/mtconnect/data/ruby:/mtconnect/data/ruby'
+      # - '/etc/mtconnect/data/security:/mtconnect/data/security'
 
   mosquitto:
     container_name: mosquitto
