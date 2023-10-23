@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     volumes:
       - '/etc/mtconnect/config/:/mtconnect/config/'
-      - '/etc/mtconnect/data/:/mtconnect/config/data/'
+      - '/etc/mtconnect/data/:/mtconnect/data/'
 
   mosquitto:
     container_name: mosquitto
