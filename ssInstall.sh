@@ -172,5 +172,5 @@ InstallDocker
 
 echo ""
 echo "Check to verify containers are running:"
-docker system prune -f --volumes
+docker system prune --all --force --volumes
 docker ps
