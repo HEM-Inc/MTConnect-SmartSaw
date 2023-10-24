@@ -9,10 +9,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
-      - "/etc/mtconnect/data/styles/styles.xsl:/mtconnect/data/styles/styles.xsl"
-      - "/etc/mtconnect/data/styles/SSC_Logo.png:/mtconnect/data/styles/SSC_Logo.png"
-      - "/etc/mtconnect/data/ruby:/mtconnect/data/ruby"
-      # - "/etc/mtconnect/data/security:/mtconnect/data/security"
+      - "/etc/mtconnect/data/:/mtconnect/data/"
     ports: 
       - 5000:5000/tcp
     entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
