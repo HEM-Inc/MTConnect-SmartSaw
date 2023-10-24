@@ -36,11 +36,6 @@ Uninstall_Agent(){
     if id -u mtconnect > /dev/null 2>&1; then
         userdel -f -r mtconnect
     fi
-    if id -u agent > /dev/null 2>&1; then
-        userdel -f -r agent
-    fi
-
-
     
     rm -rf /var/log/mtconnect
     rm -rf /etc/mtconnect/
