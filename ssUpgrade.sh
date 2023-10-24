@@ -45,6 +45,29 @@ RunDocker(){
 Update_Adapter(){
     echo "Updating MTConnect Adapter..."
 
+    if test -f /etc/adapter/Adapter; then
+        mkdir -p /etc/adapter/
+        cp -r ./adapter/data/Adapter /etc/adapter/
+        cp -r ./adapter/data/adapter.service /etc/systemd/system/
+        cp -r ./adapter/config/$Afg_File /etc/adapter/
+        chmod +x /etc/adapter/Adapter
+
+        systemctl enable adapter
+        systemctl start adapter
+        systemctl status adapter
+    else
+        systemctl stop adapter
+        rm -rf /etc/adapter/*.afg
+        cp -r ./adapter/data/Adapter /etc/adapter/
+        cp -r -u ./adapter/data/adapter.service /etc/systemd/system/
+        cp -r ./adapter/config/$Afg_File /etc/adapter/
+        chmod +x /etc/adapter/Adapter
+
+        systemctl daemon-reload
+        systemctl start adapter
+        systemctl status adapter
+    fi
+
     systemctl stop adapter
     rm -rf /etc/adapter/*.afg
     cp -r ./adapter/data/Adapter /etc/adapter/
