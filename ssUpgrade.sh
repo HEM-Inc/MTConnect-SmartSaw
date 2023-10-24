@@ -98,6 +98,12 @@ Update_Agent(){
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         echo ""
     fi
+
+    if ! id -u agent > /dev/null 2>&1; then
+        useradd -r -s /bin/false agent
+    fi
+    chown agent:agent /etc/mtconnect/
+
 }
 
 Update_Mosquitto(){
