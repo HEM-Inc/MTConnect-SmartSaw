@@ -46,11 +46,11 @@ Update_Adapter(){
     echo "Updating MTConnect Adapter..."
 
     systemctl stop adapter
-    cp -r ./adapter/. /etc/adapter/
-    rm -rf /etc/adapter/SmartSaw_*.afg
-    cp -r ./afg/$Afg_File /etc/adapter/
+    rm -rf /etc/adapter/*.afg
+    cp -r ./adapter/data/Adapter /etc/adapter/
+    cp -r -u ./adapter/data/adapter.service /etc/systemd/system/
+    cp -r ./adapter/config/$Afg_File /etc/adapter/
     chmod +x /etc/adapter/Adapter
-    cp -u /etc/adapter/adapter.service /etc/systemd/system/
 
     systemctl daemon-reload
     systemctl start adapter
