@@ -44,9 +44,6 @@ InstallMTCAgent(){
         docker-compose down
     fi
 
-    useradd -r -s /bin/false agent
-    chown agent:agent
-
     echo "Moving MTConnect Files..."
     mkdir -p /etc/mtconnect/
     mkdir -p /etc/mtconnect/config/
@@ -63,7 +60,7 @@ InstallMTCAgent(){
     if ! id -u agent > /dev/null 2>&1; then
         useradd -r -s /bin/false agent
     fi
-    chown agent:agent /etc/mtconnect/
+    chown -R agent:agent /etc/mtconnect/
 
 
     if test -f /etc/mosquitto/passwd; then

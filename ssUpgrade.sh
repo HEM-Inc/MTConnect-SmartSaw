@@ -102,7 +102,7 @@ Update_Agent(){
     if ! id -u agent > /dev/null 2>&1; then
         useradd -r -s /bin/false agent
     fi
-    chown agent:agent /etc/mtconnect/
+    chown -R agent:agent /etc/mtconnect/
 
 }
 
