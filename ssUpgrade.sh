@@ -73,10 +73,10 @@ Update_Adapter(){
 }
 
 Update_Agent(){
-    if test -f /etc/mtconnect/agent/agent.cfg; then
+    if test -f /etc/mtconnect/config/agent.cfg; then
         echo "Updating MTConnect Agent files..."
         cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
-        sed -i '1 i\Devices = /mtconnect/config/devices/'$Device_File /etc/mtconnect/config/agent.cfg
+        sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
         cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
         cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
@@ -89,7 +89,7 @@ Update_Agent(){
         mkdir -p /etc/mtconnect/config/
         mkdir -p /etc/mtconnect/data/
 
-        cp -r ./agent/config/. /etc/mtconnect/config/
+        cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
         sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
         cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
         sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File

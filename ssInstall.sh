@@ -39,11 +39,6 @@ InstallAdapter(){
 }
 
 InstallMTCAgent(){
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        docker-compose down
-    fi
-
     echo "Moving MTConnect Files..."
     mkdir -p /etc/mtconnect/
     mkdir -p /etc/mtconnect/config/
@@ -78,22 +73,14 @@ InstallMTCAgent(){
 }
 
 InstallDocker(){
-    if service_exists docker; then
-        apt update
-        apt upgrade -y
+    echo "Installing Docker..."
+    apt update
+    apt upgrade -y
+    apt install -y docker-compose
+    apt clean
 
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
-    else
-        echo "Installing Docker..."
-        apt update
-        apt upgrade -y
-        apt install -y docker-compose
-        apt clean
-
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
-    fi
+    echo "Starting up the Docker image"
+    docker-compose up --remove-orphans -d 
     docker-compose logs
 }
 
