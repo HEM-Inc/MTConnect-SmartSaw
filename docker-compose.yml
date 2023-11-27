@@ -6,7 +6,8 @@ services:
     image: mtconnect/agent:latest
     user: agent
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=false"
+      - "com.centurylinklabs.watchtower.monitor-only=true"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
       - "/etc/mtconnect/data/:/mtconnect/data/"
@@ -45,5 +46,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
     environment:
       - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
