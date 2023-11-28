@@ -6,7 +6,7 @@ services:
     image: mtconnect/agent:latest
     user: agent
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
+      - "com.centurylinklabs.watchtower.enable=true"
       - "com.centurylinklabs.watchtower.monitor-only=true"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
