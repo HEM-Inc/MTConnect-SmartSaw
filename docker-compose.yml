@@ -3,14 +3,14 @@ services:
   mtc_agent:
     container_name: mtc_agent
     hostname: mtc_agent
-    image: mtconnect/agent:latest
+    image: hemsaw/mtconnect:latest
     user: agent
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
       - "com.centurylinklabs.watchtower.monitor-only=true"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
-      - "/etc/mtconnect/data/:/mtconnect/data/"
+      - "/etc/mtconnect/data/ruby/:/mtconnect/data/ruby/"
     ports: 
       - 5000:5000/tcp
     entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
