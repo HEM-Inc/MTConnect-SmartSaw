@@ -7,7 +7,7 @@ services:
     user: agent
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=true"
+      - "com.centurylinklabs.watchtower.monitor-only=false"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
       - "/etc/mtconnect/data/ruby/:/mtconnect/data/ruby/"
