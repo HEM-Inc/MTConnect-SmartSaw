@@ -16,6 +16,8 @@ services:
     entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
     working_dir: "/home/agent"
     restart: unless-stopped
+    depends_on:
+      - mosquitto
 
   mosquitto:
     container_name: mosquitto
