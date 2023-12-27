@@ -13,5 +13,5 @@ echo "<<DONE>>"
 echo
 
 echo "Docker container status for Agent, Mosquitto, and Watchtower..."
-docker-compose ps
+docker compose ps
 echo "<<DONE>>"

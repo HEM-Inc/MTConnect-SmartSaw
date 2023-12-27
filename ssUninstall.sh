@@ -55,12 +55,12 @@ Uninstall_Mosquitto(){
 }
 Uninstall_Docker(){
     echo "Shutting down any old Docker containers"
-    docker-compose down
+    docker-compose down || docker compose down
 
     echo "Uninstalling MTConnect Adapter..."
     docker system prune --all --force --volumes
 
-    apt purge -y docker-compose docker
+    apt purge -y docker-compose docker docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     apt autoremove -y
 }
 

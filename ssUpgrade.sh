@@ -25,18 +25,13 @@ Help(){
 RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
-        docker-compose pull
-        docker-compose up --remove-orphans -d 
+        docker compose pull
+        docker compose up --remove-orphans -d 
     else
-        echo "Installing Docker..."
-        apt update
-        apt install -y docker-compose
-        apt clean
-
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
+        echo "run ssUninstall.sh on SmartSawConnect and run ssInstall.sh"
+        exit;;
     fi
-    docker-compose logs
+    docker compose logs
 }
 
 ############################################################
@@ -209,7 +204,7 @@ fi
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    docker-compose down
+    docker compose down
 fi
 
 echo ""
