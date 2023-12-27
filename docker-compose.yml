@@ -7,7 +7,6 @@ services:
     user: agent
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
-      - "com.centurylinklabs.watchtower.monitor-only=false"
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
       - "/etc/mtconnect/data/ruby/:/mtconnect/data/ruby/"
@@ -22,9 +21,9 @@ services:
   mosquitto:
     container_name: mosquitto
     hostname: mosquitto
-    image: eclipse-mosquitto:latest
+    image: hemsaw/mosquitto:latest
     labels:
-      - "com.centurylinklabs.watchtower.enable=false"
+      - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
       - "/etc/mosquitto/passwd:/mosquitto/data/passwd"
