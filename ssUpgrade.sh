@@ -195,7 +195,7 @@ service_exists() {
 
 if $run_install; then
     echo "Running Install script..."
-    bash ssInstall.sh -a Afg_File -d Device_File -u Serial_Number
+    bash ssInstall.sh -a $Afg_File -d $Device_File -u $Serial_Number
 else
     echo "Printing the options..."
     echo "Update Adapter set to run = "$run_update_adapter
