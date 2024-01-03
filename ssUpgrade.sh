@@ -131,12 +131,6 @@ Update_Mosquitto(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
-if ! test -f /etc/mtconnect/config/agent.cfg; 
-    then echo 'mtconnect agent.cfg not found, run bash ssInstall.sh instead'; exit 1 
-else
-    echo 'Mtconnect agent.cfg found, continuing install...'
-fi
-
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
@@ -144,6 +138,14 @@ Serial_Number="SmartSaw"
 run_update_adapter=false
 run_update_agent=false
 run_update_mosquitto=false
+run_install=false
+
+# check if install or upgrade
+if ! test -f /etc/mtconnect/config/agent.cfg; 
+    then echo 'mtconnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
+else
+    echo 'Mtconnect agent.cfg found, continuing upgrade...'
+fi
 
 ############################################################
 # Process the input options. Add options as needed.        #
@@ -191,39 +193,44 @@ service_exists() {
 ############################################################
 ############################################################
 
-echo "Printing the options..."
-echo "Update Adapter set to run = "$run_update_adapter
-echo "Update MTConnect Agent set to run = "$run_update_agent
-echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
-if $run_update_adapter; then
-    echo "AFG file = "$Afg_File
-fi
-if $run_update_agent; then
-    echo "MTConnect Agent file = "$Device_File
-    echo "MTConnect UUID = HEMSaw_"$Serial_Number
-fi
-if $run_update_mosquitto; then
-    echo "Config file = mosquitto.conf"
-fi
+if run_install; then
+    echo "Running Install script..."
+    bash ssInstall.sh -a Afg_File -d Device_File -u Serial_Number
+else
+    echo "Printing the options..."
+    echo "Update Adapter set to run = "$run_update_adapter
+    echo "Update MTConnect Agent set to run = "$run_update_agent
+    echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
+    if $run_update_adapter; then
+        echo "AFG file = "$Afg_File
+    fi
+    if $run_update_agent; then
+        echo "MTConnect Agent file = "$Device_File
+        echo "MTConnect UUID = HEMSaw_"$Serial_Number
+    fi
+    if $run_update_mosquitto; then
+        echo "Config file = mosquitto.conf"
+    fi
 
-echo ""
-if service_exists docker; then
-    echo "Shutting down any old Docker containers"
-    docker-compose down
-fi
+    echo ""
+    if service_exists docker; then
+        echo "Shutting down any old Docker containers"
+        docker-compose down
+    fi
 
-echo ""
-if $run_update_adapter; then
-    Update_Adapter
-fi
-if $run_update_agent; then
-    Update_Agent
-fi
-if $run_update_mosquitto; then
-    Update_Mosquitto
-fi
+    echo ""
+    if $run_update_adapter; then
+        Update_Adapter
+    fi
+    if $run_update_agent; then
+        Update_Agent
+    fi
+    if $run_update_mosquitto; then
+        Update_Mosquitto
+    fi
 
-RunDocker
+    RunDocker
+fi
 
 echo ""
 echo "Check to verify containers are running:"
