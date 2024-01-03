@@ -8,12 +8,13 @@ Help(){
     echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUninstall.sh [-H|-A|-M|-D|-h]"
+    echo "Syntax: ssClean.sh [-H|-A|-M|-D|-C|-h]"
     echo "options:"
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
     echo "-M                Uninstall the Mosquitto broker application"
     echo "-D                Uninstall Docker"
+    echo "-C                Clean the system files"
     echo "-h                Print this Help."
 }
 
@@ -63,6 +64,10 @@ Uninstall_Docker(){
     apt purge -y docker-compose docker
     apt autoremove -y
 }
+Clean_Files(){
+    apt clean
+    journalctl --vacuum-time=10d
+}
 
 ############################################################
 ############################################################
@@ -77,12 +82,13 @@ run_uninstall_adapter=false
 run_uninstall_agent=false
 run_uninstall_mosquitto=false
 run_uninstall_docker=false
+run_clean=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":HAMDh" option; do
+while getopts ":HAMDCh" option; do
     case ${option} in
         h) # display Help
             Help
@@ -95,6 +101,8 @@ while getopts ":HAMDh" option; do
             run_uninstall_mosquitto=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
+        C) # Clean Files
+            run_clean=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -140,7 +148,8 @@ fi
 if $run_uninstall_docker; then
     Uninstall_Docker
 fi
-
-apt clean
+if $run_clean; then
+    Clean_Files
+fi
 
 echo ""
