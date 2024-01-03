@@ -134,6 +134,7 @@ echo "uninstall Adapter set to run = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
 echo "uninstall Mosquitto Broker set to run = "$run_uninstall_mosquitto
 echo "uninstall Docker set to run = "$run_uninstall_docker
+echo "clean System Files set to run = "$run_clean
 
 echo ""
 if $run_uninstall_adapter; then
