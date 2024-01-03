@@ -193,7 +193,7 @@ service_exists() {
 ############################################################
 ############################################################
 
-if run_install; then
+if $run_install; then
     echo "Running Install script..."
     bash ssInstall.sh -a Afg_File -d Device_File -u Serial_Number
 else
