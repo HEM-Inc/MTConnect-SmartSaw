@@ -58,8 +58,8 @@ services:
     environment:
       - HIVEMQ_LOG_LEVEL=DEBUG
     volumes:
-      - /etc/mqtt/config:/hivemq/config
-      - /etc/mqtt/data:/hivemq/data
+      - /etc/mqtt/config:/opt/hivemq/conf
+      - /etc/mqtt/data:/opt/hivemq/data
       # - /etc/mqtt/extensions:/hivemq/extensions
     restart: unless-stopped
 

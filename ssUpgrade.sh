@@ -203,9 +203,6 @@ else
         echo "MTConnect Agent file = "$Device_File
         echo "MTConnect UUID = HEMSaw_"$Serial_Number
     fi
-    if $run_update_mqtt_broker; then
-        echo "Config file = nanomq.conf"
-    fi
 
     echo ""
     if service_exists docker; then
