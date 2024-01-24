@@ -15,7 +15,7 @@ Help(){
     echo "-A                Update the MTConnect Agent application"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-M                Update the Mosquitto broker application"
+    echo "-M                Update the MQTT broker application"
     echo "-h                Print this Help."
 }
 
@@ -104,22 +104,17 @@ Update_Agent(){
 
 }
 
-Update_Mosquitto(){
-    if test -f /etc/mosquitto/passwd; then
-        echo "Updating Mosquitto files..."
-        cp -u ./mqtt/data/passwd /etc/mosquitto
-        chmod 0700 /etc/mosquitto/passwd
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+Update_mqtt_broker(){
+    if test -f /etc/mqtt/config/nanomq.conf; then
+        echo "Updating mqtt files..."
+        cp -r ./mqtt/data /etc/mqtt/data
+        cp -r ./mqtt/config /etc/mqtt/config/
     else
-        echo "Updating Mosquitto files..."
-        mkdir -p /etc/mosquitto/conf.d/
-        cp -u ./mqtt/data/passwd /etc/mosquitto
-        chmod 0700 /etc/mosquitto/passwd
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        echo "Updating mqtt files..."
+        mkdir -p /etc/mqtt/data/
+        mkdir -p /etc/mqtt/config/
+        cp -r ./mqtt/data /etc/mqtt/data
+        cp -r ./mqtt/config /etc/mqtt/config/
     fi
 }
 
@@ -137,7 +132,7 @@ Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
 run_update_adapter=false
 run_update_agent=false
-run_update_mosquitto=false
+run_update_mqtt_broker=false
 run_install=false
 
 # check if install or upgrade
@@ -166,8 +161,8 @@ while getopts ":a:d:u:HAMh" option; do
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
-        M) # Update Mosquitto
-            run_update_mosquitto=true;;
+        M) # Update mqtt broker
+            run_update_mqtt_broker=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -200,7 +195,7 @@ else
     echo "Printing the options..."
     echo "Update Adapter set to run = "$run_update_adapter
     echo "Update MTConnect Agent set to run = "$run_update_agent
-    echo "Update Mosquitto Broker set to run = "$run_update_mosquitto
+    echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
     fi
@@ -208,8 +203,8 @@ else
         echo "MTConnect Agent file = "$Device_File
         echo "MTConnect UUID = HEMSaw_"$Serial_Number
     fi
-    if $run_update_mosquitto; then
-        echo "Config file = mosquitto.conf"
+    if $run_update_mqtt_broker; then
+        echo "Config file = nanomq.conf"
     fi
 
     echo ""
@@ -225,8 +220,8 @@ else
     if $run_update_agent; then
         Update_Agent
     fi
-    if $run_update_mosquitto; then
-        Update_Mosquitto
+    if $run_update_mqtt_broker; then
+        Update_mqtt_broker
     fi
 
     RunDocker
