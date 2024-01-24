@@ -107,14 +107,12 @@ Update_Agent(){
 Update_mqtt_broker(){
     if test -d /etc/mqtt/config/; then
         echo "Updating mqtt files..."
-        cp -r ./mqtt/data /etc/mqtt/data
-        cp -r ./mqtt/config /etc/mqtt/config
+        cp -r ./mqtt /etc/mqtt
     else
         echo "Updating mqtt files..."
         mkdir -p /etc/mqtt/data/
         mkdir -p /etc/mqtt/config/
-        cp -r ./mqtt/data /etc/mqtt/data
-        cp -r ./mqtt/config /etc/mqtt/config
+        cp -r ./mqtt /etc/mqtt
     fi
 }
 

@@ -57,10 +57,10 @@ services:
       - "8080:8080"
     environment:
       - HIVEMQ_LOG_LEVEL=DEBUG
-    volumes:
-      - /etc/mqtt/config:/opt/hivemq/conf
-      # - /etc/mqtt/data:/opt/hivemq/data
-      # - /etc/mqtt/extensions:/hivemq/extensions
+    # volumes:
+    #   - /etc/mqtt/config:/opt/hivemq/conf
+    #   - /etc/mqtt/data:/opt/hivemq/data
+    #   - /etc/mqtt/extensions:/hivemq/extensions
     restart: unless-stopped
 
   watchtower:
