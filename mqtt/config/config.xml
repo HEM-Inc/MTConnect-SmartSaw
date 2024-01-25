@@ -135,7 +135,15 @@
             <expiryTimeMinutes>30</expiryTimeMinutes>
             <tokenEarlyEpochThresholdMinutes>2</tokenEarlyEpochThresholdMinutes>
         </generated-tokens>
-        <users/>
+        <users>
+            <user>
+                <username>hemsaw</username>
+                <password>hemsaw</password>
+                <roles>
+                    <role>admin</role>
+                </roles>
+            </user>
+        </users>
     </admin-api>
     <uns>
         <isa95>
