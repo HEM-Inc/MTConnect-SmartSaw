@@ -12,7 +12,7 @@ Help(){
     echo "options:"
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
-    echo "-M                Uninstall the Mosquitto broker application"
+    echo "-M                Uninstall the MQTT Broker application"
     echo "-D                Uninstall Docker"
     echo "-C                Clean the system files"
     echo "-h                Print this Help."
@@ -133,7 +133,7 @@ service_exists() {
 echo "Printing the options..."
 echo "uninstall Adapter set to run = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
-echo "uninstall Mosquitto Broker set to run = "$run_uninstall_mqtt
+echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
 echo "uninstall Docker set to run = "$run_uninstall_docker
 echo "clean System Files set to run = "$run_clean
 
