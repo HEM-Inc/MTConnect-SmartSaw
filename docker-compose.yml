@@ -31,7 +31,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - "/etc/mqtt/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
+      - "/etc/mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf"
       - "/etc/mqtt/passwd:/mosquitto/data/passwd"
       - "/etc/mqtt/acl:/mosquitto/data/acl"
     logging:
@@ -54,7 +54,7 @@ services:
   #     - HIVEMQ_LOG_LEVEL=WARN
   #     - HIVEMQ_CONFIG_FOLDER=/opt/mqtt/conf
   #   volumes:
-  #     - /etc/mqtt/config:/opt/mqtt/conf
+  #     - /etc/mqtt/config/config.xml:/opt/mqtt/conf/config.xml
   #     # - /etc/mqtt/data:/opt/hivemq/data
   #     # - /etc/mqtt/extensions:/hivemq/extensions
   #   logging:
