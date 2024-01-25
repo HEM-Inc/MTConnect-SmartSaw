@@ -4,7 +4,7 @@
         <tcp-listener>
             <port>1883</port>
             <bind-address>0.0.0.0</bind-address>
-            <name>open-listener</name>
+            <name>open-mqtt-listener</name>
         </tcp-listener>
         <!-- Secure connection
            <tls-tcp-listener>
@@ -20,15 +20,15 @@
                </tls>
            </tls-tcp-listener>
        -->
-    </mqtt-listeners>
-    <!--     
-    <mqtt-sn-listeners>
-        <udp-listener>
-            <port>2442</port>
-            <bind-address>0.0.0.0</bind-address>
-            <name>udp-listener</name>
-        </udp-listener>
-    </mqtt-sn-listeners> 
+    </mqtt-listeners> 
+    <!--
+        <mqtt-sn-listeners>
+            <udp-listener>
+                <port>2442</port>
+                <bind-address>0.0.0.0</bind-address>
+                <name>udp-mqtt-sn-listener</name>
+            </udp-listener>
+        </mqtt-sn-listeners>
     -->
     <mqtt>
         <queued-messages>
@@ -72,28 +72,28 @@
         </receive-maximum>
     </mqtt>
     <!--     
-    <mqtt-sn>
-        <predefined-topics/>
-        <allow-empty-client-identifier>
-            <enabled>false</enabled>
-        </allow-empty-client-identifier>
-        <discovery>
-            <enabled>false</enabled>
-            <broadcast-addresses/>
-            <discovery-interval-seconds>30</discovery-interval-seconds>
-        </discovery>
-        <allow-anonymous-publish-minus-one>
-            <enabled>false</enabled>
-        </allow-anonymous-publish-minus-one>
-        <allow-waking-ping-session-hijack>
-            <enabled>false</enabled>
-        </allow-waking-ping-session-hijack>
-        <topic-registrations-held-during-sleep>
-            <enabled>false</enabled>
-        </topic-registrations-held-during-sleep>
-        <max-client-identifier-length>23</max-client-identifier-length>
-        <gateway-id>1</gateway-id>
-    </mqtt-sn> 
+        <mqtt-sn>
+            <predefined-topics/>
+            <allow-empty-client-identifier>
+                <enabled>false</enabled>
+            </allow-empty-client-identifier>
+            <discovery>
+                <enabled>false</enabled>
+                <broadcast-addresses/>
+                <discovery-interval-seconds>30</discovery-interval-seconds>
+            </discovery>
+            <allow-anonymous-publish-minus-one>
+                <enabled>false</enabled>
+            </allow-anonymous-publish-minus-one>
+            <allow-waking-ping-session-hijack>
+                <enabled>false</enabled>
+            </allow-waking-ping-session-hijack>
+            <topic-registrations-held-during-sleep>
+                <enabled>false</enabled>
+            </topic-registrations-held-during-sleep>
+            <max-client-identifier-length>23</max-client-identifier-length>
+            <gateway-id>1</gateway-id>
+        </mqtt-sn> 
     -->
     <restrictions>
         <max-connections>-1</max-connections>
@@ -158,5 +158,25 @@
     <usage-tracking>
         <enabled>false</enabled>
     </usage-tracking>
-    <protocol-adapters/>
+    
+    <protocol-adapters>
+        <!--         
+            <opc-ua-client>
+                <id>opc-example</id>
+                <uri>opc.tcp://my-opc-server-uri-or-ip:4840</uri>
+                <subscriptions>
+                    <subscription>
+                        <node>ns=3;s="node-name"</node>
+                        <mqtt-topic>my/mqtt/topic/1</mqtt-topic>
+                    </subscription>
+                </subscriptions>
+                <auth>
+                    <basic>
+                        <password>password</password>
+                        <username>edge</username>
+                    </basic>
+                </auth>
+            </opc-ua-client>
+        -->
+    </protocol-adapters>
 </hivemq>
