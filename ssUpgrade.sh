@@ -109,12 +109,16 @@ Update_MQTT_Broker(){
         echo "Updating mqtt files..."
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
+        chmod 0700 /etc/mqtt/data/passwd
+        chmod 0700 /etc/mqtt/data/acl
     else
         echo "Updating mqtt files..."
         mkdir -p /etc/mqtt/config/
         mkdir -p /etc/mqtt/data/
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
+        chmod 0700 /etc/mqtt/data/passwd
+        chmod 0700 /etc/mqtt/data/acl
     fi
 }
 
