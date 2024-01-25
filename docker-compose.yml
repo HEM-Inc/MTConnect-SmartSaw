@@ -39,9 +39,9 @@ services:
       - HIVEMQ_LOG_LEVEL=DEBUG
       - HIVEMQ_CONFIG_FOLDER=/opt/mqtt/conf
      volumes:
-       - /etc/mqtt/config:/opt/mqtt/conf
-    #   - /etc/mqtt/data:/opt/hivemq/data
-    #   - /etc/mqtt/extensions:/hivemq/extensions
+      - /etc/mqtt/config:/opt/mqtt/conf
+      # - /etc/mqtt/data:/opt/hivemq/data
+      # - /etc/mqtt/extensions:/hivemq/extensions
     restart: unless-stopped
 
   watchtower:
