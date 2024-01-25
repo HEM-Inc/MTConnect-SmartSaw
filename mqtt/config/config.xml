@@ -1,24 +1,154 @@
-<?xml version="1.0"?>
-<hivemq>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<hivemq xsi:schemaLocation="config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <mqtt-listeners>
         <tcp-listener>
             <port>1883</port>
             <bind-address>0.0.0.0</bind-address>
+            <name>open-listener</name>
         </tcp-listener>
+        <!-- Secure connection
+           <tls-tcp-listener>
+               <port>8883</port>
+               <bind-address>0.0.0.0</bind-address>
+               <name>secure-listener</name>
+               <tls>
+                   <keystore>
+                       <path>/path/to/the/key/store.jks</path>
+                       <password>password-keystore</password>
+                       <private-key-password>password-key</private-key-password>
+                   </keystore>
+               </tls>
+           </tls-tcp-listener>
+       -->
     </mqtt-listeners>
+    <!--     
     <mqtt-sn-listeners>
         <udp-listener>
             <port>2442</port>
             <bind-address>0.0.0.0</bind-address>
+            <name>udp-listener</name>
         </udp-listener>
-    </mqtt-sn-listeners>
+    </mqtt-sn-listeners> 
+    -->
+    <mqtt>
+        <queued-messages>
+            <max-queue-size>1000</max-queue-size>
+            <strategy>discard</strategy>
+        </queued-messages>
+        <retained-messages>
+            <enabled>true</enabled>
+        </retained-messages>
+        <wildcard-subscriptions>
+            <enabled>true</enabled>
+        </wildcard-subscriptions>
+        <quality-of-service>
+            <max-qos>2</max-qos>
+        </quality-of-service>
+        <topic-alias>
+            <enabled>true</enabled>
+            <max-per-client>5</max-per-client>
+        </topic-alias>
+        <message-expiry>
+            <max-interval>4294967296</max-interval>
+        </message-expiry>
+        <session-expiry>
+            <max-interval>4294967295</max-interval>
+        </session-expiry>
+        <subscription-identifier>
+            <enabled>true</enabled>
+        </subscription-identifier>
+        <shared-subscriptions>
+            <enabled>true</enabled>
+        </shared-subscriptions>
+        <keep-alive>
+            <max-keep-alive>65535</max-keep-alive>
+            <allow-unlimited>true</allow-unlimited>
+        </keep-alive>
+        <packets>
+            <max-packet-size>268435460</max-packet-size>
+        </packets>
+        <receive-maximum>
+            <server-receive-maximum>10</server-receive-maximum>
+        </receive-maximum>
+    </mqtt>
+    <!--     
+    <mqtt-sn>
+        <predefined-topics/>
+        <allow-empty-client-identifier>
+            <enabled>false</enabled>
+        </allow-empty-client-identifier>
+        <discovery>
+            <enabled>false</enabled>
+            <broadcast-addresses/>
+            <discovery-interval-seconds>30</discovery-interval-seconds>
+        </discovery>
+        <allow-anonymous-publish-minus-one>
+            <enabled>false</enabled>
+        </allow-anonymous-publish-minus-one>
+        <allow-waking-ping-session-hijack>
+            <enabled>false</enabled>
+        </allow-waking-ping-session-hijack>
+        <topic-registrations-held-during-sleep>
+            <enabled>false</enabled>
+        </topic-registrations-held-during-sleep>
+        <max-client-identifier-length>23</max-client-identifier-length>
+        <gateway-id>1</gateway-id>
+    </mqtt-sn> 
+    -->
+    <restrictions>
+        <max-connections>-1</max-connections>
+        <max-client-id-length>65535</max-client-id-length>
+        <max-topic-length>65535</max-topic-length>
+        <no-connect-idle-timeout>10000</no-connect-idle-timeout>
+        <incoming-bandwidth-throttling>0</incoming-bandwidth-throttling>
+    </restrictions>
+    <security>
+        <payload-format-validation>
+            <enabled>false</enabled>
+        </payload-format-validation>
+        <utf8-validation>
+            <enabled>true</enabled>
+        </utf8-validation>
+        <allow-empty-client-id>
+            <enabled>true</enabled>
+        </allow-empty-client-id>
+        <allow-request-problem-information>
+            <enabled>true</enabled>
+        </allow-request-problem-information>
+    </security>
+    <persistence>
+        <mode>in-memory</mode>
+    </persistence>
+    <mqtt-bridges/>
     <admin-api>
         <enabled>true</enabled>
         <listeners>
             <http-listener>
-                <bind-address>0.0.0.0</bind-address>
                 <port>8080</port>
+                <bind-address>0.0.0.0</bind-address>
             </http-listener>
         </listeners>
+        <generated-tokens>
+            <keySize>2048</keySize>
+            <issuer>HiveMQ-Edge</issuer>
+            <audience>HiveMQ-Edge-Api</audience>
+            <expiryTimeMinutes>30</expiryTimeMinutes>
+            <tokenEarlyEpochThresholdMinutes>2</tokenEarlyEpochThresholdMinutes>
+        </generated-tokens>
+        <users/>
     </admin-api>
+    <uns>
+        <isa95>
+            <enabled>true</enabled>
+            <prefix-all-topics>false</prefix-all-topics>
+        </isa95>
+    </uns>
+    <dynamic-configuration>
+        <allow-configuration-export>false</allow-configuration-export>
+        <allow-mutable-configuration>true</allow-mutable-configuration>
+    </dynamic-configuration>
+    <usage-tracking>
+        <enabled>false</enabled>
+    </usage-tracking>
+    <protocol-adapters/>
 </hivemq>

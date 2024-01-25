@@ -45,11 +45,12 @@ Uninstall_Agent(){
     echo "<<Done>>"
     echo ""
 }
-Uninstall_Mosquitto(){
+Uninstall_MQTT(){
     echo "Uninstalling Mosquitto files..."
     apt purge -y mosquitto mosquitto-clients
     apt autoremove -y
     rm -rf /etc/mosquitto
+    rm -rf /etc/mqtt
     systemctl daemon-reload
     echo "<<Done>>"
     echo ""
@@ -80,7 +81,7 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUninstall.sh as sudo" ; exit 1
 # Set default variables
 run_uninstall_adapter=false
 run_uninstall_agent=false
-run_uninstall_mosquitto=false
+run_uninstall_mqtt=false
 run_uninstall_docker=false
 run_clean=false
 
@@ -98,7 +99,7 @@ while getopts ":HAMDCh" option; do
         A) # uninstall the Agent
             run_uninstall_agent=true;;
         M) # uninstall Mosquitto
-            run_uninstall_mosquitto=true;;
+            run_uninstall_mqtt=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         C) # Clean Files
@@ -132,7 +133,7 @@ service_exists() {
 echo "Printing the options..."
 echo "uninstall Adapter set to run = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
-echo "uninstall Mosquitto Broker set to run = "$run_uninstall_mosquitto
+echo "uninstall Mosquitto Broker set to run = "$run_uninstall_mqtt
 echo "uninstall Docker set to run = "$run_uninstall_docker
 echo "clean System Files set to run = "$run_clean
 
@@ -143,8 +144,8 @@ fi
 if $run_uninstall_agent; then
     Uninstall_Agent
 fi
-if $run_uninstall_mosquitto; then
-    Uninstall_Mosquitto
+if $run_uninstall_mqtt; then
+    Uninstall_MQTT
 fi
 if $run_uninstall_docker; then
     Uninstall_Docker

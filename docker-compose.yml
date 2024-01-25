@@ -23,26 +23,6 @@ services:
     depends_on:
       - hivemq
 
-  # mosquitto:
-  #   container_name: mosquitto
-  #   hostname: mosquitto
-  #   image: hemsaw/mosquitto:latest
-  #   labels:
-  #     - "com.centurylinklabs.watchtower.enable=true"
-  #   volumes:
-  #     - "/etc/mosquitto/conf.d/mosquitto.conf:/mosquitto/config/mosquitto.conf"
-  #     - "/etc/mosquitto/passwd:/mosquitto/data/passwd"
-  #     - "/etc/mosquitto/acl:/mosquitto/data/acl"
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
-  #   ports:
-  #     - 1883:1883/tcp
-  #     - 9001:9001/tcp
-  #   restart: unless-stopped
-
   hivemq:
     container_name: hivemq
     hostname: hivemq
@@ -57,8 +37,9 @@ services:
       - "8080:8080"
     environment:
       - HIVEMQ_LOG_LEVEL=DEBUG
-    # volumes:
-    #   - /etc/mqtt/config:/opt/hivemq/conf
+      - HIVEMQ_CONFIG_FOLDER=/opt/mqtt/conf
+     volumes:
+       - /etc/mqtt/config:/opt/mqtt/conf
     #   - /etc/mqtt/data:/opt/hivemq/data
     #   - /etc/mqtt/extensions:/hivemq/extensions
     restart: unless-stopped

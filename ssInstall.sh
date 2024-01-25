@@ -54,21 +54,16 @@ InstallMTCAgent(){
 
     chown -R 1000:1000 /etc/mtconnect/
 
-    if test -f /etc/mosquitto/passwd; then
-        echo "Updating Mosquitto files..."
-        cp -u ./mqtt/data/passwd /etc/mosquitto
-        chmod 0700 /etc/mosquitto/passwd
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+    if test -d /etc/mqtt/config/; then
+        echo "Updating mqtt files..."
+        cp -r ./mqtt/config/. /etc/mqtt/config
+        cp -r ./mqtt/data/. /etc/mqtt/data
     else
-        echo "Updating Mosquitto files..."
-        mkdir -p /etc/mosquitto/conf.d/
-        cp -u ./mqtt/data/passwd /etc/mosquitto
-        chmod 0700 /etc/mosquitto/passwd
-        cp -u ./mqtt/data/acl /etc/mosquitto
-        chmod 0700 /etc/mosquitto/acl
-        cp -u ./mqtt/config/mosquitto.conf /etc/mosquitto/conf.d/
+        echo "Updating mqtt files..."
+        mkdir -p /etc/mqtt/config/
+        mkdir -p /etc/mqtt/data/
+        cp -r ./mqtt/config/. /etc/mqtt/config
+        cp -r ./mqtt/data/. /etc/mqtt/data
     fi
 }
 
@@ -143,7 +138,6 @@ done
 echo "Printing the Working Directory and options..."
 echo "AFG file = "$Afg_File
 echo "MTConnect Agent file = "$Device_File
-echo "Mosquitto Config file = mosquitto.conf"
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo ""
 
