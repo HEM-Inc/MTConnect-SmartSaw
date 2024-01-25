@@ -32,8 +32,8 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf"
-      - "/etc/mqtt/passwd:/mosquitto/data/passwd"
-      - "/etc/mqtt/acl:/mosquitto/data/acl"
+      - "/etc/mqtt/data/passwd:/mosquitto/data/passwd"
+      - "/etc/mqtt/data/acl:/mosquitto/data/acl"
     logging:
       driver: "json-file"
       options:
