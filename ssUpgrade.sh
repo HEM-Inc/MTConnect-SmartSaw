@@ -5,10 +5,10 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
+    echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-h]"
+    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-h]"
     echo "options:"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -16,6 +16,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
+    echo "-O	          Update the HEMsaw ODS application"
     echo "-h                Print this Help."
 }
 
@@ -43,33 +44,18 @@ RunDocker(){
 # Updaters                                                 #
 ############################################################
 Update_Adapter(){
-    echo "Updating MTConnect Adapter..."
-
-    if ! test -d /etc/adapter/; then
-        mkdir -p /etc/adapter/
-        cp -r ./adapter/data/Adapter /etc/adapter/
-        cp -r ./adapter/data/adapter.service /etc/systemd/system/
-        cp -r ./adapter/config/$Afg_File /etc/adapter/
-        chmod +x /etc/adapter/Adapter
-
-        systemctl enable adapter
-        systemctl start adapter
-        systemctl status adapter
+    if test -d /etc/adapter/config/; then
+        echo "Updating adapter files..."
+        rm -rf /etc/adapter/config/*.afg
+        cp -r ./adapter/config/$Afg_File /etc/adapter/config/
     else
-        systemctl stop adapter
-        rm -rf /etc/adapter/*.afg
-        cp -r ./adapter/data/Adapter /etc/adapter/
-        cp -r -u ./adapter/data/adapter.service /etc/systemd/system/
-        cp -r ./adapter/config/$Afg_File /etc/adapter/
-        chmod +x /etc/adapter/Adapter
-
-        systemctl daemon-reload
-        systemctl start adapter
-        systemctl status adapter
+        echo "Installing adapter files..."
+        mkdir -p /etc/adapter/
+        mkdir -p /etc/adapter/config/
+        cp -r ./adapter/config/$Afg_File /etc/adapter/config/
     fi
-
-    echo "MTConnect Adapter Up and Running"
-    echo ""
+    echo  ""
+    chown -R 1000:1000 /etc/adapter/
 }
 
 Update_Agent(){
@@ -101,7 +87,6 @@ Update_Agent(){
     fi
 
     chown -R 1000:1000 /etc/mtconnect/
-
 }
 
 Update_MQTT_Broker(){
@@ -109,7 +94,6 @@ Update_MQTT_Broker(){
         echo "Updating mqtt files..."
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/passwd
         chmod 0700 /etc/mqtt/data/acl
     else
         echo "Updating mqtt files..."
@@ -117,9 +101,21 @@ Update_MQTT_Broker(){
         mkdir -p /etc/mqtt/data/
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/passwd
         chmod 0700 /etc/mqtt/data/acl
     fi
+}
+
+Update_ODS(){
+    if test -d /etc/ods/config/; then
+        echo "Updating ods files..."
+        cp -r ./ods/config/. /etc/ods/config
+    else
+        echo "Installing ods files.."
+        mkdir -p /etc/ods/config/
+        cp -r ./ods/config/. /etc/ods/config
+    fi
+    echo ""
+    chown -R 1000:1000 /etc/ods/
 }
 
 ############################################################
@@ -137,6 +133,7 @@ Serial_Number="SmartSaw"
 run_update_adapter=false
 run_update_agent=false
 run_update_mqtt_broker=false
+run_update_ods=false
 run_install=false
 
 # check if install or upgrade
@@ -146,11 +143,22 @@ else
     echo 'Mtconnect agent.cfg found, continuing upgrade...'
 fi
 
+echo ""
+
+#check if systemd services are running
+if systemctl is-active --quiet adapter || systemctl is-active --quiet ods; then
+    echo "Adapter and/or ODS is running as a systemd service, Please run 1.0.0 version of ssUpgrade"
+    exit 1
+    #Optionally we can stop the Adapter and/or ODS systemd services
+    #sudo systemctl stop adapter
+    #sudo systemctl stop ods
+fi
+
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:HAMh" option; do
+while getopts ":a:d:u:HAMhO" option; do
     case ${option} in
         h) # display Help
             Help
@@ -167,6 +175,8 @@ while getopts ":a:d:u:HAMh" option; do
             Serial_Number=$OPTARG;;
         M) # Update mqtt broker
             run_update_mqtt_broker=true;;
+        O) # Update ODS
+            run_update_ods=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -200,6 +210,7 @@ else
     echo "Update Adapter set to run = "$run_update_adapter
     echo "Update MTConnect Agent set to run = "$run_update_agent
     echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
+    echo "Update ODS set to run = "$run_update_ods
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
     fi
@@ -223,6 +234,9 @@ else
     fi
     if $run_update_mqtt_broker; then
         Update_MQTT_Broker
+    fi
+    if $run_update_ods; then
+        Update_ODS
     fi
 
     RunDocker

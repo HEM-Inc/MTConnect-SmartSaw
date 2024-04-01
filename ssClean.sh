@@ -5,34 +5,36 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function updates the systemd files for the HEMsaw Adapter and the Agent."
-    echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
+    echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
+    echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-H|-A|-M|-D|-C|-h]"
+    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-D|-h]"
     echo "options:"
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
     echo "-M                Uninstall the MQTT Broker application"
+    echo "-O		   Uninstall the HEMsaw ods application"
     echo "-D                Uninstall Docker"
-    echo "-C                Clean the system files"
     echo "-h                Print this Help."
 }
 
 ############################################################
-# Unstallers                                               #
+# Uninstallers                                               #
 ############################################################
 Uninstall_Adapter(){
     echo "Uninstalling MTConnect Adapter files..."
-    systemctl stop adapter
+
+    if id -u adapter > /dev/null 2>&1; then
+        userdel -f -r adapter
+    fi
+
     rm -rf /etc/adapter/
-    rm -rf /etc/systemd/system/adapter.service
-    systemctl daemon-reload
     echo "<<Done>>"
     echo ""
 }
+
 Uninstall_Agent(){
     echo "Uninstalling MTConnect Agent files..."
-    systemctl stop agent
 
     if id -u mtconnect > /dev/null 2>&1; then
         userdel -f -r mtconnect
@@ -40,21 +42,30 @@ Uninstall_Agent(){
     
     rm -rf /var/log/mtconnect
     rm -rf /etc/mtconnect/
-    rm -rf /etc/systemd/system/agent.service
-    systemctl daemon-reload
     echo "<<Done>>"
     echo ""
 }
+
 Uninstall_MQTT(){
     echo "Uninstalling Mosquitto files..."
-    apt purge -y mosquitto mosquitto-clients
-    apt autoremove -y
     rm -rf /etc/mosquitto
     rm -rf /etc/mqtt
-    systemctl daemon-reload
     echo "<<Done>>"
     echo ""
 }
+
+Uninstall_ODS(){
+    echo "Uninstalling ODS files..."
+
+    if id -u ods > /dev/null 2>&1; then
+        userdel -f -r ods
+    fi
+
+    rm -rf /etc/ods
+    echo "<<Done>>"
+    echo ""
+}
+
 Uninstall_Docker(){
     echo "Shutting down any old Docker containers"
     docker-compose down
@@ -64,10 +75,6 @@ Uninstall_Docker(){
 
     apt purge -y docker-compose docker
     apt autoremove -y
-}
-Clean_Files(){
-    apt clean
-    journalctl --vacuum-time=10d
 }
 
 ############################################################
@@ -82,14 +89,14 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUninstall.sh as sudo" ; exit 1
 run_uninstall_adapter=false
 run_uninstall_agent=false
 run_uninstall_mqtt=false
+run_uninstall_ods=false
 run_uninstall_docker=false
-run_clean=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":HAMDCh" option; do
+while getopts ":HAMDhO" option; do
     case ${option} in
         h) # display Help
             Help
@@ -100,10 +107,10 @@ while getopts ":HAMDCh" option; do
             run_uninstall_agent=true;;
         M) # uninstall Mosquitto
             run_uninstall_mqtt=true;;
+        O) # uninstall the ODS
+            run_uninstall_ods=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
-        C) # Clean Files
-            run_clean=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -134,8 +141,8 @@ echo "Printing the options..."
 echo "uninstall Adapter set to run = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
 echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
+echo "uninstall ODS set to run = "$run_uninstall_ods
 echo "uninstall Docker set to run = "$run_uninstall_docker
-echo "clean System Files set to run = "$run_clean
 
 echo ""
 if $run_uninstall_adapter; then
@@ -147,11 +154,11 @@ fi
 if $run_uninstall_mqtt; then
     Uninstall_MQTT
 fi
+if $run_uninstall_ods; then
+    Uninstall_ODS
+fi
 if $run_uninstall_docker; then
     Uninstall_Docker
-fi
-if $run_clean; then
-    Clean_Files
 fi
 
 echo ""
