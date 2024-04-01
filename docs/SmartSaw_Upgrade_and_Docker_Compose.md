@@ -1,7 +1,7 @@
 # SmartSaw Upgrade and Docker Compose 
 
 # Functional Specification Document
-#### Rev 0.1
+#### Rev 0.2
 
 ## Table of Contents
 * [List of Tables](#list-of-tables)
@@ -36,6 +36,7 @@
 | Rev |     Date    |       Author                | Change Description                |
 |:---:|:-----------:|:-------------------------:|:-----------------------------------:|
 | 0.1 |  03/27/2024           |      Prarthana and Adithya     |    Initial version  |
+|0.2|04/01/2024|Prarthana and Adithya| Updated Test case status|
 
 
 ### Definition/Abbreviation
@@ -227,54 +228,54 @@ Not Applicable
 ### **9.1 Test cases**
 | Test Case   ID |                        Test Case   Description                       |                     Expected Result                     | Status | Comments |
 |:--------------:|--------------------------------------------------------------------|-------------------------------------------------------|:------:|:--------:|
-| 1| Verify ssInstall script for installation of all components | Installs all the docker components| | |
-| 2 | Verify ssInstall script with -a \<afg_file>  | Installs adapter component with specified afg file| | |
-| 3 | Verify ssInstall script with -d \<device_file>| Installs Agent component with specified Device XML file| | |
-| 4 | Verify ssInstall script with -u \<UUID> |Declares the specified serial number for uuid within Agent device xml file | | |
-|5|  Verify ssInstall script with -h option  | Displays Help options| | |
-| 6|Verify ssInstall script with invalid options |Displays the valid options for ssInstall | | Negative testcase
-|        7       | Verify ssUpgrade script                                            |Successful execution of all docker components. |        |          |
-|        8       | Verify ssUpgrade script with -H option                                            | Docker compose runs with updated Adapter configuration files                    |        |          |
-|        9       | Verify ssUpgrade script without -H option when adapter configurations are modified | Docker compose runs with previous adapter configurations               |        |          |
-| 10|Verify ssUpgrade script with -H -a \<afg_file> option |Successful execution with the specified afg file for adapter | | |
-|       11     | Verify ssUpgrade script with -a \<afg_file>                                            |Docker compose runs with previous afg file for Adapter           |        |          |
-|        12       | Verify ssUpgrade script with -A option                                             | Successful execution with Agent updated files                      |        |          |
-|        13       | Verify ssUpgrade script without -A option when agent configurations are modified   | Docker compose runs with previous agent configurations| | |
-|14                 |Verify for the change in values of different data items in REST API        |Verified for functionalmode and saw_controller_mode dataItem.          |
-|       15      | Verify ssUpgrade script with -d \<device_file>                                             | Docker compose runs with previous device file for Agent             |        |          |
-|16|Verify ssUpgrade script with -A -d \<device_file>| Successful execution with specified device file for agent
-|       17       | Verify ssUpgrade script with -A -u \<UUID>                                             | Updates Agent device xml file with specified serial number           |        |          |
-|       18       | Verify ssUpgrade script with -u \<UUID>                                             | Agent device file will not be updated with specified serial number number           |        |          |
-|        19      | Verify ssUpgrade script with -O option                                            |Successful execution with ods updated files                  |        |          |
-|        20      | Verify ssUpgrade script without -O option when ODS configurations are modified     |Docker compose runs with previous ods configurations | | |
-|        21      | Verify ssUpgrade script with -M option                                             |Successful execution with Mosqitto updated files                        |        |          |
-|        22      | Verify ssUpgrade script without -M option when mqtt configurations are modified    |Docker compose runs with previous mqtt configurations                  |        |          |
-|       23      | Verify ssUpgrade script with -h option                                             | Displays Help options                                    |        |          |
-| 24|Verify ssUpgrade script with invalid options |Displays the valid options for ssUpgrade script | | Negative testcase|
-|       25       | Verify ssClean script with -H option                                              | Deletes adapter configurations from etc                                |        |          |
-|       26       | Verify ssClean script with -A option                                               | Deletes Agent configurations from etc                                  |        |          |
-|       27       | Verify ssClean script with -D option                                               | Shutting down all existing Docker containers                                       |        |          |
-|       28       | Verify ssClean script with -O option                                               | Deletes ODS configurations from etc                                    |        |          |
-|       29       | Verify ssClean script with -M option                                               | Deletes MQTT configurations from etc                                    |        |          |
-| 30|Verify ssClean script with invalid options |Displays the valid options in ssClean | |Negative testcase|
-|       31       | Verify ssStatus script                                                      |  Provides the status of each container                     |        |          |
-|32|Verify Docker Compose logs for ODS|Displays ODS-specific logs based on provided severity in yml file| | 
-|33|Verify Docker Compose logs for Adapter|Displays Adapter-specific logs based on provided severity in afg file| |
-|34|Verify Docker Compose logs for MQTT broker|Displays MQTT broker-specific logs| |
-|35|Verify Docker Compose logs for Agent|Displays Agent-specific logs based on provided severity in cfg file| |  
+| 1| Verify ssInstall script for installation of all components | Installs all the docker components| PASS| |
+| 2 | Verify ssInstall script with -a \<afg_file>  | Installs adapter component with specified afg file| PASS| |
+| 3 | Verify ssInstall script with -d \<device_file>| Installs Agent component with specified Device XML file| PASS| |
+| 4 | Verify ssInstall script with -u \<UUID> |Declares the specified serial number for uuid within Agent device xml file |PASS | |
+|5|  Verify ssInstall script with -h option  | Displays Help options| PASS| |
+| 6|Verify ssInstall script with invalid options |Displays the valid options for ssInstall |PASS | Negative testcase
+|        7       | Verify ssUpgrade script                                            |Successful execution of all docker components. |   PASS    |          |
+|        8       | Verify ssUpgrade script with -H option                                            | Docker compose runs with updated Adapter configuration files                    |  PASS      |          |
+|        9       | Verify ssUpgrade script without -H option when adapter configurations are modified | Docker compose runs with previous adapter configurations               |  PASS      |          |
+| 10|Verify ssUpgrade script with -H -a \<afg_file> option |Successful execution with the specified afg file for adapter | PASS | |
+|       11     | Verify ssUpgrade script with -a \<afg_file>                                            |Docker compose runs with previous afg file for Adapter           |     PASS   |          |
+|        12       | Verify ssUpgrade script with -A option                                             | Successful execution with Agent updated files                      |  PASS      |          |
+|        13       | Verify ssUpgrade script without -A option when agent configurations are modified   | Docker compose runs with previous agent configurations| PASS | |
+|14                 |Verify for the change in values of different data items in REST API        |Verified for functionalmode and saw_controller_mode dataItem.          |PASS||
+|       15      | Verify ssUpgrade script with -d \<device_file>                                             | Docker compose runs with previous device file for Agent             |     PASS   |          |
+|16|Verify ssUpgrade script with -A -d \<device_file>| Successful execution with specified device file for agent|PASS| |
+|       17       | Verify ssUpgrade script with -A -u \<UUID>                                             | Updates Agent device xml file with specified serial number           |  PASS      |          |
+|       18       | Verify ssUpgrade script with -u \<UUID>                                             | Agent device file will not be updated with specified serial number number           |  PASS      |          |
+|        19      | Verify ssUpgrade script with -O option                                            |Successful execution with ods updated files                  |  PASS      |          |
+|        20      | Verify ssUpgrade script without -O option when ODS configurations are modified     |Docker compose runs with previous ods configurations | PASS| |
+|        21      | Verify ssUpgrade script with -M option                                             |Successful execution with Mosqitto updated files                        |  PASS      |          |
+|        22      | Verify ssUpgrade script without -M option when mqtt configurations are modified    |Docker compose runs with previous mqtt configurations                  | PASS       |          |
+|       23      | Verify ssUpgrade script with -h option                                             | Displays Help options                                    |  PASS      |          |
+| 24|Verify ssUpgrade script with invalid options |Displays the valid options for ssUpgrade script | PASS | Negative testcase|
+|       25       | Verify ssClean script with -H option                                              | Deletes adapter configurations from etc                                |  PASS      |          |
+|       26       | Verify ssClean script with -A option                                               | Deletes Agent configurations from etc                                  | PASS       |          |
+|       27       | Verify ssClean script with -D option                                               | Shutting down all existing Docker containers                                       |        PASS|         |
+|       28       | Verify ssClean script with -O option                                               | Deletes ODS configurations from etc                                    |   PASS     |          |
+|       29       | Verify ssClean script with -M option                                               | Deletes MQTT configurations from etc                                    |  PASS      |          |
+| 30|Verify ssClean script with invalid options |Displays the valid options in ssClean | PASS|Negative testcase|
+|       31       | Verify ssStatus script                                                      |  Provides the status of each container                     |  PASS      |          |
+|32|Verify Docker Compose logs for ODS|Displays ODS-specific logs based on provided severity in yml file|PASS | 
+|33|Verify Docker Compose logs for Adapter|Displays Adapter-specific logs based on provided severity in afg file|PASS |
+|34|Verify Docker Compose logs for MQTT broker|Displays MQTT broker-specific logs|PASS |
+|35|Verify Docker Compose logs for Agent|Displays Agent-specific logs based on provided severity in cfg file| PASS|  
 
 ### **9.2 Integration test cases**
 | Test Case ID |                  Test Case Description                 |                    Expected Result                    | Status | Comments |
 |:------------:|------------------------------------------------------|-----------------------------------------------------|:------:|:--------:|
-|1| verify ssUpgrade script with -u \<UUID> '-A'and '-H' options |Successful execution with changed UUID in agent device file and  latest adapter configuration file | | |
-|2| verify ssUpgrade script with -d  \<device_file>  '-A'and '-O' options |Successful execution with changed device file for agent and  latest ODS configuration file | | |
-|3|Verify ssUpgrade script with '-H' -a \<afg_file> and '-A' options|Successful execution with specified afg file for adapter and updated configuration for agent.| | |
-|4| verify ssUpgrade script with '-A' '-H' '-M' '-O' options |Successful execution with latest configuration files | | | 
-|       5      | Verify the connection between PLC and adapter in IPC   | Successful connection between PLC and adapter         |        |          |
-|       6      | Verify the connection between adapter and agent in IPC | Successful sending of data to agent                   |        |          |
-| 7 | Verify the connection between Agent and Mosquitto | Data sent from agent to MQTT on topic 'mtconnect/'| | |
-|       8      | Verify the connection between PLC and ODS in IPC       | Successful connection between PLC and ODS             |       |          |
-|       9      | Verify the connection between ODS and MongoDB in IPC   | Successfully able to access job and material from HMI |        |          |
+|1| verify ssUpgrade script with -u \<UUID> '-A'and '-H' options |Successful execution with changed UUID in agent device file and  latest adapter configuration file |PASS | |
+|2| verify ssUpgrade script with -d  \<device_file>  '-A'and '-O' options |Successful execution with changed device file for agent and  latest ODS configuration file | PASS | |
+|3|Verify ssUpgrade script with '-H' -a \<afg_file> and '-A' options|Successful execution with specified afg file for adapter and updated configuration for agent.|PASS | |
+|4| verify ssUpgrade script with '-A' '-H' '-M' '-O' options |Successful execution with latest configuration files | PASS| | 
+|       5      | Verify the connection between PLC and adapter in IPC   | Successful connection between PLC and adapter         |   PASS     |          |
+|       6      | Verify the connection between adapter and agent in IPC | Successful sending of data to agent                   |  PASS      |          |
+| 7 | Verify the connection between Agent and Mosquitto | Data sent from agent to MQTT on topic 'mtconnect/'| PASS| |
+|       8      | Verify the connection between PLC and ODS in IPC       | Successful connection between PLC and ODS             |  PASS     |          |
+|       9      | Verify the connection between ODS and MongoDB in IPC   | Successfully able to access job and material from HMI |  PASS      |          |
 
 
 
