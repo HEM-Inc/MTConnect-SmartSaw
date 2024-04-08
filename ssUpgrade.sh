@@ -16,7 +16,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
-    echo "-O	          Update the HEMsaw ODS application"
+    echo "-O	            Update the HEMsaw ODS application"
     echo "-h                Print this Help."
 }
 
@@ -147,8 +147,10 @@ echo ""
 
 #check if systemd services are running
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods; then
-    echo "Adapter and/or ODS is running as a systemd service, Please run 1.0.0 version of ssUpgrade"
-    exit 1
+    echo "Adapter and/or ODS is running as a systemd service, stopping the systemd services.."
+    systemctl stop adapter
+    systemctl stop ods
+    #exit 1
     #Optionally we can stop the Adapter and/or ODS systemd services
     #sudo systemctl stop adapter
     #sudo systemctl stop ods

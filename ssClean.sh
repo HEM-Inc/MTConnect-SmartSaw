@@ -13,7 +13,7 @@ Help(){
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
     echo "-M                Uninstall the MQTT Broker application"
-    echo "-O		   Uninstall the HEMsaw ods application"
+    echo "-O		        Uninstall the HEMsaw ods application"
     echo "-D                Uninstall Docker"
     echo "-h                Print this Help."
 }

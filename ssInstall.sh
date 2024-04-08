@@ -115,11 +115,12 @@ else
 fi
 echo ""
 
-#check if systemd services are running
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods; then
-    echo "Adapter and/or ODS is running as a systemd service, Please run 1.0.0 version of ssUpgrade"
-    exit 1
-    #Optionally we can stop the ODS and/or systemd services
+    echo "Adapter and/or ODS is running as a systemd service, stopping the systemd services.."
+    systemctl stop adapter
+    systemctl stop ods
+    #exit 1
+    #Optionally we can stop the Adapter and/or ODS systemd services
     #sudo systemctl stop adapter
     #sudo systemctl stop ods
 fi
