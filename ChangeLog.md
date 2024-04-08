@@ -16,7 +16,7 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 - Adapter from systemd to docker container.
   - Added adapter container to docker-compose.
 - Updated scripts to support docker-compose.
-- Update the adapter (HA, SA, SM) afg(s) for commands - Max Harris
+- Update the adapter (HA, SA, SM) afg(s) for commands - @MaxHarris
 
 ## [1.0.1.0] - 2023/12/18 - Max Harris
 ### Added

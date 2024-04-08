@@ -13,7 +13,7 @@ saw_serial_number = gMachineInformation.Serial
 cmd_adapter_version: true
 cmd_mtconnect_version = comd "2.0"
 cmd_shdr_version = comd "2.0"
-// cmd_uuid = cmd generate_uuid(manufacturer = "HEMSaw",model = "",serialNumber = gMachineInformation.Serial)
+cmd_uuid = comd generate_uuid(manufacturer = "HEMSaw",model = "",serialNumber = gMachineInformation.Serial)
 cmd_device_name = comd "Saw"
 cmd_serial_number = comd  gMachineInformation.Serial // sends the serial number command
 
