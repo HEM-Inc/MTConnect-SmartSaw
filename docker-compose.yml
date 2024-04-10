@@ -1,5 +1,24 @@
 version: '3.5'
 services:
+  smartsaw_adapter:
+    container_name: smartsaw_adapter
+    hostname: smartsaw_adapter
+    image: hemsaw/smartsaw-adapter:latest
+    user: adapter
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - "/etc/adapter/config/:/adapter/config/"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - 9800:9800/tcp
+    working_dir: "/adapter"
+    restart: unless-stopped
+
   mtc_agent:
     container_name: mtc_agent
     hostname: mtc_agent
@@ -31,7 +50,6 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf"
-      - "/etc/mqtt/data/passwd:/mosquitto/data/passwd"
       - "/etc/mqtt/data/acl:/mosquitto/data/acl"
     logging:
       driver: "json-file"
@@ -42,6 +60,24 @@ services:
       - 1883:1883/tcp
       - 9001:9001/tcp
     restart: unless-stopped
+
+  ods:
+    container_name: ods
+    hostname: ods
+    image: hemsaw/ods:latest
+    user: ods
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - "/etc/ods/config/:/ods/"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    working_dir: "/ods"
+    restart: unless-stopped
+    network_mode: "host"
 
   watchtower:
     container_name: watchtower

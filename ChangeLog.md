@@ -7,6 +7,16 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased] 
 
+## [1.1.0.0] - 2024/04/05 - emprarthanak
+### Added
+- Jira Id: EP4US1
+  - ODS container included within docker-compose.
+  - 'ods' directory containing configuration files.
+### Changed
+- Adapter from systemd to docker container.
+  - Added adapter container to docker-compose.
+- Updated scripts to support docker-compose.
+- Update the adapter (HA, SA, SM) afg(s) for commands - @MaxHarris
 
 ## [1.0.1.0] - 2023/12/18 - Max Harris
 ### Added

@@ -5,7 +5,7 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function installs the systemd files for the HEMsaw Adapter and the Agent."
+    echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "To securly set up the agent an mtconnect user and group is created. The agent"
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
@@ -23,17 +23,12 @@ Help(){
 ############################################################
 
 InstallAdapter(){
-    echo "Installing MTConnect Adapter and setting it as a SystemCTL..."
+    echo "Installing MTConnect Adapter..."
 
     mkdir -p /etc/adapter/
-    cp -r ./adapter/data/Adapter /etc/adapter/
-    cp -r ./adapter/data/adapter.service /etc/systemd/system/
-    cp -r ./adapter/config/$Afg_File /etc/adapter/
-    chmod +x /etc/adapter/Adapter
-
-    systemctl enable adapter
-    systemctl start adapter
-    systemctl status adapter
+    mkdir -p /etc/adapter/config/
+    cp -r ./adapter/config/$Afg_File /etc/adapter/config/
+    chown -R 1000:1000 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
 }
@@ -58,7 +53,6 @@ InstallMTCAgent(){
         echo "Updating mqtt files..."
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/passwd
         chmod 0700 /etc/mqtt/data/acl
     else
         echo "Updating mqtt files..."
@@ -66,9 +60,16 @@ InstallMTCAgent(){
         mkdir -p /etc/mqtt/data/
         cp -r ./mqtt/config/. /etc/mqtt/config
         cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/passwd
         chmod 0700 /etc/mqtt/data/acl
     fi
+}
+
+InstallODS(){
+    echo "Installing ODS..."
+    mkdir -p /etc/ods/
+    mkdir -p /etc/ods/config/
+    cp -r ./ods/config/* /etc/ods/config/
+    chown -R 1000:1000 /etc/ods/
 }
 
 InstallDocker(){
@@ -82,6 +83,8 @@ InstallDocker(){
     docker-compose up --remove-orphans -d 
     docker-compose logs
 }
+
+
 
 
 ############################################################
@@ -110,11 +113,23 @@ if test -f /etc/mtconnect/config/agent.cfg;
 else
     echo 'Mtconnet agent.cfg not found, continuing install...'
 fi
+echo ""
+
+if systemctl is-active --quiet adapter || systemctl is-active --quiet ods; then
+    echo "Adapter and/or ODS is running as a systemd service, stopping the systemd services.."
+    systemctl stop adapter
+    systemctl stop ods
+    #exit 1
+    #Optionally we can stop the Adapter and/or ODS systemd services
+    #sudo systemctl stop adapter
+    #sudo systemctl stop ods
+fi
 
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
+
 
 ############################################################
 # Process the input options. Add options as needed.        #
@@ -150,10 +165,11 @@ if service_exists docker; then
     echo "Shutting down any old Docker containers"
     docker-compose down
 fi
-
+echo ""
 
 InstallAdapter
 InstallMTCAgent
+InstallODS
 InstallDocker
     
 
