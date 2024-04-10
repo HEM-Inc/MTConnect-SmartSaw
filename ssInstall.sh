@@ -43,8 +43,6 @@ InstallMTCAgent(){
     sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
     cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
     sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw_$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
-    cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
-    cp -r ./agent/data/schemas/. /etc/mtconnect/data/schemas/
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
