@@ -1,3 +1,0 @@
-[submodule "schemas.git"]
-	path = agent/data/schemas
-	url = https://github.com/mtconnect/schema.git
