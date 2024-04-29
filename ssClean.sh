@@ -8,12 +8,13 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-D|-h]"
+    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-S|-D|-h]"
     echo "options:"
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
     echo "-M                Uninstall the MQTT Broker application"
-    echo "-O		        Uninstall the HEMsaw ods application"
+    echo "-O		    Uninstall the HEMsaw ods application"
+    echo "-S	            Uninstall the HEMSaw MongoDB application"
     echo "-D                Uninstall Docker"
     echo "-h                Print this Help."
 }
@@ -66,6 +67,13 @@ Uninstall_ODS(){
     echo ""
 }
 
+Uninstall_Mongodb(){
+    echo "Uninstalling Mongodb files..."
+    rm -rf /etc/mongodb/
+    echo "<<Done>>"
+    echo ""
+}
+
 Uninstall_Docker(){
     echo "Shutting down any old Docker containers"
     docker-compose down
@@ -90,13 +98,14 @@ run_uninstall_adapter=false
 run_uninstall_agent=false
 run_uninstall_mqtt=false
 run_uninstall_ods=false
+run_uninstall_mongodb=false
 run_uninstall_docker=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":HAMDhO" option; do
+while getopts ":HAMDhOS" option; do
     case ${option} in
         h) # display Help
             Help
@@ -109,6 +118,8 @@ while getopts ":HAMDhO" option; do
             run_uninstall_mqtt=true;;
         O) # uninstall the ODS
             run_uninstall_ods=true;;
+        S) # uninstall the mongodb
+	    run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         \?) # Invalid option
@@ -142,6 +153,7 @@ echo "uninstall Adapter set to run = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
 echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
 echo "uninstall ODS set to run = "$run_uninstall_ods
+echo "uninstall Mongodb set to run="$run_uninstall_mongodb
 echo "uninstall Docker set to run = "$run_uninstall_docker
 
 echo ""
@@ -156,6 +168,9 @@ if $run_uninstall_mqtt; then
 fi
 if $run_uninstall_ods; then
     Uninstall_ODS
+fi
+if $run_uninstall_mongodb; then
+    Uninstall_Mongodb
 fi
 if $run_uninstall_docker; then
     Uninstall_Docker

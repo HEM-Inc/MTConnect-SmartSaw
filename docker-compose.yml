@@ -66,6 +66,8 @@ services:
     hostname: ods
     image: hemsaw/ods:latest
     user: ods
+    ports:
+      - 9625:9625/tcp
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -76,8 +78,28 @@ services:
         max-size: "10m"
         max-file: "3"
     working_dir: "/ods"
+    depends_on:
+    - mongodb
     restart: unless-stopped
-    network_mode: "host"
+
+  mongodb:
+    container_name: mongodb
+    hostname: mongodb
+    image: mongo:4.4
+    ports:
+      - 27017:27017/tcp
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - "/etc/mongodb_data:/data/db"
+      - "/etc/mongodb/config/mongod.conf.orig:/etc/mongod.conf.orig"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+
 
   watchtower:
     container_name: watchtower

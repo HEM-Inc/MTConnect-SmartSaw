@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 For build level release notes see https://github.com/mtconnect/cppagent/
 
-## [Unreleased] 
+## [Unreleased]
+
+##[1.2.0.0] - 2024/04/29 - emAdithyaShenoy
+### Added
+- Jira Id: EP4US7
+  - MongoDB container included within docker-compose.
+  - 'mongodb' directory containing configuration files.
+###Changed
+- Updated scripts to support docker-compose.
 
 ## [1.1.0.0] - 2024/04/05 - emprarthanak
 ### Added
