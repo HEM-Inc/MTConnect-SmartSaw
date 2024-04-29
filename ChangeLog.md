@@ -14,6 +14,7 @@ For build level release notes see https://github.com/mtconnect/cppagent/
   - 'mongodb' directory containing configuration files.
 ###Changed
 - Updated scripts to support docker-compose.
+- Updated README file. 
 
 ## [1.1.0.0] - 2024/04/05 - emprarthanak
 ### Added
