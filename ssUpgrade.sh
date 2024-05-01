@@ -16,8 +16,8 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
-    echo "-O		        Update the HEMsaw ODS application"
-    echo "-S		        Update the HEMsaw MongoDB application"
+    echo "-O		    Update the HEMsaw ODS application"
+    echo "-S		    Update the HEMsaw MongoDB application"
     echo "-m                Update the MongoDB database with default materials"
     echo "-h                Print this Help."
 }
