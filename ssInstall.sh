@@ -186,7 +186,7 @@ InstallODS
 InstallMongodb
 InstallDocker
 
-sudo python3 /etc/mongodb/data/upload_materials.py
+python3 /etc/mongodb/data/upload_materials.py
     
 
 echo ""

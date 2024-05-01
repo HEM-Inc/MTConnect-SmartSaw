@@ -245,6 +245,7 @@ else
     echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
     echo "Update ODS set to run = "$run_update_ods
     echo "Update Mongodb set to run = "$run_update_mongodb
+    echo "Update Materials set to run = "$run_update_materials
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
     fi
