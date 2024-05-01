@@ -1,0 +1,1437 @@
+UUID,NAME,CLASS,SIZE,BLADE SPEED,CHIP REMOVAL RATE,FORCE
+,A36 Solid - 2 In,Carbon Steel,2,275,14,175
+,A36 Solid - 4 In,Carbon Steel,4,275,14,175
+,A36 Solid - 6 In,Carbon Steel,6,275,14,175
+,A36 Solid - 8 In,Carbon Steel,8,275,14,175
+,A36 Solid - 10 In,Carbon Steel,10,275,14,175
+,A36 Solid - 12 In,Carbon Steel,12,275,14,175
+,A36 Solid - 16 In,Carbon Steel,16,275,14,175
+,A36 Solid - 20 In,Carbon Steel,20,275,14,175
+,A36 Tubing - 2 In,Carbon Steel,2,275,14,175
+,A36 Tubing - 4 In,Carbon Steel,4,275,14,175
+,A36 Tubing - 6 In,Carbon Steel,6,275,14,175
+,A36 Tubing - 8 In,Carbon Steel,8,275,14,175
+,A36 Tubing - 10 In,Carbon Steel,10,275,14,175
+,A36 Tubing - 12 In,Carbon Steel,12,275,14,175
+,A36 Tubing - 16 In,Carbon Steel,16,275,14,175
+,A36 Tubing - 20 In,Carbon Steel,20,275,14,175
+,A48 CLASS 20 - 2 In,Carbon Steel,2,156,9.4,265
+,A48 CLASS 20 - 4 In,Carbon Steel,4,156,9.4,265
+,A48 CLASS 20 - 6 In,Carbon Steel,6,156,9.4,265
+,A48 CLASS 20 - 8 In,Carbon Steel,8,156,9.4,265
+,A48 CLASS 20 - 10 In,Carbon Steel,10,156,9.4,265
+,A48 CLASS 20 - 12 In,Carbon Steel,12,156,9.4,265
+,A48 CLASS 20 - 16 In,Carbon Steel,16,156,9.4,265
+,A48 CLASS 20 - 20 In,Carbon Steel,20,156,9.4,265
+,A536 Grade 60-40-18 - 2 In,Carbon Steel,2,156,9.4,265
+,A536 Grade 60-40-18 - 4 In,Carbon Steel,4,156,9.4,265
+,A536 Grade 60-40-18 - 6 In,Carbon Steel,6,156,9.4,265
+,A536 Grade 60-40-18 - 8 In,Carbon Steel,8,156,9.4,265
+,A536 Grade 60-40-18 - 10 In,Carbon Steel,10,156,9.4,265
+,A536 Grade 60-40-18 - 12 In,Carbon Steel,12,156,9.4,265
+,A536 Grade 60-40-18 - 16 In,Carbon Steel,16,156,9.4,265
+,A536 Grade 60-40-18 - 20 In,Carbon Steel,20,156,9.4,265
+,A536 Grade 120-90-02 - 2 In,Carbon Steel,2,156,9.4,265
+,A536 Grade 120-90-02 - 4 In,Carbon Steel,4,156,9.4,265
+,A536 Grade 120-90-02 - 6 In,Carbon Steel,6,156,9.4,265
+,A536 Grade 120-90-02 - 8 In,Carbon Steel,8,156,9.4,265
+,A536 Grade 120-90-02 - 10 In,Carbon Steel,10,156,9.4,265
+,A536 Grade 120-90-02 - 12 In,Carbon Steel,12,156,9.4,265
+,A536 Grade 120-90-02 - 16 In,Carbon Steel,16,156,9.4,265
+,A536 Grade 120-90-02 - 20 In,Carbon Steel,20,156,9.4,265
+,1145-12L15 Steel - 2 In,Carbon Steel,2,285,24,150
+,1145-12L15 Steel - 4 In,Carbon Steel,4,270,24,150
+,1145-12L15 Steel - 6 In,Carbon Steel,6,255,24,150
+,1145-12L15 Steel - 8 In,Carbon Steel,8,240,24,150
+,1145-12L15 Steel - 10 In,Carbon Steel,10,225,24,150
+,1145-12L15 Steel - 12 In,Carbon Steel,12,215,24,150
+,1145-12L15 Steel - 16 In,Carbon Steel,16,190,24,150
+,1145-12L15 Steel - 20 In,Carbon Steel,20,170,24,150
+,1524 Alloy - 2 In,Alloy Steel,2,180,14,210
+,1524 Alloy - 4 In,Alloy Steel,4,170,14,210
+,1524 Alloy - 6 In,Alloy Steel,6,160,14,210
+,1524 Alloy - 8 In,Alloy Steel,8,150,14,210
+,1524 Alloy - 10 In,Alloy Steel,10,145,14,210
+,1524 Alloy - 12 In,Alloy Steel,12,135,14,210
+,1524 Alloy - 16 In,Alloy Steel,16,120,14,210
+,1524 Alloy - 20 In,Alloy Steel,20,105,14,210
+,1541 Alloy - 2 In,Alloy Steel,2,215,14,210
+,1541 Alloy - 4 In,Alloy Steel,4,200,14,210
+,1541 Alloy - 6 In,Alloy Steel,6,190,14,210
+,1541 Alloy - 8 In,Alloy Steel,8,180,14,210
+,1541 Alloy - 10 In,Alloy Steel,10,170,14,210
+,1541 Alloy - 12 In,Alloy Steel,12,160,14,210
+,1541 Alloy - 16 In,Alloy Steel,16,140,14,210
+,1541 Alloy - 20 In,Alloy Steel,20,125,14,210
+,4140-4150 Alloy - 2 In,Alloy Steel,2,215,9.6,245
+,4140-4150 Alloy - 4 In,Alloy Steel,4,200,9.6,245
+,4140-4150 Alloy - 6 In,Alloy Steel,6,190,9.6,245
+,4140-4150 Alloy - 8 In,Alloy Steel,8,180,9.6,245
+,4140-4150 Alloy - 10 In,Alloy Steel,10,170,9.6,245
+,4140-4150 Alloy - 12 In,Alloy Steel,12,160,9.6,245
+,4140-4150 Alloy - 16 In,Alloy Steel,16,140,9.6,245
+,4140-4150 Alloy - 20 In,Alloy Steel,20,125,9.6,245
+,4340-5160-6150 Allow - 2 In,Alloy Steel,2,200,9.6,245
+,4340-5160-6150 Allow - 4 In,Alloy Steel,4,190,9.6,245
+,4340-5160-6150 Allow - 6 In,Alloy Steel,6,185,9.6,245
+,4340-5160-6150 Allow - 8 In,Alloy Steel,8,175,9.6,245
+,4340-5160-6150 Allow - 10 In,Alloy Steel,10,160,9.6,245
+,4340-5160-6150 Allow - 12 In,Alloy Steel,12,150,9.6,245
+,4340-5160-6150 Allow - 16 In,Alloy Steel,16,135,9.6,245
+,4340-5160-6150 Allow - 20 In,Alloy Steel,20,125,9.6,245
+,5210-9310 Alloy - 2 In,Alloy Steel,2,170,12.4,245
+,5210-9310 Alloy - 4 In,Alloy Steel,4,160,12.4,245
+,5210-9310 Alloy - 6 In,Alloy Steel,6,150,12.4,245
+,5210-9310 Alloy - 8 In,Alloy Steel,8,140,12.4,245
+,5210-9310 Alloy - 10 In,Alloy Steel,10,135,12.4,245
+,5210-9310 Alloy - 12 In,Alloy Steel,12,125,12.4,245
+,5210-9310 Alloy - 16 In,Alloy Steel,16,115,12.4,245
+,5210-9310 Alloy - 20 In,Alloy Steel,20,100,12.4,245
+,8620 Alloy - 2 In,Alloy Steel,2,230,9.6,210
+,8620 Alloy - 4 In,Alloy Steel,4,215,9.6,210
+,8620 Alloy - 6 In,Alloy Steel,6,205,9.6,210
+,8620 Alloy - 8 In,Alloy Steel,8,190,9.6,210
+,8620 Alloy - 10 In,Alloy Steel,10,180,9.6,210
+,8620 Alloy - 12 In,Alloy Steel,12,170,9.6,210
+,8620 Alloy - 16 In,Alloy Steel,16,150,9.6,210
+,8620 Alloy - 20 In,Alloy Steel,20,135,9.6,210
+,8640 Alloy - 2 In,Alloy Steel,2,195,9.6,210
+,8640 Alloy - 4 In,Alloy Steel,4,185,9.6,210
+,8640 Alloy - 6 In,Alloy Steel,6,175,9.6,210
+,8640 Alloy - 8 In,Alloy Steel,8,165,9.6,210
+,8640 Alloy - 10 In,Alloy Steel,10,155,9.6,210
+,8640 Alloy - 12 In,Alloy Steel,12,145,9.6,210
+,8640 Alloy - 16 In,Alloy Steel,16,130,9.6,210
+,8640 Alloy - 20 In,Alloy Steel,20,115,9.6,210
+,2024 Aluminum - 2 In,Aluminum,2,350,20,175
+,2024 Aluminum - 4 In,Aluminum,4,350,20,175
+,2024 Aluminum - 6 In,Aluminum,6,350,20,175
+,2024 Aluminum - 8 In,Aluminum,8,350,20,175
+,2024 Aluminum - 10 In,Aluminum,10,350,20,175
+,2024 Aluminum - 12 In,Aluminum,12,350,20,175
+,2024 Aluminum - 16 In,Aluminum,16,350,20,175
+,2024 Aluminum - 20 In,Aluminum,20,350,20,175
+,5052 Aluminum - 2 In,Aluminum,2,350,20,175
+,5052 Aluminum - 4 In,Aluminum,4,350,20,175
+,5052 Aluminum - 6 In,Aluminum,6,350,20,175
+,5052 Aluminum - 8 In,Aluminum,8,350,20,175
+,5052 Aluminum - 10 In,Aluminum,10,350,20,175
+,5052 Aluminum - 12 In,Aluminum,12,350,20,175
+,5052 Aluminum - 16 In,Aluminum,16,350,20,175
+,5052 Aluminum - 20 In,Aluminum,20,350,20,175
+,6061 Aluminum - 2 In,Aluminum,2,350,20,175
+,6061 Aluminum - 4 In,Aluminum,4,350,20,175
+,6061 Aluminum - 6 In,Aluminum,6,350,20,175
+,6061 Aluminum - 8 In,Aluminum,8,350,20,175
+,6061 Aluminum - 10 In,Aluminum,10,350,20,175
+,6061 Aluminum - 12 In,Aluminum,12,350,20,175
+,6061 Aluminum - 16 In,Aluminum,16,350,20,175
+,6061 Aluminum - 20 In,Aluminum,20,350,20,175
+,7075 Aluminum - 2 In,Aluminum,2,350,20,175
+,7075 Aluminum - 4 In,Aluminum,4,350,20,175
+,7075 Aluminum - 6 In,Aluminum,6,350,20,175
+,7075 Aluminum - 8 In,Aluminum,8,350,20,175
+,7075 Aluminum - 10 In,Aluminum,10,350,20,175
+,7075 Aluminum - 12 In,Aluminum,12,350,20,175
+,7075 Aluminum - 16 In,Aluminum,16,350,20,175
+,7075 Aluminum - 20 In,Aluminum,20,350,20,175
+,301-303 SS - 2 In,Stainless Steel,2,90,4.6,480
+,301-303 SS - 4 In,Stainless Steel,4,90,4.6,480
+,301-303 SS - 6 In,Stainless Steel,6,90,4.6,480
+,301-303 SS - 8 In,Stainless Steel,8,90,4.6,480
+,301-303 SS - 10 In,Stainless Steel,10,90,4.6,480
+,301-303 SS - 12 In,Stainless Steel,12,90,4.6,480
+,301-303 SS - 16 In,Stainless Steel,16,90,4.6,480
+,301-303 SS - 20 In,Stainless Steel,20,90,4.6,480
+,304-304L SS - 2 In,Stainless Steel,2,90,4.6,480
+,304-304L SS - 4 In,Stainless Steel,4,90,4.6,480
+,304-304L SS - 6 In,Stainless Steel,6,90,4.6,480
+,304-304L SS - 8 In,Stainless Steel,8,90,4.6,480
+,304-304L SS - 10 In,Stainless Steel,10,90,4.6,480
+,304-304L SS - 12 In,Stainless Steel,12,90,4.6,480
+,304-304L SS - 16 In,Stainless Steel,16,90,4.6,480
+,304-304L SS - 20 In,Stainless Steel,20,90,4.6,480
+,316-316L SS - 2 In,Stainless Steel,2,90,4.6,480
+,316-316L SS - 4 In,Stainless Steel,4,90,4.6,480
+,316-316L SS - 6 In,Stainless Steel,6,90,4.6,480
+,316-316L SS - 8 In,Stainless Steel,8,90,4.6,480
+,316-316L SS - 10 In,Stainless Steel,10,90,4.6,480
+,316-316L SS - 12 In,Stainless Steel,12,90,4.6,480
+,316-316L SS - 16 In,Stainless Steel,16,90,4.6,480
+,316-316L SS - 20 In,Stainless Steel,20,90,4.6,480
+,321 SS - 2 In,Stainless Steel,2,90,4.6,480
+,321 SS - 4 In,Stainless Steel,4,90,4.6,480
+,321 SS - 6 In,Stainless Steel,6,90,4.6,480
+,321 SS - 8 In,Stainless Steel,8,90,4.6,480
+,321 SS - 10 In,Stainless Steel,10,90,4.6,480
+,321 SS - 12 In,Stainless Steel,12,90,4.6,480
+,321 SS - 16 In,Stainless Steel,16,90,4.6,480
+,321 SS - 20 In,Stainless Steel,20,90,4.6,480
+,410-420 SS - 2 In,Stainless Steel,2,101,5.4,375
+,410-420 SS - 4 In,Stainless Steel,4,101,5.4,375
+,410-420 SS - 6 In,Stainless Steel,6,101,5.4,375
+,410-420 SS - 8 In,Stainless Steel,8,101,5.4,375
+,410-420 SS - 10 In,Stainless Steel,10,101,5.4,375
+,410-420 SS - 12 In,Stainless Steel,12,101,5.4,375
+,410-420 SS - 16 In,Stainless Steel,16,101,5.4,375
+,410-420 SS - 20 In,Stainless Steel,20,101,5.4,375
+,440 SS - 2 In,Stainless Steel,2,90,4.6,480
+,440 SS - 4 In,Stainless Steel,4,90,4.6,480
+,440 SS - 6 In,Stainless Steel,6,90,4.6,480
+,440 SS - 8 In,Stainless Steel,8,90,4.6,480
+,440 SS - 10 In,Stainless Steel,10,90,4.6,480
+,440 SS - 12 In,Stainless Steel,12,90,4.6,480
+,440 SS - 16 In,Stainless Steel,16,90,4.6,480
+,440 SS - 20 In,Stainless Steel,20,90,4.6,480
+,17-4 SS - 2 In,Stainless Steel,2,71,2.8,780
+,17-4 SS - 4 In,Stainless Steel,4,71,2.8,780
+,17-4 SS - 6 In,Stainless Steel,6,71,2.8,780
+,17-4 SS - 8 In,Stainless Steel,8,71,2.8,780
+,17-4 SS - 10 In,Stainless Steel,10,71,2.8,780
+,17-4 SS - 12 In,Stainless Steel,12,71,2.8,780
+,17-4 SS - 16 In,Stainless Steel,16,71,2.8,780
+,17-4 SS - 20 In,Stainless Steel,20,71,2.8,780
+,15-5 SS - 2 In,Stainless Steel,2,71,2.8,780
+,15-5 SS - 4 In,Stainless Steel,4,71,2.8,780
+,15-5 SS - 6 In,Stainless Steel,6,71,2.8,780
+,15-5 SS - 8 In,Stainless Steel,8,71,2.8,780
+,15-5 SS - 10 In,Stainless Steel,10,71,2.8,780
+,15-5 SS - 12 In,Stainless Steel,12,71,2.8,780
+,15-5 SS - 16 In,Stainless Steel,16,71,2.8,780
+,15-5 SS - 20 In,Stainless Steel,20,71,2.8,780
+,Super Alloy A286 2 In,Super Alloy,2,66,2.4,800
+,Super Alloy A286 4 In,Super Alloy,4,66,2.4,800
+,Super Alloy A286 6 In,Super Alloy,6,66,2.4,800
+,Super Alloy A286 8 In,Super Alloy,8,66,2.4,800
+,Super Alloy A286 10 In,Super Alloy,10,66,2.4,800
+,Super Alloy A286 12 In,Super Alloy,12,66,2.4,800
+,Super Alloy A286 16 In,Super Alloy,16,66,2.4,800
+,Super Alloy A286 20 In,Super Alloy,20,66,2.4,800
+,Monel K500 2 In,Super Alloy,2,71,2.8,750
+,Monel K500 4 In,Super Alloy,4,71,2.8,750
+,Monel K500 6 In,Super Alloy,6,71,2.8,750
+,Monel K500 8 In,Super Alloy,8,71,2.8,750
+,Monel K500 10 In,Super Alloy,10,71,2.8,750
+,Monel K500 12 In,Super Alloy,12,71,2.8,750
+,Monel K500 16 In,Super Alloy,16,71,2.8,750
+,Monel K500 20 In,Super Alloy,20,71,2.8,750
+,Incoloy 330 2 In,Super Alloy,2,71,2.8,750
+,Incoloy 330 4 In,Super Alloy,4,71,2.8,750
+,Incoloy 330 6 In,Super Alloy,6,71,2.8,750
+,Incoloy 330 8 In,Super Alloy,8,71,2.8,750
+,Incoloy 330 10 In,Super Alloy,10,71,2.8,750
+,Incoloy 330 12 In,Super Alloy,12,71,2.8,750
+,Incoloy 330 16 In,Super Alloy,16,71,2.8,750
+,Incoloy 330 20 In,Super Alloy,20,71,2.8,750
+,Inconel 600 2 In,Super Alloy,2,71,2.8,750
+,Inconel 600 4 In,Super Alloy,4,71,2.8,750
+,Inconel 600 6 In,Super Alloy,6,71,2.8,750
+,Inconel 600 8 In,Super Alloy,8,71,2.8,750
+,Inconel 600 10 In,Super Alloy,10,71,2.8,750
+,Inconel 600 12 In,Super Alloy,12,71,2.8,750
+,Inconel 600 16 In,Super Alloy,16,71,2.8,750
+,Inconel 600 20 In,Super Alloy,20,71,2.8,750
+,Nitronic 60 2 In,Super Alloy,2,90,4.6,460
+,Nitronic 60 4 In,Super Alloy,4,90,4.6,460
+,Nitronic 60 6 In,Super Alloy,6,90,4.6,460
+,Nitronic 60 8 In,Super Alloy,8,90,4.6,460
+,Nitronic 60 10 In,Super Alloy,10,90,4.6,460
+,Nitronic 60 12 In,Super Alloy,12,90,4.6,460
+,Nitronic 60 16 In,Super Alloy,16,90,4.6,460
+,Nitronic 60 20 In,Super Alloy,20,90,4.6,460
+,RENE 88 2 In,Super Alloy,2,71,2.8,750
+,RENE 88 4 In,Super Alloy,4,71,2.8,750
+,RENE 88 6 In,Super Alloy,6,71,2.8,750
+,RENE 88 8 In,Super Alloy,8,71,2.8,750
+,RENE 88 10 In,Super Alloy,10,71,2.8,750
+,RENE 88 12 In,Super Alloy,12,71,2.8,750
+,RENE 88 16 In,Super Alloy,16,71,2.8,750
+,RENE 88 20 In,Super Alloy,20,71,2.8,750
+,Waspalloy 2 In,Super Alloy,2,71,2.8,750
+,Waspalloy 4 In,Super Alloy,4,71,2.8,750
+,Waspalloy 6 In,Super Alloy,6,71,2.8,750
+,Waspalloy 8 In,Super Alloy,8,71,2.8,750
+,Waspalloy 10 In,Super Alloy,10,71,2.8,750
+,Waspalloy 12 In,Super Alloy,12,71,2.8,750
+,Waspalloy 16 In,Super Alloy,16,71,2.8,750
+,Waspalloy 20 In,Super Alloy,20,71,2.8,750
+,Hastelloy 2 In,Super Alloy,2,66,2.4,800
+,Hastelloy 4 In,Super Alloy,4,66,2.4,800
+,Hastelloy 6 In,Super Alloy,6,66,2.4,800
+,Hastelloy 8 In,Super Alloy,8,66,2.4,800
+,Hastelloy 10 In,Super Alloy,10,66,2.4,800
+,Hastelloy 12 In,Super Alloy,12,66,2.4,800
+,Hastelloy 16 In,Super Alloy,16,66,2.4,800
+,Hastelloy 20 In,Super Alloy,20,66,2.4,800
+,Incoloy 825 2 In,Super Alloy,2,71,2.8,750
+,Incoloy 825 4 In,Super Alloy,4,71,2.8,750
+,Incoloy 825 6 In,Super Alloy,6,71,2.8,750
+,Incoloy 825 8 In,Super Alloy,8,71,2.8,750
+,Incoloy 825 10 In,Super Alloy,10,71,2.8,750
+,Incoloy 825 12 In,Super Alloy,12,71,2.8,750
+,Incoloy 825 16 In,Super Alloy,16,71,2.8,750
+,Incoloy 825 20 In,Super Alloy,20,71,2.8,750
+,Inconel 625 2 In,Super Alloy,2,66,2.4,800
+,Inconel 625 4 In,Super Alloy,4,66,2.4,800
+,Inconel 625 6 In,Super Alloy,6,66,2.4,800
+,Inconel 625 8 In,Super Alloy,8,66,2.4,800
+,Inconel 625 10 In,Super Alloy,10,66,2.4,800
+,Inconel 625 12 In,Super Alloy,12,66,2.4,800
+,Inconel 625 16 In,Super Alloy,16,66,2.4,800
+,Inconel 625 20 In,Super Alloy,20,66,2.4,800
+,Inconel 718 2 In,Super Alloy,2,71,2.8,750
+,Inconel 718 4 In,Super Alloy,4,71,2.8,750
+,Inconel 718 6 In,Super Alloy,6,71,2.8,750
+,Inconel 718 8 In,Super Alloy,8,71,2.8,750
+,Inconel 718 10 In,Super Alloy,10,71,2.8,750
+,Inconel 718 12 In,Super Alloy,12,71,2.8,750
+,Inconel 718 16 In,Super Alloy,16,71,2.8,750
+,Inconel 718 20 In,Super Alloy,20,71,2.8,750
+,Nitronic 90 2 In,Super Alloy,2,66,2.4,800
+,Nitronic 90 4 In,Super Alloy,4,66,2.4,800
+,Nitronic 90 6 In,Super Alloy,6,66,2.4,800
+,Nitronic 90 8 In,Super Alloy,8,66,2.4,800
+,Nitronic 90 10 In,Super Alloy,10,66,2.4,800
+,Nitronic 90 12 In,Super Alloy,12,66,2.4,800
+,Nitronic 90 16 In,Super Alloy,16,66,2.4,800
+,Nitronic 90 20 In,Super Alloy,20,66,2.4,800
+,Ni-Span 2 In,Titanium,2,66,2.4,800
+,Ni-Span 4 In,Titanium,4,66,2.4,800
+,Ni-Span 6 In,Titanium,6,66,2.4,800
+,Ni-Span 8 In,Titanium,8,66,2.4,800
+,Ni-Span 10 In,Titanium,10,66,2.4,800
+,Ni-Span 12 In,Titanium,12,66,2.4,800
+,Ni-Span 16 In,Titanium,16,66,2.4,800
+,Ni-Span 20 In,Titanium,20,66,2.4,800
+,Titanium 99% CP Ti 2 In,Titanium,2,81,3.8,550
+,Titanium 99% CP Ti 4 In,Titanium,4,81,3.8,550
+,Titanium 99% CP Ti 6 In,Titanium,6,81,3.8,550
+,Titanium 99% CP Ti 8 In,Titanium,8,81,3.8,550
+,Titanium 99% CP Ti 10 In,Titanium,10,81,3.8,550
+,Titanium 99% CP Ti 12 In,Titanium,12,81,3.8,550
+,Titanium 99% CP Ti 16 In,Titanium,16,81,3.8,550
+,Titanium 99% CP Ti 20 In,Titanium,20,81,3.8,550
+,Titanium Ti-6Al-4V 2 In,Titanium,2,81,3.8,550
+,Titanium Ti-6Al-4V 4 In,Titanium,4,81,3.8,550
+,Titanium Ti-6Al-4V 6 In,Titanium,6,81,3.8,550
+,Titanium Ti-6Al-4V 8 In,Titanium,8,81,3.8,550
+,Titanium Ti-6Al-4V 10 In,Titanium,10,81,3.8,550
+,Titanium Ti-6Al-4V 12 In,Titanium,12,81,3.8,550
+,Titanium Ti-6Al-4V 16 In,Titanium,16,81,3.8,550
+,Titanium Ti-6Al-4V 20 In,Titanium,20,81,3.8,550
+,CDA 715 (Copper Nickel) 2 In,Copper Brass Bronze,2,156,9.4,390
+,CDA 715 (Copper Nickel) 4 In,Copper Brass Bronze,4,156,9.4,390
+,CDA 715 (Copper Nickel) 6 In,Copper Brass Bronze,6,156,9.4,390
+,CDA 715 (Copper Nickel) 8 In,Copper Brass Bronze,8,156,9.4,390
+,CDA 715 (Copper Nickel) 10 In,Copper Brass Bronze,10,156,9.4,390
+,CDA 715 (Copper Nickel) 12 In,Copper Brass Bronze,12,156,9.4,390
+,CDA 715 (Copper Nickel) 16 In,Copper Brass Bronze,16,156,9.4,390
+,CDA 715 (Copper Nickel) 20 In,Copper Brass Bronze,20,156,9.4,390
+,CDA 464 (Naval Brass) 2 In,Copper Brass Bronze,2,156,9.4,390
+,CDA 464 (Naval Brass) 4 In,Copper Brass Bronze,4,156,9.4,390
+,CDA 464 (Naval Brass) 6 In,Copper Brass Bronze,6,156,9.4,390
+,CDA 464 (Naval Brass) 8 In,Copper Brass Bronze,8,156,9.4,390
+,CDA 464 (Naval Brass) 10 In,Copper Brass Bronze,10,156,9.4,390
+,CDA 464 (Naval Brass) 12 In,Copper Brass Bronze,12,156,9.4,390
+,CDA 464 (Naval Brass) 16 In,Copper Brass Bronze,16,156,9.4,390
+,CDA 464 (Naval Brass) 20 In,Copper Brass Bronze,20,156,9.4,390
+,CDA 230 (Red Brass) 2 In,Copper Brass Bronze,2,198,12.8,300
+,CDA 230 (Red Brass) 4 In,Copper Brass Bronze,4,198,12.8,300
+,CDA 230 (Red Brass) 6 In,Copper Brass Bronze,6,198,12.8,300
+,CDA 230 (Red Brass) 8 In,Copper Brass Bronze,8,198,12.8,300
+,CDA 230 (Red Brass) 10 In,Copper Brass Bronze,10,198,12.8,300
+,CDA 230 (Red Brass) 12 In,Copper Brass Bronze,12,198,12.8,300
+,CDA 230 (Red Brass) 16 In,Copper Brass Bronze,16,198,12.8,300
+,CDA 230 (Red Brass) 20 In,Copper Brass Bronze,20,198,12.8,300
+,CDA 260 (Cartridge Brass) 2 In,Copper Brass Bronze,2,198,12.8,300
+,CDA 260 (Cartridge Brass) 4 In,Copper Brass Bronze,4,198,12.8,300
+,CDA 260 (Cartridge Brass) 6 In,Copper Brass Bronze,6,198,12.8,300
+,CDA 260 (Cartridge Brass) 8 In,Copper Brass Bronze,8,198,12.8,300
+,CDA 260 (Cartridge Brass) 10 In,Copper Brass Bronze,10,198,12.8,300
+,CDA 260 (Cartridge Brass) 12 In,Copper Brass Bronze,12,198,12.8,300
+,CDA 260 (Cartridge Brass) 16 In,Copper Brass Bronze,16,198,12.8,300
+,CDA 260 (Cartridge Brass) 20 In,Copper Brass Bronze,20,198,12.8,300
+,CDA 865 (Aluminum Bronze) 2 In,Copper Brass Bronze,2,101,5.4,680
+,CDA 865 (Aluminum Bronze) 4 In,Copper Brass Bronze,4,101,5.4,680
+,CDA 865 (Aluminum Bronze) 6 In,Copper Brass Bronze,6,101,5.4,680
+,CDA 865 (Aluminum Bronze) 8 In,Copper Brass Bronze,8,101,5.4,680
+,CDA 865 (Aluminum Bronze) 10 In,Copper Brass Bronze,10,101,5.4,680
+,CDA 865 (Aluminum Bronze) 12 In,Copper Brass Bronze,12,101,5.4,680
+,CDA 865 (Aluminum Bronze) 16 In,Copper Brass Bronze,16,101,5.4,680
+,CDA 865 (Aluminum Bronze) 20 In,Copper Brass Bronze,20,101,5.4,680
+,CDA 863 (Manganese Bronze) 2 In,Copper Brass Bronze,2,101,5.4,680
+,CDA 863 (Manganese Bronze) 4 In,Copper Brass Bronze,4,101,5.4,680
+,CDA 863 (Manganese Bronze) 6 In,Copper Brass Bronze,6,101,5.4,680
+,CDA 863 (Manganese Bronze) 8 In,Copper Brass Bronze,8,101,5.4,680
+,CDA 863 (Manganese Bronze) 10 In,Copper Brass Bronze,10,101,5.4,680
+,CDA 863 (Manganese Bronze) 12 In,Copper Brass Bronze,12,101,5.4,680
+,CDA 863 (Manganese Bronze) 16 In,Copper Brass Bronze,16,101,5.4,680
+,CDA 863 (Manganese Bronze) 20 In,Copper Brass Bronze,20,101,5.4,680
+,AMPCO 18 2 In,Copper Brass Bronze,2,198,12.8,480
+,AMPCO 18 4 In,Copper Brass Bronze,4,198,12.8,480
+,AMPCO 18 6 In,Copper Brass Bronze,6,198,12.8,480
+,AMPCO 18 8 In,Copper Brass Bronze,8,198,12.8,480
+,AMPCO 18 10 In,Copper Brass Bronze,10,198,12.8,480
+,AMPCO 18 12 In,Copper Brass Bronze,12,198,12.8,480
+,AMPCO 18 16 In,Copper Brass Bronze,16,198,12.8,480
+,AMPCO 18 20 In,Copper Brass Bronze,20,198,12.8,480
+,AMPCO 21 2 In,Copper Brass Bronze,2,156,9.4,730
+,AMPCO 21 4 In,Copper Brass Bronze,4,156,9.4,730
+,AMPCO 21 6 In,Copper Brass Bronze,6,156,9.4,730
+,AMPCO 21 8 In,Copper Brass Bronze,8,156,9.4,730
+,AMPCO 21 10 In,Copper Brass Bronze,10,156,9.4,730
+,AMPCO 21 12 In,Copper Brass Bronze,12,156,9.4,730
+,AMPCO 21 16 In,Copper Brass Bronze,16,156,9.4,730
+,AMPCO 21 20 In,Copper Brass Bronze,20,156,9.4,730
+,AMPCO 25 2 In,Copper Brass Bronze,2,156,9.4,730
+,AMPCO 25 4 In,Copper Brass Bronze,4,156,9.4,730
+,AMPCO 25 6 In,Copper Brass Bronze,6,156,9.4,730
+,AMPCO 25 8 In,Copper Brass Bronze,8,156,9.4,730
+,AMPCO 25 10 In,Copper Brass Bronze,10,156,9.4,730
+,AMPCO 25 12 In,Copper Brass Bronze,12,156,9.4,730
+,AMPCO 25 16 In,Copper Brass Bronze,16,156,9.4,730
+,AMPCO 25 20 In,Copper Brass Bronze,20,156,9.4,730
+,CDA 20 (Commerial Bronze) 2 In,Copper Brass Bronze,2,198,12.8,480
+,CDA 20 (Commerial Bronze) 4 In,Copper Brass Bronze,4,198,12.8,480
+,CDA 20 (Commerial Bronze) 6 In,Copper Brass Bronze,6,198,12.8,480
+,CDA 20 (Commerial Bronze) 8 In,Copper Brass Bronze,8,198,12.8,480
+,CDA 20 (Commerial Bronze) 10 In,Copper Brass Bronze,10,198,12.8,480
+,CDA 20 (Commerial Bronze) 12 In,Copper Brass Bronze,12,198,12.8,480
+,CDA 20 (Commerial Bronze) 16 In,Copper Brass Bronze,16,198,12.8,480
+,CDA 20 (Commerial Bronze) 20 In,Copper Brass Bronze,20,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 2 In,Copper Brass Bronze,2,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 4 In,Copper Brass Bronze,4,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 6 In,Copper Brass Bronze,6,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 8 In,Copper Brass Bronze,8,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 10 In,Copper Brass Bronze,10,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 12 In,Copper Brass Bronze,12,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 16 In,Copper Brass Bronze,16,198,12.8,480
+,CDA 932 (Pb Tin Bronze) 20 In,Copper Brass Bronze,20,198,12.8,480
+,L6 - 2 In,Tool Steel,2,90,4.6,700
+,L6 - 4 In,Tool Steel,4,90,4.6,700
+,L6 - 6 In,Tool Steel,6,90,4.6,700
+,L6 - 8 In,Tool Steel,8,90,4.6,700
+,L6 - 10 In,Tool Steel,10,90,4.6,700
+,L6 - 12 In,Tool Steel,12,90,4.6,700
+,L6 - 16 In,Tool Steel,16,90,4.6,700
+,L6 - 20 In,Tool Steel,20,90,4.6,700
+,W1 - 2 In,Tool Steel,2,101,5.4,550
+,W1 - 4 In,Tool Steel,4,101,5.4,550
+,W1 - 6 In,Tool Steel,6,101,5.4,550
+,W1 - 8 In,Tool Steel,8,101,5.4,550
+,W1 - 10 In,Tool Steel,10,101,5.4,550
+,W1 - 12 In,Tool Steel,12,101,5.4,550
+,W1 - 16 In,Tool Steel,16,101,5.4,550
+,W1 - 20 In,Tool Steel,20,101,5.4,550
+,D2 - 2 In,Tool Steel,2,75,3,700
+,D2 - 4 In,Tool Steel,4,75,3,700
+,D2 - 6 In,Tool Steel,6,75,3,700
+,D2 - 8 In,Tool Steel,8,75,3,700
+,D2 - 10 In,Tool Steel,10,75,3,700
+,D2 - 12 In,Tool Steel,12,75,3,700
+,D2 - 16 In,Tool Steel,16,75,3,700
+,D2 - 20 In,Tool Steel,20,75,3,700
+,A2 - 2 In,Tool Steel,2,101,5.4,700
+,A2 - 4 In,Tool Steel,4,101,5.4,700
+,A2 - 6 In,Tool Steel,6,101,5.4,700
+,A2 - 8 In,Tool Steel,8,101,5.4,700
+,A2 - 10 In,Tool Steel,10,101,5.4,700
+,A2 - 12 In,Tool Steel,12,101,5.4,700
+,A2 - 16 In,Tool Steel,16,101,5.4,700
+,A2 - 20 In,Tool Steel,20,101,5.4,700
+,A6 - 2 In,Tool Steel,2,101,5.4,700
+,A6 - 4 In,Tool Steel,4,101,5.4,700
+,A6 - 6 In,Tool Steel,6,101,5.4,700
+,A6 - 8 In,Tool Steel,8,101,5.4,700
+,A6 - 10 In,Tool Steel,10,101,5.4,700
+,A6 - 12 In,Tool Steel,12,101,5.4,700
+,A6 - 16 In,Tool Steel,16,101,5.4,700
+,A6 - 20 In,Tool Steel,20,101,5.4,700
+,A10 - 2 In,Tool Steel,2,101,5.4,700
+,A10 - 4 In,Tool Steel,4,101,5.4,700
+,A10 - 6 In,Tool Steel,6,101,5.4,700
+,A10 - 8 In,Tool Steel,8,101,5.4,700
+,A10 - 10 In,Tool Steel,10,101,5.4,700
+,A10 - 12 In,Tool Steel,12,101,5.4,700
+,A10 - 16 In,Tool Steel,16,101,5.4,700
+,A10 - 20 In,Tool Steel,20,101,5.4,700
+,H13 - 2 In,Tool Steel,2,101,5.4,700
+,H13 - 4 In,Tool Steel,4,101,5.4,700
+,H13 - 6 In,Tool Steel,6,101,5.4,700
+,H13 - 8 In,Tool Steel,8,101,5.4,700
+,H13 - 10 In,Tool Steel,10,101,5.4,700
+,H13 - 12 In,Tool Steel,12,101,5.4,700
+,H13 - 16 In,Tool Steel,16,101,5.4,700
+,H13 - 20 In,Tool Steel,20,101,5.4,700
+,H25 - 2 In,Tool Steel,2,81,3.8,825
+,H25 - 4 In,Tool Steel,4,81,3.8,825
+,H25 - 6 In,Tool Steel,6,81,3.8,825
+,H25 - 8 In,Tool Steel,8,81,3.8,825
+,H25 - 10 In,Tool Steel,10,81,3.8,825
+,H25 - 12 In,Tool Steel,12,81,3.8,825
+,H25 - 16 In,Tool Steel,16,81,3.8,825
+,H25 - 20 In,Tool Steel,20,81,3.8,825
+,O1 - 2 In,Tool Steel,2,101,5.4,700
+,O1 - 4 In,Tool Steel,4,101,5.4,700
+,O1 - 6 In,Tool Steel,6,101,5.4,700
+,O1 - 8 In,Tool Steel,8,101,5.4,700
+,O1 - 10 In,Tool Steel,10,101,5.4,700
+,O1 - 12 In,Tool Steel,12,101,5.4,700
+,O1 - 16 In,Tool Steel,16,101,5.4,700
+,O1 - 20 In,Tool Steel,20,101,5.4,700
+,O2 - 2 In,Tool Steel,2,101,5.4,700
+,O2 - 4 In,Tool Steel,4,101,5.4,700
+,O2 - 6 In,Tool Steel,6,101,5.4,700
+,O2 - 8 In,Tool Steel,8,101,5.4,700
+,O2 - 10 In,Tool Steel,10,101,5.4,700
+,O2 - 12 In,Tool Steel,12,101,5.4,700
+,O2 - 16 In,Tool Steel,16,101,5.4,700
+,O2 - 20 In,Tool Steel,20,101,5.4,700
+,M2 - 2 In,Tool Steel,2,81,3.8,825
+,M2 - 4 In,Tool Steel,4,81,3.8,825
+,M2 - 6 In,Tool Steel,6,81,3.8,825
+,M2 - 8 In,Tool Steel,8,81,3.8,825
+,M2 - 10 In,Tool Steel,10,81,3.8,825
+,M2 - 12 In,Tool Steel,12,81,3.8,825
+,M2 - 16 In,Tool Steel,16,81,3.8,825
+,M2 - 20 In,Tool Steel,20,81,3.8,825
+,M4 - 2 In,Tool Steel,2,81,3.8,825
+,M4 - 4 In,Tool Steel,4,81,3.8,825
+,M4 - 6 In,Tool Steel,6,81,3.8,825
+,M4 - 8 In,Tool Steel,8,81,3.8,825
+,M4 - 10 In,Tool Steel,10,81,3.8,825
+,M4 - 12 In,Tool Steel,12,81,3.8,825
+,M4 - 16 In,Tool Steel,16,81,3.8,825
+,M4 - 20 In,Tool Steel,20,81,3.8,825
+,M10 - 2 In,Tool Steel,2,81,3.8,825
+,M10 - 4 In,Tool Steel,4,81,3.8,825
+,M10 - 6 In,Tool Steel,6,81,3.8,825
+,M10 - 8 In,Tool Steel,8,81,3.8,825
+,M10 - 10 In,Tool Steel,10,81,3.8,825
+,M10 - 12 In,Tool Steel,12,81,3.8,825
+,M10 - 16 In,Tool Steel,16,81,3.8,825
+,M10 - 20 In,Tool Steel,20,81,3.8,825
+,M42 - 2 In,Tool Steel,2,81,3.8,825
+,M42 - 4 In,Tool Steel,4,81,3.8,825
+,M42 - 6 In,Tool Steel,6,81,3.8,825
+,M42 - 8 In,Tool Steel,8,81,3.8,825
+,M42 - 10 In,Tool Steel,10,81,3.8,825
+,M42 - 12 In,Tool Steel,12,81,3.8,825
+,M42 - 16 In,Tool Steel,16,81,3.8,825
+,M42 - 20 In,Tool Steel,20,81,3.8,825
+,T1 - 2 In,Tool Steel,2,71,2.8,880
+,T1 - 4 In,Tool Steel,4,71,2.8,880
+,T1 - 6 In,Tool Steel,6,71,2.8,880
+,T1 - 8 In,Tool Steel,8,71,2.8,880
+,T1 - 10 In,Tool Steel,10,71,2.8,880
+,T1 - 12 In,Tool Steel,12,71,2.8,880
+,T1 - 16 In,Tool Steel,16,71,2.8,880
+,T1 - 20 In,Tool Steel,20,71,2.8,880
+,T15 - 2 In,Tool Steel,2,71,2.8,880
+,T15 - 4 In,Tool Steel,4,71,2.8,880
+,T15 - 6 In,Tool Steel,6,71,2.8,880
+,T15 - 8 In,Tool Steel,8,71,2.8,880
+,T15 - 10 In,Tool Steel,10,71,2.8,880
+,T15 - 12 In,Tool Steel,12,71,2.8,880
+,T15 - 16 In,Tool Steel,16,71,2.8,880
+,T15 - 20 In,Tool Steel,20,71,2.8,880
+,P3 - 2 In,Tool Steel,2,101,5.4,675
+,P3 - 4 In,Tool Steel,4,101,5.4,675
+,P3 - 6 In,Tool Steel,6,101,5.4,675
+,P3 - 8 In,Tool Steel,8,101,5.4,675
+,P3 - 10 In,Tool Steel,10,101,5.4,675
+,P3 - 12 In,Tool Steel,12,101,5.4,675
+,P3 - 16 In,Tool Steel,16,101,5.4,675
+,P3 - 20 In,Tool Steel,20,101,5.4,675
+,P20 - 2 In,Tool Steel,2,101,5.4,675
+,P20 - 4 In,Tool Steel,4,101,5.4,675
+,P20 - 6 In,Tool Steel,6,101,5.4,675
+,P20 - 8 In,Tool Steel,8,101,5.4,675
+,P20 - 10 In,Tool Steel,10,101,5.4,675
+,P20 - 12 In,Tool Steel,12,101,5.4,675
+,P20 - 16 In,Tool Steel,16,101,5.4,675
+,P20 - 20 In,Tool Steel,20,101,5.4,675
+,S1 - 2 In,Tool Steel,2,81,3.8,750
+,S1 - 4 In,Tool Steel,4,81,3.8,750
+,S1 - 6 In,Tool Steel,6,81,3.8,750
+,S1 - 8 In,Tool Steel,8,81,3.8,750
+,S1 - 10 In,Tool Steel,10,81,3.8,750
+,S1 - 12 In,Tool Steel,12,81,3.8,750
+,S1 - 16 In,Tool Steel,16,81,3.8,750
+,S1 - 20 In,Tool Steel,20,81,3.8,750
+,S5 - 2 In,Tool Steel,2,81,3.8,750
+,S5 - 4 In,Tool Steel,4,81,3.8,750
+,S5 - 6 In,Tool Steel,6,81,3.8,750
+,S5 - 8 In,Tool Steel,8,81,3.8,750
+,S5 - 10 In,Tool Steel,10,81,3.8,750
+,S5 - 12 In,Tool Steel,12,81,3.8,750
+,S5 - 16 In,Tool Steel,16,81,3.8,750
+,S5 - 20 In,Tool Steel,20,81,3.8,750
+,S7 - 2 In,Tool Steel,2,81,3.8,750
+,S7 - 4 In,Tool Steel,4,81,3.8,750
+,S7 - 6 In,Tool Steel,6,81,3.8,750
+,S7 - 8 In,Tool Steel,8,81,3.8,750
+,S7 - 10 In,Tool Steel,10,81,3.8,750
+,S7 - 12 In,Tool Steel,12,81,3.8,750
+,S7 - 16 In,Tool Steel,16,81,3.8,750
+,S7 - 20 In,Tool Steel,20,81,3.8,750
+,418 SS - 1 In,Stainless Steel,1,150,5,500
+,418 SS - 2 In,Stainless Steel,2,150,5,500
+,418 SS - 3 In,Stainless Steel,3,150,5,500
+,418 SS - 4 In,Stainless Steel,4,150,5,500
+,418 SS - 5 In,Stainless Steel,5,150,5,500
+,418 SS - 6 In,Stainless Steel,6,150,5,500
+,418 SS - 7 In,Stainless Steel,7,150,3,500
+,418 SS - 8 In,Stainless Steel,8,150,3,500
+,418 SS - 9 In,Stainless Steel,9,150,3,500
+,418 SS - 10 In,Stainless Steel,10,130,3,500
+,418 SS - 11 In,Stainless Steel,11,130,3,500
+,418 SS - 12 In,Stainless Steel,12,130,3,500
+,418 SS - 13 In,Stainless Steel,13,130,3,500
+,418 SS - 14 In,Stainless Steel,14,120,3,500
+,418 SS - 15 In,Stainless Steel,15,120,3,500
+,418 SS - 16 In,Stainless Steel,16,120,3,500
+,418 SS - 17 In,Stainless Steel,17,120,3,500
+,418 SS - 18 In,Stainless Steel,18,120,3,500
+,418 SS - 19 In,Stainless Steel,19,110,3,500
+,418 SS - 20 In,Stainless Steel,20,110,3,500
+,Alloy 13-8 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 13-8 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 13-8 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 13-8 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 13-8 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 13-8 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 13-8 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 13-8 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 13-8 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 13-8 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 13-8 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 13-8 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 13-8 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 13-8 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 13-8 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 13-8 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 13-8 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 13-8 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 13-8 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 13-8 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 15-7 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 15-7 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 15-7 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 15-7 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 15-7 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 15-7 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 15-7 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 15-7 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 15-7 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 15-7 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 15-7 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 15-7 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 15-7 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 15-7 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 15-7 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 15-7 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 15-7 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 15-7 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 15-7 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 15-7 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 188 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 188 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 188 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 188 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 188 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 188 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 188 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 188 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 188 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 188 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 188 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 188 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 188 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 188 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 188 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 188 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 188 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 188 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 188 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 188 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 20 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 20 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 20 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 20 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 20 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 20 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 20 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 20 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 20 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 20 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 20 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 20 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 20 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 20 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 20 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 20 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 20 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 20 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 20 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 20 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 21-6-9 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 21-6-9 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 21-6-9 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 21-6-9 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 21-6-9 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 21-6-9 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 21-6-9 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 21-6-9 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 21-6-9 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 21-6-9 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 21-6-9 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 21-6-9 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 21-6-9 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 21-6-9 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 21-6-9 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 21-6-9 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 21-6-9 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 21-6-9 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 21-6-9 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 21-6-9 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 230 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 230 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 230 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 230 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 230 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 230 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 230 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 230 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 230 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 230 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 230 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 230 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 230 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 230 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 230 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 230 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 230 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 230 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 230 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 230 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 263 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 263 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 263 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 263 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 263 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 263 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 263 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 263 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 263 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 263 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 263 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 263 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 263 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 263 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 263 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 263 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 263 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 263 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 263 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 263 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 330 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 330 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 330 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 330 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 330 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 330 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 330 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 330 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 330 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 330 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 330 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 330 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 330 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 330 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 330 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 330 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 330 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 330 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 330 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 330 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 60 - 1 In,Alloy Steel,1,100,3,500
+,Alloy 60 - 2 In,Alloy Steel,2,100,3,500
+,Alloy 60 - 3 In,Alloy Steel,3,90,3,500
+,Alloy 60 - 4 In,Alloy Steel,4,90,3,500
+,Alloy 60 - 5 In,Alloy Steel,5,90,3,500
+,Alloy 60 - 6 In,Alloy Steel,6,90,3,500
+,Alloy 60 - 7 In,Alloy Steel,7,80,2,500
+,Alloy 60 - 8 In,Alloy Steel,8,80,2,500
+,Alloy 60 - 9 In,Alloy Steel,9,80,2,500
+,Alloy 60 - 10 In,Alloy Steel,10,80,2,500
+,Alloy 60 - 11 In,Alloy Steel,11,80,2,500
+,Alloy 60 - 12 In,Alloy Steel,12,80,2,500
+,Alloy 60 - 13 In,Alloy Steel,13,80,2,500
+,Alloy 60 - 14 In,Alloy Steel,14,80,2,500
+,Alloy 60 - 15 In,Alloy Steel,15,80,2,500
+,Alloy 60 - 16 In,Alloy Steel,16,80,2,500
+,Alloy 60 - 17 In,Alloy Steel,17,80,2,500
+,Alloy 60 - 18 In,Alloy Steel,18,80,2,500
+,Alloy 60 - 19 In,Alloy Steel,19,80,2,500
+,Alloy 60 - 20 In,Alloy Steel,20,80,2,500
+,Alloy 600 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 600 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 600 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 600 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 600 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 600 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 600 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 600 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 600 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 600 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 600 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 600 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 600 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 600 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 600 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 600 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 600 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 600 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 600 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 600 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 601 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 601 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 601 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 601 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 601 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 601 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 601 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 601 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 601 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 601 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 601 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 601 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 601 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 601 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 601 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 601 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 601 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 601 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 601 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 601 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 617 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 617 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 617 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 617 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 617 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 617 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 617 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 617 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 617 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 617 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 617 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 617 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 617 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 617 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 617 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 617 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 617 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 617 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 617 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 617 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 625 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 625 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 625 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 625 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 625 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 625 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 625 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 625 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 625 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 625 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 625 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 625 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 625 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 625 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 625 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 625 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 625 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 625 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 625 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 625 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 6B - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 6B - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 6B - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 6B - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 6B - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 6B - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 6B - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 6B - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 6B - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 6B - 10 In,Alloy Steel,10,110,3,500
+,Alloy 6B - 11 In,Alloy Steel,11,110,3,500
+,Alloy 6B - 12 In,Alloy Steel,12,110,3,500
+,Alloy 6B - 13 In,Alloy Steel,13,110,3,500
+,Alloy 6B - 14 In,Alloy Steel,14,110,3,500
+,Alloy 6B - 15 In,Alloy Steel,15,110,3,500
+,Alloy 6B - 16 In,Alloy Steel,16,110,3,500
+,Alloy 6B - 17 In,Alloy Steel,17,110,3,500
+,Alloy 6B - 18 In,Alloy Steel,18,110,3,500
+,Alloy 6B - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 6B - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 718 - 1 In,Alloy Steel,1,120,3.5,500
+,Alloy 718 - 2 In,Alloy Steel,2,120,3.5,500
+,Alloy 718 - 3 In,Alloy Steel,3,110,3.5,500
+,Alloy 718 - 4 In,Alloy Steel,4,110,3.5,500
+,Alloy 718 - 5 In,Alloy Steel,5,110,3.5,500
+,Alloy 718 - 6 In,Alloy Steel,6,110,3.5,500
+,Alloy 718 - 7 In,Alloy Steel,7,110,3.5,500
+,Alloy 718 - 8 In,Alloy Steel,8,110,3.5,500
+,Alloy 718 - 9 In,Alloy Steel,9,110,3.5,500
+,Alloy 718 - 10 In,Alloy Steel,10,110,3,500
+,Alloy 718 - 11 In,Alloy Steel,11,110,3,500
+,Alloy 718 - 12 In,Alloy Steel,12,110,3,500
+,Alloy 718 - 13 In,Alloy Steel,13,110,3,500
+,Alloy 718 - 14 In,Alloy Steel,14,110,3,500
+,Alloy 718 - 15 In,Alloy Steel,15,110,3,500
+,Alloy 718 - 16 In,Alloy Steel,16,110,3,500
+,Alloy 718 - 17 In,Alloy Steel,17,110,3,500
+,Alloy 718 - 18 In,Alloy Steel,18,110,3,500
+,Alloy 718 - 19 In,Alloy Steel,19,100,2.5,500
+,Alloy 718 - 20 In,Alloy Steel,20,100,2.5,500
+,Alloy 722 - 1 In,Alloy Steel,1,110,4,500
+,Alloy 722 - 2 In,Alloy Steel,2,110,4,500
+,Alloy 722 - 3 In,Alloy Steel,3,105,4,500
+,Alloy 722 - 4 In,Alloy Steel,4,105,4,500
+,Alloy 722 - 5 In,Alloy Steel,5,105,4,500
+,Alloy 722 - 6 In,Alloy Steel,6,105,4,500
+,Alloy 722 - 7 In,Alloy Steel,7,105,4,500
+,Alloy 722 - 8 In,Alloy Steel,8,105,4,500
+,Alloy 722 - 9 In,Alloy Steel,9,105,4,500
+,Alloy 722 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy 722 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy 722 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy 722 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy 722 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy 722 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy 722 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy 722 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy 722 - 18 In,Alloy Steel,18,100,3,500
+,Alloy 722 - 19 In,Alloy Steel,19,100,3,500
+,Alloy 722 - 20 In,Alloy Steel,20,100,3,500
+,Alloy 800 - 1 In,Alloy Steel,1,110,4,500
+,Alloy 800 - 2 In,Alloy Steel,2,110,4,500
+,Alloy 800 - 3 In,Alloy Steel,3,105,4,500
+,Alloy 800 - 4 In,Alloy Steel,4,105,4,500
+,Alloy 800 - 5 In,Alloy Steel,5,105,4,500
+,Alloy 800 - 6 In,Alloy Steel,6,105,4,500
+,Alloy 800 - 7 In,Alloy Steel,7,105,4,500
+,Alloy 800 - 8 In,Alloy Steel,8,105,4,500
+,Alloy 800 - 9 In,Alloy Steel,9,105,4,500
+,Alloy 800 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy 800 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy 800 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy 800 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy 800 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy 800 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy 800 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy 800 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy 800 - 18 In,Alloy Steel,18,100,3,500
+,Alloy 800 - 19 In,Alloy Steel,19,100,3,500
+,Alloy 800 - 20 In,Alloy Steel,20,100,3,500
+,Alloy 825 - 1 In,Alloy Steel,1,110,4,500
+,Alloy 825 - 2 In,Alloy Steel,2,110,4,500
+,Alloy 825 - 3 In,Alloy Steel,3,105,4,500
+,Alloy 825 - 4 In,Alloy Steel,4,105,4,500
+,Alloy 825 - 5 In,Alloy Steel,5,105,4,500
+,Alloy 825 - 6 In,Alloy Steel,6,105,4,500
+,Alloy 825 - 7 In,Alloy Steel,7,105,4,500
+,Alloy 825 - 8 In,Alloy Steel,8,105,4,500
+,Alloy 825 - 9 In,Alloy Steel,9,105,4,500
+,Alloy 825 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy 825 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy 825 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy 825 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy 825 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy 825 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy 825 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy 825 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy 825 - 18 In,Alloy Steel,18,100,3,500
+,Alloy 825 - 19 In,Alloy Steel,19,100,3,500
+,Alloy 825 - 20 In,Alloy Steel,20,100,3,500
+,Alloy 901 - 1 In,Alloy Steel,1,110,4,500
+,Alloy 901 - 2 In,Alloy Steel,2,110,4,500
+,Alloy 901 - 3 In,Alloy Steel,3,105,4,500
+,Alloy 901 - 4 In,Alloy Steel,4,105,4,500
+,Alloy 901 - 5 In,Alloy Steel,5,105,4,500
+,Alloy 901 - 6 In,Alloy Steel,6,105,4,500
+,Alloy 901 - 7 In,Alloy Steel,7,105,4,500
+,Alloy 901 - 8 In,Alloy Steel,8,105,4,500
+,Alloy 901 - 9 In,Alloy Steel,9,105,4,500
+,Alloy 901 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy 901 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy 901 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy 901 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy 901 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy 901 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy 901 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy 901 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy 901 - 18 In,Alloy Steel,18,100,3,500
+,Alloy 901 - 19 In,Alloy Steel,19,100,3,500
+,Alloy 901 - 20 In,Alloy Steel,20,100,3,500
+,Alloy A286 - 1 In,Alloy Steel,1,110,4,500
+,Alloy A286 - 2 In,Alloy Steel,2,110,4,500
+,Alloy A286 - 3 In,Alloy Steel,3,105,4,500
+,Alloy A286 - 4 In,Alloy Steel,4,105,4,500
+,Alloy A286 - 5 In,Alloy Steel,5,105,4,500
+,Alloy A286 - 6 In,Alloy Steel,6,105,4,500
+,Alloy A286 - 7 In,Alloy Steel,7,105,4,500
+,Alloy A286 - 8 In,Alloy Steel,8,105,4,500
+,Alloy A286 - 9 In,Alloy Steel,9,105,4,500
+,Alloy A286 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy A286 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy A286 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy A286 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy A286 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy A286 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy A286 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy A286 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy A286 - 18 In,Alloy Steel,18,100,3,500
+,Alloy A286 - 19 In,Alloy Steel,19,100,3,500
+,Alloy A286 - 20 In,Alloy Steel,20,100,3,500
+,Alloy AM350 - 1 In,Alloy Steel,1,110,4,500
+,Alloy AM350 - 2 In,Alloy Steel,2,110,4,500
+,Alloy AM350 - 3 In,Alloy Steel,3,105,4,500
+,Alloy AM350 - 4 In,Alloy Steel,4,105,4,500
+,Alloy AM350 - 5 In,Alloy Steel,5,105,4,500
+,Alloy AM350 - 6 In,Alloy Steel,6,105,4,500
+,Alloy AM350 - 7 In,Alloy Steel,7,105,4,500
+,Alloy AM350 - 8 In,Alloy Steel,8,105,4,500
+,Alloy AM350 - 9 In,Alloy Steel,9,105,4,500
+,Alloy AM350 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy AM350 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy AM350 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy AM350 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy AM350 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy AM350 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy AM350 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy AM350 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy AM350 - 18 In,Alloy Steel,18,100,3,500
+,Alloy AM350 - 19 In,Alloy Steel,19,100,3,500
+,Alloy AM350 - 20 In,Alloy Steel,20,100,3,500
+,Alloy AM355 - 1 In,Alloy Steel,1,110,4,500
+,Alloy AM355 - 2 In,Alloy Steel,2,110,4,500
+,Alloy AM355 - 3 In,Alloy Steel,3,105,4,500
+,Alloy AM355 - 4 In,Alloy Steel,4,105,4,500
+,Alloy AM355 - 5 In,Alloy Steel,5,105,4,500
+,Alloy AM355 - 6 In,Alloy Steel,6,105,4,500
+,Alloy AM355 - 7 In,Alloy Steel,7,105,4,500
+,Alloy AM355 - 8 In,Alloy Steel,8,105,4,500
+,Alloy AM355 - 9 In,Alloy Steel,9,105,4,500
+,Alloy AM355 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy AM355 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy AM355 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy AM355 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy AM355 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy AM355 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy AM355 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy AM355 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy AM355 - 18 In,Alloy Steel,18,100,3,500
+,Alloy AM355 - 19 In,Alloy Steel,19,100,3,500
+,Alloy AM355 - 20 In,Alloy Steel,20,100,3,500
+,Alloy N-155 - 1 In,Alloy Steel,1,110,4,500
+,Alloy N-155 - 2 In,Alloy Steel,2,110,4,500
+,Alloy N-155 - 3 In,Alloy Steel,3,105,4,500
+,Alloy N-155 - 4 In,Alloy Steel,4,105,4,500
+,Alloy N-155 - 5 In,Alloy Steel,5,105,4,500
+,Alloy N-155 - 6 In,Alloy Steel,6,105,4,500
+,Alloy N-155 - 7 In,Alloy Steel,7,105,4,500
+,Alloy N-155 - 8 In,Alloy Steel,8,105,4,500
+,Alloy N-155 - 9 In,Alloy Steel,9,105,4,500
+,Alloy N-155 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy N-155 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy N-155 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy N-155 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy N-155 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy N-155 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy N-155 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy N-155 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy N-155 - 18 In,Alloy Steel,18,100,3,500
+,Alloy N-155 - 19 In,Alloy Steel,19,100,3,500
+,Alloy N-155 - 20 In,Alloy Steel,20,100,3,500
+,Alloy X750 - 1 In,Alloy Steel,1,110,4,500
+,Alloy X750 - 2 In,Alloy Steel,2,110,4,500
+,Alloy X750 - 3 In,Alloy Steel,3,105,4,500
+,Alloy X750 - 4 In,Alloy Steel,4,105,4,500
+,Alloy X750 - 5 In,Alloy Steel,5,105,4,500
+,Alloy X750 - 6 In,Alloy Steel,6,105,4,500
+,Alloy X750 - 7 In,Alloy Steel,7,105,4,500
+,Alloy X750 - 8 In,Alloy Steel,8,105,4,500
+,Alloy X750 - 9 In,Alloy Steel,9,105,4,500
+,Alloy X750 - 10 In,Alloy Steel,10,105,3.5,500
+,Alloy X750 - 11 In,Alloy Steel,11,105,3.5,500
+,Alloy X750 - 12 In,Alloy Steel,12,105,3.5,500
+,Alloy X750 - 13 In,Alloy Steel,13,105,3.5,500
+,Alloy X750 - 14 In,Alloy Steel,14,100,3.5,500
+,Alloy X750 - 15 In,Alloy Steel,15,100,3.5,500
+,Alloy X750 - 16 In,Alloy Steel,16,100,3.5,500
+,Alloy X750 - 17 In,Alloy Steel,17,100,3.5,500
+,Alloy X750 - 18 In,Alloy Steel,18,100,3,500
+,Alloy X750 - 19 In,Alloy Steel,19,100,3,500
+,Alloy X750 - 20 In,Alloy Steel,20,100,3,500
+,Custom 455 - 1 In,Super Alloy Steel,1,100,3,500
+,Custom 455 - 2 In,Super Alloy Steel,2,100,3,500
+,Custom 455 - 3 In,Super Alloy Steel,3,90,3,500
+,Custom 455 - 4 In,Super Alloy Steel,4,90,3,500
+,Custom 455 - 5 In,Super Alloy Steel,5,90,3,500
+,Custom 455 - 6 In,Super Alloy Steel,6,90,3,500
+,Custom 455 - 7 In,Super Alloy Steel,7,80,2,500
+,Custom 455 - 8 In,Super Alloy Steel,8,80,2,500
+,Custom 455 - 9 In,Super Alloy Steel,9,80,2,500
+,Custom 455 - 10 In,Super Alloy Steel,10,80,2,500
+,Custom 455 - 11 In,Super Alloy Steel,11,80,2,500
+,Custom 455 - 12 In,Super Alloy Steel,12,80,2,500
+,Custom 455 - 13 In,Super Alloy Steel,13,80,2,500
+,Custom 455 - 14 In,Super Alloy Steel,14,80,2,500
+,Custom 455 - 15 In,Super Alloy Steel,15,80,2,500
+,Custom 455 - 16 In,Super Alloy Steel,16,80,2,500
+,Custom 455 - 17 In,Super Alloy Steel,17,80,2,500
+,Custom 455 - 18 In,Super Alloy Steel,18,80,2,500
+,Custom 455 - 19 In,Super Alloy Steel,19,80,2,500
+,Custom 455 - 20 In,Super Alloy Steel,20,80,2,500
+,Hastelloy C22 - 1 In,Super Alloy Steel,1,100,3,500
+,Hastelloy C22 - 2 In,Super Alloy Steel,2,100,3,500
+,Hastelloy C22 - 3 In,Super Alloy Steel,3,90,3,500
+,Hastelloy C22 - 4 In,Super Alloy Steel,4,90,3,500
+,Hastelloy C22 - 5 In,Super Alloy Steel,5,90,3,500
+,Hastelloy C22 - 6 In,Super Alloy Steel,6,90,3,500
+,Hastelloy C22 - 7 In,Super Alloy Steel,7,80,2,500
+,Hastelloy C22 - 8 In,Super Alloy Steel,8,80,2,500
+,Hastelloy C22 - 9 In,Super Alloy Steel,9,80,2,500
+,Hastelloy C22 - 10 In,Super Alloy Steel,10,80,2,500
+,Hastelloy C22 - 11 In,Super Alloy Steel,11,80,2,500
+,Hastelloy C22 - 12 In,Super Alloy Steel,12,80,2,500
+,Hastelloy C22 - 13 In,Super Alloy Steel,13,80,2,500
+,Hastelloy C22 - 14 In,Super Alloy Steel,14,80,2,500
+,Hastelloy C22 - 15 In,Super Alloy Steel,15,80,2,500
+,Hastelloy C22 - 16 In,Super Alloy Steel,16,80,2,500
+,Hastelloy C22 - 17 In,Super Alloy Steel,17,80,2,500
+,Hastelloy C22 - 18 In,Super Alloy Steel,18,80,2,500
+,Hastelloy C22 - 19 In,Super Alloy Steel,19,80,2,500
+,Hastelloy C22 - 20 In,Super Alloy Steel,20,80,2,500
+,Hastelloy C276 - 1 In,Super Alloy Steel,1,100,3,500
+,Hastelloy C276 - 2 In,Super Alloy Steel,2,100,3,500
+,Hastelloy C276 - 3 In,Super Alloy Steel,3,90,3,500
+,Hastelloy C276 - 4 In,Super Alloy Steel,4,90,3,500
+,Hastelloy C276 - 5 In,Super Alloy Steel,5,90,3,500
+,Hastelloy C276 - 6 In,Super Alloy Steel,6,90,3,500
+,Hastelloy C276 - 7 In,Super Alloy Steel,7,80,2,500
+,Hastelloy C276 - 8 In,Super Alloy Steel,8,80,2,500
+,Hastelloy C276 - 9 In,Super Alloy Steel,9,80,2,500
+,Hastelloy C276 - 10 In,Super Alloy Steel,10,80,2,500
+,Hastelloy C276 - 11 In,Super Alloy Steel,11,80,2,500
+,Hastelloy C276 - 12 In,Super Alloy Steel,12,80,2,500
+,Hastelloy C276 - 13 In,Super Alloy Steel,13,80,2,500
+,Hastelloy C276 - 14 In,Super Alloy Steel,14,80,2,500
+,Hastelloy C276 - 15 In,Super Alloy Steel,15,80,2,500
+,Hastelloy C276 - 16 In,Super Alloy Steel,16,80,2,500
+,Hastelloy C276 - 17 In,Super Alloy Steel,17,80,2,500
+,Hastelloy C276 - 18 In,Super Alloy Steel,18,80,2,500
+,Hastelloy C276 - 19 In,Super Alloy Steel,19,80,2,500
+,Hastelloy C276 - 20 In,Super Alloy Steel,20,80,2,500
+,Hastelloy X - 1 In,Super Alloy Steel,1,100,3,500
+,Hastelloy X - 2 In,Super Alloy Steel,2,100,3,500
+,Hastelloy X - 3 In,Super Alloy Steel,3,90,3,500
+,Hastelloy X - 4 In,Super Alloy Steel,4,90,3,500
+,Hastelloy X - 5 In,Super Alloy Steel,5,90,3,500
+,Hastelloy X - 6 In,Super Alloy Steel,6,90,3,500
+,Hastelloy X - 7 In,Super Alloy Steel,7,80,2,500
+,Hastelloy X - 8 In,Super Alloy Steel,8,80,2,500
+,Hastelloy X - 9 In,Super Alloy Steel,9,80,2,500
+,Hastelloy X - 10 In,Super Alloy Steel,10,80,2,500
+,Hastelloy X - 11 In,Super Alloy Steel,11,80,2,500
+,Hastelloy X - 12 In,Super Alloy Steel,12,80,2,500
+,Hastelloy X - 13 In,Super Alloy Steel,13,80,2,500
+,Hastelloy X - 14 In,Super Alloy Steel,14,80,2,500
+,Hastelloy X - 15 In,Super Alloy Steel,15,80,2,500
+,Hastelloy X - 16 In,Super Alloy Steel,16,80,2,500
+,Hastelloy X - 17 In,Super Alloy Steel,17,80,2,500
+,Hastelloy X - 18 In,Super Alloy Steel,18,80,2,500
+,Hastelloy X - 19 In,Super Alloy Steel,19,80,2,500
+,Hastelloy X - 20 In,Super Alloy Steel,20,80,2,500
+,Haynes 242 - 1 In,Super Alloy Steel,1,100,3,500
+,Haynes 242 - 2 In,Super Alloy Steel,2,100,3,500
+,Haynes 242 - 3 In,Super Alloy Steel,3,90,3,500
+,Haynes 242 - 4 In,Super Alloy Steel,4,90,3,500
+,Haynes 242 - 5 In,Super Alloy Steel,5,90,3,500
+,Haynes 242 - 6 In,Super Alloy Steel,6,90,3,500
+,Haynes 242 - 7 In,Super Alloy Steel,7,80,2,500
+,Haynes 242 - 8 In,Super Alloy Steel,8,80,2,500
+,Haynes 242 - 9 In,Super Alloy Steel,9,80,2,500
+,Haynes 242 - 10 In,Super Alloy Steel,10,80,2,500
+,Haynes 242 - 11 In,Super Alloy Steel,11,80,2,500
+,Haynes 242 - 12 In,Super Alloy Steel,12,80,2,500
+,Haynes 242 - 13 In,Super Alloy Steel,13,80,2,500
+,Haynes 242 - 14 In,Super Alloy Steel,14,80,2,500
+,Haynes 242 - 15 In,Super Alloy Steel,15,80,2,500
+,Haynes 242 - 16 In,Super Alloy Steel,16,80,2,500
+,Haynes 242 - 17 In,Super Alloy Steel,17,80,2,500
+,Haynes 242 - 18 In,Super Alloy Steel,18,80,2,500
+,Haynes 242 - 19 In,Super Alloy Steel,19,80,2,500
+,Haynes 242 - 20 In,Super Alloy Steel,20,80,2,500
+,HyMu 80 - 1 In,Super Alloy Steel,1,100,3,500
+,HyMu 80 - 2 In,Super Alloy Steel,2,100,3,500
+,HyMu 80 - 3 In,Super Alloy Steel,3,90,3,500
+,HyMu 80 - 4 In,Super Alloy Steel,4,90,3,500
+,HyMu 80 - 5 In,Super Alloy Steel,5,90,3,500
+,HyMu 80 - 6 In,Super Alloy Steel,6,90,3,500
+,HyMu 80 - 7 In,Super Alloy Steel,7,80,2,500
+,HyMu 80 - 8 In,Super Alloy Steel,8,80,2,500
+,HyMu 80 - 9 In,Super Alloy Steel,9,80,2,500
+,HyMu 80 - 10 In,Super Alloy Steel,10,80,2,500
+,HyMu 80 - 11 In,Super Alloy Steel,11,80,2,500
+,HyMu 80 - 12 In,Super Alloy Steel,12,80,2,500
+,HyMu 80 - 13 In,Super Alloy Steel,13,80,2,500
+,HyMu 80 - 14 In,Super Alloy Steel,14,80,2,500
+,HyMu 80 - 15 In,Super Alloy Steel,15,80,2,500
+,HyMu 80 - 16 In,Super Alloy Steel,16,80,2,500
+,HyMu 80 - 17 In,Super Alloy Steel,17,80,2,500
+,HyMu 80 - 18 In,Super Alloy Steel,18,80,2,500
+,HyMu 80 - 19 In,Super Alloy Steel,19,80,2,500
+,HyMu 80 - 20 In,Super Alloy Steel,20,80,2,500
+,Invar 36 - 1 In,Super Alloy Steel,1,100,3,500
+,Invar 36 - 2 In,Super Alloy Steel,2,100,3,500
+,Invar 36 - 3 In,Super Alloy Steel,3,90,3,500
+,Invar 36 - 4 In,Super Alloy Steel,4,90,3,500
+,Invar 36 - 5 In,Super Alloy Steel,5,90,3,500
+,Invar 36 - 6 In,Super Alloy Steel,6,90,3,500
+,Invar 36 - 7 In,Super Alloy Steel,7,80,2,500
+,Invar 36 - 8 In,Super Alloy Steel,8,80,2,500
+,Invar 36 - 9 In,Super Alloy Steel,9,80,2,500
+,Invar 36 - 10 In,Super Alloy Steel,10,80,2,500
+,Invar 36 - 11 In,Super Alloy Steel,11,80,2,500
+,Invar 36 - 12 In,Super Alloy Steel,12,80,2,500
+,Invar 36 - 13 In,Super Alloy Steel,13,80,2,500
+,Invar 36 - 14 In,Super Alloy Steel,14,80,2,500
+,Invar 36 - 15 In,Super Alloy Steel,15,80,2,500
+,Invar 36 - 16 In,Super Alloy Steel,16,80,2,500
+,Invar 36 - 17 In,Super Alloy Steel,17,80,2,500
+,Invar 36 - 18 In,Super Alloy Steel,18,80,2,500
+,Invar 36 - 19 In,Super Alloy Steel,19,80,2,500
+,Invar 36 - 20 In,Super Alloy Steel,20,80,2,500
+,Invar 42 - 1 In,Super Alloy Steel,1,100,3,500
+,Invar 42 - 2 In,Super Alloy Steel,2,100,3,500
+,Invar 42 - 3 In,Super Alloy Steel,3,90,3,500
+,Invar 42 - 4 In,Super Alloy Steel,4,90,3,500
+,Invar 42 - 5 In,Super Alloy Steel,5,90,3,500
+,Invar 42 - 6 In,Super Alloy Steel,6,90,3,500
+,Invar 42 - 7 In,Super Alloy Steel,7,80,2,500
+,Invar 42 - 8 In,Super Alloy Steel,8,80,2,500
+,Invar 42 - 9 In,Super Alloy Steel,9,80,2,500
+,Invar 42 - 10 In,Super Alloy Steel,10,80,2,500
+,Invar 42 - 11 In,Super Alloy Steel,11,80,2,500
+,Invar 42 - 12 In,Super Alloy Steel,12,80,2,500
+,Invar 42 - 13 In,Super Alloy Steel,13,80,2,500
+,Invar 42 - 14 In,Super Alloy Steel,14,80,2,500
+,Invar 42 - 15 In,Super Alloy Steel,15,80,2,500
+,Invar 42 - 16 In,Super Alloy Steel,16,80,2,500
+,Invar 42 - 17 In,Super Alloy Steel,17,80,2,500
+,Invar 42 - 18 In,Super Alloy Steel,18,80,2,500
+,Invar 42 - 19 In,Super Alloy Steel,19,80,2,500
+,Invar 42 - 20 In,Super Alloy Steel,20,80,2,500
+,Kovar - 1 In,Super Alloy Steel,1,100,3,500
+,Kovar - 2 In,Super Alloy Steel,2,100,3,500
+,Kovar - 3 In,Super Alloy Steel,3,90,3,500
+,Kovar - 4 In,Super Alloy Steel,4,90,3,500
+,Kovar - 5 In,Super Alloy Steel,5,90,3,500
+,Kovar - 6 In,Super Alloy Steel,6,90,3,500
+,Kovar - 7 In,Super Alloy Steel,7,80,2,500
+,Kovar - 8 In,Super Alloy Steel,8,80,2,500
+,Kovar - 9 In,Super Alloy Steel,9,80,2,500
+,Kovar - 10 In,Super Alloy Steel,10,80,2,500
+,Kovar - 11 In,Super Alloy Steel,11,80,2,500
+,Kovar - 12 In,Super Alloy Steel,12,80,2,500
+,Kovar - 13 In,Super Alloy Steel,13,80,2,500
+,Kovar - 14 In,Super Alloy Steel,14,80,2,500
+,Kovar - 15 In,Super Alloy Steel,15,80,2,500
+,Kovar - 16 In,Super Alloy Steel,16,80,2,500
+,Kovar - 17 In,Super Alloy Steel,17,80,2,500
+,Kovar - 18 In,Super Alloy Steel,18,80,2,500
+,Kovar - 19 In,Super Alloy Steel,19,80,2,500
+,Kovar - 20 In,Super Alloy Steel,20,80,2,500
+,L605 - 1 In,Super Alloy Steel,1,110,4,500
+,L605 - 2 In,Super Alloy Steel,2,110,4,500
+,L605 - 3 In,Super Alloy Steel,3,105,4,500
+,L605 - 4 In,Super Alloy Steel,4,105,4,500
+,L605 - 5 In,Super Alloy Steel,5,105,4,500
+,L605 - 6 In,Super Alloy Steel,6,105,4,500
+,L605 - 7 In,Super Alloy Steel,7,105,4,500
+,L605 - 8 In,Super Alloy Steel,8,105,4,500
+,L605 - 9 In,Super Alloy Steel,9,105,4,500
+,L605 - 10 In,Super Alloy Steel,10,105,3.5,500
+,L605 - 11 In,Super Alloy Steel,11,105,3.5,500
+,L605 - 12 In,Super Alloy Steel,12,105,3.5,500
+,L605 - 13 In,Super Alloy Steel,13,105,3.5,500
+,L605 - 14 In,Super Alloy Steel,14,100,3.5,500
+,L605 - 15 In,Super Alloy Steel,15,100,3.5,500
+,L605 - 16 In,Super Alloy Steel,16,100,3.5,500
+,L605 - 17 In,Super Alloy Steel,17,100,3.5,500
+,L605 - 18 In,Super Alloy Steel,18,100,3,500
+,L605 - 19 In,Super Alloy Steel,19,100,3,500
+,L605 - 20 In,Super Alloy Steel,20,100,3,500
+,Monel 400 - 1 In,Super Alloy Steel,1,110,4,500
+,Monel 400 - 2 In,Super Alloy Steel,2,110,4,500
+,Monel 400 - 3 In,Super Alloy Steel,3,105,4,500
+,Monel 400 - 4 In,Super Alloy Steel,4,105,4,500
+,Monel 400 - 5 In,Super Alloy Steel,5,105,4,500
+,Monel 400 - 6 In,Super Alloy Steel,6,105,4,500
+,Monel 400 - 7 In,Super Alloy Steel,7,105,4,500
+,Monel 400 - 8 In,Super Alloy Steel,8,105,4,500
+,Monel 400 - 9 In,Super Alloy Steel,9,105,4,500
+,Monel 400 - 10 In,Super Alloy Steel,10,105,3.5,500
+,Monel 400 - 11 In,Super Alloy Steel,11,105,3.5,500
+,Monel 400 - 12 In,Super Alloy Steel,12,105,3.5,500
+,Monel 400 - 13 In,Super Alloy Steel,13,105,3.5,500
+,Monel 400 - 14 In,Super Alloy Steel,14,100,3.5,500
+,Monel 400 - 15 In,Super Alloy Steel,15,100,3.5,500
+,Monel 400 - 16 In,Super Alloy Steel,16,100,3.5,500
+,Monel 400 - 17 In,Super Alloy Steel,17,100,3.5,500
+,Monel 400 - 18 In,Super Alloy Steel,18,100,3,500
+,Monel 400 - 19 In,Super Alloy Steel,19,100,3,500
+,Monel 400 - 20 In,Super Alloy Steel,20,100,3,500
+,Monel K500 - 1 In,Super Alloy Steel,1,110,4,500
+,Monel K500 - 2 In,Super Alloy Steel,2,110,4,500
+,Monel K500 - 3 In,Super Alloy Steel,3,105,4,500
+,Monel K500 - 4 In,Super Alloy Steel,4,105,4,500
+,Monel K500 - 5 In,Super Alloy Steel,5,105,4,500
+,Monel K500 - 6 In,Super Alloy Steel,6,105,4,500
+,Monel K500 - 7 In,Super Alloy Steel,7,105,4,500
+,Monel K500 - 8 In,Super Alloy Steel,8,105,4,500
+,Monel K500 - 9 In,Super Alloy Steel,9,105,4,500
+,Monel K500 - 10 In,Super Alloy Steel,10,105,3.5,500
+,Monel K500 - 11 In,Super Alloy Steel,11,105,3.5,500
+,Monel K500 - 12 In,Super Alloy Steel,12,105,3.5,500
+,Monel K500 - 13 In,Super Alloy Steel,13,105,3.5,500
+,Monel K500 - 14 In,Super Alloy Steel,14,100,3.5,500
+,Monel K500 - 15 In,Super Alloy Steel,15,100,3.5,500
+,Monel K500 - 16 In,Super Alloy Steel,16,100,3.5,500
+,Monel K500 - 17 In,Super Alloy Steel,17,100,3.5,500
+,Monel K500 - 18 In,Super Alloy Steel,18,100,3,500
+,Monel K500 - 19 In,Super Alloy Steel,19,100,3,500
+,Monel K500 - 20 In,Super Alloy Steel,20,100,3,500
+,Mu-metal - 1 In,Super Alloy Steel,1,110,4,500
+,Mu-metal - 2 In,Super Alloy Steel,2,110,4,500
+,Mu-metal - 3 In,Super Alloy Steel,3,105,4,500
+,Mu-metal - 4 In,Super Alloy Steel,4,105,4,500
+,Mu-metal - 5 In,Super Alloy Steel,5,105,4,500
+,Mu-metal - 6 In,Super Alloy Steel,6,105,4,500
+,Mu-metal - 7 In,Super Alloy Steel,7,105,4,500
+,Mu-metal - 8 In,Super Alloy Steel,8,105,4,500
+,Mu-metal - 9 In,Super Alloy Steel,9,105,4,500
+,Mu-metal - 10 In,Super Alloy Steel,10,105,3.5,500
+,Mu-metal - 11 In,Super Alloy Steel,11,105,3.5,500
+,Mu-metal - 12 In,Super Alloy Steel,12,105,3.5,500
+,Mu-metal - 13 In,Super Alloy Steel,13,105,3.5,500
+,Mu-metal - 14 In,Super Alloy Steel,14,100,3.5,500
+,Mu-metal - 15 In,Super Alloy Steel,15,100,3.5,500
+,Mu-metal - 16 In,Super Alloy Steel,16,100,3.5,500
+,Mu-metal - 17 In,Super Alloy Steel,17,100,3.5,500
+,Mu-metal - 18 In,Super Alloy Steel,18,100,3,500
+,Mu-metal - 19 In,Super Alloy Steel,19,100,3,500
+,Mu-metal - 20 In,Super Alloy Steel,20,100,3,500
+,Nickel 200 - 1 In,Super Alloy Steel,1,110,4,500
+,Nickel 200 - 2 In,Super Alloy Steel,2,110,4,500
+,Nickel 200 - 3 In,Super Alloy Steel,3,105,4,500
+,Nickel 200 - 4 In,Super Alloy Steel,4,105,4,500
+,Nickel 200 - 5 In,Super Alloy Steel,5,105,4,500
+,Nickel 200 - 6 In,Super Alloy Steel,6,105,4,500
+,Nickel 200 - 7 In,Super Alloy Steel,7,105,4,500
+,Nickel 200 - 8 In,Super Alloy Steel,8,105,4,500
+,Nickel 200 - 9 In,Super Alloy Steel,9,105,4,500
+,Nickel 200 - 10 In,Super Alloy Steel,10,105,3.5,500
+,Nickel 200 - 11 In,Super Alloy Steel,11,105,3.5,500
+,Nickel 200 - 12 In,Super Alloy Steel,12,105,3.5,500
+,Nickel 200 - 13 In,Super Alloy Steel,13,105,3.5,500
+,Nickel 200 - 14 In,Super Alloy Steel,14,100,3.5,500
+,Nickel 200 - 15 In,Super Alloy Steel,15,100,3.5,500
+,Nickel 200 - 16 In,Super Alloy Steel,16,100,3.5,500
+,Nickel 200 - 17 In,Super Alloy Steel,17,100,3.5,500
+,Nickel 200 - 18 In,Super Alloy Steel,18,100,3,500
+,Nickel 200 - 19 In,Super Alloy Steel,19,100,3,500
+,Nickel 200 - 20 In,Super Alloy Steel,20,100,3,500
+,Permendur 2V - 1 In,Super Alloy Steel,1,110,4,500
+,Permendur 2V - 2 In,Super Alloy Steel,2,110,4,500
+,Permendur 2V - 3 In,Super Alloy Steel,3,105,4,500
+,Permendur 2V - 4 In,Super Alloy Steel,4,105,4,500
+,Permendur 2V - 5 In,Super Alloy Steel,5,105,4,500
+,Permendur 2V - 6 In,Super Alloy Steel,6,105,4,500
+,Permendur 2V - 7 In,Super Alloy Steel,7,105,4,500
+,Permendur 2V - 8 In,Super Alloy Steel,8,105,4,500
+,Permendur 2V - 9 In,Super Alloy Steel,9,105,4,500
+,Permendur 2V - 10 In,Super Alloy Steel,10,105,3.5,500
+,Permendur 2V - 11 In,Super Alloy Steel,11,105,3.5,500
+,Permendur 2V - 12 In,Super Alloy Steel,12,105,3.5,500
+,Permendur 2V - 13 In,Super Alloy Steel,13,105,3.5,500
+,Permendur 2V - 14 In,Super Alloy Steel,14,100,3.5,500
+,Permendur 2V - 15 In,Super Alloy Steel,15,100,3.5,500
+,Permendur 2V - 16 In,Super Alloy Steel,16,100,3.5,500
+,Permendur 2V - 17 In,Super Alloy Steel,17,100,3.5,500
+,Permendur 2V - 18 In,Super Alloy Steel,18,100,3,500
+,Permendur 2V - 19 In,Super Alloy Steel,19,100,3,500
+,Permendur 2V - 20 In,Super Alloy Steel,20,100,3,500
+,Rene 41 - 1 In,Super Alloy Steel,1,110,4,500
+,Rene 41 - 2 In,Super Alloy Steel,2,110,4,500
+,Rene 41 - 3 In,Super Alloy Steel,3,105,4,500
+,Rene 41 - 4 In,Super Alloy Steel,4,105,4,500
+,Rene 41 - 5 In,Super Alloy Steel,5,105,4,500
+,Rene 41 - 6 In,Super Alloy Steel,6,105,4,500
+,Rene 41 - 7 In,Super Alloy Steel,7,105,4,500
+,Rene 41 - 8 In,Super Alloy Steel,8,105,4,500
+,Rene 41 - 9 In,Super Alloy Steel,9,105,4,500
+,Rene 41 - 10 In,Super Alloy Steel,10,105,3.5,500
+,Rene 41 - 11 In,Super Alloy Steel,11,105,3.5,500
+,Rene 41 - 12 In,Super Alloy Steel,12,105,3.5,500
+,Rene 41 - 13 In,Super Alloy Steel,13,105,3.5,500
+,Rene 41 - 14 In,Super Alloy Steel,14,100,3.5,500
+,Rene 41 - 15 In,Super Alloy Steel,15,100,3.5,500
+,Rene 41 - 16 In,Super Alloy Steel,16,100,3.5,500
+,Rene 41 - 17 In,Super Alloy Steel,17,100,3.5,500
+,Rene 41 - 18 In,Super Alloy Steel,18,100,3,500
+,Rene 41 - 19 In,Super Alloy Steel,19,100,3,500
+,Rene 41 - 20 In,Super Alloy Steel,20,100,3,500
+,Super Invar 32 - 1 In,Super Alloy Steel,1,110,4,500
+,Super Invar 32 - 2 In,Super Alloy Steel,2,110,4,500
+,Super Invar 32 - 3 In,Super Alloy Steel,3,105,4,500
+,Super Invar 32 - 4 In,Super Alloy Steel,4,105,4,500
+,Super Invar 32 - 5 In,Super Alloy Steel,5,105,4,500
+,Super Invar 32 - 6 In,Super Alloy Steel,6,105,4,500
+,Super Invar 32 - 7 In,Super Alloy Steel,7,105,4,500
+,Super Invar 32 - 8 In,Super Alloy Steel,8,105,4,500
+,Super Invar 32 - 9 In,Super Alloy Steel,9,105,4,500
+,Super Invar 32 - 10 In,Super Alloy Steel,10,105,3.5,500
+,Super Invar 32 - 11 In,Super Alloy Steel,11,105,3.5,500
+,Super Invar 32 - 12 In,Super Alloy Steel,12,105,3.5,500
+,Super Invar 32 - 13 In,Super Alloy Steel,13,105,3.5,500
+,Super Invar 32 - 14 In,Super Alloy Steel,14,100,3.5,500
+,Super Invar 32 - 15 In,Super Alloy Steel,15,100,3.5,500
+,Super Invar 32 - 16 In,Super Alloy Steel,16,100,3.5,500
+,Super Invar 32 - 17 In,Super Alloy Steel,17,100,3.5,500
+,Super Invar 32 - 18 In,Super Alloy Steel,18,100,3,500
+,Super Invar 32 - 19 In,Super Alloy Steel,19,100,3,500
+,Super Invar 32 - 20 In,Super Alloy Steel,20,100,3,500
+,Waspaloy - 1 In,Super Alloy Steel,1,110,4,500
+,Waspaloy - 2 In,Super Alloy Steel,2,110,4,500
+,Waspaloy - 3 In,Super Alloy Steel,3,105,4,500
+,Waspaloy - 4 In,Super Alloy Steel,4,105,4,500
+,Waspaloy - 5 In,Super Alloy Steel,5,105,4,500
+,Waspaloy - 6 In,Super Alloy Steel,6,105,4,500
+,Waspaloy - 7 In,Super Alloy Steel,7,105,4,500
+,Waspaloy - 8 In,Super Alloy Steel,8,105,4,500
+,Waspaloy - 9 In,Super Alloy Steel,9,105,4,500
+,Waspaloy - 10 In,Super Alloy Steel,10,105,3.5,500
+,Waspaloy - 11 In,Super Alloy Steel,11,105,3.5,500
+,Waspaloy - 12 In,Super Alloy Steel,12,105,3.5,500
+,Waspaloy - 13 In,Super Alloy Steel,13,105,3.5,500
+,Waspaloy - 14 In,Super Alloy Steel,14,100,3.5,500
+,Waspaloy - 15 In,Super Alloy Steel,15,100,3.5,500
+,Waspaloy - 16 In,Super Alloy Steel,16,100,3.5,500
+,Waspaloy - 17 In,Super Alloy Steel,17,100,3.5,500
+,Waspaloy - 18 In,Super Alloy Steel,18,100,3,500
+,Waspaloy - 19 In,Super Alloy Steel,19,100,3,500
+,Waspaloy - 20 In,Super Alloy Steel,20,100,3,500
