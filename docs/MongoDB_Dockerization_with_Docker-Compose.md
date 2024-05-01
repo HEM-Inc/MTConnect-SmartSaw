@@ -150,7 +150,7 @@ ssUpgrade script will be modified to include additional option '-S' for MongoDB 
 ssUpgrade command syntax will be as below after adding new option '-S'.
 
    ```
-   sudo bash ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-h]
+   sudo bash ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]
    ```
    ``` 
       options:
@@ -161,7 +161,8 @@ ssUpgrade command syntax will be as below after adding new option '-S'.
       -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
       -M                Update the mosquitto broker application
       -O                Update the HEMsaw ODS application
-      -S                Update the HEMsaw MongoDB application  
+      -S                Update the HEMsaw MongoDB application
+      -m                Update the MongoDB database with default materials
       -h                Print this Help.
    ```
 
