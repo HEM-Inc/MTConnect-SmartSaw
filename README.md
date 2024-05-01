@@ -50,7 +50,7 @@ Help syntax for the `ssUpgrade.sh`.
 
 ``` bash
 
-Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-h]
+Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]
 
 options:
 
@@ -69,6 +69,8 @@ options:
 -O                Update the HEMsaw ODS application
 
 -S                Update the HEMsaw MongoDB application
+
+-m                Update the mongodb database to have default materials
 
 -h                Print this Help.
 
