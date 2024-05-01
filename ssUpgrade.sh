@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-h]"
+    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]"
     echo "options:"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -16,8 +16,8 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
-    echo "-O		    Update the HEMsaw ODS application"
-    echo "-S		    Update the HEMsaw MongoDB application"
+    echo "-O                Update the HEMsaw ODS application"
+    echo "-S                Update the HEMsaw MongoDB application"
     echo "-m                Update the MongoDB database with default materials"
     echo "-h                Print this Help."
 }
