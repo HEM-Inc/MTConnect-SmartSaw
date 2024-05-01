@@ -13,7 +13,7 @@ def upload_materials(collection):
     with open('/etc/mongodb/data/MaterialLibrary.csv','r') as infile:
         reader = csv.DictReader(infile)
         for row in reader:
-            print(row)
+            # print(row)
             collection.insert_one({
                 'name':row['NAME'],
                 'category':row['CLASS'],
@@ -36,3 +36,4 @@ client = pymongo.MongoClient('localhost', 27017)
 collection_materials = client[db_name].materials
 
 upload_materials(collection_materials)
+print("Done uploading materials")
