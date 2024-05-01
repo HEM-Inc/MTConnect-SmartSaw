@@ -1,8 +1,8 @@
 version: '3.5'
 services:
-  smartsaw_adapter:
-    container_name: smartsaw_adapter
-    hostname: smartsaw_adapter
+  mtc_adapter:
+    container_name: mtc_adapter
+    hostname: mtc_adapter
     image: hemsaw/smartsaw-adapter:latest
     user: adapter
     labels:
@@ -15,7 +15,7 @@ services:
         max-size: "10m"
         max-file: "3"
     ports:
-      - 9800:9800/tcp
+      - 7878:7878/tcp
     working_dir: "/adapter"
     restart: unless-stopped
 
@@ -41,6 +41,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mosquitto
+      - mtc_adapter
 
   mosquitto:
     container_name: mosquitto
@@ -78,9 +79,9 @@ services:
         max-size: "10m"
         max-file: "3"
     working_dir: "/ods"
-    depends_on:
-    - mongodb
     restart: unless-stopped
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongodb

@@ -3,7 +3,7 @@ platform: Sysmac
 log_severity_level: info
 plc_host: 10.0.0.2
 server_host: 0.0.0.0
-server_port: 9800
+server_port: 7878
 
 
 // ** Device: Saw

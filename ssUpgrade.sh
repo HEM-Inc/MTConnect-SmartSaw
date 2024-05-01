@@ -135,7 +135,7 @@ Update_Mongodb(){
 }
 
 Update_Materials(){
-    if python -c "import pymongo" &> /dev/null; then
+    if python3 -c "import pymongo" &> /dev/null; then
         echo "Updating or reseting the materials..."
         sudo python3 /etc/mongodb/data/upload_materials.py
     else
@@ -167,17 +167,18 @@ run_update_materials=false
 run_install=false
 
 # check if install or upgrade
-if ! test -f /etc/mtconnect/config/agent.cfg; 
-    then echo 'mtconnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
+if ! test -f /etc/mtconnect/config/agent.cfg; then
+    echo 'MTConnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
 else
-    echo 'Mtconnect agent.cfg found, continuing upgrade...'
+    echo 'MTConnect agent.cfg found, continuing upgrade...'
 fi
 
 echo ""
 
 #check if systemd services are running
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services.."
+    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
+    echo "    Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
     systemctl stop adapter
     systemctl stop ods
     systemctl stop mongod
@@ -202,14 +203,14 @@ while getopts ":a:d:u:HAMhOSm" option; do
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
+        m) #Update Mongodb
+           run_update_materials=true;;
         M) # Update mqtt broker
             run_update_mqtt_broker=true;;
         O) # Update ODS
             run_update_ods=true;;
         S) #Update Mongodb
 	       run_update_mongodb=true;;
-        m) #Update Mongodb
-           run_update_materials=true;;
         \?) # Invalid option
             Help
             exit;;

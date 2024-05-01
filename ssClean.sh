@@ -13,9 +13,10 @@ Help(){
     echo "-H                Uninstall the HEMsaw adapter application"
     echo "-A                Uninstall the MTConnect Agent application"
     echo "-M                Uninstall the MQTT Broker application"
-    echo "-O		        Uninstall the HEMsaw ods application"
-    echo "-S	            Uninstall the HEMSaw MongoDB application"
+    echo "-O                Uninstall the HEMsaw ods application"
+    echo "-S                Uninstall the HEMSaw MongoDB application"
     echo "-D                Uninstall Docker"
+    echo "-d                Disable mongod, ods, and agent daemons"
     echo "-h                Print this Help."
 }
 
@@ -83,6 +84,22 @@ Uninstall_Docker(){
 
     apt purge -y docker-compose docker
     apt autoremove -y
+    echo "<<Done>>"
+}
+
+Uninstall_Daemon(){
+    if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
+        echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping and disabling the systemd services.."
+        systemctl stop adapter
+        systemctl disable adapter
+        systemctl stop ods
+        systemctl disable ods
+        systemctl stop mongod
+        systemctl disable mongod
+
+        systemctl daemon-reload
+        echo "<<Done>>"
+    fi
 }
 
 ############################################################
@@ -100,12 +117,13 @@ run_uninstall_mqtt=false
 run_uninstall_ods=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
+run_uninstall_daemon=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":HAMDhOS" option; do
+while getopts ":HAMDhOSd" option; do
     case ${option} in
         h) # display Help
             Help
@@ -122,6 +140,8 @@ while getopts ":HAMDhOS" option; do
 	    run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
+        d) # uninstall daemon
+            run_uninstall_daemon=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -155,6 +175,7 @@ echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
 echo "uninstall ODS set to run = "$run_uninstall_ods
 echo "uninstall Mongodb set to run="$run_uninstall_mongodb
 echo "uninstall Docker set to run = "$run_uninstall_docker
+echo "uninstall Daemon set to run = "$run_uninstall_daemon
 
 echo ""
 if $run_uninstall_adapter; then
@@ -174,6 +195,9 @@ if $run_uninstall_mongodb; then
 fi
 if $run_uninstall_docker; then
     Uninstall_Docker
+fi
+if $run_uninstall_daemon; then
+    Uninstall_Daemon
 fi
 
 echo ""

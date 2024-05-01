@@ -7,16 +7,23 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
-##[1.2.0.0] - 2024/04/29 - emAdithyaShenoy
+## [1.2.1] - 2024/05/01 - Max Harris
+### Added
+- Upload the mongodb default material to upgrade and install script
+- ssClean script removes the daemons with the -d command
+### Changed
+- Changed the port 9800 to 7878 (mtconnect default adapter port)
+
+## [1.2.0] - 2024/04/29 - emAdithyaShenoy
 ### Added
 - Jira Id: EP4US7
   - MongoDB container included within docker-compose.
   - 'mongodb' directory containing configuration files.
-###Changed
+### Changed
 - Updated scripts to support docker-compose.
 - Updated README file. 
 
-## [1.1.0.0] - 2024/04/05 - emprarthanak
+## [1.1.0] - 2024/04/05 - emprarthanak
 ### Added
 - Jira Id: EP4US1
   - ODS container included within docker-compose.
@@ -27,13 +34,13 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 - Updated scripts to support docker-compose.
 - Update the adapter (HA, SA, SM) afg(s) for commands - @MaxHarris
 
-## [1.0.1.0] - 2023/12/18 - Max Harris
+## [1.0.1] - 2023/12/18 - Max Harris
 ### Added
-SmartSaw_DC30M-SCT.xml to the device file list.
+- SmartSaw_DC30M-SCT.xml to the device file list.
 
-## [1.0.0.0] - 2023/12/05 - Max Harris
+## [1.0.0] - 2023/12/05 - Max Harris
 ### Added
-This is the intial revisioned release of the code.
+- This is the intial revisioned release of the code.
 
 
 ## Types of changes

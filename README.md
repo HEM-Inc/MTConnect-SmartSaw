@@ -64,11 +64,11 @@ options:
 
 -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
 
--M                Update the mosquitto broker application
-
 -O                Update the HEMsaw ODS application
 
 -S                Update the HEMsaw MongoDB application
+
+-M                Update the MQTT broker application
 
 -m                Update the mongodb database to have default materials
 
@@ -80,7 +80,7 @@ Help syntax for the `ssClean.sh`.
 
 ``` bash
 
-Syntax: ssUninstall.sh [-H|-A|-M|-O|-S|-D|-h]
+Syntax: ssUninstall.sh [-H|-A|-M|-O|-S|-D|-d|-h]
 
 options:
 
@@ -88,13 +88,15 @@ options:
 
 -A                Uninstall the MTConnect Agent application
 
--M                Uninstall the Mosquitto broker application
+-M                Uninstall the MQTT broker application
 
 -O                Uninstall the HEMsaw ODS application
 
 -S                Uninstall the HEMsaw MongoDB application
 
 -D                Uninstall Docker
+
+-d                Disable mongod, ods, and agent daemons
 
 -h                Print this Help.
 
