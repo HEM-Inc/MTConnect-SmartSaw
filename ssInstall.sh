@@ -82,7 +82,6 @@ InstallMongodb(){
 
     sudo pip3 install pyaml
     sudo pip3 install pymongo
-    sudo python3 /etc/mongodb/data/upload_materials.py
 }
 
 InstallDocker(){
@@ -186,6 +185,8 @@ InstallMTCAgent
 InstallODS
 InstallMongodb
 InstallDocker
+
+sudo python3 /etc/mongodb/data/upload_materials.py
     
 
 echo ""

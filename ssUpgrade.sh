@@ -272,13 +272,13 @@ else
     if $run_update_ods; then
         Update_ODS
     fi
-    if $run_update_mongodb; then
-        Update_Mongodb
-    fi
     if $run_update_materials; then
         Update_Materials
     fi
     RunDocker
+    if $run_update_mongodb; then
+        Update_Mongodb
+    fi
 fi
 
 echo ""
