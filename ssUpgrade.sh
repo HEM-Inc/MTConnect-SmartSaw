@@ -16,8 +16,9 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
-    echo "-O		    Update the HEMsaw ODS application"
-    echo "-S		    Update the HEMsaw MongoDB application"
+    echo "-O		        Update the HEMsaw ODS application"
+    echo "-S		        Update the HEMsaw MongoDB application"
+    echo "-m                Update the MongoDB database with default materials"
     echo "-h                Print this Help."
 }
 
@@ -118,14 +119,31 @@ Update_ODS(){
 Update_Mongodb(){
       if test -d /etc/mongodb/config/; then
         echo "Updating mongodb files..."
-        cp -r ./mongodb/config/. /etc/mongodb/config
+        cp -r ./mongodb/config/* /etc/mongodb/config/
+        cp -r ./mongodb/data/* /etc/mongodb/data/
     else
         echo "Installing mongodb files.."
+        mkdir -p /etc/mongodb/
         mkdir -p /etc/mongodb/config/
-        cp -r ./mongodb/config/. /etc/mongodb/config
+        mkdir -p /etc/mongodb/data/
+        mkdir -p /etc/mongodb/data/db
+        cp -r ./mongodb/config/* /etc/mongodb/config/
+        cp -r ./mongodb/data/* /etc/mongodb/data/     
     fi
     echo ""
     chown -R 1000:1000 /etc/mongodb/
+}
+
+Update_Materials(){
+    if python -c "import pymongo" &> /dev/null; then
+        echo "Updating or reseting the materials..."
+        sudo python3 /etc/mongodb/data/upload_materials.py
+    else
+        echo "Setting the default materials..."
+        sudo pip3 install pyaml
+        sudo pip3 install pymongo
+        sudo python3 /etc/mongodb/data/upload_materials.py
+    fi
 }
 
 ############################################################
@@ -145,6 +163,7 @@ run_update_agent=false
 run_update_mqtt_broker=false
 run_update_ods=false
 run_update_mongodb=false
+run_update_materials=false
 run_install=false
 
 # check if install or upgrade
@@ -162,17 +181,13 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
     systemctl stop adapter
     systemctl stop ods
     systemctl stop mongod
-    #exit 1
-    #Optionally we can stop the Adapter and/or ODS systemd services
-    #sudo systemctl stop adapter
-    #sudo systemctl stop ods
 fi
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:HAMhOS" option; do
+while getopts ":a:d:u:HAMhOSm" option; do
     case ${option} in
         h) # display Help
             Help
@@ -191,8 +206,10 @@ while getopts ":a:d:u:HAMhOS" option; do
             run_update_mqtt_broker=true;;
         O) # Update ODS
             run_update_ods=true;;
-	S) #Update Mongodb
-	    run_update_mongodb=true;;
+        S) #Update Mongodb
+	       run_update_mongodb=true;;
+        m) #Update Mongodb
+           run_update_materials=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -256,7 +273,10 @@ else
         Update_ODS
     fi
     if $run_update_mongodb; then
-	Update_Mongodb
+        Update_Mongodb
+    fi
+    if $run_update_materials; then
+        Update_Materials
     fi
     RunDocker
 fi

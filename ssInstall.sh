@@ -74,8 +74,15 @@ InstallMongodb(){
     echo "Installing Mongodb..."
     mkdir -p /etc/mongodb/
     mkdir -p /etc/mongodb/config/
+    mkdir -p /etc/mongodb/data/
+    mkdir -p /etc/mongodb/data/db
     cp -r ./mongodb/config/* /etc/mongodb/config/
+    cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
+
+    sudo pip3 install pyaml
+    sudo pip3 install pymongo
+    sudo python3 /etc/mongodb/data/upload_materials.py
 }
 
 InstallDocker(){

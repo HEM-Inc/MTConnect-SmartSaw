@@ -91,7 +91,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - "/etc/mongodb_data:/data/db"
+      - "/etc/mongodb/data/db:/data/db"
       - "/etc/mongodb/config/mongod.conf.orig:/etc/mongod.conf.orig"
     logging:
       driver: "json-file"
@@ -99,7 +99,6 @@ services:
         max-size: "10m"
         max-file: "3"
     restart: always
-
 
   watchtower:
     container_name: watchtower
