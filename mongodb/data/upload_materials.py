@@ -2,12 +2,6 @@ import pymongo
 import csv
 import re
 
-db_name = 'machine_objects'
-client = pymongo.MongoClient('localhost', 27017)
-collection_materials = client[db_name].materials
-
-upload_materials(collection_materials)
-
 def nwd(name):
     m = re.search(r'(.*?)\s*(\d+)\s+In', name)
     if m:
@@ -35,3 +29,10 @@ if __name__ == '__main__':
     collection_materials = client['machine_objects'].materials
     collection_materials.delete_many({})
     upload_materials(collection_materials)
+
+
+db_name = 'machine_objects'
+client = pymongo.MongoClient('localhost', 27017)
+collection_materials = client[db_name].materials
+
+upload_materials(collection_materials)
