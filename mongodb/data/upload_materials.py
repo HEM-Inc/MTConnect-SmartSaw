@@ -23,17 +23,11 @@ def upload_materials(collection):
                 'force':float(row['FORCE']),
                 'name_without_diameter':nwd(row['NAME'])
             })
-                
-if __name__ == '__main__':
-    client = pymongo.MongoClient('localhost', 27017)
-    collection_materials = client['machine_objects'].materials
-    collection_materials.delete_many({})
-    upload_materials(collection_materials)
-
 
 db_name = 'machine_objects'
 client = pymongo.MongoClient('localhost', 27017)
 collection_materials = client[db_name].materials
+collection_materials.delete_many({})
 
 upload_materials(collection_materials)
 print("Done uploading materials")

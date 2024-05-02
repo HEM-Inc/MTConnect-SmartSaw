@@ -178,7 +178,7 @@ echo ""
 #check if systemd services are running
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
     echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
-    echo "    Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
+    echo " -- Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
     systemctl stop adapter
     systemctl stop ods
     systemctl stop mongod

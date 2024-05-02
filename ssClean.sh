@@ -24,7 +24,7 @@ Help(){
 # Uninstallers                                               #
 ############################################################
 Uninstall_Adapter(){
-    echo "Uninstalling MTConnect Adapter files..."
+    echo "Uninstalling MTConnect Adapter files and user..."
 
     if id -u adapter > /dev/null 2>&1; then
         userdel -f -r adapter
@@ -36,7 +36,7 @@ Uninstall_Adapter(){
 }
 
 Uninstall_Agent(){
-    echo "Uninstalling MTConnect Agent files..."
+    echo "Uninstalling MTConnect Agent files and user..."
 
     if id -u mtconnect > /dev/null 2>&1; then
         userdel -f -r mtconnect
@@ -57,7 +57,7 @@ Uninstall_MQTT(){
 }
 
 Uninstall_ODS(){
-    echo "Uninstalling ODS files..."
+    echo "Uninstalling ODS files and user..."
 
     if id -u ods > /dev/null 2>&1; then
         userdel -f -r ods
@@ -85,21 +85,25 @@ Uninstall_Docker(){
     apt purge -y docker-compose docker
     apt autoremove -y
     echo "<<Done>>"
+    echo ""
 }
 
 Uninstall_Daemon(){
     if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-        echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping and disabling the systemd services.."
+        echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
         systemctl stop adapter
-        systemctl disable adapter
         systemctl stop ods
-        systemctl disable ods
         systemctl stop mongod
-        systemctl disable mongod
-
-        systemctl daemon-reload
-        echo "<<Done>>"
     fi
+
+    echo "Disabling the systemd services..."
+    systemctl disable adapter
+    systemctl disable ods
+    systemctl disable mongod
+
+    systemctl daemon-reload
+    echo "<<Done>>"
+    echo ""
 }
 
 ############################################################
@@ -175,7 +179,7 @@ echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
 echo "uninstall ODS set to run = "$run_uninstall_ods
 echo "uninstall Mongodb set to run="$run_uninstall_mongodb
 echo "uninstall Docker set to run = "$run_uninstall_docker
-echo "uninstall Daemon set to run = "$run_uninstall_daemon
+echo "disable   Systemctl Daemons set to run = "$run_uninstall_daemon
 
 echo ""
 if $run_uninstall_adapter; then
@@ -200,4 +204,5 @@ if $run_uninstall_daemon; then
     Uninstall_Daemon
 fi
 
+echo "***** Cleaning Complete *****"
 echo ""

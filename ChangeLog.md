@@ -7,6 +7,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.2.2] - 2024/05/02 - Max Harris
+### Changed
+- Changed the localhost to use host.docker.internal as an extrahost for directing the host ipaddress - @MaxHarris
+### Fixed
+- Fixed duplicate material entry
+
 ## [1.2.1] - 2024/05/01 - Max Harris
 ### Added
 - Upload the mongodb default material to upgrade and install script

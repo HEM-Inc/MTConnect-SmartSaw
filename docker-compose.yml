@@ -24,6 +24,8 @@ services:
     hostname: mtc_agent
     image: hemsaw/mtconnect:latest
     user: agent
+    entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
+    working_dir: "/home/agent"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -36,8 +38,6 @@ services:
         max-file: "3"
     ports: 
       - 5000:5000/tcp
-    entrypoint: "/usr/bin/mtcagent run /mtconnect/config/agent.cfg"
-    working_dir: "/home/agent"
     restart: unless-stopped
     depends_on:
       - mosquitto
@@ -67,8 +67,7 @@ services:
     hostname: ods
     image: hemsaw/ods:latest
     user: ods
-    ports:
-      - 9625:9625/tcp
+    working_dir: "/ods"
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
@@ -78,7 +77,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
-    working_dir: "/ods"
+    ports:
+      - 9625:9625/tcp
     restart: unless-stopped
     depends_on:
       - mongodb
@@ -87,19 +87,19 @@ services:
     container_name: mongodb
     hostname: mongodb
     image: mongo:4.4
-    ports:
-      - 27017:27017/tcp
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - "/etc/mongodb/data/db:/data/db"
+      - "/etc/mongodb/data/db:/var/lib/mongodb/"
       - "/etc/mongodb/config/mongod.conf.orig:/etc/mongod.conf.orig"
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-    restart: always
+    ports:
+      - 27017:27017/tcp
+    restart: unless-stopped
 
   watchtower:
     container_name: watchtower
