@@ -84,7 +84,11 @@ InstallMongodb(){
         pip3 install pyaml
         pip3 install pymongo
     else
-        apt install python3-pip
+        apt update
+        apt upgrade -y
+        apt install -y python3-pip
+        apt clean
+        
         pip3 install pyaml
         pip3 install pymongo
     fi

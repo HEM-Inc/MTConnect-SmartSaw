@@ -39,7 +39,7 @@ RunDocker(){
         echo "Starting up the Docker image"
         docker-compose up --remove-orphans -d 
     fi
-    docker-compose logs smartsaw_adapter mtc_agent mosquitto ods
+    docker-compose logs mtc_adapter mtc_agent mosquitto ods
 }
 
 ############################################################
