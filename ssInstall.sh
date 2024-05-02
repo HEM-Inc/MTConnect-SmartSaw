@@ -80,8 +80,14 @@ InstallMongodb(){
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    sudo pip3 install pyaml
-    sudo pip3 install pymongo
+    if pip3 &> /dev/null; then
+        pip3 install pyaml
+        pip3 install pymongo
+    else
+        apt install python3-pip
+        pip3 install pyaml
+        pip3 install pymongo
+    fi
 }
 
 InstallDocker(){
