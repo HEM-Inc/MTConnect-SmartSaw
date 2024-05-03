@@ -139,7 +139,6 @@ fi
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
-PythonVersion=3.11
 
 
 ############################################################
@@ -187,9 +186,8 @@ InstallDocker
 apt update
 apt upgrade -y
 apt install -y 
-    python$PythonVersion \
     python3-pip \
-    python$PythonVersion-venv
+    python3-venv
 apt clean
 
 python$PythonVersion -m venv temp-venv
