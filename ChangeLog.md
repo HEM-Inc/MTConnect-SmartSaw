@@ -7,10 +7,6 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
-## [1.2.3] - 2024/05/02 - Max Harris
-### Fixed
-- Fixed the pymongo and pyaml warnings by running them in a venv
-
 ## [1.2.2] - 2024/05/02 - Max Harris
 ### Changed
 - Changed the localhost to use host.docker.internal as an extrahost for directing the host ipaddress - @MaxHarris
