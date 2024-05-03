@@ -79,20 +79,6 @@ InstallMongodb(){
     cp -r ./mongodb/config/* /etc/mongodb/config/
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
-
-`   apt update
-    apt upgrade -y
-    apt install -y 
-        python$PythonVersion \
-        python3-pip \
-        python$PythonVersion-venv
-    apt clean
-    
-    python$PythonVersion -m venv temp-venv
-    source temp-venv/bin/activate
-    python -m pip install pyaml
-    python -m pip install pymongo
-    deactivate
 }
 
 InstallDocker(){
