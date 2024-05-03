@@ -135,15 +135,22 @@ Update_Mongodb(){
 }
 
 Update_Materials(){
-    if python3 -c "import pymongo" &> /dev/null; then
-        echo "Updating or reseting the materials..."
-        sudo python3 /etc/mongodb/data/upload_materials.py
-    else
-        echo "Setting the default materials..."
-        sudo pip3 install pyaml
-        sudo pip3 install pymongo
-        sudo python3 /etc/mongodb/data/upload_materials.py
-    fi
+    echo "Updating or reseting the materials..."
+    apt update
+    apt upgrade -y
+    apt install -y 
+        python3-pip \
+        python3-venv
+    apt clean
+
+    python3 -m venv temp-venv
+    source temp-venv/bin/activate
+    python -m pip install pyaml
+    python -m pip install pymongo
+    python /etc/mongodb/data/upload_materials.py
+    deactivate
+
+    rm -rf temp-venv
 }
 
 ############################################################
