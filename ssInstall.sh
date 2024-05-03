@@ -190,7 +190,7 @@ apt install -y
     python3-venv
 apt clean
 
-python$PythonVersion -m venv temp-venv
+python3 -m venv temp-venv
 source temp-venv/bin/activate
 python -m pip install pyaml
 python -m pip install pymongo
