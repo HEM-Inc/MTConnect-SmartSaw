@@ -135,15 +135,23 @@ Update_Mongodb(){
 }
 
 Update_Materials(){
-    if python3 -c "import pymongo" &> /dev/null; then
-        echo "Updating or reseting the materials..."
-        sudo python3 /etc/mongodb/data/upload_materials.py
-    else
-        echo "Setting the default materials..."
-        sudo pip3 install pyaml
-        sudo pip3 install pymongo
-        sudo python3 /etc/mongodb/data/upload_materials.py
-    fi
+    echo "Updating or reseting the materials..."
+    apt update
+    apt upgrade -y
+    apt install -y 
+        python$PythonVersion \
+        python3-pip \
+        python$PythonVersion-venv
+    apt clean
+
+    python$PythonVersion -m venv temp-venv
+    source temp-venv/bin/activate
+    python -m pip install pyaml
+    python -m pip install pymongo
+    python /etc/mongodb/data/upload_materials.py
+    deactivate
+
+    rm -rf temp-venv
 }
 
 ############################################################
@@ -158,6 +166,7 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ;
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
+PythonVersion=3.11
 run_update_adapter=false
 run_update_agent=false
 run_update_mqtt_broker=false

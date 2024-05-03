@@ -80,18 +80,19 @@ InstallMongodb(){
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    if pip3 &> /dev/null; then
-        pip3 install pyaml
-        pip3 install pymongo
-    else
-        apt update
-        apt upgrade -y
-        apt install -y python3-pip
-        apt clean
-        
-        pip3 install pyaml
-        pip3 install pymongo
-    fi
+`   apt update
+    apt upgrade -y
+    apt install -y 
+        python$PythonVersion \
+        python3-pip \
+        python$PythonVersion-venv
+    apt clean
+    
+    python$PythonVersion -m venv temp-venv
+    source temp-venv/bin/activate
+    python -m pip install pyaml
+    python -m pip install pymongo
+    deactivate
 }
 
 InstallDocker(){
@@ -152,6 +153,7 @@ fi
 Afg_File="SmartSaw_DC_HA.afg"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
+PythonVersion=3.11
 
 
 ############################################################
@@ -196,8 +198,22 @@ InstallODS
 InstallMongodb
 InstallDocker
 
-python3 /etc/mongodb/data/upload_materials.py
-    
+apt update
+apt upgrade -y
+apt install -y 
+    python$PythonVersion \
+    python3-pip \
+    python$PythonVersion-venv
+apt clean
+
+python$PythonVersion -m venv temp-venv
+source temp-venv/bin/activate
+python -m pip install pyaml
+python -m pip install pymongo
+python /etc/mongodb/data/upload_materials.py
+deactivate
+
+rm -rf temp-venv
 
 echo ""
 echo "Check to verify containers are running:"
