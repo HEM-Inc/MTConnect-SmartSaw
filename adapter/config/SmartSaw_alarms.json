@@ -1,0 +1,46 @@
+{
+  "ConditionCodes": [
+    {
+    	"nativeCode": "alarm_21",
+    		 "warning": {
+    		 	"severity": "1",
+    		 	"message": "Motion controller error. Check the infeed."   		 	
+    		 }
+    },
+    {
+	"nativeCode": "alarm_50",
+		"fault": {
+			"severity": "1",
+			"message": "Communication error between the PLC and the IPC"
+ 		}
+    },
+    {
+	"nativeCode": "alarm_101",
+		"warning": {
+			"severity": "1",
+			"message": "Motion controller error. Check the band motor."
+		}
+    },
+    {
+	"nativeCode": "alarm_106",
+		"warning": {
+			"severity": "1",
+			"message": "Motion controller error. Check the arm."
+		}
+    },
+    {
+	"nativeCode": "alarm_115",
+		"warning": {
+			"severity": "1",
+			"message": "Machine is low on hydraulic oil"
+		}
+    },
+    {
+	"nativeCode": "alarm_1008",
+		"warning": {
+			"severity": "1",
+			"message": "Machine is out of stock"
+		}
+    }
+ ]
+}

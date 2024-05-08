@@ -8,10 +8,11 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]"
+    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]"
     echo "options:"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
+    echo "-j File_Name 	    Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-A                Update the MTConnect Agent application"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
@@ -49,12 +50,15 @@ Update_Adapter(){
     if test -d /etc/adapter/config/; then
         echo "Updating adapter files..."
         rm -rf /etc/adapter/config/*.afg
+	rm -rf /etc/adapter/config/*.json
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
+	cp -r ./adapter/config/$Json_File /etc/adapter/config/
     else
         echo "Installing adapter files..."
         mkdir -p /etc/adapter/
         mkdir -p /etc/adapter/config/
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
+	cp -r ./adapter/config/$Json_File /etc/adapter/config/
     fi
     echo  ""
     chown -R 1000:1000 /etc/adapter/
@@ -156,6 +160,7 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ;
 
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
+Json_File="SmartSaw_alarms.json"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
 run_update_adapter=false
@@ -188,7 +193,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:HAMhOSm" option; do
+while getopts ":a:j:d:u:HAMhOSm" option; do
     case ${option} in
         h) # display Help
             Help
@@ -197,6 +202,8 @@ while getopts ":a:d:u:HAMhOSm" option; do
             run_update_adapter=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
+	j) # Enter JSON file name
+	    Json_File=$OPTARG;;
         A) # Update the Agent
             run_update_agent=true;;
         d) # Enter a Device file name
@@ -238,7 +245,7 @@ service_exists() {
 
 if $run_install; then
     echo "Running Install script..."
-    bash ssInstall.sh -a $Afg_File -d $Device_File -u $Serial_Number
+    bash ssInstall.sh -a $Afg_File -j $Json_file -d $Device_File -u $Serial_Number
 else
     echo "Printing the options..."
     echo "Update Adapter set to run = "$run_update_adapter
@@ -249,6 +256,7 @@ else
     echo "Update Materials set to run = "$run_update_materials
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
+	echo "JSON file = "$Json_File
     fi
     if $run_update_agent; then
         echo "MTConnect Agent file = "$Device_File

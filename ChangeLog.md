@@ -7,6 +7,13 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.0] - 2024/05/08 - emsumithn
+### Added
+- Jira ID : EP4US3
+  - Alarm JSON file to support generic function for Condition
+### Changed
+- Updated script to handle Alarm JSON File
+
 ## [1.2.2] - 2024/05/02 - Max Harris
 ### Changed
 - Changed the localhost to use host.docker.internal as an extrahost for directing the host ipaddress - @MaxHarris
