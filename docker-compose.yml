@@ -8,7 +8,8 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - "/etc/adapter/config/:/adapter/"
+      - "/etc/adapter/config/:/adapter/config/"
+      - "/etc/adapter/data/:/adapter/data/"
     logging:
       driver: "json-file"
       options:
