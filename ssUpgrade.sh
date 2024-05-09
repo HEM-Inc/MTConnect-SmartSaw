@@ -61,7 +61,7 @@ Update_Adapter(){
 	cp -r ./adapter/config/$Json_File /etc/adapter/config/
     fi
     echo  ""
-    chown -R 1000:1000 /etc/adapter/
+    chown -R 1100:1100 /etc/adapter/
 }
 
 Update_Agent(){
@@ -117,7 +117,7 @@ Update_ODS(){
         cp -r ./ods/config/. /etc/ods/config
     fi
     echo ""
-    chown -R 1000:1000 /etc/ods/
+    chown -R 1200:1200 /etc/ods/
 }
 
 Update_Mongodb(){

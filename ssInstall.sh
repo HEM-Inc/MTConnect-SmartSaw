@@ -30,7 +30,7 @@ InstallAdapter(){
     mkdir -p /etc/adapter/config/
     cp -r ./adapter/config/$Afg_File /etc/adapter/config/
     cp -r ./adapter/config/$Json_File /etc/adapter/config/
-    chown -R 1000:1000 /etc/adapter/
+    chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
 }
@@ -69,7 +69,7 @@ InstallODS(){
     mkdir -p /etc/ods/
     mkdir -p /etc/ods/config/
     cp -r ./ods/config/* /etc/ods/config/
-    chown -R 1000:1000 /etc/ods/
+    chown -R 1200:1200 /etc/ods/
 }
 
 InstallMongodb(){
