@@ -90,7 +90,7 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
-      - "/etc/mongodb/data/db:/var/lib/mongodb/"
+      - "/etc/mongodb/data/db:/data/db"
       - "/etc/mongodb/config/mongod.conf.orig:/etc/mongod.conf.orig"
     logging:
       driver: "json-file"

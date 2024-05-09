@@ -13,6 +13,8 @@ For build level release notes see https://github.com/mtconnect/cppagent/
   - Alarm JSON file to support generic function for Condition
 ### Changed
 - Updated script to handle Alarm JSON File
+### Fixed
+- Corrected the volume issue for mongodb
 
 ## [1.2.2] - 2024/05/02 - Max Harris
 ### Changed
