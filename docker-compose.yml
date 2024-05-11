@@ -94,6 +94,7 @@ services:
       - "/etc/mongodb/data/db:/data/db"
       - "/etc/mongodb/config/:/etc/mongo/"
     command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
+
     logging:
       driver: "json-file"
       options:
