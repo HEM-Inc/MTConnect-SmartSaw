@@ -7,6 +7,20 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.1] - 2024/05/10 - emAdithyaShenoy
+### Changed
+- Jira Id: EP4US7
+ - renamed mongod.conf.orig to mongod.conf
+### Fixed
+- corrected mongodb script to take custom configuration file
+
+## [1.3.0] - 2024/05/09 - emsumithn
+### Added
+- Jira ID : EP4US3
+  - Alarm JSON file to support generic function for Condition
+### Changed
+- Updated script to handle Alarm JSON File
+
 ## [1.2.3] - 2024/05/09 - Max Harris
 ### Fixed
 - Corrected the volume issue for mongodb

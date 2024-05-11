@@ -10,10 +10,11 @@ Help(){
     echo "is run using this mtconnect group so that it has lower permissions, while the"
     echo "adapter is run using the default permissions."
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-d File_Name|-u Serial_number]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number]"
     echo "options:"
     echo "-h                    Print this Help."
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
+    echo "-j File_Name		Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
@@ -28,7 +29,8 @@ InstallAdapter(){
     mkdir -p /etc/adapter/
     mkdir -p /etc/adapter/config/
     cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-    chown -R 1000:1000 /etc/adapter/
+    cp -r ./adapter/config/$Json_File /etc/adapter/config/
+    chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
 }
@@ -67,7 +69,7 @@ InstallODS(){
     mkdir -p /etc/ods/
     mkdir -p /etc/ods/config/
     cp -r ./ods/config/* /etc/ods/config/
-    chown -R 1000:1000 /etc/ods/
+    chown -R 1200:1200 /etc/ods/
 }
 
 InstallMongodb(){
@@ -150,6 +152,7 @@ fi
 
 # Set default variables
 Afg_File="SmartSaw_DC_HA.afg"
+Json_File="SmartSaw_alarms.json"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
 
@@ -158,13 +161,15 @@ Serial_Number="SmartSaw"
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:d:u:h" option; do
+while getopts ":a:j:d:u:h" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
+	j) # Enter JSON file name
+	    Json_File=$OPTARG;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
@@ -179,6 +184,7 @@ done
 
 echo "Printing the Working Directory and options..."
 echo "AFG file = "$Afg_File
+echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo ""
