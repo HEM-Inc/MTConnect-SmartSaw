@@ -30,16 +30,16 @@ RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
         docker-compose pull
-        docker-compose up --remove-orphans -d 
+        docker-compose up --remove-orphans -d
     else
         echo "Installing Docker..."
-        apt update
+        apt update --fix-missing
         apt upgrade --fix-missing -y
-        apt install -y docker-compose
+        apt install -y docker-compose --fix-missing
         apt clean
 
         echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d 
+        docker-compose up --remove-orphans -d
     fi
     docker-compose logs mtc_adapter mtc_agent mosquitto ods
 }
@@ -133,7 +133,7 @@ Update_Mongodb(){
         mkdir -p /etc/mongodb/data/
         mkdir -p /etc/mongodb/data/db
         cp -r ./mongodb/config/* /etc/mongodb/config/
-        cp -r ./mongodb/data/* /etc/mongodb/data/     
+        cp -r ./mongodb/data/* /etc/mongodb/data/
     fi
     echo ""
     chown -R 1000:1000 /etc/mongodb/
@@ -145,8 +145,8 @@ Update_Materials(){
         sudo python3 /etc/mongodb/data/upload_materials.py
     else
         echo "Setting the default materials..."
-        sudo pip3 install pyaml
-        sudo pip3 install pymongo
+        sudo pip3 install pyaml --break-system-packages
+        sudo pip3 install pymongo --break-system-packages
         sudo python3 /etc/mongodb/data/upload_materials.py
     fi
 }
