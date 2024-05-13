@@ -14,7 +14,7 @@ Help(){
     echo "options:"
     echo "-h                    Print this Help."
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
-    echo "-j File_Name		Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
+    echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
 }
@@ -29,7 +29,7 @@ InstallAdapter(){
     mkdir -p /etc/adapter/
     mkdir -p /etc/adapter/config/
     cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-    cp -r ./adapter/config/$Json_File /etc/adapter/config/
+    cp -r ./adapter/data/$Json_File /etc/data/config/
     chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
@@ -87,7 +87,7 @@ InstallMongodb(){
         pip3 install pymongo
     else
         apt update
-        apt upgrade -y
+        apt upgrade --fix-missing -y
         apt install -y python3-pip
         apt clean
         
@@ -99,7 +99,7 @@ InstallMongodb(){
 InstallDocker(){
     echo "Installing Docker..."
     apt update
-    apt upgrade -y
+    apt upgrade --fix-missing -y
     apt install -y docker-compose
     apt clean
 

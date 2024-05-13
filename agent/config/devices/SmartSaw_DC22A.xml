@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MTConnectDevices
-    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:1.8 http://schemas.mtconnect.org/schemas/MTConnectDevices_2.0.xsd"
+    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.3 http://schemas.mtconnect.org/schemas/MTConnectDevices_2.3.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="urn:mtconnect.org:MTConnectDevices:2.0" 
-    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.0">
-    
-    <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.0.0.0" 
+    xmlns="urn:mtconnect.org:MTConnectDevices:2.3"
+    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.3">
+
+    <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.3.0.0"
         instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
         <!-- <Device id="saw" uuid="HEMSaw_DC22A_SmartSaw" name="Saw"> -->
@@ -55,7 +55,7 @@
                 </CoordinateSystems>
             </Configuration>
             <Components>
-                <Axes id="saw_axes" name="Machine">       
+                <Axes id="saw_axes" name="Machine">
                     <DataItems>
                         <!-- <DataItem id="x0_cond" type="ACTUATOR" category="CONDITION" name="x0_saw_head_servo_cond"/> -->
                         <DataItem id="z0_cond" type="ACTUATOR" category="CONDITION" name="z0_feed_servo_cond"/>
@@ -123,7 +123,7 @@
                                         <Filter type="MINIMUM_DELTA">0.010</Filter>
                                     </Filters>
                                 </DataItem>
-                                
+
                                 <!-*- Not an output from the servo
                                 <DataItem id="x0_amp" compositionId="x0_motor" type="AMPERAGE_AC" subType="ACTUAL"
                                     units="AMPERE" category="SAMPLE"/>
@@ -136,13 +136,13 @@
                                     </Filters>
                                 </DataItem>
 
-                                <DataItem id="x0_enhancer_0_freq" type="FREQUENCY" units="HERTZ" 
+                                <DataItem id="x0_enhancer_0_freq" type="FREQUENCY" units="HERTZ"
                                     category="SAMPLE">
                                     <Relationships>
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_0_freq_spec"/>
                                     </Relationships>
                                 </DataItem>
-                                <DataItem id="x0_enhancer_1_freq" type="FREQUENCY" units="HERTZ" 
+                                <DataItem id="x0_enhancer_1_freq" type="FREQUENCY" units="HERTZ"
                                     category="SAMPLE">
                                     <Relationships>
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_1_freq_spec"/>
@@ -178,20 +178,20 @@
                                     </Filters>
                                 </DataItem>
 
-                                <!-- Not installed                            
+                                <!-- Not installed
                                 <DataItem id="x0_enhancer_0_freq" type="FREQUENCY" units="HERTZ" category="SAMPLE">
                                     <Relationships>
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_0_freq_spec"/>
                                     </Relationships>
                                 </DataItem>
-                                <DataItem id="x0_enhancer_1_freq" type="FREQUENCY" units="HERTZ" 
+                                <DataItem id="x0_enhancer_1_freq" type="FREQUENCY" units="HERTZ"
                                     category="SAMPLE">
                                     <Relationships>
                                         <SpecificationRelationship type="LIMIT" idRef="x0_enhancer_freq_spec" name="x0_enhancer_1_freq_spec"/>
                                     </Relationships>
                                 </DataItem>
                                 -->
-                      
+
                                 <DataItem id="x0_state" type="AXIS_STATE" category="EVENT"/>
                                 <DataItem id="x0_axis_interlock" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
@@ -306,7 +306,7 @@
 
                                 <!-- Not an output from the servo
                                 <DataItem id="z0_amp" compositionId="z0_motor" type="AMPERAGE_AC" subType="ACTUAL"
-                                    units="AMPERE" category="SAMPLE"/> 
+                                    units="AMPERE" category="SAMPLE"/>
                                 -->
 
                                 <DataItem id="z0_state" compositionId="z0_motor" type="AXIS_STATE" category="EVENT"/>
@@ -407,8 +407,8 @@
                                     </Filters>
                                 </DataItem>
                                 -->
-                                
-                                <!--                            
+
+                                <!--
                                 <DataItem id="c0_tension" compositionId="c0_tensioner" type="PRESSURE" units="PASCAL" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
@@ -418,9 +418,9 @@
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
-                                </DataItem> 
+                                </DataItem>
                                 -->
-                                
+
                                 <!-- Choose one method -->
                                 <DataItem id="c0_cutwatcher_volt" type="VOLTAGE_DC" subType="ACTUAL"
                                     units="VOLT" category="SAMPLE">
@@ -438,7 +438,7 @@
                                     </Filters>
                                 </DataItem>
                                 -->
-                                
+
                                 <!-- Choose one method
                                 <DataItem id="c0_cutwatcher_dif" type="DISPLACEMENT" subType="ACTUAL"
                                     units="MILLIMETER" category="SAMPLE">
@@ -449,13 +449,13 @@
                                 -->
 
                                 <!-- N/A
-                                <DataItem id="c0_gearbox_freq" type="FREQUENCY" units="HERTZ" 
+                                <DataItem id="c0_gearbox_freq" type="FREQUENCY" units="HERTZ"
                                     category="SAMPLE"/>
                                 -->
-                                
+
                                 <DataItem id="c0_state" compositionId="c0_motor" type="AXIS_STATE" category="EVENT"/>
-                                <DataItem id="c0_axis_interlock" compositionId="c0_motor" type="AXIS_INTERLOCK" category="EVENT"/> 
-                                
+                                <DataItem id="c0_axis_interlock" compositionId="c0_motor" type="AXIS_INTERLOCK" category="EVENT"/>
+
                             </DataItems>
                             <Compositions>
                                 <Composition id="c0_motor" type="MOTOR"/>
@@ -509,15 +509,15 @@
                                 <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
                                 <DataItem id="job_id" type="PART_ID" category="EVENT"/>
-                                <DataItem id="job_name" type="PROGRAM" subType="MAIN" category="EVENT"/> 
+                                <DataItem id="job_name" type="PROGRAM" subType="MAIN" category="EVENT"/>
                                 <DataItem id="job_active_part_number" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
                                 <DataItem id="job_repetitions" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="job_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
-                                
+
                                 <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
-                                
+
                                 <DataItem id="cut_count_complete" type="PART_COUNT" subType="COMPLETE" category="EVENT"/>
                             </DataItems>
                         </Path>
