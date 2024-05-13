@@ -83,14 +83,14 @@ InstallMongodb(){
     chown -R 1000:1000 /etc/mongodb/
 
     if pip3 &> /dev/null; then
-        pip3 install pyaml
-        pip3 install pymongo
+        pip3 install pyaml --break-system-packages
+        pip3 install pymongo --break-system-packages
     else
-        apt update
+        apt update --fix-missing
         apt upgrade --fix-missing -y
-        apt install -y python3-pip
+        apt install -y python3-pip --fix-missing
         apt clean
-        
+
         pip3 install pyaml
         pip3 install pymongo
     fi
@@ -98,13 +98,13 @@ InstallMongodb(){
 
 InstallDocker(){
     echo "Installing Docker..."
-    apt update
+    apt update --fix-missing
     apt upgrade --fix-missing -y
-    apt install -y docker-compose
+    apt install -y docker-compose --fix-missing
     apt clean
 
     echo "Starting up the Docker image"
-    docker-compose up --remove-orphans -d 
+    docker-compose up --remove-orphans -d
     docker-compose logs
 }
 
@@ -132,8 +132,8 @@ service_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if test -f /etc/mtconnect/config/agent.cfg; 
-    then echo 'mtconnect agent.cfg found, run bash ssUpgrade.sh instead'; exit 1 
+if test -f /etc/mtconnect/config/agent.cfg;
+    then echo 'mtconnect agent.cfg found, run bash ssUpgrade.sh instead'; exit 1
 else
     echo 'Mtconnet agent.cfg not found, continuing install...'
 fi
@@ -203,7 +203,7 @@ InstallMongodb
 InstallDocker
 
 python3 /etc/mongodb/data/upload_materials.py
-    
+
 
 echo ""
 echo "Check to verify containers are running:"
