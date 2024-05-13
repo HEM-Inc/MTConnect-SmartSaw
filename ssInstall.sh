@@ -28,8 +28,9 @@ InstallAdapter(){
 
     mkdir -p /etc/adapter/
     mkdir -p /etc/adapter/config/
+    mkdir -p /etc/adapter/data
     cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-    cp -r ./adapter/data/$Json_File /etc/data/config/
+    cp -r ./adapter/data/$Json_File /etc/adapter/data/
     chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"

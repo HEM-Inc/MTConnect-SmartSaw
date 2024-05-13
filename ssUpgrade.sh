@@ -51,15 +51,16 @@ Update_Adapter(){
     if test -d /etc/adapter/config/; then
         echo "Updating adapter files..."
         rm -rf /etc/adapter/config/*.afg
-	rm -rf /etc/adapter/config/*.json
+        rm -rf /etc/adapter/config/*.json
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
 	cp -r ./adapter/data/$Json_File /etc/adapter/data/
     else
         echo "Installing adapter files..."
         mkdir -p /etc/adapter/
         mkdir -p /etc/adapter/config/
+        mkdir -p /etc/adapter/data/
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-	cp -r ./adapter/data/$Json_File /etc/adapter/data/
+        cp -r ./adapter/data/$Json_File /etc/adapter/data/
     fi
     echo  ""
     chown -R 1100:1100 /etc/adapter/
