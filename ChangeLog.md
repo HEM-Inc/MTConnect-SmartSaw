@@ -7,6 +7,11 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.2] - 2024/05/13 - Max Harris
+### Fixed
+- Fixed the adapter data folder call from ssInstall and ssUpgrade
+- Updated the afg and device files to 2.3
+
 ## [1.3.1] - 2024/05/10 - emAdithyaShenoy
 ### Changed
 - Jira Id: EP4US7
