@@ -77,7 +77,7 @@ Uninstall_Mongodb(){
 }
 
 Uninstall_Docker(){
-    if Use_Docker_Compose_v2; then
+    if $Use_Docker_Compose_v2; then
         echo "Shutting down any old Docker containers"
         docker compose down
 
@@ -193,7 +193,7 @@ echo "uninstall ODS set to run = "$run_uninstall_ods
 echo "uninstall Mongodb set to run="$run_uninstall_mongodb
 echo "uninstall Docker set to run = "$run_uninstall_docker
 echo "disable   Systemctl Daemons set to run = "$run_uninstall_daemon
-echo "Use Docker Compose V2 commands= " $Use_Docker_Compose_v2
+echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
 
 echo ""
 if $run_uninstall_adapter; then

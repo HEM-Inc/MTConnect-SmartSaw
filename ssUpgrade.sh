@@ -30,7 +30,7 @@ Help(){
 RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
-        if Use_Docker_Compose_v2; then
+        if $Use_Docker_Compose_v2; then
             docker compose pull
             docker compose up --remove-orphans -d
         else
@@ -39,7 +39,7 @@ RunDocker(){
         fi
     else
         echo "Installing and Starting up the Docker images"
-        if Use_Docker_Compose_v2; then
+        if $Use_Docker_Compose_v2; then
             apt update --fix-missing
             apt install -y docker-compose-v2 --fix-missing
             docker compose up --remove-orphans -d
@@ -50,7 +50,7 @@ RunDocker(){
         fi
         apt clean
     fi
-    if Use_Docker_Compose_v2; then
+    if $Use_Docker_Compose_v2; then
         docker compose logs mtc_adapter mtc_agent mosquitto ods
     else
         docker-compose logs mtc_adapter mtc_agent mosquitto ods
@@ -287,7 +287,7 @@ else
     echo ""
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
-        if Use_Docker_Compose_v2; then
+        if $Use_Docker_Compose_v2; then
             docker compose down
         else
             docker-compose down
