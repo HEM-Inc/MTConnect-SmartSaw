@@ -32,11 +32,13 @@ Help syntax for the `ssInstall.sh`.
 
 ``` bash
 
-Syntax: ssInstall [-h|-a File_Name|-d File_Name|-u Serial_number]
+Syntax: ssInstall [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number]
 
 options:
 
 -a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
+
+-j File_Name 	    Declare the json file name; Defaults to - SmartSaw_alarms.json
 
 -d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 
@@ -50,13 +52,15 @@ Help syntax for the `ssUpgrade.sh`.
 
 ``` bash
 
-Syntax: ssUpgrade [-H|-a File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]
+Syntax: ssUpgrade [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]
 
 options:
 
 -H                Update the HEMsaw adapter application
 
 -a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
+
+-j File_Name 	  Declare the json file name; Defaults to - SmartSaw_alarms.json
 
 -A                Update the MTConnect Agent application
 
