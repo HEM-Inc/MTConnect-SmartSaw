@@ -64,7 +64,8 @@ Update_Adapter(){
     if test -d /etc/adapter/config/; then
         echo "Updating adapter files..."
         rm -rf /etc/adapter/config/*.afg
-        rm -rf /etc/adapter/config/*.json
+        rm -rf /etc/adapter/data/*.json
+	rm -rf /etc/adapter/log/*
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
 	cp -r ./adapter/data/$Json_File /etc/adapter/data/
     else
@@ -72,6 +73,7 @@ Update_Adapter(){
         mkdir -p /etc/adapter/
         mkdir -p /etc/adapter/config/
         mkdir -p /etc/adapter/data/
+	mkdir -p /etc/adapter/log
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
         cp -r ./adapter/data/$Json_File /etc/adapter/data/
     fi
@@ -263,7 +265,7 @@ service_exists() {
 
 if $run_install; then
     echo "Running Install script..."
-    bash ssInstall.sh -a $Afg_File -j $Json_file -d $Device_File -u $Serial_Number
+    bash ssInstall.sh -a $Afg_File -j $Json_File -d $Device_File -u $Serial_Number
 else
     echo "Printing the options..."
     echo "Update Adapter set to run = "$run_update_adapter

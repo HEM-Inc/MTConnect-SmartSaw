@@ -8,6 +8,20 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.4] - 2024/05/14 - emsumithn
+
+### Added
+
+- Added adapter log folder support in scripts and docker compose
+
+### Changed
+
+- Updated README file
+
+### Fixed
+
+- Fixed adapter data folder file updates in ssUpgrade
+
 ## [1.3.3] - 2024/05/13 - Max Harris
 
 ### Added

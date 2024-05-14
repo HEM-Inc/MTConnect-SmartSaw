@@ -8,13 +8,14 @@ Help(){
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "The function uses the Docker Compose V1 script. To use the V2 script use -2"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-2]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-2|-f]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
 }
 
@@ -27,7 +28,8 @@ InstallAdapter(){
 
     mkdir -p /etc/adapter/
     mkdir -p /etc/adapter/config/
-    mkdir -p /etc/adapter/data
+    mkdir -p /etc/adapter/data/
+    mkdir -p /etc/adapter/log/
     cp -r ./adapter/config/$Afg_File /etc/adapter/config/
     cp -r ./adapter/data/$Json_File /etc/adapter/data/
     chown -R 1100:1100 /etc/adapter/
@@ -124,13 +126,6 @@ service_exists() {
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if test -f /etc/mtconnect/config/agent.cfg;
-    then echo 'mtconnect agent.cfg found, run bash ssUpgrade.sh instead'; exit 1
-else
-    echo 'Mtconnet agent.cfg not found, continuing install...'
-fi
-echo ""
-
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
     echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services.."
     systemctl stop adapter
@@ -148,13 +143,14 @@ Json_File="SmartSaw_alarms.json"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
 Use_Docker_Compose_v2=false
+force_install_files=false
 
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:h2" option; do
+while getopts ":a:j:d:u:h2f" option; do
     case ${option} in
         h) # display Help
             Help
@@ -169,6 +165,8 @@ while getopts ":a:j:d:u:h2" option; do
             Serial_Number=$OPTARG;;
         2) # Run the Docker Compose V2
             Use_Docker_Compose_v2=true;;
+        f) # Force install files
+            force_install_files=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -185,36 +183,63 @@ echo "MTConnect UUID = HEMSaw_"$Serial_Number
 echo "Use Docker Compose V2 commands= " $Use_Docker_Compose_v2
 echo ""
 
-echo ""
-if service_exists docker; then
-    echo "Shutting down any old Docker containers"
-    if Use_Docker_Compose_v2; then
-        docker compose down
-    else
-        docker-compose down
+if test -f /etc/mtconnect/config/agent.cfg;
+    if service_exists docker; then
+        echo "Shutting down any old Docker containers"
+        if Use_Docker_Compose_v2; then
+            docker compose down
+        else
+            docker-compose down
+        fi
     fi
+    echo ""
+
+    InstallDepenency
+
+    echo "Starting up the Docker image"
+    if Use_Docker_Compose_v2; then
+        docker compose up --remove-orphans -d
+        docker compose logs
+    else
+        docker-compose up --remove-orphans -d
+        docker-compose logs
+    fi
+
+    echo ""
+    echo "Check to verify containers are running:"
+    docker system prune --all --force --volumes
+    docker ps
+elif (test -f /etc/mtconnect/config/agent.cfg)=false || force_install_files; then
+    if service_exists docker; then
+        echo "Shutting down any old Docker containers"
+        if Use_Docker_Compose_v2; then
+            docker compose down
+        else
+            docker-compose down
+        fi
+    fi
+    echo ""
+
+    InstallDepenency
+    InstallAdapter
+    InstallMTCAgent
+    InstallODS
+    InstallMongodb
+
+    echo "Starting up the Docker image"
+    if Use_Docker_Compose_v2; then
+        docker compose up --remove-orphans -d
+        docker compose logs
+    else
+        docker-compose up --remove-orphans -d
+        docker-compose logs
+    fi
+
+    python3 /etc/mongodb/data/upload_materials.py
+
+
+    echo ""
+    echo "Check to verify containers are running:"
+    docker system prune --all --force --volumes
+    docker ps
 fi
-echo ""
-
-InstallDepenency
-InstallAdapter
-InstallMTCAgent
-InstallODS
-InstallMongodb
-
-echo "Starting up the Docker image"
-if Use_Docker_Compose_v2; then
-    docker compose up --remove-orphans -d
-    docker compose logs
-else
-    docker-compose up --remove-orphans -d
-    docker-compose logs
-fi
-
-python3 /etc/mongodb/data/upload_materials.py
-
-
-echo ""
-echo "Check to verify containers are running:"
-docker system prune --all --force --volumes
-docker ps

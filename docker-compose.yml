@@ -10,6 +10,7 @@ services:
     volumes:
       - "/etc/adapter/config/:/adapter/config/"
       - "/etc/adapter/data/:/adapter/data/"
+      - "/etc/adapter/log/:/adapter/log/"
     logging:
       driver: "json-file"
       options:
