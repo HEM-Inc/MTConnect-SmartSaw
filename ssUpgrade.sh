@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]"
+    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-2|-h]"
     echo "options:"
     echo "-H                Update the HEMsaw adapter application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -20,6 +20,7 @@ Help(){
     echo "-O                Update the HEMsaw ODS application"
     echo "-S                Update the HEMsaw MongoDB application"
     echo "-m                Update the MongoDB database with default materials"
+    echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-h                Print this Help."
 }
 
@@ -29,19 +30,31 @@ Help(){
 RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
-        docker-compose pull
-        docker-compose up --remove-orphans -d
+        if Use_Docker_Compose_v2; then
+            docker compose pull
+            docker compose up --remove-orphans -d
+        else
+            docker-compose pull
+            docker-compose up --remove-orphans -d
+        fi
     else
-        echo "Installing Docker..."
-        apt update --fix-missing
-        apt upgrade --fix-missing -y
-        apt install -y docker-compose --fix-missing
+        echo "Installing and Starting up the Docker images"
+        if Use_Docker_Compose_v2; then
+            apt update --fix-missing
+            apt install -y docker-compose-v2 --fix-missing
+            docker compose up --remove-orphans -d
+        else
+            apt update --fix-missing
+            apt install -y docker-compose --fix-missing
+            docker-compose up --remove-orphans -d
+        fi
         apt clean
-
-        echo "Starting up the Docker image"
-        docker-compose up --remove-orphans -d
     fi
-    docker-compose logs mtc_adapter mtc_agent mosquitto ods
+    if Use_Docker_Compose_v2; then
+        docker compose logs mtc_adapter mtc_agent mosquitto ods
+    else
+        docker-compose logs mtc_adapter mtc_agent mosquitto ods
+    fi
 }
 
 ############################################################
@@ -172,6 +185,7 @@ run_update_ods=false
 run_update_mongodb=false
 run_update_materials=false
 run_install=false
+Use_Docker_Compose_v2=false
 
 # check if install or upgrade
 if ! test -f /etc/mtconnect/config/agent.cfg; then
@@ -195,7 +209,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:HAMhOSm" option; do
+while getopts ":a:j:d:u:HAMhOSm2" option; do
     case ${option} in
         h) # display Help
             Help
@@ -204,8 +218,8 @@ while getopts ":a:j:d:u:HAMhOSm" option; do
             run_update_adapter=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
-	j) # Enter JSON file name
-	    Json_File=$OPTARG;;
+        j) # Enter JSON file name
+            Json_File=$OPTARG;;
         A) # Update the Agent
             run_update_agent=true;;
         d) # Enter a Device file name
@@ -220,6 +234,8 @@ while getopts ":a:j:d:u:HAMhOSm" option; do
             run_update_ods=true;;
         S) #Update Mongodb
 	       run_update_mongodb=true;;
+        2) # Run the Docker Compose V2
+            Use_Docker_Compose_v2=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -256,9 +272,10 @@ else
     echo "Update ODS set to run = "$run_update_ods
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
+    echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
-	echo "JSON file = "$Json_File
+        echo "JSON file = "$Json_File
     fi
     if $run_update_agent; then
         echo "MTConnect Agent file = "$Device_File
@@ -268,7 +285,11 @@ else
     echo ""
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
-        docker-compose down
+        if Use_Docker_Compose_v2; then
+            docker compose down
+        else
+            docker-compose down
+        fi
     fi
 
     echo ""

@@ -6,17 +6,16 @@
 Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
-    echo "To securly set up the agent an mtconnect user and group is created. The agent"
-    echo "is run using this mtconnect group so that it has lower permissions, while the"
-    echo "adapter is run using the default permissions."
+    echo "The function uses the Docker Compose V1 script. To use the V2 script use -2"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-2]"
     echo "options:"
-    echo "-h                    Print this Help."
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-h                    Print this Help."
 }
 
 ############################################################
@@ -86,27 +85,19 @@ InstallMongodb(){
     if pip3 &> /dev/null; then
         pip3 install pyaml --break-system-packages
         pip3 install pymongo --break-system-packages
-    else
-        apt update --fix-missing
-        apt upgrade --fix-missing -y
-        apt install -y python3-pip --fix-missing
-        apt clean
-
-        pip3 install pyaml --break-system-package
-        pip3 install pymongo --break-system-package
     fi
 }
 
-InstallDocker(){
+InstallDepency(){
     echo "Installing Docker..."
     apt update --fix-missing
     apt upgrade --fix-missing -y
-    apt install -y docker-compose --fix-missing
+    if Use_Docker_Compose_v2; then
+        apt install -y docker-compose-v2 python3-pip --fix-missing
+    else
+        apt install -y docker-compose python3-pip --fix-missing
+    fi
     apt clean
-
-    echo "Starting up the Docker image"
-    docker-compose up --remove-orphans -d
-    docker-compose logs
 }
 
 
@@ -156,25 +147,28 @@ Afg_File="SmartSaw_DC_HA.afg"
 Json_File="SmartSaw_alarms.json"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
+Use_Docker_Compose_v2=false
 
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:h" option; do
+while getopts ":a:j:d:u:h2" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG;;
-	j) # Enter JSON file name
-	    Json_File=$OPTARG;;
+        j) # Enter JSON file name
+            Json_File=$OPTARG;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
+        2) # Run the Docker Compose V2
+            Use_Docker_Compose_v2=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -188,20 +182,34 @@ echo "AFG file = "$Afg_File
 echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
+echo "Use Docker Compose V2 commands= " $Use_Docker_Compose_v2
 echo ""
 
 echo ""
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    docker-compose down
+    if Use_Docker_Compose_v2; then
+        docker compose down
+    else
+        docker-compose down
+    fi
 fi
 echo ""
 
+InstallDepenency
 InstallAdapter
 InstallMTCAgent
 InstallODS
 InstallMongodb
-InstallDocker
+
+echo "Starting up the Docker image"
+if Use_Docker_Compose_v2; then
+    docker compose up --remove-orphans -d
+    docker compose logs
+else
+    docker-compose up --remove-orphans -d
+    docker-compose logs
+fi
 
 python3 /etc/mongodb/data/upload_materials.py
 
