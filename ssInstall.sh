@@ -94,7 +94,7 @@ InstallDepency(){
     echo "Installing Docker..."
     apt update --fix-missing
     apt upgrade --fix-missing -y
-    if Use_Docker_Compose_v2; then
+    if $Use_Docker_Compose_v2; then
         apt install -y docker-compose-v2 python3-pip --fix-missing
     else
         apt install -y docker-compose python3-pip --fix-missing
@@ -180,66 +180,38 @@ echo "AFG file = "$Afg_File
 echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw_"$Serial_Number
-echo "Use Docker Compose V2 commands= " $Use_Docker_Compose_v2
+echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
 echo ""
 
-if test -f /etc/mtconnect/config/agent.cfg;
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        if Use_Docker_Compose_v2; then
-            docker compose down
-        else
-            docker-compose down
-        fi
-    fi
-    echo ""
-
-    InstallDepenency
-
-    echo "Starting up the Docker image"
-    if Use_Docker_Compose_v2; then
-        docker compose up --remove-orphans -d
-        docker compose logs
+if service_exists docker; then
+    echo "Shutting down any old Docker containers"
+    if $Use_Docker_Compose_v2; then
+        docker compose down
     else
-        docker-compose up --remove-orphans -d
-        docker-compose logs
+        docker-compose down
     fi
-
-    echo ""
-    echo "Check to verify containers are running:"
-    docker system prune --all --force --volumes
-    docker ps
-elif (test -f /etc/mtconnect/config/agent.cfg)=false || force_install_files; then
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        if Use_Docker_Compose_v2; then
-            docker compose down
-        else
-            docker-compose down
-        fi
-    fi
-    echo ""
-
-    InstallDepenency
-    InstallAdapter
-    InstallMTCAgent
-    InstallODS
-    InstallMongodb
-
-    echo "Starting up the Docker image"
-    if Use_Docker_Compose_v2; then
-        docker compose up --remove-orphans -d
-        docker compose logs
-    else
-        docker-compose up --remove-orphans -d
-        docker-compose logs
-    fi
-
-    python3 /etc/mongodb/data/upload_materials.py
-
-
-    echo ""
-    echo "Check to verify containers are running:"
-    docker system prune --all --force --volumes
-    docker ps
 fi
+echo ""
+
+InstallDepency
+InstallAdapter
+InstallMTCAgent
+InstallODS
+InstallMongodb
+
+echo "Starting up the Docker image"
+if $Use_Docker_Compose_v2; then
+    docker compose up --remove-orphans -d
+    docker compose logs
+else
+    docker-compose up --remove-orphans -d
+    docker-compose logs
+fi
+
+python3 /etc/mongodb/data/upload_materials.py
+
+
+echo ""
+echo "Check to verify containers are running:"
+docker system prune --all --force --volumes
+docker ps
