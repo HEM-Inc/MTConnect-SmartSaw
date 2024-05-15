@@ -95,9 +95,9 @@ InstallDepency(){
     apt update --fix-missing
     apt upgrade --fix-missing -y
     if $Use_Docker_Compose_v2; then
-        apt install -y docker-compose-v2 python3-pip --fix-missing
+        apt install -y docker-compose-v2 python3-pip tree --fix-missing
     else
-        apt install -y docker-compose python3-pip --fix-missing
+        apt install -y docker-compose python3-pip tree --fix-missing
     fi
     apt clean
 }

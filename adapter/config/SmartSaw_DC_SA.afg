@@ -23,7 +23,6 @@ saw_operating = gMTConnectData.SawEquipmentModeOperating // EQUIPMENT_MODE will 
 saw_powered = "ON" // EQUIPMENT_MODE will output On when the PLC is powered, and Off when not
 saw_working = gMTConnectData.SawEquipmentModeWorking // EQUIPMENT_MODE will output On when the hydraulics are opperating, and Off when not
 
-
 saw_prog_version = gMachineInformation.PLCProgramVersion
 saw_prog_design_company = "HEMSAW"
 saw_plc_type = "NX-NJ"
@@ -34,8 +33,7 @@ saw_plc_manufacturer = "OMRON"
 x0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_106")
 z0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_21")
 // z2_cond = cond z2_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
-c0_cond = cond generic_condition(axisCondition = gMTConnectData.BMVFDFault, nativeCode = "alarm_101")
-
+c0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_101")
 
 
 // *** Linear: X0 Servo Head
@@ -86,6 +84,7 @@ z0_torque = servo_torque_from_percent(percent = gInfeedServoAxisData.Torque, max
 z0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
 
+
 // *** Linear: Z2 MaterialStop
 // z2_target = convert_units(input=gMTConnectData.MSCommandedPosition, conversionRate=25.4) // inches to mm
 // z2_abs = convert_units(input=gMaterialStopServoAxisData.PresentPosition, conversionRate=25.4) // inches to mm
@@ -104,6 +103,7 @@ c0_tension = convert_units(input=gMTConnectData.BladeTensionPressureSensor, conv
 c0_cutwatcher_dif = convert_units(input=gCutwatcherSensor.Distance, conversionRate=0.001) // micro meter to mm
 c0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 c0_state = gMTConnectData.BMState
+
 
 // ** Controller
 saw_estop = gMTConnectData.EStop
@@ -149,12 +149,14 @@ saw_idle_door_state = gMTConnectData.VIO_IdleWheelDoorSensor
 // *** WorkEnvelope
 material_detection = gMTConnectData.MaterialDetection
 
+
 // ** Auxiliaries
 // *** Saw Sensors
 chip_auger = Out_ChipConveyorExtendSolenoid
 worklight = Out_WorkLight
 laserlight = gMTConnectData.VIO_LaserLight
 // shadowlight = gMTConnectData.VIO_ShadowLight
+
 
 // ** Resources
 // *** Stock
