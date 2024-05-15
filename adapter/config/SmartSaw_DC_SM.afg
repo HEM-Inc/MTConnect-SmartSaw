@@ -34,7 +34,7 @@ saw_plc_manufacturer = "OMRON"
 x0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_106")
 // z0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_21")
 // z2_cond = cond z2_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
-c0_cond = cond generic_condition(axisCondition = gMTConnectData.BMVFDFault, nativeCode = "alarm_101")
+c0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_101")
 
 
 
