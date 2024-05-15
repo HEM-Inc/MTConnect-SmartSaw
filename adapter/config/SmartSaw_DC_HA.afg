@@ -31,10 +31,10 @@ saw_plc_manufacturer = "OMRON"
 
 
 // ** Axes
-// x0_cond = cond x0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
-z0_cond = cond z0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
+// x0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_106")
+z0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_21")
 // z2_cond = cond z2_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
-c0_cond = cond c0_axis_condition(axisCondition = gMachineErrors.MCErrorFlag)
+c0_cond = cond generic_condition(axisCondition = gMTConnectData.BMVFDFault, nativeCode = "alarm_101")
 
 
 
@@ -109,7 +109,7 @@ c0_state = gMTConnectData.BMState
 // ** Controller
 saw_estop = gMTConnectData.EStop
 saw_condition = cond system_condition(generalFault = gMachineErrorLevels.Fatal, generalWarning = gMachineErrorLevels.NonCritical)
-saw_comms_cond = cond communication_condition(ipcCommsError = gMTConnectData.IPCError)
+saw_comms_cond = cond generic_condition(ipcCommsError = gMTConnectData.IPCError, nativeCode = "alarm_50")
 saw_blade_life = gMachineTime.TotalBladeLifeSeconds
 saw_hydraulic_life = gMachineTime.TotalHydraulicsOnTimeSeconds
 saw_time_till_next_service = gMachineTime.HoursTillNextServiceSeconds
@@ -121,7 +121,7 @@ saw_cpu_on_time = gMachineTime.TotalMachineOnTimeSeconds
 saw_execution = gMTConnectData.SawExecutionState
 // saw_wait = // See model.mtconnect.org for instructions on WAIT_STATE, type:EXECUTION st:INTERRUPTED, type:EXECUTION st:FEED_HOLD for flags
 saw_controller_mode = gMTConnectData.SawControllerMode
-saw_out_of_stock = cond end_of_bar_cond(barPresent = gAutoOperation.OutOfStock)
+saw_out_of_stock = cond generic_condition(barPresent = gAutoOperation.OutOfStock, nativeCode = "alarm_1008")
 
 job_id = gActiveJobBuffer.JobData.UUID
 job_name = gActiveJobBuffer.JobData.Name
@@ -141,7 +141,7 @@ cut_count_complete = gMTConnectData.CutCounter
 // saw_electric_cond = cond ???
 // This section will be used to track the status of the electrical system and can be extended using an agent adapter for 3rd party systems
 // *** Hydraulic
-saw_hydraulic_low_level = cond hyd_low_level_cond(lowLevel = gMTConnectData.VIO_HydraulicTankLevelSensor)
+saw_hydraulic_low_level = cond generic_condition(lowLevel = gMTConnectData.VIO_HydraulicTankLevelSensor, nativeCode = "alarm_115")
 saw_hydraulic_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved) // This needs to be corrected to proper type
 // saw_hydraulic_maintenance = // maintaince table output
 // *** Enclosure
