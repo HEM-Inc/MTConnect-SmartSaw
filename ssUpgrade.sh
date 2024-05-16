@@ -24,10 +24,10 @@ Help(){
     echo "-h                Print this Help."
     echo ""
     echo "AFG files"
-    tree adapter/config/
+    ls adapter/config/
     echo ""
     echo "MTConnect Device files"
-    tree agent/config/devices
+    ls agent/config/devices
     echo ""
 }
 
