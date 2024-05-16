@@ -22,6 +22,11 @@ Help(){
     echo "-m                Update the MongoDB database with default materials"
     echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-h                Print this Help."
+    echo ""
+    echo "AFG files"
+    tree adapter/config/
+    echo "MTConnect Device files"
+    tree agent/config/devices
 }
 
 ############################################################

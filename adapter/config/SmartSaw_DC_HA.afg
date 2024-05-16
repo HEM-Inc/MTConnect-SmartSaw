@@ -86,6 +86,7 @@ z0_torque = servo_torque_from_percent(percent = gInfeedServoAxisData.Torque, max
 z0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 z0_state = axis_state(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved, velocity = gInfeedAxisData.Velocity_IPS, home = false) // refrences interlocked status
 
+
 // *** Linear: Z2 MaterialStop
 // z2_target = convert_units(input=gMTConnectData.MSCommandedPosition, conversionRate=25.4) // inches to mm
 // z2_abs = convert_units(input=gMaterialStopServoAxisData.PresentPosition, conversionRate=25.4) // inches to mm
@@ -104,6 +105,7 @@ c0_tension = convert_units(input=gMTConnectData.BladeTensionPressureSensor, conv
 c0_cutwatcher_dif = convert_units(input=gCutwatcherSensor.Distance, conversionRate=0.001) // micro meter to mm
 c0_axis_interlock = axis_interlock(bladeChangeCaution = gMTConnectData.VIO_KeySwitchCaution, bladeChangeEngaged= gMTConnectData.VIO_KeySwitchRemoved)
 c0_state = gMTConnectData.BMState
+
 
 // ** Controller
 saw_estop = gMTConnectData.EStop
@@ -149,12 +151,14 @@ saw_idle_door_state = gMTConnectData.VIO_IdleWheelDoorSensor
 // *** WorkEnvelope
 material_detection = gMTConnectData.MaterialDetection
 
+
 // ** Auxiliaries
 // *** Saw Sensors
 chip_auger = Out_ChipConveyorExtendSolenoid
 worklight = Out_WorkLight
 laserlight = gMTConnectData.VIO_LaserLight
 // shadowlight = gMTConnectData.VIO_ShadowLight
+
 
 // ** Resources
 // *** Stock
