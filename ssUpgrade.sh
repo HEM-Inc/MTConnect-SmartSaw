@@ -25,8 +25,10 @@ Help(){
     echo ""
     echo "AFG files"
     tree adapter/config/
+    echo ""
     echo "MTConnect Device files"
     tree agent/config/devices
+    echo ""
 }
 
 ############################################################
