@@ -8,6 +8,13 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.5] - 2024/05/15 - emsumithn
+### Changed
+
+- Updated configurations for condition functions in afg files
+	- x0_axis_condition, z0_axis_condition, c0_axis_condition
+	- communication_condition, hyd_low_level_cond, end_of_bar_cond
+
 ## [1.3.4] - 2024/05/14 - emsumithn
 
 ### Added
