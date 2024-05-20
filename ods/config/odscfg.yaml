@@ -2,5 +2,5 @@ host: 0.0.0.0
 port: 9625
 object_definitions_file_path: db_object_definitions.json
 log_severity_level: info
-mongodb_host: 10.0.0.4
+mongodb_host: mongodb
 mongodb_port: 27017

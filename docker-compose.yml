@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 services:
   mtc_adapter:
     container_name: mtc_adapter
@@ -95,14 +95,13 @@ services:
       - "/etc/mongodb/data/db:/data/db"
       - "/etc/mongodb/config/:/etc/mongo/"
     command: ["mongod", "--config", "/etc/mongo/mongod.conf"]
-
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
     ports:
-      - 27017:27017/tcp
+      - 127.0.0.1:27017:27017/tcp
     restart: unless-stopped
 
   watchtower:

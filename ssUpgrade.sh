@@ -72,7 +72,7 @@ Update_Adapter(){
         echo "Updating adapter files..."
         rm -rf /etc/adapter/config/*.afg
         rm -rf /etc/adapter/data/*.json
-	rm -rf /etc/adapter/log/*
+        rm -rf /etc/adapter/log/*
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
 	cp -r ./adapter/data/$Json_File /etc/adapter/data/
     else
@@ -80,7 +80,7 @@ Update_Adapter(){
         mkdir -p /etc/adapter/
         mkdir -p /etc/adapter/config/
         mkdir -p /etc/adapter/data/
-	mkdir -p /etc/adapter/log
+        mkdir -p /etc/adapter/log
         cp -r ./adapter/config/$Afg_File /etc/adapter/config/
         cp -r ./adapter/data/$Json_File /etc/adapter/data/
     fi
