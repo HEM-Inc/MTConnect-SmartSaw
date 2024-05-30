@@ -8,17 +8,18 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-S|-d|-D|-2|-h]"
+    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-S|-d|-D|-2|-L|-h]"
     echo "options:"
-    echo "-H                Uninstall the HEMsaw adapter application"
-    echo "-A                Uninstall the MTConnect Agent application"
-    echo "-M                Uninstall the MQTT Broker application"
-    echo "-O                Uninstall the HEMsaw ods application"
-    echo "-S                Uninstall the HEMSaw MongoDB application"
-    echo "-d                Disable mongod, ods, and agent daemons"
-    echo "-D                Uninstall Docker"
-    echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
-    echo "-h                Print this Help."
+    echo "-H                    Uninstall the HEMsaw adapter application"
+    echo "-A                    Uninstall the MTConnect Agent application"
+    echo "-M                    Uninstall the MQTT Broker application"
+    echo "-O                    Uninstall the HEMsaw ods application"
+    echo "-S                    Uninstall the HEMSaw MongoDB application"
+    echo "-d                    Disable mongod, ods, and agent daemons"
+    echo "-D                    Uninstall Docker"
+    echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-L Container_Name     Log repair for any NULL or ^@ char"
+    echo "-h                    Print this Help."
 }
 
 ############################################################
@@ -116,6 +117,34 @@ Uninstall_Daemon(){
     echo ""
 }
 
+CleanLog(){
+    # Get the log path for the specified container
+    log_path=$(docker inspect --format='{{.LogPath}}' "$container_name")
+
+    # Check if the log path was successfully retrieved
+    if [ -z "$log_path" ]; then
+        echo "Failed to retrieve log path for container $container_name"
+        exit 1
+    fi
+    echo "Log path for container $container_name: $log_path"
+    echo " "
+
+    # Extract the file name and directory of the log file
+    log_dir=$(dirname "$log_path")
+    log_file=$(basename "$log_path")
+
+    # Remove null characters from the log file and its rotated versions
+    for logs in "$log_dir/$log_file"*; 
+    do
+        if [ -e "$logs" ]; then
+            sed -i 's/\x00//g' "$logs"
+            echo " "
+            echo "Null characters removed. Repair successful."
+            echo "Repaired log file at $logs"
+        fi
+    done
+}
+
 ############################################################
 ############################################################
 # Main program                                             #
@@ -133,12 +162,13 @@ run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
 Use_Docker_Compose_v2=false
+clean_logs=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":HAMDhOSd2" option; do
+while getopts ":L:HAMDhOSd2" option; do
     case ${option} in
         h) # display Help
             Help
@@ -152,13 +182,16 @@ while getopts ":HAMDhOSd2" option; do
         O) # uninstall the ODS
             run_uninstall_ods=true;;
         S) # uninstall the mongodb
-	    run_uninstall_mongodb=true;;
+	        run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         d) # uninstall daemon
             run_uninstall_daemon=true;;
         2) # Run the Docker Compose V2
             Use_Docker_Compose_v2=true;;
+        L) # run the docker log clean;;
+            container_name=$OPTARG
+            clean_logs=true;;
         \?) # Invalid option
             Help
             exit;;
@@ -194,8 +227,12 @@ echo "uninstall Mongodb set to run="$run_uninstall_mongodb
 echo "uninstall Docker set to run = "$run_uninstall_docker
 echo "disable   Systemctl Daemons set to run = "$run_uninstall_daemon
 echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
+echo "Clean the docker logs = " $clean_logs
 
 echo ""
+if $clean_logs; then
+    CleanLog
+fi
 if $run_uninstall_adapter; then
     Uninstall_Adapter
 fi
