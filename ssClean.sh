@@ -134,7 +134,7 @@ CleanLog(){
     log_file=$(basename "$log_path")
 
     # Remove null characters from the log file and its rotated versions
-    for logs in "$log_dir/$log_file"*; 
+    for logs in "$log_dir/$log_file"*;
     do
         if [ -e "$logs" ]; then
             sed -i 's/\x00//g' "$logs"
@@ -219,15 +219,17 @@ service_exists() {
 ############################################################
 
 echo "Printing the options..."
-echo "uninstall Adapter set to run = "$run_uninstall_adapter
-echo "uninstall MTConnect Agent set to run = "$run_uninstall_agent
-echo "uninstall MQTT Broker set to run = "$run_uninstall_mqtt
-echo "uninstall ODS set to run = "$run_uninstall_ods
-echo "uninstall Mongodb set to run="$run_uninstall_mongodb
-echo "uninstall Docker set to run = "$run_uninstall_docker
-echo "disable   Systemctl Daemons set to run = "$run_uninstall_daemon
-echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
-echo "Clean the docker logs = " $clean_logs
+echo ""
+
+echo "uninstall Adapter = "$run_uninstall_adapter
+echo "uninstall MTConnect Agent = "$run_uninstall_agent
+echo "uninstall MQTT Broker = "$run_uninstall_mqtt
+echo "uninstall ODS = "$run_uninstall_ods
+echo "uninstall Mongodb = "$run_uninstall_mongodb
+echo "uninstall Docker = "$run_uninstall_docker
+echo "disable Systemctl Daemons = "$run_uninstall_daemon
+echo "Run Docker Compose V2 commands = " $Use_Docker_Compose_v2
+echo "Clean the docker container (" $container_name ") log = " $clean_logs
 
 echo ""
 if $clean_logs; then
