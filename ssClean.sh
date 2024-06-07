@@ -229,7 +229,7 @@ echo "uninstall Mongodb = "$run_uninstall_mongodb
 echo "uninstall Docker = "$run_uninstall_docker
 echo "disable Systemctl Daemons = "$run_uninstall_daemon
 echo "Run Docker Compose V2 commands = " $Use_Docker_Compose_v2
-echo "Clean the docker container (" $container_name ") log = " $clean_logs
+echo "Clean the docker log for container (" $container_name ") = " $clean_logs
 
 echo ""
 if $clean_logs; then
