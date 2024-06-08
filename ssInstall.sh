@@ -17,6 +17,12 @@ Help(){
     echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
+    echo "AFG files"
+    ls adapter/config/
+    echo ""
+    echo "MTConnect Device files"
+    ls agent/config/devices
+    echo ""
 }
 
 ############################################################
