@@ -8,6 +8,11 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.6] - 2024/06/12 - Max Harris
+### Added
+
+- add Clean log to the ssClean.sh bash script as -L
+
 ## [1.3.5] - 2024/05/15 - emsumithn
 ### Changed
 
