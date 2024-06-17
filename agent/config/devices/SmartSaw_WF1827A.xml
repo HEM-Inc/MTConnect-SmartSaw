@@ -25,6 +25,8 @@
                 <DataItem id="saw_prog_design_company" type="OPERATING_SYSTEM" subType="MANUFACTURER" category="EVENT"/>
                 <DataItem id="saw_plc_type" type="HARDWARE" subType="VERSION" category="EVENT"/>
                 <DataItem id="saw_plc_manufacturer" type="HARDWARE" subType="MANUFACTURER" category="EVENT"/>
+		<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+		<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
             </DataItems>
             <Configuration>
                 <CoordinateSystems>

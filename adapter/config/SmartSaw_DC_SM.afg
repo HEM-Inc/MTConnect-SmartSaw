@@ -28,6 +28,9 @@ saw_prog_design_company = "HEMSAW"
 saw_plc_type = "NX-NJ"
 saw_plc_manufacturer = "OMRON"
 
+// ** Message Events
+saw_switch_status = generate_event_message(nativeCode = "message_24", switchRemoved = gMTConnectData.VIO_KeySwitchRemoved)
+saw_service_status = generate_event_message(nativeCode = "message_105", serviceWarning = gMachineTime.ServiceWarning)
 
 // ** Axes
 x0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_106")
