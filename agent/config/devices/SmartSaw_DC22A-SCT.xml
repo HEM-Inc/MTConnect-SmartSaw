@@ -25,8 +25,6 @@
                 <DataItem id="saw_prog_design_company" type="OPERATING_SYSTEM" subType="MANUFACTURER" category="EVENT"/>
                 <DataItem id="saw_plc_type" type="HARDWARE" subType="VERSION" category="EVENT"/>
 		<DataItem id="saw_plc_manufacturer" type="HARDWARE" subType="MANUFACTURER" category="EVENT"/>
-		<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
-                <DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
             </DataItems>
             <Configuration>
                 <CoordinateSystems>
@@ -470,6 +468,8 @@
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
                         <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
+			<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+			<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
                         <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
                         <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 

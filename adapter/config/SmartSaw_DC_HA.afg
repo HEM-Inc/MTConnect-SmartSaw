@@ -29,9 +29,6 @@ saw_prog_design_company = "HEMSAW"
 saw_plc_type = "NX-NJ"
 saw_plc_manufacturer = "OMRON"
 
-// ** Message Events
-saw_switch_status = generate_event_message(nativeCode = "message_24", switchRemoved = gMTConnectData.VIO_KeySwitchRemoved)
-saw_service_status = generate_event_message(nativeCode = "message_105", serviceWarning = gMachineTime.ServiceWarning)
 
 // ** Axes
 // x0_cond = cond generic_condition(axisCondition = gMachineErrors.MCErrorFlag, nativeCode = "alarm_106")
@@ -112,6 +109,10 @@ c0_state = gMTConnectData.BMState
 
 // ** Controller
 saw_estop = gMTConnectData.EStop
+// *** Message Events
+saw_switch_status = generate_event_message(nativeCode = "message_24", switchRemoved = gMTConnectData.VIO_KeySwitchRemoved)
+saw_service_status = generate_event_message(nativeCode = "message_105", serviceWarning = gMachineTime.ServiceWarning)
+
 saw_condition = cond system_condition(generalFault = gMachineErrorLevels.Fatal, generalWarning = gMachineErrorLevels.NonCritical)
 saw_comms_cond = cond generic_condition(ipcCommsError = gMTConnectData.IPCError, nativeCode = "alarm_50")
 saw_blade_life = gMachineTime.TotalBladeLifeSeconds
