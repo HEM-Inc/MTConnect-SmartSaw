@@ -1,46 +1,62 @@
 {
-  "ConditionCodes": [
-    {
-    	"nativeCode": "alarm_21",
-    		 "warning": {
-    		 	"severity": "1",
-    		 	"message": "Motion controller error. Check the infeed."   		 	
-    		 }
-    },
-    {
-	"nativeCode": "alarm_50",
-		"fault": {
-			"severity": "1",
-			"message": "Communication error between the PLC and the IPC"
- 		}
-    },
-    {
-	"nativeCode": "alarm_101",
-		"warning": {
-			"severity": "1",
-			"message": "Motion controller error. Check the band motor."
-		}
-    },
-    {
-	"nativeCode": "alarm_106",
-		"warning": {
-			"severity": "1",
-			"message": "Motion controller error. Check the arm."
-		}
-    },
-    {
-	"nativeCode": "alarm_115",
-		"warning": {
-			"severity": "1",
-			"message": "Machine is low on hydraulic oil"
-		}
-    },
-    {
-	"nativeCode": "alarm_1008",
-		"warning": {
-			"severity": "1",
-			"message": "Machine is out of stock"
-		}
-    }
- ]
+	"data_items" :
+	{
+		"conditions" :
+		[
+			{
+				"native_code" : "alarm_21",
+				"warning" : {
+					"severity" : "1",
+					"message" : "Motion controller error. Check the infeed."
+				}
+			},
+			{
+				"native_code" : "alarm_50",
+				"fault" : {
+					"severity" : "1",
+					"message" : "Communication error between the PLC and the IPC"
+				}
+			},
+			{
+				"native_code" : "alarm_101",
+				"warning" : {
+					"severity" : "1",
+					"message" : "Motion controller error. Check the band motor."
+				}
+			},
+			{
+				"native_code" : "alarm_106",
+				"warning" : {
+					"severity" : "1",
+					"message" : "Motion controller error. Check the arm."
+				}
+			},
+			{
+				"native_code" : "alarm_115",
+				"warning" : {
+					"severity" : "1",
+					"message" : "Machine is low on hydraulic oil"
+				}
+			},
+			{
+				"native_code" : "alarm_1008",
+				"warning" : {
+					"severity" : "1",
+					"message" : "Machine is out of stock"
+				}
+			}
+		],
+
+		"events" :
+		[
+			{
+				"native_code" : "message_24",
+				"message" : "Key switch is in the engaged position"
+			},
+			{
+				"native_code" : "message_105",
+				"message" : "The machine is in need of preventive maintenance (PM)"
+			}
+		]
+	}
 }
