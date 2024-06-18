@@ -8,6 +8,18 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [1.3.7] - 2024/06/17 -emsumithn
+### Added
+
+- Jira ID: EP4US8
+  - added message event data items configurations to afg files
+  - added message event data items definition to device files
+	- saw_service_status, saw_switch_status
+
+### Changed
+
+- Updated alarm Json data file of adapter
+
 ## [1.3.6] - 2024/06/12 - Max Harris
 ### Added
 
