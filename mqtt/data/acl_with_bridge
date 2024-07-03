@@ -9,4 +9,4 @@ topic write mtconnect/#
 # Allow secure readwrite to the broker from ods using the hemsaw user 
 user hemsaw 
 topic deny mtconnect/# 
-topic read control/#
+topic readwrite control/#
