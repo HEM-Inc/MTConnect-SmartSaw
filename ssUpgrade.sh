@@ -17,7 +17,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-M                Update the MQTT broker application"
-    echo "-b                Update the MQTT bridge configuration file name; defaults to - mosq_bridge.conf"
+    echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-O                Update the HEMsaw ODS application"
     echo "-S                Update the HEMsaw MongoDB application"
     echo "-m                Update the MongoDB database with default materials"
@@ -29,9 +29,6 @@ Help(){
     echo ""
     echo "MTConnect Device files"
     ls agent/config/devices
-    echo ""
-    echo "MQTT files"
-    ls mqtt/config/
     echo ""
 }
 
@@ -338,7 +335,7 @@ else
     if $run_update_agent; then
         Update_Agent
     fi
-    if [$run_update_mqtt_broker] || [$run_update_mqtt_bridge]; then
+    if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
         Update_MQTT_Broker
     fi
     if $run_update_ods; then
