@@ -14,6 +14,7 @@ Help(){
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
     echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
@@ -57,20 +58,40 @@ InstallMTCAgent(){
 
     chown -R 1000:1000 /etc/mtconnect/
 
-    if test -d /etc/mqtt/config/; then
-        echo "Updating mqtt files..."
-        cp -r ./mqtt/config/. /etc/mqtt/config
-        cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/acl
+}
+
+    if $Use_MQTT_Bridge; then
+            if test -d /etc/mqtt/config/; then
+            echo "Updating MQTT bridge files"
+            cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            chmod 0700 /etc/mqtt/data/acl
+        else
+            echo "Installing MQTT bridge files"
+            mkdir -p /etc/mqtt/config/
+            mkdir -p /etc/mqtt/data/
+            cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            chmod 0700 /etc/mqtt/data/acl
+        fi
     else
-        echo "Updating mqtt files..."
-        mkdir -p /etc/mqtt/config/
-        mkdir -p /etc/mqtt/data/
-        cp -r ./mqtt/config/. /etc/mqtt/config
-        cp -r ./mqtt/data/. /etc/mqtt/data
-        chmod 0700 /etc/mqtt/data/acl
+        if test -d /etc/mqtt/config/; then
+            echo "Updating MQTT files..."
+            cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+            cp -r ./mqtt/data/acl /etc/mqtt/data/
+            chmod 0700 /etc/mqtt/data/acl
+        else
+            echo "Updating MQTT files..."
+            mkdir -p /etc/mqtt/config/
+            mkdir -p /etc/mqtt/data/
+            cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+            cp -r ./mqtt/data/acl /etc/mqtt/data/
+            chmod 0700 /etc/mqtt/data/acl
+        fi
     fi
 }
+
+
 
 InstallODS(){
     echo "Installing ODS..."
@@ -148,6 +169,7 @@ Afg_File="SmartSaw_DC_HA.afg"
 Json_File="SmartSaw_alarms.json"
 Device_File="SmartSaw_DC_HA.xml"
 Serial_Number="SmartSaw"
+Use_MQTT_Bridge=false
 Use_Docker_Compose_v2=false
 force_install_files=false
 
@@ -156,7 +178,7 @@ force_install_files=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:h2f" option; do
+while getopts ":a:j:d:u:bh2f" option; do
     case ${option} in
         h) # display Help
             Help
@@ -169,6 +191,8 @@ while getopts ":a:j:d:u:h2f" option; do
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
+        b) # Run MQTT Bridge
+            Use_MQTT_Bridge=true;;
         2) # Run the Docker Compose V2
             Use_Docker_Compose_v2=true;;
         f) # Force install files
@@ -204,6 +228,7 @@ InstallAdapter
 InstallMTCAgent
 InstallODS
 InstallMongodb
+echo ""
 
 echo "Starting up the Docker image"
 if $Use_Docker_Compose_v2; then
