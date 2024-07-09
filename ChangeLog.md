@@ -8,7 +8,7 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
-## [1.3.7] - 2024/06/17 -emsumithn
+## [1.4.0] - 2024/06/18 -emsumithn
 ### Added
 
 - Jira ID: EP4US8
