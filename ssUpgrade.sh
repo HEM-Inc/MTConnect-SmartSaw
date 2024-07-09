@@ -146,7 +146,7 @@ Update_MQTT_Broker(){
             chmod 0700 /etc/mqtt/data/acl
         fi
     fi
-
+    echo ""
 
 }
 
