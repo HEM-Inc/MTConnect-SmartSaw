@@ -58,20 +58,22 @@ InstallMTCAgent(){
 
     chown -R 1000:1000 /etc/mtconnect/
 
-}
 
     if $Use_MQTT_Bridge; then
-            if test -d /etc/mqtt/config/; then
+        if test -d /etc/mqtt/config/; then
             echo "Updating MQTT bridge files"
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         else
             echo "Installing MQTT bridge files"
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
+            mkdir -p /etc/mqtt/certs/
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
