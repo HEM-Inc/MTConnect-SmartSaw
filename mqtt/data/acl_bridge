@@ -11,3 +11,4 @@ topic write mtconnect/#
 user hemsaw 
 topic deny mtconnect/# 
 topic readwrite control/#
+topic write monitor/#
