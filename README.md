@@ -52,29 +52,25 @@ Help syntax for the `ssUpgrade.sh`.
 
 ``` bash
 
-Syntax: ssUpgrade [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-O|-S|-m|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-2|-h]
 
 options:
 
--H                Update the HEMsaw adapter application
+-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, and Mongodb application
 
 -a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 
--j File_Name 	  Declare the json file name; Defaults to - SmartSaw_alarms.json
-
--A                Update the MTConnect Agent application
+-j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json
 
 -d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 
 -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
 
--O                Update the HEMsaw ODS application
+-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf
 
--S                Update the HEMsaw MongoDB application
+-m                Update the MongoDB database with default materials
 
--M                Update the MQTT broker application
-
--m                Update the mongodb database to have default materials
+-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS
 
 -h                Print this Help.
 
