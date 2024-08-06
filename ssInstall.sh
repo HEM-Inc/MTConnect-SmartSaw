@@ -167,7 +167,7 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
 fi
 
 ## Set default variables
-/bin/bash ./env.sh
+source ./env.sh
 # Afg_File="SmartSaw_DC_HA.afg"
 # Json_File="SmartSaw_alarms.json"
 # Device_File="SmartSaw_DC_HA.xml"

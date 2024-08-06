@@ -201,7 +201,7 @@ Update_Materials(){
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
 ## Set default variables
-/bin/bash ./env.sh
+source ./env.sh
 # Afg_File="SmartSaw_DC_HA.afg"
 # Json_File="SmartSaw_alarms.json"
 # Device_File="SmartSaw_DC_HA.xml"
