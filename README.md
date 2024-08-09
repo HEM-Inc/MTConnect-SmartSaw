@@ -28,6 +28,8 @@ sudo bash ssUpgrade.sh
 
 ```
 
+Edit the `env.sh` file for setting the default install file names on this unique install. These will persist across all updates and installs on that machine. Note use of the parameters will overwrite the file names in the `env.sh` file.
+
 Help syntax for the `ssInstall.sh`.
 
 ``` bash

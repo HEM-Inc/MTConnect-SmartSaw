@@ -8,6 +8,17 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.0.0] - 2024/08/09 -Max Harris
+### Changed
+
+- Removed the individual update tags infavor of a full update with an env file
+- Updated the readme
+
+### Added
+
+- Created a Source env.sh file for setting the default file names for the unique install.  
+
+
 ## [1.4.0] - 2024/06/18 -emsumithn
 ### Added
 
