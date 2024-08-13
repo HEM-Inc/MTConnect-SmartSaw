@@ -54,6 +54,7 @@ services:
     volumes:
       - "/etc/mqtt/config/mosquitto.conf:/mosquitto/config/mosquitto.conf"
       - "/etc/mqtt/data/acl:/mosquitto/data/acl"
+      - "/etc/mqtt/certs:/mosquitto/certs"
     logging:
       driver: "json-file"
       options:

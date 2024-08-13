@@ -8,18 +8,14 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-H|-a File_Name|-j File_Name|-A|-d File_Name|-u Serial_number|-M|-b|-O|-S|-m|-2|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-2|-h]"
     echo "options:"
-    echo "-H                Update the HEMsaw adapter application"
+    echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
-    echo "-A                Update the MTConnect Agent application"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-M                Update the MQTT broker application"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
-    echo "-O                Update the HEMsaw ODS application"
-    echo "-S                Update the HEMsaw MongoDB application"
     echo "-m                Update the MongoDB database with default materials"
     echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-h                Print this Help."
@@ -122,13 +118,16 @@ Update_MQTT_Broker(){
             echo "Updating MQTT bridge files"
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         else
             echo "Installing MQTT bridge files"
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
+            mkdir -p /etc/mqtt/certs/
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
@@ -201,11 +200,12 @@ Update_Materials(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
-# Set default variables
-Afg_File="SmartSaw_DC_HA.afg"
-Json_File="SmartSaw_alarms.json"
-Device_File="SmartSaw_DC_HA.xml"
-Serial_Number="SmartSaw"
+## Set default variables
+source ./env.sh
+# Afg_File="SmartSaw_DC_HA.afg"
+# Json_File="SmartSaw_alarms.json"
+# Device_File="SmartSaw_DC_HA.xml"
+# Serial_Number="SmartSaw"
 run_update_adapter=false
 run_update_agent=false
 run_update_mqtt_broker=false
@@ -238,33 +238,29 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:HAMhbOSm2" option; do
+while getopts ":a:j:d:u:Ahbm2" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
-        H) # Update the Adapter
-            run_update_adapter=true;;
-        a) # Enter an AFG file name
-            Afg_File=$OPTARG;;
-        j) # Enter JSON file name
-            Json_File=$OPTARG;;
-        A) # Update the Agent
-            run_update_agent=true;;
+        A) # Update All Containers
+            run_update_mqtt_broker=true
+            run_update_adapter=true
+            run_update_agent=true
+            run_update_ods=true
+            run_update_mongodb=true;;
         d) # Enter a Device file name
             Device_File=$OPTARG;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG;;
+        a) # Enter an AFG file name
+            Afg_File=$OPTARG;;
+        j) # Enter JSON file name
+            Json_File=$OPTARG;;
         m) # Update Mongodb
            run_update_materials=true;;
-        M) # Update mqtt broker
-            run_update_mqtt_broker=true;;
         b) # Enter MQTT Bridge file name
             run_update_mqtt_bridge=true;;
-        O) # Update ODS
-            run_update_ods=true;;
-        S) # Update Mongodb
-	        run_update_mongodb=true;;
         2) # Run the Docker Compose V2
             Use_Docker_Compose_v2=true;;
         \?) # Invalid option

@@ -58,20 +58,22 @@ InstallMTCAgent(){
 
     chown -R 1000:1000 /etc/mtconnect/
 
-}
 
     if $Use_MQTT_Bridge; then
-            if test -d /etc/mqtt/config/; then
+        if test -d /etc/mqtt/config/; then
             echo "Updating MQTT bridge files"
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         else
             echo "Installing MQTT bridge files"
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
+            mkdir -p /etc/mqtt/certs/
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
@@ -164,11 +166,12 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
     #sudo systemctl stop ods
 fi
 
-# Set default variables
-Afg_File="SmartSaw_DC_HA.afg"
-Json_File="SmartSaw_alarms.json"
-Device_File="SmartSaw_DC_HA.xml"
-Serial_Number="SmartSaw"
+## Set default variables
+source ./env.sh
+# Afg_File="SmartSaw_DC_HA.afg"
+# Json_File="SmartSaw_alarms.json"
+# Device_File="SmartSaw_DC_HA.xml"
+# Serial_Number="SmartSaw"
 Use_MQTT_Bridge=false
 Use_Docker_Compose_v2=false
 force_install_files=false
