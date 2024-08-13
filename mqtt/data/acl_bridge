@@ -1,7 +1,8 @@
 # Allow anonymous to read MTConnect and access to the sys
 # topic read $SYS/#
-topic deny #
 topic read mtconnect/#
+topic deny control/#
+topic deny monitor/#
  
 # Allow secure write to the broker from MTConnect using the mtconnect user 
 user mtconnect 
