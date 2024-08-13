@@ -305,6 +305,7 @@ else
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
+    echo ""
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
         echo "JSON file = "$Json_File
