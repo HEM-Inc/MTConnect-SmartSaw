@@ -167,11 +167,19 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
 fi
 
 ## Set default variables
-source ./env.sh
-# Afg_File="SmartSaw_DC_HA.afg"
-# Json_File="SmartSaw_alarms.json"
-# Device_File="SmartSaw_DC_HA.xml"
-# Serial_Number="SmartSaw"
+# Source the env.sh file
+if [ -f "./env.sh" ]; then
+    set -a
+    source ./env.sh
+    set +a
+else
+    echo "env.sh file not found. Using default values."
+    Afg_File="SmartSaw_DC_HA.afg"
+    Json_File="SmartSaw_alarms.json"
+    Device_File="SmartSaw_DC_HA.xml"
+    Serial_Number="SmartSaw"
+fi
+
 Use_MQTT_Bridge=false
 Use_Docker_Compose_v2=false
 force_install_files=false

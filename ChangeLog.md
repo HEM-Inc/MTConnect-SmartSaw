@@ -8,7 +8,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
-## [2.0.0] - 2024/08/09 -Max Harris
+## [2.1.0] - 2024/08/21 - Max Harris
+### Added
+
+- Added a env.sh file for defining the default env
+
+## [2.0.0] - 2024/08/09 - Max Harris
 ### Changed
 
 - Removed the individual update tags infavor of a full update with an env file
@@ -16,10 +21,10 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ### Added
 
-- Created a Source env.sh file for setting the default file names for the unique install.  
+- Created a Source env.sh file for setting the default file names for the unique install.
 
 
-## [1.4.0] - 2024/06/18 -emsumithn
+## [1.4.0] - 2024/06/18 - emsumithn
 ### Added
 
 - Jira ID: EP4US8

@@ -201,11 +201,19 @@ Update_Materials(){
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ; fi
 
 ## Set default variables
-source ./env.sh
-# Afg_File="SmartSaw_DC_HA.afg"
-# Json_File="SmartSaw_alarms.json"
-# Device_File="SmartSaw_DC_HA.xml"
-# Serial_Number="SmartSaw"
+# Source the env.sh file
+if [ -f "./env.sh" ]; then
+    set -a
+    source ./env.sh
+    set +a
+else
+    echo "env.sh file not found. Using default values."
+    Afg_File="SmartSaw_DC_HA.afg"
+    Json_File="SmartSaw_alarms.json"
+    Device_File="SmartSaw_DC_HA.xml"
+    Serial_Number="SmartSaw"
+fi
+
 run_update_adapter=false
 run_update_agent=false
 run_update_mqtt_broker=false
@@ -305,6 +313,7 @@ else
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
+    echo ""
     if $run_update_adapter; then
         echo "AFG file = "$Afg_File
         echo "JSON file = "$Json_File
