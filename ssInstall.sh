@@ -62,7 +62,11 @@ InstallMTCAgent(){
     if $Use_MQTT_Bridge; then
         if test -d /etc/mqtt/config/; then
             echo "Updating MQTT bridge files"
+
+            # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
@@ -71,7 +75,11 @@ InstallMTCAgent(){
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
             mkdir -p /etc/mqtt/certs/
+
+            # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
