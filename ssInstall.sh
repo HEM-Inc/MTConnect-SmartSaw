@@ -66,7 +66,7 @@ InstallMTCAgent(){
             # Generate a Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             brokerUUID=$(ip link show enp1s0 | awk '/link\/ether/{print $2}' | shasum | awk '{print $1}')
-            sed -i "26 i\#remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
+            sed -i "28 i\remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -80,7 +80,7 @@ InstallMTCAgent(){
             # Generate a Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             brokerUUID=$(ip link show enp1s0 | awk '/link\/ether/{print $2}' | shasum | awk '{print $1}')
-            sed -i "26 i\#remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
+            sed -i "28 i\remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
