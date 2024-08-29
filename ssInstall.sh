@@ -62,7 +62,12 @@ InstallMTCAgent(){
     if $Use_MQTT_Bridge; then
         if test -d /etc/mqtt/config/; then
             echo "Updating MQTT bridge files"
+
+            # Generate a Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            brokerUUID=$(ip link show enp1s0 | awk '/link\/ether/{print $2}' | shasum | awk '{print $1}')
+            sed -i "26 i\#remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
+
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
@@ -71,7 +76,12 @@ InstallMTCAgent(){
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
             mkdir -p /etc/mqtt/certs/
+
+            # Generate a Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            brokerUUID=$(ip link show enp1s0 | awk '/link\/ether/{print $2}' | shasum | awk '{print $1}')
+            sed -i "26 i\#remote_clientid hemsaw_$brokerUUID" /etc/mqtt/config/mosquitto.conf
+
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
