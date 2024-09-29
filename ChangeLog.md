@@ -8,6 +8,11 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.1.2] - 2024/09/29 - Max Harris
+### Added
+
+- added the ability to remember the last overwrite command (-a,-u,-d,-j) to the ssInstall and ssUpgrade bash files
+
 ## [2.1.1] - 2024/08/29 - Max Harris
 ### Changed
 
