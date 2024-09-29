@@ -325,14 +325,11 @@ else
     echo "Update Materials set to run = "$run_update_materials
     echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
     echo ""
-    if $run_update_adapter; then
-        echo "AFG file = "$Afg_File
-        echo "JSON file = "$Json_File
-    fi
-    if $run_update_agent; then
-        echo "MTConnect Agent file = "$Device_File
-        echo "MTConnect UUID = HEMSaw_"$Serial_Number
-    fi
+    echo "Printing the settings..."
+    echo "AFG file = "$Afg_File
+    echo "JSON file = "$Json_File
+    echo "MTConnect Agent file = "$Device_File
+    echo "MTConnect UUID = HEMSaw_"$Serial_Number
 
     echo ""
     if service_exists docker; then
