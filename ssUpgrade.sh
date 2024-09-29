@@ -264,14 +264,18 @@ while getopts ":a:j:d:u:Ahbm2" option; do
             run_update_agent=true
             run_update_ods=true
             run_update_mongodb=true;;
-        d) # Enter a Device file name
-            Device_File=$OPTARG;;
-        u) # Enter a serial number for the UUID
-            Serial_Number=$OPTARG;;
         a) # Enter an AFG file name
-            Afg_File=$OPTARG;;
+            Afg_File=$OPTARG
+            sed -i "4 s/.*/export Afg_File=\"$Afg_File\"/" env.sh;;
         j) # Enter JSON file name
-            Json_File=$OPTARG;;
+            Json_File=$OPTARG;
+            sed -i "5 s/.*/export Json_File=\"$Json_File\"/" env.sh;;
+        d) # Enter a Device file name
+            Device_File=$OPTARG
+            sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
+        u) # Enter a serial number for the UUID
+            Serial_Number=$OPTARG
+            sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
         m) # Update Mongodb
            run_update_materials=true;;
         b) # Enter MQTT Bridge file name
@@ -321,14 +325,11 @@ else
     echo "Update Materials set to run = "$run_update_materials
     echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
     echo ""
-    if $run_update_adapter; then
-        echo "AFG file = "$Afg_File
-        echo "JSON file = "$Json_File
-    fi
-    if $run_update_agent; then
-        echo "MTConnect Agent file = "$Device_File
-        echo "MTConnect UUID = HEMSaw_"$Serial_Number
-    fi
+    echo "Printing the settings..."
+    echo "AFG file = "$Afg_File
+    echo "JSON file = "$Json_File
+    echo "MTConnect Agent file = "$Device_File
+    echo "MTConnect UUID = HEMSaw_"$Serial_Number
 
     echo ""
     if service_exists docker; then

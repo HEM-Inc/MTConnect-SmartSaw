@@ -203,13 +203,17 @@ while getopts ":a:j:d:u:bh2f" option; do
             Help
             exit;;
         a) # Enter an AFG file name
-            Afg_File=$OPTARG;;
+            Afg_File=$OPTARG
+            sed -i "4 s/.*/export Afg_File=\"$Afg_File\"/" env.sh;;
         j) # Enter JSON file name
-            Json_File=$OPTARG;;
+            Json_File=$OPTARG;
+            sed -i "5 s/.*/export Json_File=\"$Json_File\"/" env.sh;;
         d) # Enter a Device file name
-            Device_File=$OPTARG;;
+            Device_File=$OPTARG
+            sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
         u) # Enter a serial number for the UUID
-            Serial_Number=$OPTARG;;
+            Serial_Number=$OPTARG
+            sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
         b) # Run MQTT Bridge
             Use_MQTT_Bridge=true;;
         2) # Run the Docker Compose V2
