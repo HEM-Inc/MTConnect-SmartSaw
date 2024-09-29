@@ -24,7 +24,7 @@
                 <DataItem id="saw_prog_version" type="OPERATING_SYSTEM" subType="VERSION" category="EVENT"/>
                 <DataItem id="saw_prog_design_company" type="OPERATING_SYSTEM" subType="MANUFACTURER" category="EVENT"/>
                 <DataItem id="saw_plc_type" type="HARDWARE" subType="VERSION" category="EVENT"/>
-		<DataItem id="saw_plc_manufacturer" type="HARDWARE" subType="MANUFACTURER" category="EVENT"/>
+                <DataItem id="saw_plc_manufacturer" type="HARDWARE" subType="MANUFACTURER" category="EVENT"/>
             </DataItems>
             <Configuration>
                 <CoordinateSystems>
@@ -381,6 +381,14 @@
 
                         <!-- N/A
                         <Rotary id="a0_machine_head" name="A0">
+                            <Configuration>
+                                <Specifications>
+                                    <Specification id="a0_axis_spec" type="ANGLE" units="DEGREE">
+                                        <Maximum>150</Maximum>
+                                        <Minimum>30</Minimum>
+                                    </Specification>
+                                </Specifications>
+                            </Configuration>
                             <DataItems>
                                 <DataItem id="a0_target" type="ANGLE" subType="TARGET"
                                     category="SAMPLE" units="DEGREE" coordinateSystemIdRef="machine_coordinates"/>
@@ -396,9 +404,16 @@
                         -->
 
                         <Rotary id="c0_machine" name="C0">
+                            <Configuration>
+                                <Specifications>
+                                    <Specification id="C0_axis_spec" compositionIdRef="c0_motor" type="CUTTING_SPEED" units="MILLIMETER/SECOND">
+                                        <Maximum>2032</Maximum>
+                                        <Minimum>304</Minimum>
+                                    </Specification>
+                                </Specifications>
+                            </Configuration>
                             <DataItems>
                                 <DataItem id="c0_speed" compositionId="c0_motor" type="CUTTING_SPEED" subType="ACTUAL" category="SAMPLE" units="MILLIMETER/SECOND" coordinateSystemIdRef="machine_coordinates"/>
-
                                 <DataItem id="c0_amp" compositionId="c0_motor" type="AMPERAGE_AC" subType="ACTUAL" units="AMPERE" category="SAMPLE"/>
 
                                 <!-- N/A
@@ -468,8 +483,8 @@
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
                         <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
-			<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
-			<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
+                        <DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+                        <DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
                         <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
                         <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 

@@ -8,6 +8,11 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.1.1] - 2024/08/29 - Max Harris
+### Changed
+
+- modified the bridge to set the uuid as  the serial number declared in the env.sh or from the command line.
+
 ## [2.1.0] - 2024/08/21 - Max Harris
 ### Added
 
