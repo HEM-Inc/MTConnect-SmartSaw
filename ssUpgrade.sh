@@ -329,7 +329,7 @@ else
     echo "AFG file = "$Afg_File
     echo "JSON file = "$Json_File
     echo "MTConnect Agent file = "$Device_File
-    echo "MTConnect UUID = HEMSaw_"$Serial_Number
+    echo "MTConnect UUID = HEMSaw-"$Serial_Number
 
     echo ""
     if service_exists docker; then
