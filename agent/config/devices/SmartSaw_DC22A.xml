@@ -8,7 +8,7 @@
     <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.4.0.0"
         instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
-        <!-- <Device id="saw" uuid="HEMSaw_DC22A_SmartSaw" name="Saw"> -->
+        <Device id="saw" uuid="HEMSaw_DC22A_SmartSaw" name="Saw">
         <Description manufacturer="HEMSaw">SmartSaw</Description>
             <DataItems>
                 <DataItem id="saw_avail" name="avail" type="AVAILABILITY" category="EVENT"/>

@@ -92,7 +92,7 @@ Update_Agent(){
         rm -rf /etc/mtconnect/config/*.xml
         sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
         cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
-        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
+        sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         echo ""
     else
@@ -104,7 +104,7 @@ Update_Agent(){
         cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
         sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
         cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
-        sed -i "11 i\        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">" /etc/mtconnect/config/$Device_File
+        sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         echo ""
     fi
@@ -329,7 +329,7 @@ else
     echo "AFG file = "$Afg_File
     echo "JSON file = "$Json_File
     echo "MTConnect Agent file = "$Device_File
-    echo "MTConnect UUID = HEMSaw_"$Serial_Number
+    echo "MTConnect UUID = HEMSaw-"$Serial_Number
 
     echo ""
     if service_exists docker; then

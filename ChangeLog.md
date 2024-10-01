@@ -8,6 +8,11 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.1.3] - 2024/09/30 - Max Harris
+### Changed
+
+- replace the device file device uuid line 11 insted of adding additional line which needed commenting out of the origional line.
+
 ## [2.1.2] - 2024/09/29 - Max Harris
 ### Added
 
