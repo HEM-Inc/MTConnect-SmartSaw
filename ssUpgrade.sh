@@ -283,8 +283,9 @@ while getopts ":a:j:d:u:Ahbm2" option; do
         2) # Run the Docker Compose V2
             Use_Docker_Compose_v2=true;;
         \?) # Invalid option
+            echo "ERROR[1] - Invalid option chosen"
             Help
-            exit;;
+            exit 1;;
     esac
 done
 
@@ -332,6 +333,21 @@ else
     echo "MTConnect UUID = HEMSaw-"$Serial_Number
 
     echo ""
+
+    # check if files are correct
+    if ! test -f ./agent/config/devices/$Device_File; then
+        echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
+        exit 1
+    fi
+    if ! test -f ./adapter/config/$Afg_File; then
+        echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
+        exit 1
+    fi
+    if ! test -f ./adapter/data/$Json_File; then
+        echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
+        exit 1
+    fi
+
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
         if $Use_Docker_Compose_v2; then

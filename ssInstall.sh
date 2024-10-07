@@ -221,8 +221,9 @@ while getopts ":a:j:d:u:bh2f" option; do
         f) # Force install files
             force_install_files=true;;
         \?) # Invalid option
+            echo "ERROR[1] - Invalid option chosen"
             Help
-            exit;;
+            exit 1;;
     esac
 done
 
@@ -235,6 +236,20 @@ echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw-"$Serial_Number
 echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
 echo ""
+
+# check if files are correct
+if ! test -f ./agent/config/devices/$Device_File; then
+    echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
+    exit 1
+fi
+if ! test -f ./adapter/config/$Afg_File; then
+    echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
+    exit 1
+fi
+if ! test -f ./adapter/data/$Json_File; then
+    echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
+    exit 1
+fi
 
 if service_exists docker; then
     echo "Shutting down any old Docker containers"

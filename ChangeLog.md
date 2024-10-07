@@ -8,20 +8,25 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.1.4] - 2024/10/07 - Max Harris
+### Added
+
+- Check to see if the file names are there before running or exit with an error code.
+
 ## [2.1.3] - 2024/09/30 - Max Harris
 ### Changed
 
-- replace the device file device uuid line 11 insted of adding additional line which needed commenting out of the origional line.
+- Replace the device file device uuid line 11 insted of adding additional line which needed commenting out of the origional line.
 
 ## [2.1.2] - 2024/09/29 - Max Harris
 ### Added
 
-- added the ability to remember the last overwrite command (-a,-u,-d,-j) to the ssInstall and ssUpgrade bash files
+- Added the ability to remember the last overwrite command (-a,-u,-d,-j) to the ssInstall and ssUpgrade bash files
 
 ## [2.1.1] - 2024/08/29 - Max Harris
 ### Changed
 
-- modified the bridge to set the uuid as  the serial number declared in the env.sh or from the command line.
+- Modified the bridge to set the uuid as  the serial number declared in the env.sh or from the command line.
 
 ## [2.1.0] - 2024/08/21 - Max Harris
 ### Added
