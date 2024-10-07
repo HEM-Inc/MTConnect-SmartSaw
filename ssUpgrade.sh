@@ -337,14 +337,20 @@ else
     # check if files are correct
     if ! test -f ./agent/config/devices/$Device_File; then
         echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
+        echo "Available MTConnect Device files..."
+        ls agent/config/devices
         exit 1
     fi
     if ! test -f ./adapter/config/$Afg_File; then
         echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
+        echo "Available Adapter config files..."
+        ls adapter/config
         exit 1
     fi
     if ! test -f ./adapter/data/$Json_File; then
         echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
+        echo "Available Adapter alarm json files..."
+        ls adapter/data
         exit 1
     fi
 
