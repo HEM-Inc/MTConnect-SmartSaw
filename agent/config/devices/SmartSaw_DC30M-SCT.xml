@@ -384,8 +384,16 @@
                         </Linear>
                         -->
 
-                        <!-- N/A
                         <Rotary id="a0_machine_head" name="A0">
+                            <Configuration>
+                                <Specifications>
+                                    <Specification id="a0_axis_spec" type="ANGLE" units="DEGREE">
+                                        <Maximum>90</Maximum>
+                                        <Minimum>90</Minimum>
+                                    </Specification>
+                                </Specifications>
+                            </Configuration>
+                            <!-- N/A
                             <DataItems>
                                 <DataItem id="a0_target" type="ANGLE" subType="TARGET"
                                     category="SAMPLE" units="DEGREE" coordinateSystemIdRef="machine_coordinates"/>
@@ -397,8 +405,8 @@
                                 <DataItem id="a0_state" type="AXIS_STATE" category="EVENT"/>
                                 <DataItem id="a0_axis_interlock" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
+                            -->
                         </Rotary>
-                        -->
 
                         <Rotary id="c0_machine" name="C0">
                             <DataItems>
