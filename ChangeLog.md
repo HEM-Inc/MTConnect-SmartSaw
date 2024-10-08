@@ -8,32 +8,44 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.1.5] - 2024/10/08 - Max Harris
+
+### Changed
+
+- Modified the agent devices to have an a0 axis specification and extended the a0 axis dimension to the workenvelope.
+
 ## [2.1.4] - 2024/10/07 - Max Harris
+
 ### Added
 
 - Check to see if the file names are there before running or exit with an error code.
 
 ## [2.1.3] - 2024/09/30 - Max Harris
+
 ### Changed
 
 - Replace the device file device uuid line 11 insted of adding additional line which needed commenting out of the origional line.
 
 ## [2.1.2] - 2024/09/29 - Max Harris
+
 ### Added
 
 - Added the ability to remember the last overwrite command (-a,-u,-d,-j) to the ssInstall and ssUpgrade bash files
 
 ## [2.1.1] - 2024/08/29 - Max Harris
+
 ### Changed
 
-- Modified the bridge to set the uuid as  the serial number declared in the env.sh or from the command line.
+- Modified the bridge to set the uuid as the serial number declared in the env.sh or from the command line.
 
 ## [2.1.0] - 2024/08/21 - Max Harris
+
 ### Added
 
 - Added a env.sh file for defining the default env
 
 ## [2.0.0] - 2024/08/09 - Max Harris
+
 ### Changed
 
 - Removed the individual update tags infavor of a full update with an env file
@@ -43,30 +55,32 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 - Created a Source env.sh file for setting the default file names for the unique install.
 
-
 ## [1.4.0] - 2024/06/18 - emsumithn
+
 ### Added
 
 - Jira ID: EP4US8
   - added message event data items configurations to afg files
   - added message event data items definition to device files
-	- saw_service_status, saw_switch_status
+  - saw_service_status, saw_switch_status
 
 ### Changed
 
 - Updated alarm Json data file of adapter
 
 ## [1.3.6] - 2024/06/12 - Max Harris
+
 ### Added
 
 - add Clean log to the ssClean.sh bash script as -L
 
 ## [1.3.5] - 2024/05/15 - emsumithn
+
 ### Changed
 
 - Updated configurations for condition functions in afg files
-	- x0_axis_condition, z0_axis_condition, c0_axis_condition
-	- communication_condition, hyd_low_level_cond, end_of_bar_cond
+  - x0_axis_condition, z0_axis_condition, c0_axis_condition
+  - communication_condition, hyd_low_level_cond, end_of_bar_cond
 
 ## [1.3.4] - 2024/05/14 - emsumithn
 
