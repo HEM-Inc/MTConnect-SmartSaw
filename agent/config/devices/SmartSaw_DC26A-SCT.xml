@@ -576,6 +576,10 @@
                                         <Maximum>3048</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
+                                    <Specification if="saw_envelope_a_spec" type"x:A_DIMENSION" units="DEGREE" compositionIdRef="saw_workpeice_comp">
+                                        <Maximum>90</Maximum>
+                                        <Minimum>90</Minimum>
+                                    </Specification>
                                     <Specification id="saw_envelope_load_spec" type="MASS" units="KILOGRAM" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>4536</Maximum>
                                         <Minimum>0</Minimum>
