@@ -243,6 +243,7 @@ run_update_mqtt_bridge=false
 run_update_ods=false
 run_update_mongodb=false
 run_update_materials=false
+run_init_jp=false
 run_install=false
 Use_Docker_Compose_v2=false
 
@@ -292,9 +293,9 @@ while getopts ":a:j:d:u:Ahbmi2" option; do
             Serial_Number=$OPTARG
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
         m) # Update Mongodb materials
-           run_update_materials=true;;
+            run_update_materials=true;;
         i) # Init Mongodb jobs and parts
-           run_init_jp=true;;
+            run_init_jp=true;;
         b) # Enter MQTT Bridge file name
             run_update_mqtt_bridge=true;;
         2) # Run the Docker Compose V2

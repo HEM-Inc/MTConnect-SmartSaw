@@ -8,6 +8,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.2.1] - 2024/10/09 - Max Harris
+
+### Fixed
+
+- Fixed the issue where it did not default the run_init_jp to false so init ran all the time. 
+
 ## [2.2.0] - 2024/10/09 - Max Harris
 
 ### Added
