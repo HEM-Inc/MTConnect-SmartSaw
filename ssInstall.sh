@@ -283,6 +283,7 @@ else
     docker-compose logs
 fi
 
+echo ""
 python3 /etc/mongodb/data/jobs_parts_init.py
 python3 /etc/mongodb/data/upload_materials.py
 

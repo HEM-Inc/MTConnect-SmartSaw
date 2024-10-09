@@ -189,6 +189,7 @@ Update_Mongodb(){
 }
 
 Init_Jobs_Parts(){
+    echo ""
     if python3 -c "import pymongo" &> /dev/null; then
         echo "Reseting the Parts and Jobs..."
         sudo python3 /etc/mongodb/data/jobs_parts_init.py
@@ -201,6 +202,7 @@ Init_Jobs_Parts(){
 }
 
 Update_Materials(){
+    echo ""
     if python3 -c "import pymongo" &> /dev/null; then
         echo "Updating or reseting the materials to default..."
         sudo python3 /etc/mongodb/data/upload_materials.py
