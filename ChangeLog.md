@@ -8,6 +8,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.2.0] - 2024/10/09 - Max Harris
+
+### Added
+
+- A way to init the jobs and parts DB on the upgrade, the install will auto clear the databases.
+
 ## [2.1.5] - 2024/10/08 - Max Harris
 
 ### Changed

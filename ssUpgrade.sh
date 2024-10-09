@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-2|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-i|-m|-2|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -16,6 +16,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
+    echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
     echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
     echo "-h                Print this Help."
@@ -187,6 +188,18 @@ Update_Mongodb(){
     chown -R 1000:1000 /etc/mongodb/
 }
 
+Init_Jobs_Parts(){
+    if python3 -c "import pymongo" &> /dev/null; then
+        echo "Updating or reseting the materials..."
+        sudo python3 /etc/mongodb/data/jobs_parts_init.py
+    else
+        echo "Setting the default materials..."
+        sudo pip3 install pyaml --break-system-packages
+        sudo pip3 install pymongo --break-system-packages
+        sudo python3 /etc/mongodb/data/jobs_parts_init.py
+    fi
+}
+
 Update_Materials(){
     if python3 -c "import pymongo" &> /dev/null; then
         echo "Updating or reseting the materials..."
@@ -253,7 +266,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:Ahbm2" option; do
+while getopts ":a:j:d:u:Ahbmi2" option; do
     case ${option} in
         h) # display Help
             Help
@@ -276,8 +289,10 @@ while getopts ":a:j:d:u:Ahbm2" option; do
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
-        m) # Update Mongodb
+        m) # Update Mongodb materials
            run_update_materials=true;;
+        i) # Init Mongodb jobs and parts
+           run_init_jp=true;;
         b) # Enter MQTT Bridge file name
             run_update_mqtt_bridge=true;;
         2) # Run the Docker Compose V2
@@ -324,6 +339,7 @@ else
     echo "Update ODS set to run = "$run_update_ods
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
+    echo "Init Jobs and Parts set to run = "$run_init_jp
     echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
     echo ""
     echo "Printing the settings..."
@@ -380,6 +396,9 @@ else
         Update_Mongodb
     fi
     RunDocker
+    if $run_init_jp; then
+        Init_Jobs_Parts
+    fi
     if $run_update_materials; then
         Update_Materials
     fi
