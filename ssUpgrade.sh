@@ -190,10 +190,10 @@ Update_Mongodb(){
 
 Init_Jobs_Parts(){
     if python3 -c "import pymongo" &> /dev/null; then
-        echo "Updating or reseting the materials..."
+        echo "Reseting the Parts and Jobs..."
         sudo python3 /etc/mongodb/data/jobs_parts_init.py
     else
-        echo "Setting the default materials..."
+        echo "Reseting the Parts and Jobs..."
         sudo pip3 install pyaml --break-system-packages
         sudo pip3 install pymongo --break-system-packages
         sudo python3 /etc/mongodb/data/jobs_parts_init.py
@@ -202,10 +202,10 @@ Init_Jobs_Parts(){
 
 Update_Materials(){
     if python3 -c "import pymongo" &> /dev/null; then
-        echo "Updating or reseting the materials..."
+        echo "Updating or reseting the materials to default..."
         sudo python3 /etc/mongodb/data/upload_materials.py
     else
-        echo "Setting the default materials..."
+        echo "Updating or reseting the materials to default..."
         sudo pip3 install pyaml --break-system-packages
         sudo pip3 install pymongo --break-system-packages
         sudo python3 /etc/mongodb/data/upload_materials.py
