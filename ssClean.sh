@@ -8,10 +8,11 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-S|-d|-D|-2|-L|-h]"
+    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-S|-d|-D|-2|-L|-h]"
     echo "options:"
+    echo "-A                    Uninstall ALL"
     echo "-H                    Uninstall the HEMsaw adapter application"
-    echo "-A                    Uninstall the MTConnect Agent application"
+    echo "-a                    Uninstall the MTConnect Agent application"
     echo "-M                    Uninstall the MQTT Broker application"
     echo "-O                    Uninstall the HEMsaw ods application"
     echo "-S                    Uninstall the HEMSaw MongoDB application"
@@ -168,14 +169,21 @@ clean_logs=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":L:HAMDhOSd2" option; do
+while getopts ":L:HaAMDhOSd2" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
+        A) # uninstall all
+            run_uninstall_adapter=true
+            run_uninstall_agent=true
+            run_uninstall_mqtt=true
+            run_uninstall_ods=true
+            run_uninstall_mongodb=true
+            run_uninstall_docker=true;;
         H) # uninstall the Adapter
             run_uninstall_adapter=true;;
-        A) # uninstall the Agent
+        a) # uninstall the Agent
             run_uninstall_agent=true;;
         M) # uninstall Mosquitto
             run_uninstall_mqtt=true;;
