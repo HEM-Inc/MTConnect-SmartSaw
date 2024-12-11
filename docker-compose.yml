@@ -89,7 +89,7 @@ services:
   devctl:
     container_name: devctl
     hostname: devctl
-    image: hemsaw/devctl:experimental
+    image: hemsaw/devctl:latest
     user: devctl
     working_dir: "/devctl"
     labels:

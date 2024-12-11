@@ -193,7 +193,7 @@ while getopts ":L:HaAMDhOCSd2" option; do
             run_uninstall_agent=true
             run_uninstall_mqtt=true
             run_uninstall_ods=true
-	    run_uninstall_devctl=true
+            run_uninstall_devctl=true
             run_uninstall_mongodb=true
             run_uninstall_docker=true;;
         H) # uninstall the Adapter
@@ -204,10 +204,10 @@ while getopts ":L:HaAMDhOCSd2" option; do
             run_uninstall_mqtt=true;;
         O) # uninstall the ODS
             run_uninstall_ods=true;;
-	C) # uninstall the Devctl
-	    run_uninstall_devctl=true;;
+        C) # uninstall the Devctl
+	        run_uninstall_devctl=true;;
         S) # uninstall the mongodb
-	    run_uninstall_mongodb=true;;
+            run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         d) # uninstall daemon

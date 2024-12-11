@@ -172,11 +172,15 @@ Update_ODS(){
 
 Update_Devctl(){
     if test -d /etc/devctl/config/; then
-	echo "Updating devctl files..."
-	cp -r ./devctl/config/. /etc/devctl/config
+        echo "Updating devctl files..."
+        cp -r ./devctl/config/. /etc/devctl/config
+        # sed -i "19 i\        \"device_uid\" : \"hemsaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     else
-	echo "Installing ods files..."
-	cp -r ./devctl/config/. /etc/devctl/config
+        echo "Installing Devctl..."
+        mkdir -p /etc/devctl/
+        mkdir -p /etc/devctl/config/
+        cp -r ./devctl/config/* /etc/devctl/config/
+        # sed -i "19 i\        \"device_uid\" : \"hemsaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     fi
     echo ""
     chown -R 1300:1300 /etc/devctl/
@@ -292,7 +296,7 @@ while getopts ":a:j:d:u:Ahbmi2" option; do
             run_update_adapter=true
             run_update_agent=true
             run_update_ods=true
-	    run_update_devctl=true
+            run_update_devctl=true
             run_update_mongodb=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
@@ -411,7 +415,7 @@ else
         Update_ODS
     fi
     if $run_update_devctl; then
-	Update_Devctl
+        Update_Devctl
     fi
     if $run_update_mongodb; then
         Update_Mongodb

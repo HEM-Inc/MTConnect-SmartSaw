@@ -1,77 +1,76 @@
 {
-	"name": "Devctl",
-	"org": "HEMSaw",
-	"site": "OK1",
-	"user": "devctl",
-        "db" : {
-            "type" : "MongoDB",
-            "protocol" : "mongodb",
-            "host" : "mongodb",
-            "port" : 27017,
-            "user": "",
-            "password": ""
-    },
-	"interfaces" : [
-		 {
-			"enable" : "Yes",
-			"device" : 
-				{
-					"device_uid" : "HEMSaw-123456",
-					"name" : "Saw"
-				},
-			"type" : "mqtt",
-			"mqtt" : {
-				 "enable" : "Yes",
-				 "protocol" : "https",
-				 "host" : "mosquitto",
-				 "port" : 1883,
-				 "user" : "hemsaw",
-				 "password" : "hemsaw",
-				 "tsecurity" : {
-					 "enable" : "No",
-					 "type" : "tls",
-					 "ca_file" : "",
-					 "cert_file" : "",
-					 "key_file" : ""
-					 },
-				 "data_type" : "json",
-				 "subscribe-topics" : [
-					{
-						"enable": "Yes",
-						"type" : "devicectl",
-						"name" : "devicecommand",
-						"base" : "control",
-						"subtending" : "Yes",
-						"interprete" : "devctljson"
-					},
-					{
-						"enable": "Yes",
-						"type" : "devicectl",
-						"name" : "status",
-						"base" : "control",
-						"subtending" : "Yes",
-						"interprete" : "devctljson"
-					}
-				],
-				"publish-topics" : [
-					{
-						"enable": "Yes",
-						"type" : "devicectl",
-						"name" : "devctlrequest",
-						"base" : "monitor",
-						"subtending" : "Yes",
-						"interprete" : "devctljson"
-					},
-					{
-						"enable": "Yes",
-						"type" : "devicectl",
-						"name" : "devctlstatus",
-						"base" : "monitor",
-						"subtending" : "Yes",
-						"interprete" : "devctljson"
-					}
-				]
-			}
-		}
-	]
+  "name": "Devctl",
+  "org": "HEMSaw",
+  "site": "OK1",
+  "user": "devctl",
+  "db": {
+    "type": "MongoDB",
+    "protocol": "mongodb",
+    "host": "mongodb",
+    "port": 27017,
+    "user": "",
+    "password": ""
+  },
+  "interfaces": [
+    {
+      "enable": "Yes",
+      "device": {
+        "device_uid": "HEMSaw-123456",
+        "name": "Saw"
+      },
+      "type": "mqtt",
+      "mqtt": {
+        "enable": "Yes",
+        "protocol": "https",
+        "host": "mosquitto",
+        "port": 1883,
+        "user": "hemsaw",
+        "password": "hemsaw",
+        "tsecurity": {
+          "enable": "No",
+          "type": "tls",
+          "ca_file": "",
+          "cert_file": "",
+          "key_file": ""
+        },
+        "data_type": "json",
+        "subscribe-topics": [
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devicecommand",
+            "base": "control",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "status",
+            "base": "control",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          }
+        ],
+        "publish-topics": [
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devctlrequest",
+            "base": "monitor",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devctlstatus",
+            "base": "monitor",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          }
+        ]
+      }
+    }
+  ]
 }

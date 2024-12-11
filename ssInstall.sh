@@ -116,6 +116,7 @@ InstallDevctl(){
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
     cp -r ./devctl/config/* /etc/devctl/config/
+    # sed -i "19 i\        \"device_uid\" : \"hemsaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
@@ -176,10 +177,6 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
     systemctl stop adapter
     systemctl stop ods
     systemctl stop mongod
-    #exit 1
-    #Optionally we can stop the Adapter and/or ODS systemd services
-    #sudo systemctl stop adapter
-    #sudo systemctl stop ods
 fi
 
 ## Set default variables
