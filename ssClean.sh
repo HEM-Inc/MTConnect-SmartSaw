@@ -8,13 +8,14 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-S|-d|-D|-2|-L|-h]"
+    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-C|-S|-d|-D|-2|-L|-h]"
     echo "options:"
     echo "-A                    Uninstall ALL"
     echo "-H                    Uninstall the HEMsaw adapter application"
     echo "-a                    Uninstall the MTConnect Agent application"
     echo "-M                    Uninstall the MQTT Broker application"
     echo "-O                    Uninstall the HEMsaw ods application"
+    echo "-C                    Uninstall the HEMsaw devctl application"
     echo "-S                    Uninstall the HEMSaw MongoDB application"
     echo "-d                    Disable mongod, ods, and agent daemons"
     echo "-D                    Uninstall Docker"
@@ -67,6 +68,18 @@ Uninstall_ODS(){
     fi
 
     rm -rf /etc/ods
+    echo "<<Done>>"
+    echo ""
+}
+
+Uninstall_Devctl(){
+    echo "Uninstalling Devctl files and user..."
+
+    if id -u devctl > /dev/null 2>&1; then
+        userdel -f -r devctl
+    fi
+
+    rm -rf /etc/devctl
     echo "<<Done>>"
     echo ""
 }
@@ -159,6 +172,7 @@ run_uninstall_adapter=false
 run_uninstall_agent=false
 run_uninstall_mqtt=false
 run_uninstall_ods=false
+run_uninstall_devctl=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
@@ -179,6 +193,7 @@ while getopts ":L:HaAMDhOSd2" option; do
             run_uninstall_agent=true
             run_uninstall_mqtt=true
             run_uninstall_ods=true
+	    run_uninstall_devctl=true
             run_uninstall_mongodb=true
             run_uninstall_docker=true;;
         H) # uninstall the Adapter
@@ -189,8 +204,10 @@ while getopts ":L:HaAMDhOSd2" option; do
             run_uninstall_mqtt=true;;
         O) # uninstall the ODS
             run_uninstall_ods=true;;
+	C) # uninstall the Devctl
+	    run_uninstall_devctl=true;;
         S) # uninstall the mongodb
-	        run_uninstall_mongodb=true;;
+	    run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         d) # uninstall daemon

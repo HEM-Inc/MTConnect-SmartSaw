@@ -5,7 +5,7 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
+    echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "The function uses the Docker Compose V1 script. To use the V2 script use -2"
     echo
     echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-2|-f]"
@@ -109,6 +109,14 @@ InstallODS(){
     mkdir -p /etc/ods/config/
     cp -r ./ods/config/* /etc/ods/config/
     chown -R 1200:1200 /etc/ods/
+}
+
+InstallDevctl(){
+    echo "Installing Devctl..."
+    mkdir -p /etc/devctl/
+    mkdir -p /etc/devctl/config/
+    cp -r ./devctl/config/* /etc/devctl/config/
+    chown -R 1300:1300 /etc/devctl/
 }
 
 InstallMongodb(){
@@ -271,6 +279,7 @@ InstallDepency
 InstallAdapter
 InstallMTCAgent
 InstallODS
+InstallDevctl
 InstallMongodb
 echo ""
 

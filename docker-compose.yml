@@ -86,6 +86,26 @@ services:
     depends_on:
       - mongodb
 
+  devctl:
+    container_name: devctl
+    hostname: devctl
+    image: hemsaw/devctl:experimental
+    user: devctl
+    working_dir: "/devctl"
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    volumes:
+      - "/etc/devctl/config:/devctl/config"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - mosquitto
+
   mongodb:
     container_name: mongodb
     hostname: mongodb

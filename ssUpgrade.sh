@@ -5,12 +5,12 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
+    echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
     echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-i|-m|-2|-h]"
     echo "options:"
-    echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, and Mongodb application"
+    echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
@@ -56,9 +56,9 @@ RunDocker(){
         apt clean
     fi
     if $Use_Docker_Compose_v2; then
-        docker compose logs mtc_adapter mtc_agent mosquitto ods
+        docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
     else
-        docker-compose logs mtc_adapter mtc_agent mosquitto ods
+        docker-compose logs mtc_adapter mtc_agent mosquitto ods devctl
     fi
 }
 
@@ -170,6 +170,18 @@ Update_ODS(){
     chown -R 1200:1200 /etc/ods/
 }
 
+Update_Devctl(){
+    if test -d /etc/devctl/config/; then
+	echo "Updating devctl files..."
+	cp -r ./devctl/config/. /etc/devctl/config
+    else
+	echo "Installing ods files..."
+	cp -r ./devctl/config/. /etc/devctl/config
+    fi
+    echo ""
+    chown -R 1300:1300 /etc/devctl/
+}
+
 Update_Mongodb(){
       if test -d /etc/mongodb/config/; then
         echo "Updating mongodb files..."
@@ -241,6 +253,7 @@ run_update_agent=false
 run_update_mqtt_broker=false
 run_update_mqtt_bridge=false
 run_update_ods=false
+run_update_devctl=false
 run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
@@ -279,6 +292,7 @@ while getopts ":a:j:d:u:Ahbmi2" option; do
             run_update_adapter=true
             run_update_agent=true
             run_update_ods=true
+	    run_update_devctl=true
             run_update_mongodb=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
@@ -340,6 +354,7 @@ else
     echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
     echo "Update MQTT Bridge set to run = "$run_update_mqtt_bridge
     echo "Update ODS set to run = "$run_update_ods
+    echo "Update Devctl set to run = "$run_update_devctl
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Init Jobs and Parts set to run = "$run_init_jp
@@ -394,6 +409,9 @@ else
     fi
     if $run_update_ods; then
         Update_ODS
+    fi
+    if $run_update_devctl; then
+	Update_Devctl
     fi
     if $run_update_mongodb; then
         Update_Mongodb

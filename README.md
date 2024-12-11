@@ -84,7 +84,7 @@ Help syntax for the `ssClean.sh`.
 
 ``` bash
 
-Syntax: ssClean.sh [-H|-A|-M|-O|-S|-D|-d|-h]
+Syntax: ssClean.sh [-H|-A|-M|-O|-C|-S|-D|-d|-h]
 
 options:
 
@@ -95,6 +95,8 @@ options:
 -M                Uninstall the MQTT broker application
 
 -O                Uninstall the HEMsaw ODS application
+
+-C                Uninstall the HEMsaw Devctl application
 
 -S                Uninstall the HEMsaw MongoDB application
 
