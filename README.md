@@ -6,23 +6,25 @@ This is a Repo for the released MTConnect agent and device file for the SmartSaw
 
 ## Getting started
 
-To get the agent working on the IPC for the first time the github repoistory needs to be cloned. 
+To get the agent working on the IPC for the first time the github repoistory needs to be cloned.
 
-``` bash 
+```bash
 
 git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/MTConnect_SmartSaw.git mtconnect
 
 ```
+
 After cloning the repository for the first time run the install script. This will locate the files into the correct locations.
 
-``` bash
+```bash
 
 sudo bash ssInstall.sh
 
 ```
-IF the agent has already be loaded then use the update script to update the files and restart the service. 
 
-``` bash
+IF the agent has already be loaded then use the update script to update the files and restart the service.
+
+```bash
 
 sudo bash ssUpgrade.sh
 
@@ -32,9 +34,9 @@ Edit the `env.sh` file for setting the default install file names on this unique
 
 Help syntax for the `ssInstall.sh`.
 
-``` bash
+```bash
 
-Syntax: ssInstall [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number]
+Syntax: ssInstall [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number]
 
 options:
 
@@ -44,6 +46,8 @@ options:
 
 -d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 
+-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json
+
 -u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
 
 -h                  Print this Help.
@@ -52,9 +56,9 @@ options:
 
 Help syntax for the `ssUpgrade.sh`.
 
-``` bash
+```bash
 
-Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-i|-2|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-2|-h]
 
 options:
 
@@ -65,6 +69,8 @@ options:
 -j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json
 
 -d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
+
+-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json
 
 -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
 
@@ -82,7 +88,7 @@ options:
 
 Help syntax for the `ssClean.sh`.
 
-``` bash
+```bash
 
 Syntax: ssClean.sh [-H|-A|-M|-O|-C|-S|-D|-d|-h]
 
