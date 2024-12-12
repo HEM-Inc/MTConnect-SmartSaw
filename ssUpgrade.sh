@@ -8,12 +8,13 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-i|-m|-2|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-2|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
+    echo "-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
@@ -120,7 +121,7 @@ Update_MQTT_Broker(){
 
             # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -133,7 +134,7 @@ Update_MQTT_Broker(){
 
             # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -173,14 +174,14 @@ Update_ODS(){
 Update_Devctl(){
     if test -d /etc/devctl/config/; then
         echo "Updating devctl files..."
-        cp -r ./devctl/config/. /etc/devctl/config
-        # sed -i "19 i\        \"device_uid\" : \"hemsaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
+        cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+        sed -i "19 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     else
         echo "Installing Devctl..."
         mkdir -p /etc/devctl/
         mkdir -p /etc/devctl/config/
-        cp -r ./devctl/config/* /etc/devctl/config/
-        # sed -i "19 i\        \"device_uid\" : \"hemsaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
+        cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+        sed -i "19 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     fi
     echo ""
     chown -R 1300:1300 /etc/devctl/
@@ -250,6 +251,7 @@ else
     Json_File="SmartSaw_alarms.json"
     Device_File="SmartSaw_DC_HA.xml"
     Serial_Number="SmartSaw"
+    DevCTL_File="devctl_json_config.json"
 fi
 
 run_update_adapter=false
@@ -286,7 +288,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:Ahbmi2" option; do
+while getopts ":a:j:d:c:u:Ahbmi2" option; do
     case ${option} in
         h) # display Help
             Help
@@ -307,6 +309,9 @@ while getopts ":a:j:d:u:Ahbmi2" option; do
         d) # Enter a Device file name
             Device_File=$OPTARG
             sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
+        c) # Enter a Device file name
+            DevCTL_File=$OPTARG
+            sed -i "8 s/.*/export DevCTL_File=\"$DevCTL_File\"/" env.sh;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
@@ -347,9 +352,9 @@ service_exists() {
 if $run_install; then
     echo "Running Install script..."
     if $run_update_mqtt_bridge; then
-        bash ssInstall.sh -a $Afg_File -j $Json_File -d $Device_File -u $Serial_Number -b $Bridge_File
+        bash ssInstall.sh -b $Bridge_File
     else
-        bash ssInstall.sh -a $Afg_File -j $Json_File -d $Device_File -u $Serial_Number
+        bash ssInstall.sh
     fi
 else
     echo "Printing the options..."
@@ -369,6 +374,7 @@ else
     echo "JSON file = "$Json_File
     echo "MTConnect Agent file = "$Device_File
     echo "MTConnect UUID = HEMSaw-"$Serial_Number
+    echo "Device Control file = "$DevCTL_File
 
     echo ""
 
@@ -389,6 +395,12 @@ else
         echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
         echo "Available Adapter alarm json files..."
         ls adapter/data
+        exit 1
+    fi
+    if ! test -f ./devctl/config/$DevCTL_File; then
+        echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
+        echo "Available Device Control files..."
+        ls devctl/config
         exit 1
     fi
 
