@@ -8,6 +8,16 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.3.1] - 2024/12/12 - Max Harris
+
+### Fixed
+
+- Corrected a mistake of what line is being updated on the sed for the devctl file
+
+### Changed
+
+- Updated Readme to add -c option
+
 ## [2.3.0] - 2024/12/11 - emprarthanak
 
 ### Added
@@ -25,7 +35,7 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ### Fixed
 
-- Fixed the issue where it did not default the run_init_jp to false so init ran all the time. 
+- Fixed the issue where it did not default the run_init_jp to false so init ran all the time.
 
 ## [2.2.0] - 2024/10/09 - Max Harris
 

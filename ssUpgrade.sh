@@ -175,13 +175,13 @@ Update_Devctl(){
     if test -d /etc/devctl/config/; then
         echo "Updating devctl files..."
         cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
-        sed -i "19 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
+        sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     else
         echo "Installing Devctl..."
         mkdir -p /etc/devctl/
         mkdir -p /etc/devctl/config/
         cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
-        sed -i "19 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
+        sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
     fi
     echo ""
     chown -R 1300:1300 /etc/devctl/
