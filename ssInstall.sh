@@ -5,14 +5,15 @@
 ############################################################
 Help(){
     # Display Help
-    echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
+    echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "The function uses the Docker Compose V1 script. To use the V2 script use -2"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-2|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-2|-f]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
+    echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
     echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
@@ -65,7 +66,7 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -78,7 +79,7 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid hemsaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
             cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -109,6 +110,15 @@ InstallODS(){
     mkdir -p /etc/ods/config/
     cp -r ./ods/config/* /etc/ods/config/
     chown -R 1200:1200 /etc/ods/
+}
+
+InstallDevctl(){
+    echo "Installing Devctl..."
+    mkdir -p /etc/devctl/
+    mkdir -p /etc/devctl/config/
+    cp -r ./devctl/config/* /etc/devctl/config/
+    sed -i "19 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\"," /etc/devctl/config/devctl_json_config.json
+    chown -R 1300:1300 /etc/devctl/
 }
 
 InstallMongodb(){
@@ -168,10 +178,6 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
     systemctl stop adapter
     systemctl stop ods
     systemctl stop mongod
-    #exit 1
-    #Optionally we can stop the Adapter and/or ODS systemd services
-    #sudo systemctl stop adapter
-    #sudo systemctl stop ods
 fi
 
 ## Set default variables
@@ -186,6 +192,7 @@ else
     Json_File="SmartSaw_alarms.json"
     Device_File="SmartSaw_DC_HA.xml"
     Serial_Number="SmartSaw"
+    DevCTL_File="devctl_json_config.json"
 fi
 
 Use_MQTT_Bridge=false
@@ -197,7 +204,7 @@ force_install_files=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:u:bh2f" option; do
+while getopts ":a:j:d:c:u:bh2f" option; do
     case ${option} in
         h) # display Help
             Help
@@ -211,6 +218,9 @@ while getopts ":a:j:d:u:bh2f" option; do
         d) # Enter a Device file name
             Device_File=$OPTARG
             sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
+        c) # Enter a Device file name
+            DevCTL_File=$OPTARG
+            sed -i "8 s/.*/export DevCTL_File=\"$DevCTL_File\"/" env.sh;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
@@ -234,6 +244,7 @@ echo "AFG file = "$Afg_File
 echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw-"$Serial_Number
+echo "Device Control file = "$DevCTL_File
 echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
 echo ""
 
@@ -256,6 +267,12 @@ if ! test -f ./adapter/data/$Json_File; then
     ls adapter/data
     exit 1
 fi
+if ! test -f ./devctl/config/$DevCTL_File; then
+    echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
+    echo "Available Device Control files..."
+    ls devctl/config
+    exit 1
+fi
 
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
@@ -271,6 +288,7 @@ InstallDepency
 InstallAdapter
 InstallMTCAgent
 InstallODS
+InstallDevctl
 InstallMongodb
 echo ""
 

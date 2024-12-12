@@ -8,12 +8,14 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-H|-A|-M|-O|-S|-d|-D|-2|-L|-h]"
+    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-C|-S|-d|-D|-2|-L|-h]"
     echo "options:"
+    echo "-A                    Uninstall ALL"
     echo "-H                    Uninstall the HEMsaw adapter application"
-    echo "-A                    Uninstall the MTConnect Agent application"
+    echo "-a                    Uninstall the MTConnect Agent application"
     echo "-M                    Uninstall the MQTT Broker application"
     echo "-O                    Uninstall the HEMsaw ods application"
+    echo "-C                    Uninstall the HEMsaw devctl application"
     echo "-S                    Uninstall the HEMSaw MongoDB application"
     echo "-d                    Disable mongod, ods, and agent daemons"
     echo "-D                    Uninstall Docker"
@@ -66,6 +68,18 @@ Uninstall_ODS(){
     fi
 
     rm -rf /etc/ods
+    echo "<<Done>>"
+    echo ""
+}
+
+Uninstall_Devctl(){
+    echo "Uninstalling Devctl files and user..."
+
+    if id -u devctl > /dev/null 2>&1; then
+        userdel -f -r devctl
+    fi
+
+    rm -rf /etc/devctl
     echo "<<Done>>"
     echo ""
 }
@@ -158,6 +172,7 @@ run_uninstall_adapter=false
 run_uninstall_agent=false
 run_uninstall_mqtt=false
 run_uninstall_ods=false
+run_uninstall_devctl=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
@@ -168,21 +183,31 @@ clean_logs=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":L:HAMDhOSd2" option; do
+while getopts ":L:HaAMDhOCSd2" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
+        A) # uninstall all
+            run_uninstall_adapter=true
+            run_uninstall_agent=true
+            run_uninstall_mqtt=true
+            run_uninstall_ods=true
+            run_uninstall_devctl=true
+            run_uninstall_mongodb=true
+            run_uninstall_docker=true;;
         H) # uninstall the Adapter
             run_uninstall_adapter=true;;
-        A) # uninstall the Agent
+        a) # uninstall the Agent
             run_uninstall_agent=true;;
         M) # uninstall Mosquitto
             run_uninstall_mqtt=true;;
         O) # uninstall the ODS
             run_uninstall_ods=true;;
+        C) # uninstall the Devctl
+	        run_uninstall_devctl=true;;
         S) # uninstall the mongodb
-	        run_uninstall_mongodb=true;;
+            run_uninstall_mongodb=true;;
         D) # uninstall Docker
             run_uninstall_docker=true;;
         d) # uninstall daemon
@@ -225,6 +250,7 @@ echo "uninstall Adapter = "$run_uninstall_adapter
 echo "uninstall MTConnect Agent = "$run_uninstall_agent
 echo "uninstall MQTT Broker = "$run_uninstall_mqtt
 echo "uninstall ODS = "$run_uninstall_ods
+echo "uninstall Devctl = "$run_uninstall_devctl
 echo "uninstall Mongodb = "$run_uninstall_mongodb
 echo "uninstall Docker = "$run_uninstall_docker
 echo "disable Systemctl Daemons = "$run_uninstall_daemon
@@ -246,6 +272,9 @@ if $run_uninstall_mqtt; then
 fi
 if $run_uninstall_ods; then
     Uninstall_ODS
+fi
+if $run_uninstall_devctl; then
+    Uninstall_Devctl
 fi
 if $run_uninstall_mongodb; then
     Uninstall_Mongodb

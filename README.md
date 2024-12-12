@@ -54,7 +54,7 @@ Help syntax for the `ssUpgrade.sh`.
 
 ``` bash
 
-Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-2|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-u Serial_number|-b|-m|-i|-2|-h]
 
 options:
 
@@ -72,6 +72,8 @@ options:
 
 -m                Update the MongoDB database with default materials
 
+-i                ReInit the MongoDB parts and job databases
+
 -2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS
 
 -h                Print this Help.
@@ -82,7 +84,7 @@ Help syntax for the `ssClean.sh`.
 
 ``` bash
 
-Syntax: ssUninstall.sh [-H|-A|-M|-O|-S|-D|-d|-h]
+Syntax: ssClean.sh [-H|-A|-M|-O|-C|-S|-D|-d|-h]
 
 options:
 
@@ -93,6 +95,8 @@ options:
 -M                Uninstall the MQTT broker application
 
 -O                Uninstall the HEMsaw ODS application
+
+-C                Uninstall the HEMsaw Devctl application
 
 -S                Uninstall the HEMsaw MongoDB application
 
