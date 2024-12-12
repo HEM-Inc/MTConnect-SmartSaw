@@ -8,6 +8,19 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.3.0] - 2024/12/11 - emprarthanak
+
+### Added
+
+- Jira ID - EP7US23TS4
+  - Devctl(device control) container included within docker-compose.
+  - 'devctl' directory containing configuration files.
+
+### Changed
+
+- Updated scripts to support docker-compose.
+- Updated README.md file.
+
 ## [2.2.1] - 2024/10/09 - Max Harris
 
 ### Fixed
