@@ -8,6 +8,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.3.2] - 2024/12/17 - Max Harris
+
+### Added
+
+- Model name added to agent device xml
+
 ## [2.3.1] - 2024/12/12 - Max Harris
 
 ### Fixed
