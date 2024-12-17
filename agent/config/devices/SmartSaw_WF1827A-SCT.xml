@@ -9,7 +9,7 @@
         instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
         <Device id="saw" uuid="HEMSaw_WF1827A_SmartSaw" name="Saw">
-        <Description manufacturer="HEMSaw">SmartSaw</Description>
+        <Description manufacturer="HEMSaw" model="WF1827">SmartSaw</Description>
             <DataItems>
                 <DataItem id="saw_avail" name="avail" type="AVAILABILITY" category="EVENT"/>
                 <DataItem id="saw_functionalmode" name="functionalmode" type="FUNCTIONAL_MODE" category="EVENT"/>
