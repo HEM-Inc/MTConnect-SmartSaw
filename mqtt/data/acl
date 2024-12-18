@@ -1,16 +1,17 @@
-# Allow anonymous access to the sys
-topic read $SYS/#
-
-# Allow anonymous to read MTConnect
+# Allow anonymous to read MTConnect and access to the sys
+# topic read $SYS/#
 topic read mtconnect/#
-topic deny ods/#
+topic deny control/#
+topic deny monitor/#
 
-# Allow secure readwrite to the broker from MTConnect using the mtconnect user
+# Allow secure write to the broker from MTConnect using the mtconnect user
 user mtconnect
 topic readwrite mtconnect/#
-topic deny ods/#
+topic deny control/#
+topic deny monitor/#
 
 # Allow secure readwrite to the broker from ods using the hemsaw user
 # user hemsaw
 # topic deny mtconnect/#
-# topic readwrite ods/#
+# topic readwrite control/#
+# topic write monitor/#

@@ -1,344 +1,343 @@
 [
-    {
-        "type":"part",
-        "standard_definitions":[
-            {
-                "standard":"cts1",
-                "uses_timestamps":false,
-                "variables":[
-                    {
-                        "name":"name",
-                        "type":"string",
-                        "variable_class":"single_variable",
-                        "length":14,
-                        "default_value":"unnamed_part",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"length",
-                        "type":"float",
-                        "variable_class":"single_variable",
-                        "default_value":4.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"height",
-                        "type":"float",
-                        "variable_class":"single_variable",
-                        "default_value":4.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"first_angle",
-                        "type":"float",
-                        "variable_class":"single_variable",
-                        "default_value":45.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"second_angle",
-                        "type":"float",
-                        "variable_class":"single_variable",
-                        "default_value":135.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"bullnose_angle",
-                        "type":"float",
-                        "variable_class":"single_variable",
-                        "default_value":0.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"reps",
-                        "type":"uint",
-                        "variable_class":"single_variable",
-                        "default_value":0,
-                        "on_saw":true
-                    }
-                ]
-            },
-            {
-                "standard":"cts2",
-                "uses_timestamps":true,
-                "variables":
-                [
-                    {
-                        "name":"name",
-                        "variable_class":"single_variable",
-                        "type":"string",
-                        "length":40,
-                        "default_value":"unnamed_part",
-                        "on_saw":false
-                    },
-                    {
-                        "name":"reps",
-                        "variable_class":"single_variable",
-                        "type":"uint",
-                        "default_value":10,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"positions",
-                        "type":"float",
-                        "variable_class":"array",
-                        "on_saw":true,
-                        "allow_empty_content":true,
-						"length_word_size":1,
-                        "default_value":[0,0,0,0,0,0],
-                        "length":6
-                    },
-                    {
-                        "name":"angles",
-                        "type":"float",
-                        "variable_class":"array",
-                        "on_saw":true,
-                        "allow_empty_content":true,
-						"length_word_size":1,
-                        "default_value":[0,0,0,0,0,0],
-                        "length":6
-                    }
-                ]
-            }
+  {
+    "type": "part",
+    "standard_definitions": [
+      {
+        "standard": "cts1",
+        "uses_timestamps": false,
+        "variables": [
+          {
+            "name": "name",
+            "type": "string",
+            "variable_class": "single_variable",
+            "length": 14,
+            "default_value": "unnamed_part",
+            "on_saw": true
+          },
+          {
+            "name": "length",
+            "type": "float",
+            "variable_class": "single_variable",
+            "default_value": 4.0,
+            "on_saw": true
+          },
+          {
+            "name": "height",
+            "type": "float",
+            "variable_class": "single_variable",
+            "default_value": 4.0,
+            "on_saw": true
+          },
+          {
+            "name": "first_angle",
+            "type": "float",
+            "variable_class": "single_variable",
+            "default_value": 45.0,
+            "on_saw": true
+          },
+          {
+            "name": "second_angle",
+            "type": "float",
+            "variable_class": "single_variable",
+            "default_value": 135.0,
+            "on_saw": true
+          },
+          {
+            "name": "bullnose_angle",
+            "type": "float",
+            "variable_class": "single_variable",
+            "default_value": 0.0,
+            "on_saw": true
+          },
+          {
+            "name": "reps",
+            "type": "uint",
+            "variable_class": "single_variable",
+            "default_value": 0,
+            "on_saw": true
+          }
         ]
-    },
-    {
-        "type":"job",
-        "standard_definitions":[
-            {
-                "standard":"cts1",
-                "uses_timestamps":false,
-                "variables":[
-                    {
-                        "name":"name",
-                        "variable_class":"single_variable",
-                        "type":"string",
-                        "length":40,
-                        "default_value":"unnamed_job",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"reps",
-                        "variable_class":"single_variable",
-                        "type":"uint",
-                        "default_value":0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"part_ids",
-                        "variable_class":"array",
-                        "type":"oid",
-                        "on_saw":true,
-                        "length":12,
-                        "length_word_size":1,
-                        "default_value":[],
-                        "allow_empty_content":true
-                    }
-                ]
-            },
-            {
-                "standard":"cts2",
-                "uses_timestamps":true,
-                "variables":[
-                    {
-                        "name":"name",
-                        "variable_class":"single_variable",
-                        "type":"string",
-                        "length":40,
-                        "default_value":"unnamed_job",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"material_id",
-                        "variable_class":"single_variable",
-                        "type":"oid",
-                        "default_value":"60e5f1ace9c886c83765dfa0",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"reps",
-                        "variable_class":"single_variable",
-                        "type":"uint",
-                        "default_value":0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"height",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":4.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"diameter_for_non_sct",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":2,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"blade_speed_for_non_sct",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":250.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"part_ids",
-                        "type":"oid",
-                        "variable_class":"array",
-                        "length":20,
-                        "on_saw":true,
-                        "length_word_size":1,
-                        "default_value":[],
-                        "allow_empty_content":false
-                    }
-                ]
-            }
+      },
+      {
+        "standard": "cts2",
+        "uses_timestamps": true,
+        "variables": [
+          {
+            "name": "name",
+            "variable_class": "single_variable",
+            "type": "string",
+            "length": 40,
+            "default_value": "unnamed_part",
+            "on_saw": false
+          },
+          {
+            "name": "reps",
+            "variable_class": "single_variable",
+            "type": "uint",
+            "default_value": 10,
+            "on_saw": true
+          },
+          {
+            "name": "positions",
+            "type": "float",
+            "variable_class": "array",
+            "on_saw": true,
+            "allow_empty_content": true,
+            "length_word_size": 1,
+            "default_value": [0, 0, 0, 0, 0, 0],
+            "length": 6
+          },
+          {
+            "name": "angles",
+            "type": "float",
+            "variable_class": "array",
+            "on_saw": true,
+            "allow_empty_content": true,
+            "length_word_size": 1,
+            "default_value": [0, 0, 0, 0, 0, 0],
+            "length": 6
+          }
         ]
-    },
-    {
-        "type":"material",
-        "standard_definitions":[
-            {
-                "standard":"cts2",
-                "uses_timestamps":true,
-                "variables":[
-                    {
-                        "name":"name",
-                        "variable_class":"single_variable",
-                        "type":"string",
-                        "length":40,
-                        "default_value":"unnamed_material",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"category",
-                        "variable_class":"single_variable",
-                        "type":"string",
-                        "length":20,
-                        "default_value":"Carbon Steel",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"diameter",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":2,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"blade_speed",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":250.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"chip_removal_rate",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":40.0,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"force",
-                        "variable_class":"single_variable",
-                        "type":"float",
-                        "default_value":50.0,
-                        "on_saw":true
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  {
+    "type": "job",
+    "standard_definitions": [
+      {
+        "standard": "cts1",
+        "uses_timestamps": false,
+        "variables": [
+          {
+            "name": "name",
+            "variable_class": "single_variable",
+            "type": "string",
+            "length": 40,
+            "default_value": "unnamed_job",
+            "on_saw": true
+          },
+          {
+            "name": "reps",
+            "variable_class": "single_variable",
+            "type": "uint",
+            "default_value": 0,
+            "on_saw": true
+          },
+          {
+            "name": "part_ids",
+            "variable_class": "array",
+            "type": "oid",
+            "on_saw": true,
+            "length": 12,
+            "length_word_size": 1,
+            "default_value": [],
+            "allow_empty_content": true
+          }
         ]
-    },
-    {
-        "type":"machine",
-        "standard_definitions":[
-            {
-                "standard":"universal",
-                "uses_timestamps":true,
-                "variables":[
-                    {
-                        "name":"name",
-                        "type":"string",
-                        "variable_class":"single_variable",
-                        "length":20,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"type",
-                        "type":"string",
-                        "variable_class":"single_variable",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"subtype",
-                        "type":"string",
-                        "variable_class":"single_variable",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"machine_host",
-                        "type":"ip_address",
-                        "variable_class":"single_variable",
-                        "length":16,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"machine_port",
-                        "type":"uint",
-                        "variable_class":"single_variable",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"mtc_agent_host",
-                        "type":"ip_address",
-                        "variable_class":"single_variable",
-                        "length":16,
-                        "on_saw":true
-                    },
-                    {
-                        "name":"mtc_agent_port",
-                        "type":"uint",
-                        "variable_class":"single_variable",
-                        "on_saw":true
-                    }
-                ]
-            }
+      },
+      {
+        "standard": "cts2",
+        "uses_timestamps": true,
+        "variables": [
+          {
+            "name": "name",
+            "variable_class": "single_variable",
+            "type": "string",
+            "length": 40,
+            "default_value": "unnamed_job",
+            "on_saw": true
+          },
+          {
+            "name": "material_id",
+            "variable_class": "single_variable",
+            "type": "oid",
+            "default_value": "60e5f1ace9c886c83765dfa0",
+            "on_saw": true
+          },
+          {
+            "name": "reps",
+            "variable_class": "single_variable",
+            "type": "uint",
+            "default_value": 0,
+            "on_saw": true
+          },
+          {
+            "name": "height",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 4.0,
+            "on_saw": true
+          },
+          {
+            "name": "diameter_for_non_sct",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 2,
+            "on_saw": true
+          },
+          {
+            "name": "blade_speed_for_non_sct",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 250.0,
+            "on_saw": true
+          },
+          {
+            "name": "part_ids",
+            "type": "oid",
+            "variable_class": "array",
+            "length": 20,
+            "on_saw": true,
+            "length_word_size": 1,
+            "default_value": [],
+            "allow_empty_content": false
+          }
         ]
-    },
-    {
-        "type":"machine_system",
-        "standard_definitions":[
-            {
-                "standard":"universal",
-                "uses_timestamps":true,
-                "variables":[
-                    {
-                        "name":"name",
-                        "type":"string",
-                        "length":40,
-                        "variable_class":"single_variable",
-                        "default_value":"unnamed_machine_system",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"type",
-                        "type":"string",
-                        "variable_class":"single_variable",
-                        "default_value":"smh",
-                        "on_saw":true
-                    },
-                    {
-                        "name":"components",
-                        "type":"oid",
-                        "variable_class":"associative_array",
-                        "default_value":{},
-                        "on_saw":true
-                    }
-                ]
-            }
+      }
+    ]
+  },
+  {
+    "type": "material",
+    "standard_definitions": [
+      {
+        "standard": "cts2",
+        "uses_timestamps": true,
+        "variables": [
+          {
+            "name": "name",
+            "variable_class": "single_variable",
+            "type": "string",
+            "length": 40,
+            "default_value": "unnamed_material",
+            "on_saw": true
+          },
+          {
+            "name": "category",
+            "variable_class": "single_variable",
+            "type": "string",
+            "length": 20,
+            "default_value": "Carbon Steel",
+            "on_saw": true
+          },
+          {
+            "name": "diameter",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 2,
+            "on_saw": true
+          },
+          {
+            "name": "blade_speed",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 250.0,
+            "on_saw": true
+          },
+          {
+            "name": "chip_removal_rate",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 40.0,
+            "on_saw": true
+          },
+          {
+            "name": "force",
+            "variable_class": "single_variable",
+            "type": "float",
+            "default_value": 50.0,
+            "on_saw": true
+          }
         ]
-    }
+      }
+    ]
+  },
+  {
+    "type": "machine",
+    "standard_definitions": [
+      {
+        "standard": "universal",
+        "uses_timestamps": true,
+        "variables": [
+          {
+            "name": "name",
+            "type": "string",
+            "variable_class": "single_variable",
+            "length": 20,
+            "on_saw": true
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "variable_class": "single_variable",
+            "on_saw": true
+          },
+          {
+            "name": "subtype",
+            "type": "string",
+            "variable_class": "single_variable",
+            "on_saw": true
+          },
+          {
+            "name": "machine_host",
+            "type": "ip_address",
+            "variable_class": "single_variable",
+            "length": 16,
+            "on_saw": true
+          },
+          {
+            "name": "machine_port",
+            "type": "uint",
+            "variable_class": "single_variable",
+            "on_saw": true
+          },
+          {
+            "name": "mtc_agent_host",
+            "type": "ip_address",
+            "variable_class": "single_variable",
+            "length": 16,
+            "on_saw": true
+          },
+          {
+            "name": "mtc_agent_port",
+            "type": "uint",
+            "variable_class": "single_variable",
+            "on_saw": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "machine_system",
+    "standard_definitions": [
+      {
+        "standard": "universal",
+        "uses_timestamps": true,
+        "variables": [
+          {
+            "name": "name",
+            "type": "string",
+            "length": 40,
+            "variable_class": "single_variable",
+            "default_value": "unnamed_machine_system",
+            "on_saw": true
+          },
+          {
+            "name": "type",
+            "type": "string",
+            "variable_class": "single_variable",
+            "default_value": "smh",
+            "on_saw": true
+          },
+          {
+            "name": "components",
+            "type": "oid",
+            "variable_class": "associative_array",
+            "default_value": {},
+            "on_saw": true
+          }
+        ]
+      }
+    ]
+  }
 ]
