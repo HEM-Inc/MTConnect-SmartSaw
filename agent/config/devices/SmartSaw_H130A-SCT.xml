@@ -1,101 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <MTConnectDevices
     xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.3 http://schemas.mtconnect.org/schemas/MTConnectDevices_2.3.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="urn:mtconnect.org:MTConnectDevices:2.3"
-    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.3"
->
+    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.3">
 
-    <Header
-        bufferSize="8096"
-        assetCount="8096"
-        assetBufferSize="8096"
-        version="2.4.0.0"
-        instanceId="1520711514"
-        sender="HEMSaw"
-        creationTime="2018-03-10T19:52:01Z"
-        deviceModelChangeTime="2018-03-10T19:52:01Z"
-    />
+    <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.4.0.0"
+        instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
         <Device id="saw" uuid="HEMSaw_H130ADC_SmartSaw" name="Saw">
-        <Description
-                manufacturer="HEMSaw"
-                model="H130-DC"
-            >SmartSaw</Description>
+        <Description manufacturer="HEMSaw" model="H130-DC">SmartSaw</Description>
             <DataItems>
-                <DataItem
-                    id="saw_avail"
-                    name="avail"
-                    type="AVAILABILITY"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_functionalmode"
-                    name="functionalmode"
-                    type="FUNCTIONAL_MODE"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_serial_number"
-                    type="SERIAL_NUMBER"
-                    category="EVENT"
-                />
+                <DataItem id="saw_avail" name="avail" type="AVAILABILITY" category="EVENT"/>
+                <DataItem id="saw_functionalmode" name="functionalmode" type="FUNCTIONAL_MODE" category="EVENT"/>
+                <DataItem id="saw_serial_number" type="SERIAL_NUMBER" category="EVENT"/>
 
-                <DataItem
-                    id="saw_operating"
-                    type="EQUIPMENT_MODE"
-                    subType="OPERATING"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_loaded"
-                    type="EQUIPMENT_MODE"
-                    subType="LOADED"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_powered"
-                    type="EQUIPMENT_MODE"
-                    subType="POWERED"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_working"
-                    type="EQUIPMENT_MODE"
-                    subType="WORKING"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_delayed"
-                    type="EQUIPMENT_MODE"
-                    subType="DELAY"
-                    category="EVENT"
-                />
+                <DataItem id="saw_operating" type="EQUIPMENT_MODE" subType="OPERATING" category="EVENT"/>
+                <DataItem id="saw_loaded" type="EQUIPMENT_MODE" subType="LOADED" category="EVENT"/>
+                <DataItem id="saw_powered" type="EQUIPMENT_MODE" subType="POWERED" category="EVENT"/>
+                <DataItem id="saw_working" type="EQUIPMENT_MODE" subType="WORKING" category="EVENT"/>
+                <DataItem id="saw_delayed" type="EQUIPMENT_MODE" subType="DELAY" category="EVENT"/>
 
-                <DataItem
-                    id="saw_prog_version"
-                    type="OPERATING_SYSTEM"
-                    subType="VERSION"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_prog_design_company"
-                    type="OPERATING_SYSTEM"
-                    subType="MANUFACTURER"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_plc_type"
-                    type="HARDWARE"
-                    subType="VERSION"
-                    category="EVENT"
-                />
-                <DataItem
-                    id="saw_plc_manufacturer"
-                    type="HARDWARE"
-                    subType="MANUFACTURER"
-                    category="EVENT"
-                />
+                <DataItem id="saw_prog_version" type="OPERATING_SYSTEM" subType="VERSION" category="EVENT"/>
+                <DataItem id="saw_prog_design_company" type="OPERATING_SYSTEM" subType="MANUFACTURER" category="EVENT"/>
+                <DataItem id="saw_plc_type" type="HARDWARE" subType="VERSION" category="EVENT"/>
+                <DataItem id="saw_plc_manufacturer" type="HARDWARE" subType="MANUFACTURER" category="EVENT"/>
             </DataItems>
             <Configuration>
                 <CoordinateSystems>
@@ -111,21 +40,13 @@
                             <Rotation>0 0 0</Rotation>
                         </Transformation>
                     </CoordinateSystem>
-                    <CoordinateSystem
-                        id="machine_coordinates"
-                        type="MACHINE"
-                        parentIdRef="base_coordinates"
-                    >
+                    <CoordinateSystem id="machine_coordinates" type="MACHINE" parentIdRef="base_coordinates">
                         <Transformation>
                             <Translation>0 0 0</Translation>
                             <Rotation>0 0 0</Rotation>
                         </Transformation>
                     </CoordinateSystem>
-                    <CoordinateSystem
-                        id="work_coordinates"
-                        type="TASK"
-                        parentIdRef="machine_coordinates"
-                    >
+                    <CoordinateSystem id="work_coordinates" type="TASK" parentIdRef="machine_coordinates">
                         <Transformation>
                             <Translation>0 0 0</Translation>
                             <Rotation>0 0 0</Rotation>
@@ -136,63 +57,33 @@
             <Components>
                 <Axes id="saw_axes" name="Machine">
                     <DataItems>
-                        <DataItem
-                            id="x0_cond"
-                            type="ACTUATOR"
-                            category="CONDITION"
-                            name="x0_saw_head_servo_cond"
-                        />
-                        <DataItem
-                            id="z0_cond"
-                            type="ACTUATOR"
-                            category="CONDITION"
-                            name="z0_feed_servo_cond"
-                        />
+                        <DataItem id="x0_cond" type="ACTUATOR" category="CONDITION" name="x0_saw_head_servo_cond"/>
+                        <DataItem id="z0_cond" type="ACTUATOR" category="CONDITION" name="z0_feed_servo_cond"/>
                         <!-- <DataItem id="z2_cond" type="ACTUATOR" category="CONDITION" name="z2_material_stop_servo_cond"/> -->
-                        <DataItem
-                            id="c0_cond"
-                            type="ACTUATOR"
-                            category="CONDITION"
-                            name="c0_band_motor_cond"
-                        />
+                        <DataItem id="c0_cond" type="ACTUATOR" category="CONDITION" name="c0_band_motor_cond"/>
                     </DataItems>
                     <Components>
                         <!-- Servo Head -->
                         <Linear id="x0_machine_head" name="X0">
                             <Configuration>
                                 <Specifications>
-                                    <Specification
-                                        type="LINEAR_FORCE"
-                                        dataItemIdRef="x0_force"
-                                        id="x0_blade_force_spec"
-                                        units="NEWTON"
-                                    >
+                                    <Specification type="LINEAR_FORCE" dataItemIdRef="x0_force" id="x0_blade_force_spec"
+                                        units="NEWTON">
                                         <Maximum>4448</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification
-                                        type="PRESSURE"
-                                        dataItemIdRef="x0_balance_pressure"
-                                        id="x0_balance_pressure_spec"
-                                        units="PASCAL"
-                                    >
+                                    <Specification type="PRESSURE" dataItemIdRef="x0_balance_pressure" id="x0_balance_pressure_spec"
+                                        units="PASCAL">
                                         <Maximum>17236893</Maximum>
                                         <Nominal>10342135</Nominal>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification
-                                        type="FREQUENCY"
-                                        id="x0_enhancer_freq_spec"
-                                        units="HERTZ"
-                                    >
+                                    <Specification type="FREQUENCY" id="x0_enhancer_freq_spec"
+                                        units="HERTZ">
                                         <Maximum>4.17</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <ProcessSpecification
-                                        type="LINEAR_FORCE"
-                                        id="x0_blade_force_limit"
-                                        units="NEWTON"
-                                    >
+                                    <ProcessSpecification type="LINEAR_FORCE" id="x0_blade_force_limit" units="NEWTON">
                                         <AlarmLimits>
                                             <UpperLimit>6672</UpperLimit>
                                             <UpperWarning>6227</UpperWarning>
@@ -201,74 +92,35 @@
                                 </Specifications>
                             </Configuration>
                             <DataItems>
-                                <DataItem
-                                    id="x0_target"
-                                    type="POSITION"
-                                    subType="TARGET"
-                                    category="SAMPLE"
-                                    units="MILLIMETER"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="x0_target" type="POSITION" subType="TARGET"
+                                    category="SAMPLE" units="MILLIMETER"
+                                    coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                 </DataItem>
-                                <DataItem
-                                    id="x0_abs"
-                                    type="POSITION"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="x0_abs" type="POSITION" subType="ACTUAL" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                 </DataItem>
-                                <DataItem
-                                    id="x0_vel"
-                                    type="VELOCITY"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER/SECOND"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="x0_vel" type="VELOCITY" subType="ACTUAL"
+                                    category="SAMPLE" units="MILLIMETER/SECOND"
+                                    coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                 </DataItem>
-                                <DataItem
-                                    id="x0_force"
-                                    type="LINEAR_FORCE"
-                                    units="NEWTON"
-                                    category="SAMPLE"
-                                >
+                                <DataItem id="x0_force" type="LINEAR_FORCE" units="NEWTON"
+                                    category="SAMPLE">
                                     <Relationships>
-                                        <SpecificationRelationship
-                                            type="LIMIT"
-                                            idRef="x0_blade_force_limit"
-                                            name="x0_blade_force_limit"
-                                        />
+                                        <SpecificationRelationship type="LIMIT" idRef="x0_blade_force_limit" name="x0_blade_force_limit" />
                                     </Relationships>
                                 </DataItem>
 
-                                <DataItem
-                                    id="x0_torque"
-                                    compositionId="x0_motor"
-                                    type="TORQUE"
-                                    units="NEWTON_METER"
-                                    category="SAMPLE"
-                                >
+                                <DataItem id="x0_torque" compositionId="x0_motor" type="TORQUE" units="NEWTON_METER" category="SAMPLE">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.010</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.010</Filter>
                                     </Filters>
                                 </DataItem>
 
@@ -277,16 +129,10 @@
                                     units="AMPERE" category="SAMPLE"/>
                                 -->
 
-                                <DataItem
-                                    id="x0_balance_pressure"
-                                    type="PRESSURE"
-                                    units="PASCAL"
-                                    category="SAMPLE"
-                                >
+                                <DataItem id="x0_balance_pressure" type="PRESSURE" units="PASCAL"
+                                    category="SAMPLE">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >13790</Filter>
+                                        <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
                                 </DataItem>
 
@@ -304,25 +150,12 @@
                                 </DataItem>
                                 -->
 
-                                <DataItem
-                                    id="x0_state"
-                                    compositionId="x0_motor"
-                                    type="AXIS_STATE"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="x0_axis_interlock"
-                                    compositionId="x0_motor"
-                                    type="AXIS_INTERLOCK"
-                                    category="EVENT"
-                                />
+                                <DataItem id="x0_state" compositionId="x0_motor" type="AXIS_STATE" category="EVENT"/>
+                                <DataItem id="x0_axis_interlock" compositionId="x0_motor" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
                             <Compositions>
-                                <Composition
-                                    id="x0_ballscrew"
-                                    type="BALLSCREW"
-                                />
-                                <Composition id="x0_motor" type="MOTOR" />
+                                <Composition id="x0_ballscrew" type="BALLSCREW"/>
+                                <Composition id="x0_motor" type="MOTOR"/>
                             </Compositions>
                         </Linear>
                         <!-- End of Comment -->
@@ -377,18 +210,9 @@
                         -->
                         <Linear id="y1_machine_feed_vise" name="Y1">
                             <DataItems>
-                                <DataItem
-                                    id="y1_abs"
-                                    type="POSITION"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="y1_abs" type="POSITION" subType="ACTUAL" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.100</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.100</Filter>
                                     </Filters>
                                 </DataItem>
                                 <!-- N/A
@@ -403,11 +227,7 @@
                                 <DataItem id="y1_state" type="AXIS_STATE" category="EVENT"/>
                                 -->
 
-                                <DataItem
-                                    id="y1_axis_interlock"
-                                    type="AXIS_INTERLOCK"
-                                    category="EVENT"
-                                />
+                                <DataItem id="y1_axis_interlock" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
                         </Linear>
                         <!-- N/A
@@ -428,27 +248,19 @@
                         <Linear id="z0_machine_feed" name="Z0">
                             <Configuration>
                                 <Specifications>
-                                    <Specification
-                                        type="VELOCITY"
-                                        units="MILLIMETER/SECOND"
-                                        id="z0_velocity_spec"
-                                    >
+                                    <Specification type="VELOCITY" units="MILLIMETER/SECOND" id="z0_velocity_spec">
                                         <Maximum>254</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <ProcessSpecification
-                                        type="POSITION"
-                                        id="z0_position_spec"
-                                        units="MILLIMETER"
-                                    >
+                                    <ProcessSpecification type="POSITION" id="z0_position_spec"
+                                        units="MILLIMETER">
                                         <SpecificationLimits>
                                             <UpperLimit>3054.350</UpperLimit>
                                             <LowerLimit>-0.100</LowerLimit>
                                         </SpecificationLimits>
                                         <AlarmLimits>
                                             <UpperLimit>3060.700</UpperLimit>
-                                            <UpperWarning
-                                            >3059.430</UpperWarning>
+                                            <UpperWarning>3059.430</UpperWarning>
                                             <LowerWarning>-0.100</LowerWarning>
                                             <LowerLimit>-0.254</LowerLimit>
                                         </AlarmLimits>
@@ -457,81 +269,34 @@
                             </Configuration>
 
                             <DataItems>
-                                <DataItem
-                                    id="z0_target"
-                                    type="POSITION"
-                                    subType="TARGET"
-                                    category="SAMPLE"
-                                    units="MILLIMETER"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="z0_target" type="POSITION" subType="TARGET" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                     <Relationships>
-                                        <SpecificationRelationship
-                                            type="LIMIT"
-                                            idRef="z0_position_spec"
-                                            name="z0_target_position_spec"
-                                        />
+                                        <SpecificationRelationship type="LIMIT" idRef="z0_position_spec" name="z0_target_position_spec"/>
                                     </Relationships>
                                 </DataItem>
-                                <DataItem
-                                    id="z0_abs"
-                                    type="POSITION"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="z0_abs" type="POSITION" subType="ACTUAL" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                     <Relationships>
-                                        <SpecificationRelationship
-                                            type="LIMIT"
-                                            idRef="z0_position_spec"
-                                            name="z0_actual_position_spec"
-                                        />
+                                        <SpecificationRelationship type="LIMIT" idRef="z0_position_spec" name="z0_actual_position_spec" />
                                     </Relationships>
                                 </DataItem>
-                                <DataItem
-                                    id="z0_vel"
-                                    type="VELOCITY"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER/SECOND"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                >
+                                <DataItem id="z0_vel" type="VELOCITY" subType="ACTUAL" category="SAMPLE" units="MILLIMETER/SECOND" coordinateSystemIdRef="machine_coordinates">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                     <Relationships>
-                                        <SpecificationRelationship
-                                            type="LIMIT"
-                                            idRef="z0_velocity_spec"
-                                            name="z0_velocity_spec"
-                                        />
+                                        <SpecificationRelationship type="LIMIT" idRef="z0_velocity_spec" name="z0_velocity_spec"/>
                                     </Relationships>
                                 </DataItem>
 
-                                <DataItem
-                                    id="z0_torque"
-                                    compositionId="z0_motor"
-                                    type="TORQUE"
-                                    units="NEWTON_METER"
-                                    category="SAMPLE"
-                                >
+                                <DataItem id="z0_torque" compositionId="z0_motor" type="TORQUE" units="NEWTON_METER" category="SAMPLE">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.010</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.010</Filter>
                                     </Filters>
                                 </DataItem>
 
@@ -545,25 +310,12 @@
                                     units="AMPERE" category="SAMPLE"/>
                                 -->
 
-                                <DataItem
-                                    id="z0_state"
-                                    compositionId="z0_motor"
-                                    type="AXIS_STATE"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="z0_axis_interlock"
-                                    compositionId="z0_motor"
-                                    type="AXIS_INTERLOCK"
-                                    category="EVENT"
-                                />
+                                <DataItem id="z0_state" compositionId="z0_motor" type="AXIS_STATE" category="EVENT"/>
+                                <DataItem id="z0_axis_interlock" compositionId="z0_motor" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
                             <Compositions>
-                                <Composition
-                                    id="z0_ballscrew"
-                                    type="BALLSCREW"
-                                />
-                                <Composition id="z0_motor" type="MOTOR" />
+                                <Composition id="z0_ballscrew" type="BALLSCREW"/>
+                                <Composition id="z0_motor" type="MOTOR"/>
                             </Compositions>
                         </Linear>
 
@@ -630,11 +382,7 @@
                         <Rotary id="a0_machine_head" name="A0">
                             <Configuration>
                                 <Specifications>
-                                    <Specification
-                                        id="a0_axis_spec"
-                                        type="ANGLE"
-                                        units="DEGREE"
-                                    >
+                                    <Specification id="a0_axis_spec" type="ANGLE" units="DEGREE">
                                         <Maximum>90</Maximum>
                                         <Minimum>90</Minimum>
                                     </Specification>
@@ -657,24 +405,9 @@
 
                         <Rotary id="c0_machine" name="C0">
                             <DataItems>
-                                <DataItem
-                                    id="c0_speed"
-                                    compositionId="c0_motor"
-                                    type="CUTTING_SPEED"
-                                    subType="ACTUAL"
-                                    category="SAMPLE"
-                                    units="MILLIMETER/SECOND"
-                                    coordinateSystemIdRef="machine_coordinates"
-                                />
+                                <DataItem id="c0_speed" compositionId="c0_motor" type="CUTTING_SPEED" subType="ACTUAL" category="SAMPLE" units="MILLIMETER/SECOND" coordinateSystemIdRef="machine_coordinates"/>
 
-                                <DataItem
-                                    id="c0_amp"
-                                    compositionId="c0_motor"
-                                    type="AMPERAGE_AC"
-                                    subType="ACTUAL"
-                                    units="AMPERE"
-                                    category="SAMPLE"
-                                />
+                                <DataItem id="c0_amp" compositionId="c0_motor" type="AMPERAGE_AC" subType="ACTUAL" units="AMPERE" category="SAMPLE"/>
 
                                 <!-- N/A
                                 <DataItem id="c0_torque" type="TORQUE" units="NEWTON_METER" POUND" category="SAMPLE">
@@ -698,17 +431,10 @@
                                 -->
 
                                 <!-- Choose one method -->
-                                <DataItem
-                                    id="c0_cutwatcher_volt"
-                                    type="VOLTAGE_DC"
-                                    subType="ACTUAL"
-                                    units="VOLT"
-                                    category="SAMPLE"
-                                >
+                                <DataItem id="c0_cutwatcher_volt" type="VOLTAGE_DC" subType="ACTUAL"
+                                    units="VOLT" category="SAMPLE">
                                     <Filters>
-                                        <Filter
-                                            type="MINIMUM_DELTA"
-                                        >0.001</Filter>
+                                        <Filter type="MINIMUM_DELTA">0.001</Filter>
                                     </Filters>
                                 </DataItem>
 
@@ -736,119 +462,46 @@
                                     category="SAMPLE"/>
                                 -->
 
-                                <DataItem
-                                    id="c0_state"
-                                    compositionId="c0_motor"
-                                    type="AXIS_STATE"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="c0_axis_interlock"
-                                    compositionId="c0_motor"
-                                    type="AXIS_INTERLOCK"
-                                    category="EVENT"
-                                />
+                                <DataItem id="c0_state" compositionId="c0_motor" type="AXIS_STATE" category="EVENT"/>
+                                <DataItem id="c0_axis_interlock" compositionId="c0_motor" type="AXIS_INTERLOCK" category="EVENT"/>
 
                             </DataItems>
                             <Compositions>
-                                <Composition id="c0_motor" type="MOTOR" />
-                                <Composition
-                                    id="c0_tensioner"
-                                    type="TENSIONER"
-                                />
+                                <Composition id="c0_motor" type="MOTOR"/>
+                                <Composition id="c0_tensioner" type="TENSIONER"/>
                             </Compositions>
                         </Rotary>
                     </Components>
                 </Axes>
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
-                        <DataItem
-                            id="saw_estop"
-                            type="EMERGENCY_STOP"
-                            category="EVENT"
-                            name="estop"
-                        />
-			<DataItem
-                            id="saw_switch_status"
-                            type="MESSAGE"
-                            category="EVENT"
-                            name="switch_status"
-                        />
-			<DataItem
-                            id="saw_service_status"
-                            type="MESSAGE"
-                            category="EVENT"
-                            name="service_status"
-                        />
-                        <DataItem
-                            id="saw_condition"
-                            type="SYSTEM"
-                            category="CONDITION"
-                            name="system_condition"
-                        />
-                        <DataItem
-                            id="saw_comms_cond"
-                            type="COMMUNICATIONS"
-                            category="CONDITION"
-                            name="comms_condition"
-                        />
+                        <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
+			<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+			<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
+                        <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
+                        <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 
-                        <DataItem
-                            id="saw_blade_life"
-                            type="EQUIPMENT_TIMER"
-                            subType="WORKING"
-                            units="SECOND"
-                            category="SAMPLE"
-                            name="blade_life"
-                        >
+                        <DataItem id="saw_blade_life" type="EQUIPMENT_TIMER" subType="WORKING" units="SECOND" category="SAMPLE" name="blade_life">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem
-                            id="saw_hydraulic_life"
-                            type="EQUIPMENT_TIMER"
-                            subType="OPERATING"
-                            units="SECOND"
-                            category="SAMPLE"
-                            name="hydraulic_life"
-                        >
+                        <DataItem id="saw_hydraulic_life" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="hydraulic_life">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem
-                            id="saw_time_till_next_service"
-                            type="EQUIPMENT_TIMER"
-                            subType="OPERATING"
-                            units="SECOND"
-                            category="SAMPLE"
-                            name="time_till_next_service"
-                        >
+                        <DataItem id="saw_time_till_next_service" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="time_till_next_service">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem
-                            id="saw_cut_time"
-                            type="EQUIPMENT_TIMER"
-                            subType="WORKING"
-                            units="SECOND"
-                            category="SAMPLE"
-                            name="cut_time"
-                        >
+                        <DataItem id="saw_cut_time" type="EQUIPMENT_TIMER" subType="WORKING" units="SECOND" category="SAMPLE" name="cut_time">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem
-                            id="saw_cpu_on_time"
-                            type="EQUIPMENT_TIMER"
-                            subType="POWERED"
-                            units="SECOND"
-                            category="SAMPLE"
-                            name="cpu_on_time"
-                        >
+                        <DataItem id="saw_cpu_on_time" type="EQUIPMENT_TIMER" subType="POWERED" units="SECOND" category="SAMPLE" name="cpu_on_time">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
@@ -861,79 +514,22 @@
                                 <DataItem id="saw_wait" type="WAIT_STATE" category="EVENT" name="wait_cond"/>
                                 -->
 
-                                <DataItem
-                                    id="saw_execution"
-                                    type="EXECUTION"
-                                    category="EVENT"
-                                    name="execution"
-                                />
-                                <DataItem
-                                    id="saw_controller_mode"
-                                    type="CONTROLLER_MODE"
-                                    category="EVENT"
-                                    name="mode"
-                                />
+                                <DataItem id="saw_execution" type="EXECUTION" category="EVENT" name="execution"/>
+                                <DataItem id="saw_controller_mode" type="CONTROLLER_MODE" category="EVENT" name="mode"/>
 
-                                <DataItem
-                                    id="saw_out_of_stock"
-                                    type="END_OF_BAR"
-                                    category="CONDITION"
-                                />
+                                <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
-                                <DataItem
-                                    id="job_id"
-                                    type="PART_ID"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="job_name"
-                                    type="PROGRAM"
-                                    subType="MAIN"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="job_active_part_number"
-                                    type="PROGRAM"
-                                    subType="ACTIVE"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="job_repetitions"
-                                    type="PART_COUNT"
-                                    subType="TARGET"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="job_remaining"
-                                    type="PART_COUNT"
-                                    subType="REMAINING"
-                                    category="EVENT"
-                                />
+                                <DataItem id="job_id" type="PART_ID" category="EVENT"/>
+                                <DataItem id="job_name" type="PROGRAM" subType="MAIN" category="EVENT"/>
+                                <DataItem id="job_active_part_number" type="PROGRAM" subType="ACTIVE" category="EVENT"/>
+                                <DataItem id="job_repetitions" type="PART_COUNT" subType="TARGET" category="EVENT"/>
+                                <DataItem id="job_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
 
-                                <DataItem
-                                    id="part_active_id"
-                                    type="PART_ID"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="part_active_target"
-                                    type="PART_COUNT"
-                                    subType="TARGET"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="part_active_remaining"
-                                    type="PART_COUNT"
-                                    subType="REMAINING"
-                                    category="EVENT"
-                                />
+                                <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
+                                <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
+                                <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
 
-                                <DataItem
-                                    id="cut_count_complete"
-                                    type="PART_COUNT"
-                                    subType="COMPLETE"
-                                    category="EVENT"
-                                />
+                                <DataItem id="cut_count_complete" type="PART_COUNT" subType="COMPLETE" category="EVENT"/>
                             </DataItems>
                         </Path>
                     </Components>
@@ -943,20 +539,10 @@
                         <Hydraulic id="saw_pump" name="hydraulic">
                             <Configuration>
                                 <Specifications>
-                                    <Specification
-                                        id="saw_pump_spec"
-                                        compositionIdRef="saw_hyd_pump"
-                                        type="PRESSURE"
-                                        units="PASCAL"
-                                    >
+                                    <Specification id="saw_pump_spec" compositionIdRef="saw_hyd_pump" type="PRESSURE" units="PASCAL">
                                         <Maximum>17236890</Maximum>
                                     </Specification>
-                                    <ProcessSpecification
-                                        id="saw_pump_alarm"
-                                        compositionIdRef="saw_hyd_pump"
-                                        type="PRESSURE"
-                                        units="PASCAL"
-                                    >
+                                    <ProcessSpecification id="saw_pump_alarm" compositionIdRef="saw_hyd_pump" type="PRESSURE" units="PASCAL">
                                         <AlarmLimits>
                                             <UpperLimit>17236890</UpperLimit>
                                             <LowerWarning>7584230</LowerWarning>
@@ -965,38 +551,20 @@
                                 </Specifications>
                             </Configuration>
                             <DataItems>
-                                <DataItem
-                                    id="saw_hydraulic_low_level"
-                                    compositionId="saw_hyd_tank"
-                                    type="SYSTEM"
-                                    category="CONDITION"
-                                />
-                                <DataItem
-                                    id="saw_hydraulic_interlock"
-                                    compositionId="saw_hyd_tank"
-                                    type="AXIS_INTERLOCK"
-                                    category="EVENT"
-                                />
+                                <DataItem id="saw_hydraulic_low_level" compositionId="saw_hyd_tank" type="SYSTEM" category="CONDITION"/>
+                                <DataItem id="saw_hydraulic_interlock" compositionId="saw_hyd_tank" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
                             <Compositions>
-                                <Composition id="saw_hyd_tank" type="TANK" />
-                                <Composition id="saw_hyd_pump" type="PUMP" />
+                                <Composition id="saw_hyd_tank" type="TANK"/>
+                                <Composition id="saw_hyd_pump" type="PUMP"/>
                             </Compositions>
                         </Hydraulic>
                         <Enclosure id="saw_enclosure">
                             <Components>
                                 <Door id="saw_doors">
                                     <DataItems>
-                                        <DataItem
-                                            id="saw_drive_door_state"
-                                            type="DOOR_STATE"
-                                            category="EVENT"
-                                        />
-                                        <DataItem
-                                            id="saw_idle_door_state"
-                                            type="DOOR_STATE"
-                                            category="EVENT"
-                                        />
+                                        <DataItem id="saw_drive_door_state" type="DOOR_STATE" category="EVENT"/>
+                                        <DataItem id="saw_idle_door_state" type="DOOR_STATE" category="EVENT"/>
                                     </DataItems>
                                 </Door>
                             </Components>
@@ -1004,92 +572,43 @@
                         <WorkEnvelope id="saw_envelope">
                             <Configuration>
                                 <Specifications>
-                                    <Specification
-                                        id="saw_envelope_x_spec"
-                                        type="X_DIMENSION"
-                                        units="MILLIMETER"
-                                        compositionIdRef="saw_workpeice_comp"
-                                    >
+                                    <Specification id="saw_envelope_x_spec" type="X_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>508</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification
-                                        id="saw_envelope_y_spec"
-                                        type="Y_DIMENSION"
-                                        units="MILLIMETER"
-                                        compositionIdRef="saw_workpeice_comp"
-                                    >
+                                    <Specification id="saw_envelope_y_spec" type="Y_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>508</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification
-                                        id="saw_envelope_z_spec"
-                                        type="Z_DIMENSION"
-                                        units="MILLIMETER"
-                                        compositionIdRef="saw_workpeice_comp"
-                                    >
+                                    <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>3048</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification
-                                        id="saw_envelope_a_spec"
-                                        type="x:A_DIMENSION"
-                                        units="DEGREE"
-                                        compositionIdRef="saw_workpeice_comp"
-                                    >
+                                    <Specification id="saw_envelope_a_spec" type="x:A_DIMENSION" units="DEGREE" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>90</Maximum>
                                         <Minimum>90</Minimum>
                                     </Specification>
-                                    <Specification
-                                        id="saw_envelope_load_spec"
-                                        type="MASS"
-                                        units="KILOGRAM"
-                                        compositionIdRef="saw_workpeice_comp"
-                                    >
+                                    <Specification id="saw_envelope_load_spec" type="MASS" units="KILOGRAM" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>4536</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
                                 </Specifications>
                             </Configuration>
                             <DataItems>
-                                <DataItem
-                                    id="material_detection"
-                                    compositionId="saw_workpeice_sensor_comp"
-                                    type="COMPOSITION_STATE"
-                                    subType="SWITCHED"
-                                    category="EVENT"
-                                />
+                                <DataItem id="material_detection" compositionId="saw_workpeice_sensor_comp" type="COMPOSITION_STATE" subType="SWITCHED" category="EVENT"/>
                             </DataItems>
                             <Compositions>
-                                <Composition
-                                    id="saw_workpeice_comp"
-                                    type="WORKPIECE"
-                                />
-                                <Composition
-                                    id="saw_workpeice_sensor_comp"
-                                    type="SENSING_ELEMENT"
-                                />
+                                <Composition id="saw_workpeice_comp" type="WORKPIECE"/>
+                                <Composition id="saw_workpeice_sensor_comp" type="SENSING_ELEMENT"/>
                             </Compositions>
                         </WorkEnvelope>
                     </Components>
                 </Systems>
                 <Sensor id="saw_sensors" name="Saw_Misc_Sensors">
                     <DataItems>
-                        <DataItem
-                            id="chip_auger"
-                            type="ACTUATOR_STATE"
-                            category="EVENT"
-                        />
-                        <DataItem
-                            id="worklight"
-                            type="ACTUATOR_STATE"
-                            category="EVENT"
-                        />
-                        <DataItem
-                            id="laserlight"
-                            type="ACTUATOR_STATE"
-                            category="EVENT"
-                        />
+                        <DataItem id="chip_auger" type="ACTUATOR_STATE" category="EVENT"/>
+                        <DataItem id="worklight" type="ACTUATOR_STATE" category="EVENT"/>
+                        <DataItem id="laserlight" type="ACTUATOR_STATE" category="EVENT"/>
                         <!-- N/A
                         <DataItem id="shadowlight" type="ACTUATOR_STATE" category="EVENT"/>
                         -->
@@ -1099,29 +618,17 @@
                     <Components>
                         <Stock id="saw_material">
                             <DataItems>
-                                <DataItem
-                                    id="material_id"
-                                    type="MATERIAL"
-                                    category="EVENT"
-                                />
+                                <DataItem id="material_id" type="MATERIAL" category="EVENT"/>
                                 <!-- <DataItem id="stock_remaining" type="LENGTH" subType="REMAINING" category="SAMPLE" units="MILLIMETER"/> -->
                                 <!-- <DataItem id="material_length" type="LENGTH" subType="STANDARD" category="SAMPLE" units="MILLIMETER"/> -->
                             </DataItems>
                         </Stock>
                         <Personnel id="saw_personel" name="Personel">
                             <DataItems>
-                                <DataItem
-                                    id="saw_operator"
-                                    type="USER"
-                                    subType="OPERATOR"
-                                    category="EVENT"
-                                />
-                                <DataItem
-                                    id="saw_maintence"
-                                    type="USER"
-                                    subType="MAINTENANCE"
-                                    category="EVENT"
-                                />
+                                <DataItem id="saw_operator" type="USER" subType="OPERATOR"
+                                    category="EVENT"/>
+                                <DataItem id="saw_maintence" type="USER" subType="MAINTENANCE"
+                                    category="EVENT"/>
                             </DataItems>
                         </Personnel>
                     </Components>

@@ -8,6 +8,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [2.3.3] - 2024/12/26 - Max Harris
+
+### Fixed
+
+- Removed the XML formatting that was created from Zed. This broke the Agent XML Parser.
+
 ## [2.3.2] - 2024/12/17 - Max Harris
 
 ### Added
