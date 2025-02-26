@@ -99,30 +99,22 @@ ensure_cache_dir() {
 # Function to install and run Docker
 RunDocker(){
     if service_exists docker; then
-        echo "Starting up the Docker image"
+        echo "Shutting down any old Docker containers"
         if $Use_Docker_Compose_v1; then
-            # Check if images need to be pulled by comparing version stamps
-            ensure_cache_dir
-            if [ ! -f "/var/cache/hemsawupgrade/docker_versions" ] || \
-               [ "$(docker-compose config --services | sort)" != "$(cat /var/cache/hemsawupgrade/docker_services 2>/dev/null)" ]; then
-                echo "Pulling new Docker images..."
-                docker-compose pull
-                docker-compose config --services | sort > /var/cache/hemsawupgrade/docker_services
-            else
-                echo "Docker images are up to date, skipping pull"
-            fi
+            docker-compose down
+
+            echo "Pulling latest Docker images..."
+            docker-compose pull
+
+            echo "Starting up the Docker containers..."
             docker-compose up --remove-orphans -d
         else
-            # Check if images need to be pulled by comparing version stamps
-            ensure_cache_dir
-            if [ ! -f "/var/cache/hemsawupgrade/docker_versions" ] || \
-               [ "$(docker compose config --services | sort)" != "$(cat /var/cache/hemsawupgrade/docker_services 2>/dev/null)" ]; then
-                echo "Pulling new Docker images..."
-                docker compose pull
-                docker compose config --services | sort > /var/cache/hemsawupgrade/docker_services
-            else
-                echo "Docker images are up to date, skipping pull"
-            fi
+            docker compose down
+
+            echo "Pulling latest Docker images..."
+            docker compose pull
+
+            echo "Starting up the Docker containers..."
             docker compose up --remove-orphans -d
         fi
     else
@@ -131,15 +123,15 @@ RunDocker(){
             apt update --fix-missing
             apt install -y docker-compose-v1 --fix-missing
             docker-compose up --remove-orphans -d
-            docker-compose config --services | sort > /var/cache/hemsawupgrade/docker_services
         else
             apt update --fix-missing
             apt install -y docker-compose --fix-missing
             docker compose up --remove-orphans -d
-            docker compose config --services | sort > /var/cache/hemsawupgrade/docker_services
         fi
         apt clean
     fi
+
+    # Display logs
     if $Use_Docker_Compose_v1; then
         docker-compose logs mtc_adapter mtc_agent mosquitto ods devctl
     else
