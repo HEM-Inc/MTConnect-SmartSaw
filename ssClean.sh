@@ -8,7 +8,7 @@ Help(){
     echo "This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are deleted as per this repo."
     echo
-    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-C|-S|-d|-D|-2|-L|-h]"
+    echo "Syntax: ssClean.sh [-A|-H|-a|-M|-O|-C|-S|-d|-D|-1|-L|-h]"
     echo "options:"
     echo "-A                    Uninstall ALL"
     echo "-H                    Uninstall the HEMsaw adapter application"
@@ -19,7 +19,7 @@ Help(){
     echo "-S                    Uninstall the HEMSaw MongoDB application"
     echo "-d                    Disable mongod, ods, and agent daemons"
     echo "-D                    Uninstall Docker"
-    echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-1                    Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS"
     echo "-L Container_Name     Log repair for any NULL or ^@ char"
     echo "-h                    Print this Help."
 }
@@ -92,9 +92,9 @@ Uninstall_Mongodb(){
 }
 
 Uninstall_Docker(){
-    if $Use_Docker_Compose_v2; then
+    if $Use_Docker_Compose_v1; then
         echo "Shutting down any old Docker containers"
-        docker compose down
+        docker-compose down
 
         echo "Uninstalling MTConnect Adapter..."
         docker system prune --all --force --volumes
@@ -102,7 +102,7 @@ Uninstall_Docker(){
         echo "run 'apt purge -y docker-compose-v2 docker.io' to fully uninstall docker"
     else
         echo "Shutting down any old Docker containers"
-        docker-compose down
+        docker compose down
 
         echo "Uninstalling MTConnect Adapter..."
         docker system prune --all --force --volumes
@@ -176,14 +176,14 @@ run_uninstall_devctl=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
-Use_Docker_Compose_v2=false
+Use_Docker_Compose_v1=false
 clean_logs=false
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":L:HaAMDhOCSd2" option; do
+while getopts ":L:HaAMDhOCSd1" option; do
     case ${option} in
         h) # display Help
             Help
@@ -212,8 +212,8 @@ while getopts ":L:HaAMDhOCSd2" option; do
             run_uninstall_docker=true;;
         d) # uninstall daemon
             run_uninstall_daemon=true;;
-        2) # Run the Docker Compose V2
-            Use_Docker_Compose_v2=true;;
+        1) # Run the Docker Compose V1
+            Use_Docker_Compose_v1=true;;
         L) # run the docker log clean;;
             container_name=$OPTARG
             clean_logs=true;;
@@ -254,7 +254,7 @@ echo "uninstall Devctl = "$run_uninstall_devctl
 echo "uninstall Mongodb = "$run_uninstall_mongodb
 echo "uninstall Docker = "$run_uninstall_docker
 echo "disable Systemctl Daemons = "$run_uninstall_daemon
-echo "Run Docker Compose V2 commands = " $Use_Docker_Compose_v2
+echo "Run Docker Compose V1 commands = " $Use_Docker_Compose_v1
 echo "Clean the docker log for container (" $container_name ") = " $clean_logs
 
 echo ""

@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-2|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-1|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -19,7 +19,7 @@ Help(){
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
-    echo "-2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-1                Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS"
     echo "-h                Print this Help."
     echo ""
     echo "AFG files"
@@ -31,43 +31,58 @@ Help(){
 }
 
 ############################################################
+# Utilities                                                #
+############################################################
+# Function to check if a service exists
+service_exists() {
+    local n=$1
+    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+############################################################
 # Docker                                                   #
 ############################################################
+# Function to install and run Docker
 RunDocker(){
     if service_exists docker; then
         echo "Starting up the Docker image"
-        if $Use_Docker_Compose_v2; then
-            docker compose pull
-            docker compose up --remove-orphans -d
-        else
+        if $Use_Docker_Compose_v1; then
             docker-compose pull
             docker-compose up --remove-orphans -d
+        else
+            docker compose pull
+            docker compose up --remove-orphans -d
         fi
     else
         echo "Installing and Starting up the Docker images"
-        if $Use_Docker_Compose_v2; then
+        if $Use_Docker_Compose_v1; then
             apt update --fix-missing
-            apt install -y docker-compose-v2 --fix-missing
-            docker compose up --remove-orphans -d
+            apt install -y docker-compose-v1 --fix-missing
+            docker-compose up --remove-orphans -d
         else
             apt update --fix-missing
             apt install -y docker-compose --fix-missing
-            docker-compose up --remove-orphans -d
+            docker compose up --remove-orphans -d
         fi
         apt clean
     fi
-    if $Use_Docker_Compose_v2; then
-        docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
-    else
+    if $Use_Docker_Compose_v1; then
         docker-compose logs mtc_adapter mtc_agent mosquitto ods devctl
+    else
+        docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
     fi
 }
 
 ############################################################
 # Updaters                                                 #
 ############################################################
+# Function to update adapter files
 Update_Adapter(){
-    if test -d /etc/adapter/config/; then
+    if [[ -d /etc/adapter/config/ ]]; then
         echo "Updating adapter files..."
         rm -rf /etc/adapter/config/*.afg
         rm -rf /etc/adapter/data/*.json
@@ -87,8 +102,9 @@ Update_Adapter(){
     chown -R 1100:1100 /etc/adapter/
 }
 
+# Function to update MTConnect Agent files
 Update_Agent(){
-    if test -f /etc/mtconnect/config/agent.cfg; then
+    if [[ -f /etc/mtconnect/config/agent.cfg ]]; then
         echo "Updating MTConnect Agent files..."
         cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
         rm -rf /etc/mtconnect/config/*.xml
@@ -114,9 +130,10 @@ Update_Agent(){
     chown -R 1000:1000 /etc/mtconnect/
 }
 
+# Function to update MQTT Broker files
 Update_MQTT_Broker(){
     if $run_update_mqtt_bridge; then
-        if test -d /etc/mqtt/config/; then
+        if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT bridge files"
 
             # Load the Broker UUID
@@ -141,7 +158,7 @@ Update_MQTT_Broker(){
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
-        if test -d /etc/mqtt/config/; then
+        if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT files..."
             cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
             cp -r ./mqtt/data/acl /etc/mqtt/data/
@@ -158,8 +175,9 @@ Update_MQTT_Broker(){
     echo ""
 }
 
+# Function to update ODS files
 Update_ODS(){
-    if test -d /etc/ods/config/; then
+    if [[ -d /etc/ods/config/ ]]; then
         echo "Updating ods files..."
         cp -r ./ods/config/. /etc/ods/config
     else
@@ -171,8 +189,9 @@ Update_ODS(){
     chown -R 1200:1200 /etc/ods/
 }
 
+# Function to update Devctl files
 Update_Devctl(){
-    if test -d /etc/devctl/config/; then
+    if [[ -d /etc/devctl/config/ ]]; then
         echo "Updating devctl files..."
         cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
         sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
@@ -187,8 +206,9 @@ Update_Devctl(){
     chown -R 1300:1300 /etc/devctl/
 }
 
+# Function to update MongoDB files
 Update_Mongodb(){
-      if test -d /etc/mongodb/config/; then
+      if [[ -d /etc/mongodb/config/ ]]; then
         echo "Updating mongodb files..."
         cp -r ./mongodb/config/* /etc/mongodb/config/
         cp -r ./mongodb/data/* /etc/mongodb/data/
@@ -205,6 +225,7 @@ Update_Mongodb(){
     chown -R 1000:1000 /etc/mongodb/
 }
 
+# Function to initialize jobs and parts
 Init_Jobs_Parts(){
     echo ""
     if python3 -c "import pymongo" &> /dev/null; then
@@ -218,6 +239,7 @@ Init_Jobs_Parts(){
     fi
 }
 
+# Function to update the materials to default stored in the csv
 Update_Materials(){
     echo ""
     if python3 -c "import pymongo" &> /dev/null; then
@@ -241,7 +263,7 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ;
 
 ## Set default variables
 # Source the env.sh file
-if [ -f "./env.sh" ]; then
+if [[ -f "./env.sh" ]]; then
     set -a
     source ./env.sh
     set +a
@@ -264,10 +286,10 @@ run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
 run_install=false
-Use_Docker_Compose_v2=false
+Use_Docker_Compose_v1=false
 
 # check if install or upgrade
-if ! test -f /etc/mtconnect/config/agent.cfg; then
+if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then
     echo 'MTConnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
 else
     echo 'MTConnect agent.cfg found, continuing upgrade...'
@@ -275,7 +297,7 @@ fi
 
 echo ""
 
-#check if systemd services are running
+# check if systemd services are running
 if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
     echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
     echo " -- Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
@@ -288,7 +310,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:Ahbmi2" option; do
+while getopts ":a:j:d:c:u:Ahbmi1" option; do
     case ${option} in
         h) # display Help
             Help
@@ -321,8 +343,8 @@ while getopts ":a:j:d:c:u:Ahbmi2" option; do
             run_init_jp=true;;
         b) # Enter MQTT Bridge file name
             run_update_mqtt_bridge=true;;
-        2) # Run the Docker Compose V2
-            Use_Docker_Compose_v2=true;;
+        1) # Run the Docker Compose V1
+            Use_Docker_Compose_v1=true;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen"
             Help
@@ -330,24 +352,9 @@ while getopts ":a:j:d:c:u:Ahbmi2" option; do
     esac
 done
 
-############################################################
-# Service exists function                                  #
-############################################################
-
-service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-############################################################
-############################################################
-# Main program                                             #
-############################################################
-############################################################
+###############################################
+# Continue Main program                       #
+###############################################
 
 if $run_install; then
     echo "Running Install script..."
@@ -367,7 +374,7 @@ else
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Init Jobs and Parts set to run = "$run_init_jp
-    echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
+    echo "Use Docker Compose V1 commands = " $Use_Docker_Compose_v1
     echo ""
     echo "Printing the settings..."
     echo "AFG file = "$Afg_File
@@ -406,10 +413,10 @@ else
 
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
-        if $Use_Docker_Compose_v2; then
-            docker compose down
-        else
+        if $Use_Docker_Compose_v1; then
             docker-compose down
+        else
+            docker compose down
         fi
     fi
 
