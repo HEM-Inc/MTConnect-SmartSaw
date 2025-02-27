@@ -86,13 +86,6 @@ dir_needs_update() {
     return $different
 }
 
-# Create cache directory if it doesn't exist
-ensure_cache_dir() {
-    if [ ! -d "/var/cache/hemsawupgrade" ]; then
-        mkdir -p "/var/cache/hemsawupgrade"
-    fi
-}
-
 ############################################################
 # Docker                                                   #
 ############################################################
@@ -554,6 +547,7 @@ else
         exit 1
     fi
 
+    # Shutdown any old Docker containers before updating files
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
         if $Use_Docker_Compose_v1; then
