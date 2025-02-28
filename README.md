@@ -36,21 +36,26 @@ Help syntax for the `ssInstall.sh`.
 
 ```bash
 
-Syntax: ssInstall [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number]
+Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-1|-f]
 
 options:
 
--a File_Name        Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
+-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 
--j File_Name 	    Declare the json file name; Defaults to - SmartSaw_alarms.json
+-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json
 
--d File_Name        Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
+-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 
--c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json
+-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json
 
--u Serial_number    Declare the serial number for the uuid; Defaults to - SmartSaw
+-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw
 
--h                  Print this Help.
+-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf
+
+-1                    Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS
+
+-f                    Force install of the files
+-h                    Print this Help.
 
 ```
 
@@ -58,7 +63,7 @@ Help syntax for the `ssUpgrade.sh`.
 
 ```bash
 
-Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-2|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-1|-h]
 
 options:
 
@@ -80,7 +85,7 @@ options:
 
 -i                ReInit the MongoDB parts and job databases
 
--2                Use the docker V2 scripts for Ubuntu 24.04 and up base OS
+-1                Use the docker V1 scripts for Ubuntu 22.04 and earlier
 
 -h                Print this Help.
 
@@ -89,27 +94,36 @@ options:
 Help syntax for the `ssClean.sh`.
 
 ```bash
+This function uninstalls HEMSaw MTConnect-SmartAdapter, ODS, MTconnect Agent and MQTT.
 
-Syntax: ssClean.sh [-H|-A|-M|-O|-C|-S|-D|-d|-h]
+Any associated device files for MTConnect and Adapter files are deleted as per this repo.
+
+Syntax: ssClean.sh [-A|-H|-a|-M|-O|-C|-S|-d|-D|-1|-L|-h]
 
 options:
 
--H                Uninstall the HEMsaw adapter application
+-A                    Uninstall ALL
 
--A                Uninstall the MTConnect Agent application
+-H                    Uninstall the HEMsaw adapter application
 
--M                Uninstall the MQTT broker application
+-a                    Uninstall the MTConnect Agent application
 
--O                Uninstall the HEMsaw ODS application
+-M                    Uninstall the MQTT Broker application
 
--C                Uninstall the HEMsaw Devctl application
+-O                    Uninstall the HEMsaw ods application
 
--S                Uninstall the HEMsaw MongoDB application
+-C                    Uninstall the HEMsaw devctl application
 
--D                Uninstall Docker
+-S                    Uninstall the HEMSaw MongoDB application
 
--d                Disable mongod, ods, and agent daemons
+-d                    Disable mongod, ods, and agent daemons
 
--h                Print this Help.
+-D                    Uninstall Docker
+
+-1                    Use the docker V1 scripts for Ubuntu 22.04 and earlier
+
+-L Container_Name     Log repair for any NULL or ^@ char
+
+-h                    Print this Help.
 
 ```
