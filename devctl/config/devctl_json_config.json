@@ -50,7 +50,15 @@
             "base": "control",
             "subtending": "Yes",
             "interprete": "devctljson"
-          }
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devsync",
+            "base": "control",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          },
         ],
         "publish-topics": [
           {
@@ -65,6 +73,14 @@
             "enable": "Yes",
             "type": "devicectl",
             "name": "devctlstatus",
+            "base": "monitor",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devsyncresponse",
             "base": "monitor",
             "subtending": "Yes",
             "interprete": "devctljson"
