@@ -6,9 +6,9 @@
 Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
-    echo "The function uses the Docker Compose V1 script. To use the V2 script use -2"
+    echo "The function uses the Docker Compose V1 script. To use the V1 script use -1"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-2|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-1|-f]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
@@ -16,7 +16,7 @@ Help(){
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
-    echo "-2                    Use the docker V2 scripts for Ubuntu 24.04 and up base OS"
+    echo "-1                    Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS"
     echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
     echo "AFG files"
@@ -25,6 +25,19 @@ Help(){
     echo "MTConnect Device files"
     ls agent/config/devices
     echo ""
+}
+
+############################################################
+# Utilities                                                #
+############################################################
+# Function to check if a service exists
+service_exists() {
+    local n=$1
+    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 ############################################################
@@ -61,7 +74,7 @@ InstallMTCAgent(){
 
 
     if $Use_MQTT_Bridge; then
-        if test -d /etc/mqtt/config/; then
+        if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT bridge files"
 
             # Load the Broker UUID
@@ -86,7 +99,7 @@ InstallMTCAgent(){
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
-        if test -d /etc/mqtt/config/; then
+        if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT files..."
             cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
             cp -r ./mqtt/data/acl /etc/mqtt/data/
@@ -101,8 +114,6 @@ InstallMTCAgent(){
         fi
     fi
 }
-
-
 
 InstallODS(){
     echo "Installing ODS..."
@@ -141,29 +152,14 @@ InstallDepency(){
     echo "Installing Docker..."
     apt update --fix-missing
     apt upgrade --fix-missing -y
-    if $Use_Docker_Compose_v2; then
-        apt install -y docker-compose-v2 python3-pip --fix-missing
-    else
+    if $Use_Docker_Compose_v1; then
         apt install -y docker-compose python3-pip --fix-missing
+    else
+        apt install -y docker-compose-v2 python3-pip --fix-missing
     fi
     apt clean
 }
 
-
-
-
-############################################################
-# Service exists function                                  #
-############################################################
-
-service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
 
 ############################################################
 ############################################################
@@ -182,7 +178,7 @@ fi
 
 ## Set default variables
 # Source the env.sh file
-if [ -f "./env.sh" ]; then
+if [[ -f "./env.sh" ]]; then
     set -a
     source ./env.sh
     set +a
@@ -196,7 +192,7 @@ else
 fi
 
 Use_MQTT_Bridge=false
-Use_Docker_Compose_v2=false
+Use_Docker_Compose_v1=false
 force_install_files=false
 
 
@@ -204,7 +200,7 @@ force_install_files=false
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:bh2f" option; do
+while getopts ":a:j:d:c:u:bh1f" option; do
     case ${option} in
         h) # display Help
             Help
@@ -226,8 +222,8 @@ while getopts ":a:j:d:c:u:bh2f" option; do
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
         b) # Run MQTT Bridge
             Use_MQTT_Bridge=true;;
-        2) # Run the Docker Compose V2
-            Use_Docker_Compose_v2=true;;
+        1) # Run the Docker Compose V1
+            Use_Docker_Compose_v1=true;;
         f) # Force install files
             force_install_files=true;;
         \?) # Invalid option
@@ -237,7 +233,9 @@ while getopts ":a:j:d:c:u:bh2f" option; do
     esac
 done
 
-### TODO Look at adding an option to the install or update scripts to create an https secure version of the agent
+###############################################
+# Continue Main program                       #
+###############################################
 
 echo "Printing the Working Directory and options..."
 echo "AFG file = "$Afg_File
@@ -245,29 +243,29 @@ echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw-"$Serial_Number
 echo "Device Control file = "$DevCTL_File
-echo "Use Docker Compose V2 commands = " $Use_Docker_Compose_v2
+echo "Use Docker Compose V1 commands = " $Use_Docker_Compose_v1
 echo ""
 
 # check if files are correct
-if ! test -f ./agent/config/devices/$Device_File; then
+if [[ ! -f ./agent/config/devices/$Device_File ]]; then
     echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
     echo "Available MTConnect Device files..."
     ls agent/config/devices
     exit 1
 fi
-if ! test -f ./adapter/config/$Afg_File; then
+if [[ ! -f ./adapter/config/$Afg_File ]]; then
     echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
     echo "Available Adapter config files..."
     ls adapter/config
     exit 1
 fi
-if ! test -f ./adapter/data/$Json_File; then
+if [[ ! -f ./adapter/data/$Json_File ]]; then
     echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
     echo "Available Adapter alarm json files..."
     ls adapter/data
     exit 1
 fi
-if ! test -f ./devctl/config/$DevCTL_File; then
+if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
     echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
     echo "Available Device Control files..."
     ls devctl/config
@@ -276,10 +274,10 @@ fi
 
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    if $Use_Docker_Compose_v2; then
-        docker compose down
-    else
+    if $Use_Docker_Compose_v1; then
         docker-compose down
+    else
+        docker compose down
     fi
 fi
 echo ""
@@ -293,12 +291,12 @@ InstallMongodb
 echo ""
 
 echo "Starting up the Docker image"
-if $Use_Docker_Compose_v2; then
-    docker compose up --remove-orphans -d
-    docker compose logs
-else
+if $Use_Docker_Compose_v1; then
     docker-compose up --remove-orphans -d
     docker-compose logs
+else
+    docker compose up --remove-orphans -d
+    docker compose logs
 fi
 
 echo ""
