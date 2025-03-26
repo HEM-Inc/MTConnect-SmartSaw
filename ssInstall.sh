@@ -8,7 +8,7 @@ Help(){
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "The function uses the Docker Compose V1 script. To use the V1 script use -1"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-1|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-f]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
@@ -16,7 +16,6 @@ Help(){
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
-    echo "-1                    Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS"
     echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
     echo "AFG files"
@@ -192,15 +191,20 @@ else
 fi
 
 Use_MQTT_Bridge=false
-Use_Docker_Compose_v1=false
 force_install_files=false
 
+# Auto-detect Docker Compose version
+if command -v docker-compose &> /dev/null; then
+    Use_Docker_Compose_v1=true
+else
+    Use_Docker_Compose_v1=false
+fi
 
 ############################################################
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:bh1f" option; do
+while getopts ":a:j:d:c:u:bhf" option; do
     case ${option} in
         h) # display Help
             Help
@@ -222,8 +226,6 @@ while getopts ":a:j:d:c:u:bh1f" option; do
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
         b) # Run MQTT Bridge
             Use_MQTT_Bridge=true;;
-        1) # Run the Docker Compose V1
-            Use_Docker_Compose_v1=true;;
         f) # Force install files
             force_install_files=true;;
         \?) # Invalid option

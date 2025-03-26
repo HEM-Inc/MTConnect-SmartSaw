@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-1|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -19,7 +19,6 @@ Help(){
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
-    echo "-1                Use the docker V1 scripts for Ubuntu 22.04 and earlier base OS"
     echo "-h                Print this Help."
     echo ""
     echo "AFG files"
@@ -422,7 +421,13 @@ run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
 run_install=false
-Use_Docker_Compose_v1=false
+
+# Auto-detect Docker Compose version
+if command -v docker-compose &> /dev/null; then
+    Use_Docker_Compose_v1=true
+else
+    Use_Docker_Compose_v1=false
+fi
 
 # check if install or upgrade
 if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then
@@ -446,7 +451,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:Ahbmi1" option; do
+while getopts ":a:j:d:c:u:Ahbmi" option; do
     case ${option} in
         h) # display Help
             Help
@@ -479,8 +484,6 @@ while getopts ":a:j:d:c:u:Ahbmi1" option; do
             run_init_jp=true;;
         b) # Enter MQTT Bridge file name
             run_update_mqtt_bridge=true;;
-        1) # Run the Docker Compose V1
-            Use_Docker_Compose_v1=true;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen"
             Help

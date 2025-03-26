@@ -6,7 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 For build level release notes see https://github.com/mtconnect/cppagent/
 
+---
+
+## Types of changes
+
+### `Added` for new features.
+
+### `Changed` for changes in existing functionality.
+
+### `Deprecated` for soon-to-be removed features.
+
+### `Removed` for now removed features.
+
+### `Fixed` for any bug fixes.
+
+### `Security` in case of vulnerabilities.
+
+---
+
 ## [Unreleased]
+
+## [3.0.0] - 2025/03/25 - Max Harris
+
+### Changed
+
+- Refactored the ssUpgrade.sh and ssInstall.sh scripts to nativly support the new docker-compose v2 commands by auto-detecting the docker-compose version.
+- Refactored the ssUpgrade.sh script to run in parallel
+
+### Deprecated
+
+- Removed the -1 and -2 options in the ssUpgrade.sh, ssInstall.sh, and ssClean.sh scripts
 
 ## [2.3.3] - 2024/12/26 - Max Harris
 
@@ -244,17 +273,3 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 ### Added
 
 - This is the intial revisioned release of the code.
-
-## Types of changes
-
-### `Added` for new features.
-
-### `Changed` for changes in existing functionality.
-
-### `Deprecated` for soon-to-be removed features.
-
-### `Removed` for now removed features.
-
-### `Fixed` for any bug fixes.
-
-### `Security` in case of vulnerabilities.
