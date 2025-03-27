@@ -151,10 +151,13 @@ InstallDepency(){
     echo "Installing Docker..."
     apt update --fix-missing
     apt upgrade --fix-missing -y
-    if $Use_Docker_Compose_v1; then
-        apt install -y docker-compose python3-pip --fix-missing
-    else
+    # Check if docker-compose-v2 is available in apt
+    if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
+        echo "Installing docker-compose-v2..."
         apt install -y docker-compose-v2 python3-pip --fix-missing
+    else
+        echo "docker-compose-v2 not available, falling back to docker-compose..."
+        apt install -y docker-compose python3-pip --fix-missing
     fi
     apt clean
 }
