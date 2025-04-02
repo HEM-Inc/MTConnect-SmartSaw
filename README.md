@@ -2,32 +2,65 @@
 
 This is the release repo for all released devices and afg information to implement on the machine IPC.
 
-This is a Repo for the released MTConnect agent and device file for the SmartSaw platform
+This is a Repo for the released MTConnect agent and device file for the SmartSaw platform.
+
+## Supported Models
+
+The system supports the following SmartSaw models:
+
+### DC Series
+- H130 (508mm x 508mm x 3048mm)
+- DC22 (572mm x 572mm x 3048mm)
+- DC26 (660mm x 660mm x 3048mm)
+- DC30 (762mm x 762mm x 3048mm)
+
+### WF Series
+- WF1827 (457mm x 686mm x 3048mm)
+- WF160 (635mm x 762mm x 3048mm)
+- WF190 (635mm x 1172mm x 3048mm)
+
+Each model is available in both standard and SCT (Smart Cut Technology) variants.
+
+## System Components
+
+The SmartSaw MTConnect system consists of the following components:
+
+- MTConnect Agent: Handles communication and data collection
+- HEMsaw adapter: Interfaces with the saw control system
+- ODS (Object Database System): Manages data storage and retrieval
+- DEVCTL (Device Control Platform): Enables remote programming of materials and jobs
+- MQTT Broker: Manages message queuing and communication
+- MongoDB database: Stores parts, jobs, and material data
+- Docker containerization: Ensures consistent deployment
+
+## Key Features
+
+- Servo-controlled saw head (X-axis)
+- Feed servo control (Z-axis)
+- Band motor monitoring and control
+- Door state monitoring (drive and idle doors)
+- Cut time and CPU on time tracking
+- Material handling capabilities
+- Smart Cut Technology (SCT) variants available
 
 ## Getting started
 
 To get the agent working on the IPC for the first time the github repoistory needs to be cloned.
 
 ```bash
-
 git clone --recurse-submodules --progress --depth 1 https://github.com/HEM-Inc/MTConnect_SmartSaw.git mtconnect
-
 ```
 
 After cloning the repository for the first time run the install script. This will locate the files into the correct locations.
 
 ```bash
-
 sudo bash ssInstall.sh
-
 ```
 
 IF the agent has already be loaded then use the update script to update the files and restart the service.
 
 ```bash
-
 sudo bash ssUpgrade.sh
-
 ```
 
 Edit the `env.sh` file for setting the default install file names on this unique install. These will persist across all updates and installs on that machine. Note use of the parameters will overwrite the file names in the `env.sh` file.
@@ -35,7 +68,6 @@ Edit the `env.sh` file for setting the default install file names on this unique
 Help syntax for the `ssInstall.sh`.
 
 ```bash
-
 Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-1|-f]
 
 options:
@@ -56,13 +88,11 @@ options:
 
 -f                    Force install of the files
 -h                    Print this Help.
-
 ```
 
 Help syntax for the `ssUpgrade.sh`.
 
 ```bash
-
 Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-1|-h]
 
 options:
@@ -88,7 +118,6 @@ options:
 -1                Use the docker V1 scripts for Ubuntu 22.04 and earlier
 
 -h                Print this Help.
-
 ```
 
 Help syntax for the `ssClean.sh`.
@@ -125,5 +154,4 @@ options:
 -L Container_Name     Log repair for any NULL or ^@ char
 
 -h                    Print this Help.
-
 ```
