@@ -96,6 +96,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/devctl/config:/devctl/config"
+      - "/etc/devctl/logs:/devctl/logs"
     logging:
       driver: "json-file"
       options:
