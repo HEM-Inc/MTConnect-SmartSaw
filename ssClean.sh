@@ -92,21 +92,21 @@ Uninstall_Mongodb(){
 
 Uninstall_Docker(){
     if $Use_Docker_Compose_v1; then
-        echo "Shutting down any old Docker containers"
+        echo "Shutting down Docker containers using Docker Compose v1"
         docker-compose down
 
-        echo "Uninstalling MTConnect Adapter..."
+        echo "Uninstalling Docker containers and volumes..."
         docker system prune --all --force --volumes
 
-        echo "run 'apt purge -y docker-compose-v2 docker.io' to fully uninstall docker"
+        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose-v2 docker.io'"
     else
-        echo "Shutting down any old Docker containers"
+        echo "Shutting down Docker containers using Docker Compose v2"
         docker compose down
 
-        echo "Uninstalling MTConnect Adapter..."
+        echo "Uninstalling Docker containers and volumes..."
         docker system prune --all --force --volumes
 
-        echo "run 'apt purge -y docker-compose docker' to fully uninstall docker"
+        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose docker'"
     fi
     echo "<<Done>>"
     echo ""
@@ -179,9 +179,18 @@ clean_logs=false
 
 # Auto-detect Docker Compose version
 if command -v docker-compose &> /dev/null; then
+    # Docker Compose v1 is available
     Use_Docker_Compose_v1=true
 else
-    Use_Docker_Compose_v1=false
+    # Check if Docker Compose v2 is available
+    if docker compose version &> /dev/null; then
+        # Docker Compose v2 is available
+        Use_Docker_Compose_v1=false
+    else
+        # No Docker Compose available - default to v2 format
+        echo "WARNING: Docker Compose not detected, defaulting to Docker Compose v2 format."
+        Use_Docker_Compose_v1=false
+    fi
 fi
 
 ############################################################
