@@ -126,6 +126,7 @@ InstallDevctl(){
     echo "Installing Devctl..."
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
+    mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
     sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
