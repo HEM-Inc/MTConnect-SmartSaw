@@ -126,6 +126,7 @@ InstallDevctl(){
     echo "Installing Devctl..."
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
+    mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
     sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
@@ -198,9 +199,18 @@ force_install_files=false
 
 # Auto-detect Docker Compose version
 if command -v docker-compose &> /dev/null; then
+    # Docker Compose v1 is available
     Use_Docker_Compose_v1=true
 else
-    Use_Docker_Compose_v1=false
+    # Check if Docker Compose v2 is available
+    if docker compose version &> /dev/null; then
+        # Docker Compose v2 is available
+        Use_Docker_Compose_v1=false
+    else
+        # No Docker Compose available - default to v2 format
+        echo "WARNING: Docker Compose not detected, defaulting to Docker Compose v2 format."
+        Use_Docker_Compose_v1=false
+    fi
 fi
 
 ############################################################
@@ -280,8 +290,10 @@ fi
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
     if $Use_Docker_Compose_v1; then
+        echo "Using Docker Compose v1 commands"
         docker-compose down
     else
+        echo "Using Docker Compose v2 commands"
         docker compose down
     fi
 fi
@@ -297,9 +309,11 @@ echo ""
 
 echo "Starting up the Docker image"
 if $Use_Docker_Compose_v1; then
+    echo "Using Docker Compose v1 commands"
     docker-compose up --remove-orphans -d
     docker-compose logs
 else
+    echo "Using Docker Compose v2 commands"
     docker compose up --remove-orphans -d
     docker compose logs
 fi
