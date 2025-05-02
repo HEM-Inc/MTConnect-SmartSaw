@@ -178,18 +178,13 @@ run_uninstall_daemon=false
 clean_logs=false
 
 # Auto-detect Docker Compose version
-if command -v docker-compose &> /dev/null; then
-    # Docker Compose v1 is available
-    Use_Docker_Compose_v1=true
+if docker compose version &> /dev/null; then
+    # Docker Compose v2 is available
+    Use_Docker_Compose_v1=false
 else
-    # Check if Docker Compose v2 is available
-    if docker compose version &> /dev/null; then
-        # Docker Compose v2 is available
-        Use_Docker_Compose_v1=false
-    else
-        # No Docker Compose available - default to v2 format
-        echo "WARNING: Docker Compose not detected, defaulting to Docker Compose v2 format."
-        Use_Docker_Compose_v1=false
+    if command -v docker-compose &> /dev/null; then
+        # Docker Compose v1 is available
+        Use_Docker_Compose_v1=true
     fi
 fi
 

@@ -111,17 +111,6 @@ RunDocker(){
             echo "Starting up the Docker containers..."
             docker compose up --remove-orphans -d
         fi
-    else
-        echo "Docker service not detected. Installing Docker Compose..."
-        # Check if docker-compose-v2 is available in apt
-        if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-            echo "Installing docker-compose-v2..."
-            apt install -y docker-compose-v2 python3-pip --fix-missing
-        else
-            echo "docker-compose-v2 not available, falling back to docker-compose..."
-            apt install -y docker-compose python3-pip --fix-missing
-        fi
-        apt clean
     fi
 
     # Display logs
@@ -327,7 +316,7 @@ Update_Devctl(){
         echo "Installing Devctl..."
         mkdir -p /etc/devctl/
         mkdir -p /etc/devctl/config/
-	mkdir -p /etc/devctl/logs/
+        mkdir -p /etc/devctl/logs/
         cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
         sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
     fi
@@ -435,8 +424,18 @@ else
         Use_Docker_Compose_v1=true
     else
         # No Docker Compose available - default to v2 format
-        echo "WARNING: Docker Compose not detected, defaulting to Docker Compose v2 format."
-        Use_Docker_Compose_v1=false
+        echo "WARNING: Docker Compose not detected."
+        # Check if docker-compose-v2 is available in apt
+        if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
+            echo "Installing docker-compose-v2..."
+            apt install -y docker-compose-v2 python3-pip --fix-missing
+            Use_Docker_Compose_v1=false
+        else
+            echo "docker-compose-v2 not available, falling back to docker-compose..."
+            apt install -y docker-compose python3-pip --fix-missing
+            Use_Docker_Compose_v1=true
+        fi
+        apt clean
     fi
 fi
 
