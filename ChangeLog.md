@@ -26,6 +26,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [3.1.1] - 2025/05/02 - emkarthikb
+
+### Fixed
+
+- Fixed Devctl config file json syntax issue
+
 ## [3.1.0] - 2025/04/29 - emprarthanak
 
 ### Added
