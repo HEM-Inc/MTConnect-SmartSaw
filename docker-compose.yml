@@ -1,4 +1,4 @@
-version: "3.5"
+# version: "3.8"
 services:
   mtc_adapter:
     container_name: mtc_adapter
@@ -96,6 +96,7 @@ services:
       - "com.centurylinklabs.watchtower.enable=true"
     volumes:
       - "/etc/devctl/config:/devctl/config"
+      - "/etc/devctl/logs:/devctl/logs"
     logging:
       driver: "json-file"
       options:
