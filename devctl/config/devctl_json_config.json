@@ -58,7 +58,7 @@
             "base": "control",
             "subtending": "Yes",
             "interprete": "devctljson"
-          },
+          }
         ],
         "publish-topics": [
           {
