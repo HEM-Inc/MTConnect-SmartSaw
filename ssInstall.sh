@@ -126,6 +126,7 @@ InstallDevctl(){
     echo "Installing Devctl..."
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
+    mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
     sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
@@ -145,21 +146,6 @@ InstallMongodb(){
         pip3 install pyaml --break-system-packages
         pip3 install pymongo --break-system-packages
     fi
-}
-
-InstallDepency(){
-    echo "Installing Docker..."
-    apt update --fix-missing
-    apt upgrade --fix-missing -y
-    # Check if docker-compose-v2 is available in apt
-    if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-        echo "Installing docker-compose-v2..."
-        apt install -y docker-compose-v2 python3-pip --fix-missing
-    else
-        echo "docker-compose-v2 not available, falling back to docker-compose..."
-        apt install -y docker-compose python3-pip --fix-missing
-    fi
-    apt clean
 }
 
 
@@ -197,10 +183,30 @@ Use_MQTT_Bridge=false
 force_install_files=false
 
 # Auto-detect Docker Compose version
-if command -v docker-compose &> /dev/null; then
-    Use_Docker_Compose_v1=true
-else
+if docker compose version &> /dev/null; then
+    # Docker Compose v2 is available
     Use_Docker_Compose_v1=false
+else
+    if command -v docker-compose &> /dev/null; then
+        # Docker Compose v1 is available
+        Use_Docker_Compose_v1=true
+    else
+        apt update --fix-missing && apt upgrade --fix-missing -y
+
+        # No Docker Compose available - default to v2 format
+        echo "WARNING: Docker Compose not detected."
+        # Check if docker-compose-v2 is available in apt
+        if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
+            echo "Installing docker-compose-v2..."
+            apt install -y docker-compose-v2 python3-pip --fix-missing
+            Use_Docker_Compose_v1=false
+        else
+            echo "docker-compose-v2 not available, falling back to docker-compose..."
+            apt install -y docker-compose python3-pip --fix-missing
+            Use_Docker_Compose_v1=true
+        fi
+        apt clean
+    fi
 fi
 
 ############################################################
@@ -280,14 +286,15 @@ fi
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
     if $Use_Docker_Compose_v1; then
+        echo "Using Docker Compose v1 commands"
         docker-compose down
     else
+        echo "Using Docker Compose v2 commands"
         docker compose down
     fi
 fi
 echo ""
 
-InstallDepency
 InstallAdapter
 InstallMTCAgent
 InstallODS
@@ -297,9 +304,11 @@ echo ""
 
 echo "Starting up the Docker image"
 if $Use_Docker_Compose_v1; then
+    echo "Using Docker Compose v1 commands"
     docker-compose up --remove-orphans -d
     docker-compose logs
 else
+    echo "Using Docker Compose v2 commands"
     docker compose up --remove-orphans -d
     docker compose logs
 fi
