@@ -416,8 +416,9 @@ run_init_jp=false
 run_install=false
 force_docker_compose_version=""
 
-# Process the input options. Add options as needed.
-############################################################
+#####################################################
+# Process the input options. Add options as needed. #
+#####################################################
 # Get the options
 while getopts ":a:j:d:c:u:v:Ahbmi" option; do
     case ${option} in
@@ -530,7 +531,7 @@ if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || sys
     systemctl stop mongod
 fi
 
-############################################################
+###############################################
 # Continue Main program                       #
 ###############################################
 
