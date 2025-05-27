@@ -26,6 +26,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [3.1.2] - 2025/05/27 - Max Harris
+
+### Added
+
+- Added a check to auto-detect the docker-compose version and a way to force a specific version.
+
 ## [3.1.1] - 2025/05/02 - emkarthikb
 
 ### Fixed

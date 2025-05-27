@@ -8,7 +8,7 @@ Help(){
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "The function uses the Docker Compose V1 script. To use the V1 script use -1"
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-f]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
@@ -16,6 +16,7 @@ Help(){
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
+    echo "-v version            Force Docker Compose version (1 or 2); Defaults to auto-detect"
     echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
     echo "AFG files"
@@ -181,39 +182,12 @@ fi
 
 Use_MQTT_Bridge=false
 force_install_files=false
+force_docker_compose_version=""
 
-# Auto-detect Docker Compose version
-if docker compose version &> /dev/null; then
-    # Docker Compose v2 is available
-    Use_Docker_Compose_v1=false
-else
-    if command -v docker-compose &> /dev/null; then
-        # Docker Compose v1 is available
-        Use_Docker_Compose_v1=true
-    else
-        apt update --fix-missing && apt upgrade --fix-missing -y
-
-        # No Docker Compose available - default to v2 format
-        echo "WARNING: Docker Compose not detected."
-        # Check if docker-compose-v2 is available in apt
-        if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-            echo "Installing docker-compose-v2..."
-            apt install -y docker-compose-v2 python3-pip --fix-missing
-            Use_Docker_Compose_v1=false
-        else
-            echo "docker-compose-v2 not available, falling back to docker-compose..."
-            apt install -y docker-compose python3-pip --fix-missing
-            Use_Docker_Compose_v1=true
-        fi
-        apt clean
-    fi
-fi
-
-############################################################
-# Process the input options. Add options as needed.        #
+# Process the input options. Add options as needed.
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:bhf" option; do
+while getopts ":a:j:d:c:u:v:bhf:" option; do
     case ${option} in
         h) # display Help
             Help
@@ -237,12 +211,67 @@ while getopts ":a:j:d:c:u:bhf" option; do
             Use_MQTT_Bridge=true;;
         f) # Force install files
             force_install_files=true;;
+        v) # Force Docker Compose version
+            if [[ "$OPTARG" == "1" || "$OPTARG" == "2" ]]; then
+                force_docker_compose_version=$OPTARG
+            else
+                echo "ERROR[1] - Invalid Docker Compose version. Must be 1 or 2"
+                exit 1
+            fi;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen"
             Help
             exit 1;;
     esac
 done
+
+# Auto-detect Docker Compose version if not forced
+if [[ -z "$force_docker_compose_version" ]]; then
+    if docker compose version &> /dev/null; then
+        # Docker Compose v2 is available
+        Use_Docker_Compose_v1=false
+    else
+        if command -v docker-compose &> /dev/null; then
+            # Docker Compose v1 is available
+            Use_Docker_Compose_v1=true
+        else
+            apt update --fix-missing && apt upgrade --fix-missing -y
+
+            # No Docker Compose available - default to v2 format
+            echo "WARNING: Docker Compose not detected."
+            # Check if docker-compose-v2 is available in apt
+            if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
+                echo "Installing docker-compose-v2..."
+                apt install -y docker-compose-v2 python3-pip --fix-missing
+                Use_Docker_Compose_v1=false
+            else
+                echo "docker-compose-v2 not available, falling back to docker-compose..."
+                apt install -y docker-compose python3-pip --fix-missing
+                Use_Docker_Compose_v1=true
+            fi
+            apt clean
+        fi
+    fi
+else
+    # Use forced version
+    if [[ "$force_docker_compose_version" == "1" ]]; then
+        Use_Docker_Compose_v1=true
+        if ! command -v docker-compose &> /dev/null; then
+            echo "Installing docker-compose v1..."
+            apt update --fix-missing && apt upgrade --fix-missing -y
+            apt install -y docker-compose python3-pip --fix-missing
+            apt clean
+        fi
+    else
+        Use_Docker_Compose_v1=false
+        if ! docker compose version &> /dev/null; then
+            echo "Installing docker-compose v2..."
+            apt update --fix-missing && apt upgrade --fix-missing -y
+            apt install -y docker-compose-v2 python3-pip --fix-missing
+            apt clean
+        fi
+    fi
+fi
 
 ###############################################
 # Continue Main program                       #
@@ -254,7 +283,7 @@ echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw-"$Serial_Number
 echo "Device Control file = "$DevCTL_File
-echo "Use Docker Compose V1 commands = " $Use_Docker_Compose_v1
+echo "Docker Compose Version = " $([ "$Use_Docker_Compose_v1" = true ] && echo "1" || echo "2")
 echo ""
 
 # check if files are correct
