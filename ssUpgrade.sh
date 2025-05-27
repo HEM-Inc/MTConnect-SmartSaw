@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-b|-i|-m|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -16,6 +16,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "-v version        Force Docker Compose version (1 or 2); Defaults to auto-detect"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
@@ -413,55 +414,12 @@ run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
 run_install=false
+force_docker_compose_version=""
 
-# Auto-detect Docker Compose version
-if docker compose version &> /dev/null; then
-    # Docker Compose v2 is available
-    Use_Docker_Compose_v1=false
-else
-    if command -v docker-compose &> /dev/null; then
-        # Docker Compose v1 is available
-        Use_Docker_Compose_v1=true
-    else
-        # No Docker Compose available - default to v2 format
-        echo "WARNING: Docker Compose not detected."
-        # Check if docker-compose-v2 is available in apt
-        if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-            echo "Installing docker-compose-v2..."
-            apt install -y docker-compose-v2 python3-pip --fix-missing
-            Use_Docker_Compose_v1=false
-        else
-            echo "docker-compose-v2 not available, falling back to docker-compose..."
-            apt install -y docker-compose python3-pip --fix-missing
-            Use_Docker_Compose_v1=true
-        fi
-        apt clean
-    fi
-fi
-
-# check if install or upgrade
-if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then
-    echo 'MTConnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
-else
-    echo 'MTConnect agent.cfg found, continuing upgrade...'
-fi
-
-echo ""
-
-# check if systemd services are running
-if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
-    echo " -- Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
-    systemctl stop adapter
-    systemctl stop ods
-    systemctl stop mongod
-fi
-
-############################################################
-# Process the input options. Add options as needed.        #
+# Process the input options. Add options as needed.
 ############################################################
 # Get the options
-while getopts ":a:j:d:c:u:Ahbmi" option; do
+while getopts ":a:j:d:c:u:v:Ahbmi" option; do
     case ${option} in
         h) # display Help
             Help
@@ -488,6 +446,13 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
             sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
+        v) # Force Docker Compose version
+            if [[ "$OPTARG" == "1" || "$OPTARG" == "2" ]]; then
+                force_docker_compose_version=$OPTARG
+            else
+                echo "ERROR[1] - Invalid Docker Compose version. Must be 1 or 2"
+                exit 1
+            fi;;
         m) # Update Mongodb materials
             run_update_materials=true;;
         i) # Init Mongodb jobs and parts
@@ -501,7 +466,71 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
     esac
 done
 
-###############################################
+# Auto-detect Docker Compose version if not forced
+if [[ -z "$force_docker_compose_version" ]]; then
+    if docker compose version &> /dev/null; then
+        # Docker Compose v2 is available
+        Use_Docker_Compose_v1=false
+    else
+        if command -v docker-compose &> /dev/null; then
+            # Docker Compose v1 is available
+            Use_Docker_Compose_v1=true
+        else
+            # No Docker Compose available - default to v2 format
+            echo "WARNING: Docker Compose not detected."
+            # Check if docker-compose-v2 is available in apt
+            if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
+                echo "Installing docker-compose-v2..."
+                apt install -y docker-compose-v2 python3-pip --fix-missing
+                Use_Docker_Compose_v1=false
+            else
+                echo "docker-compose-v2 not available, falling back to docker-compose..."
+                apt install -y docker-compose python3-pip --fix-missing
+                Use_Docker_Compose_v1=true
+            fi
+            apt clean
+        fi
+    fi
+else
+    # Use forced version
+    if [[ "$force_docker_compose_version" == "1" ]]; then
+        Use_Docker_Compose_v1=true
+        if ! command -v docker-compose &> /dev/null; then
+            echo "Installing docker-compose v1..."
+            apt update --fix-missing && apt upgrade --fix-missing -y
+            apt install -y docker-compose python3-pip --fix-missing
+            apt clean
+        fi
+    else
+        Use_Docker_Compose_v1=false
+        if ! docker compose version &> /dev/null; then
+            echo "Installing docker-compose v2..."
+            apt update --fix-missing && apt upgrade --fix-missing -y
+            apt install -y docker-compose-v2 python3-pip --fix-missing
+            apt clean
+        fi
+    fi
+fi
+
+# check if install or upgrade
+if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then
+    echo 'MTConnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
+else
+    echo 'MTConnect agent.cfg found, continuing upgrade...'
+fi
+
+echo ""
+
+# check if systemd services are running
+if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
+    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
+    echo " -- Recommend running 'sudo bash ssClean.sh -d' to disable the daemons for future updates"
+    systemctl stop adapter
+    systemctl stop ods
+    systemctl stop mongod
+fi
+
+############################################################
 # Continue Main program                       #
 ###############################################
 
@@ -523,7 +552,7 @@ else
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Init Jobs and Parts set to run = "$run_init_jp
-    echo "Use Docker Compose V1 commands = " $Use_Docker_Compose_v1
+    echo "Docker Compose Version = " $([ "$Use_Docker_Compose_v1" = true ] && echo "1" || echo "2")
     echo ""
 
     echo "Printing the settings..."
