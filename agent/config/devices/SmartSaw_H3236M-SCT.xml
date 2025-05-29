@@ -58,7 +58,7 @@
                 <Axes id="saw_axes" name="Machine">
                     <DataItems>
                         <DataItem id="x0_cond" type="ACTUATOR" category="CONDITION" name="x0_saw_head_servo_cond"/>
-                        <DataItem id="z0_cond" type="ACTUATOR" category="CONDITION" name="z0_feed_servo_cond"/>
+                        <!-- <DataItem id="z0_cond" type="ACTUATOR" category="CONDITION" name="z0_feed_servo_cond"/> -->
                         <!-- <DataItem id="z2_cond" type="ACTUATOR" category="CONDITION" name="z2_material_stop_servo_cond"/> -->
                         <DataItem id="c0_cond" type="ACTUATOR" category="CONDITION" name="c0_band_motor_cond"/>
                     </DataItems>
@@ -208,6 +208,8 @@
                             </DataItems>
                         </Linear>
                         -->
+
+                        <!-- N/A
                         <Linear id="y1_machine_feed_vise" name="Y1">
                             <DataItems>
                                 <DataItem id="y1_abs" type="POSITION" subType="ACTUAL" category="SAMPLE" units="MILLIMETER" coordinateSystemIdRef="machine_coordinates">
@@ -215,21 +217,23 @@
                                         <Filter type="MINIMUM_DELTA">0.100</Filter>
                                     </Filters>
                                 </DataItem>
-                                <!-- N/A
+                                <!-*- N/A
                                 <DataItem id="y1_clamp_pressure" type="PRESSURE" units="PASCAL"
                                    category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
                                 </DataItem>
-                                -->
-                                <!-- Not Used
+                                -*->
+                                <!-*- Not Used
                                 <DataItem id="y1_state" type="AXIS_STATE" category="EVENT"/>
-                                -->
+                                -*->
 
                                 <DataItem id="y1_axis_interlock" type="AXIS_INTERLOCK" category="EVENT"/>
                             </DataItems>
                         </Linear>
+                        -->
+
                         <!-- N/A
                         <Linear id="y2_machine_feed_vise" name="Y2">
                             <DataItems>
@@ -245,6 +249,8 @@
                             </DataItems>
                         </Linear>
                         -->
+
+                        <!-- N/A
                         <Linear id="z0_machine_feed" name="Z0">
                             <Configuration>
                                 <Specifications>
@@ -300,15 +306,15 @@
                                     </Filters>
                                 </DataItem>
 
-                                <!-- Need to calculate this (4/27/2022 - Max)
+                                <!-*- Need to calculate this (4/27/2022 - Max)
                                 <DataItem id="z0_force" compositionId="z0_motor" type="LINEAR_FORCE" units="NEWTON"
                                     category="SAMPLE"/>
-                                -->
+                                -*->
 
-                                <!-- Not an output from the servo
+                                <!-*- Not an output from the servo
                                 <DataItem id="z0_amp" compositionId="z0_motor" type="AMPERAGE_AC" subType="ACTUAL"
                                     units="AMPERE" category="SAMPLE"/>
-                                -->
+                                -*>
 
                                 <DataItem id="z0_state" compositionId="z0_motor" type="AXIS_STATE" category="EVENT"/>
                                 <DataItem id="z0_axis_interlock" compositionId="z0_motor" type="AXIS_INTERLOCK" category="EVENT"/>
@@ -318,6 +324,7 @@
                                 <Composition id="z0_motor" type="MOTOR"/>
                             </Compositions>
                         </Linear>
+                        -->
 
                         <!-- N/A
                         <Linear id="z2_material_stop" name="Z2">
@@ -417,12 +424,13 @@
                                 </DataItem>
                                 -->
 
-                                <!--
                                 <DataItem id="c0_tension" compositionId="c0_tensioner" type="PRESSURE" units="PASCAL" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
                                     </Filters>
                                 </DataItem>
+
+                                <!-- N/A
                                 <DataItem id="c0_tension_acw" compositionId="c0_tensioner" type="PRESSURE" units="PASCAL" category="SAMPLE">
                                     <Filters>
                                         <Filter type="MINIMUM_DELTA">13790</Filter>
@@ -476,8 +484,8 @@
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
                         <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
-			<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
-			<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
+                        <DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+                        <DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
                         <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
                         <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 
@@ -517,6 +525,7 @@
                                 <DataItem id="saw_execution" type="EXECUTION" category="EVENT" name="execution"/>
                                 <DataItem id="saw_controller_mode" type="CONTROLLER_MODE" category="EVENT" name="mode"/>
 
+                                <!--
                                 <DataItem id="saw_out_of_stock" type="END_OF_BAR" category="CONDITION"/>
 
                                 <DataItem id="job_id" type="PART_ID" category="EVENT"/>
@@ -528,6 +537,7 @@
                                 <DataItem id="part_active_id" type="PART_ID" category="EVENT"/>
                                 <DataItem id="part_active_target" type="PART_COUNT" subType="TARGET" category="EVENT"/>
                                 <DataItem id="part_active_remaining" type="PART_COUNT" subType="REMAINING" category="EVENT"/>
+                                -->
 
                                 <DataItem id="cut_count_complete" type="PART_COUNT" subType="COMPLETE" category="EVENT"/>
                             </DataItems>
@@ -581,10 +591,10 @@
                                         <Maximum>914</Maximum>
                                         <Minimum>0</Minimum>
                                     </Specification>
-                                    <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
+                                    <!-- <Specification id="saw_envelope_z_spec" type="Z_DIMENSION" units="MILLIMETER" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>3048</Maximum>
                                         <Minimum>0</Minimum>
-                                    </Specification>
+                                    </Specification> -->
                                     <Specification id="saw_envelope_a_spec" type="x:A_DIMENSION" units="DEGREE" compositionIdRef="saw_workpeice_comp">
                                         <Maximum>90</Maximum>
                                         <Minimum>90</Minimum>
