@@ -314,7 +314,7 @@ Update_ODS(){
 # Function to update Devctl files
 Update_Devctl(){
     echo "Checking Devctl files..."
-    if [[ -d /etc/devctl/config/ ]]; then
+    if [[ -d /etc/devctl/config/ ]] && [[ -d /etc/devctl/logs/ ]]; then
         # Check if DevCTL config needs updating
         if files_differ "./devctl/config/$DevCTL_File" "/etc/devctl/config/devctl_json_config.json"; then
             echo "Updating Devctl configuration..."
