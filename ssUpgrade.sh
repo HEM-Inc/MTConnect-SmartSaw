@@ -502,7 +502,7 @@ else
             apt install -y docker-compose python3-pip --fix-missing
             apt clean
         fi
-    else
+    elif [[ "$force_docker_compose_version" == "2" ]]; then
         Use_Docker_Compose_v1=false
         if ! docker compose version &> /dev/null; then
             echo "Installing docker-compose v2..."
@@ -510,6 +510,8 @@ else
             apt install -y docker-compose-v2 python3-pip --fix-missing
             apt clean
         fi
+    else
+        echo "Invalid docker compose version specified"
     fi
 fi
 
