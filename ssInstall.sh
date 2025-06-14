@@ -6,7 +6,6 @@
 Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
-    echo "The function uses the Docker Compose V1 script. To use the V1 script use -1"
     echo
     echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-f]"
     echo "options:"
