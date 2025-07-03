@@ -19,9 +19,8 @@ The SmartSaw MTConnect system consists of the following containerized components
 - **MTConnect Agent**: Central component that receives and processes data from the adapter and serves it to client applications using the MTConnect protocol
 - **HEMsaw Adapter**: Interfaces with the saw control system to collect real-time operational data
 - **ODS (Object Database System)**: Manages data storage and retrieval for parts, materials, and operational metrics
-- **DEVCTL (Device Control Platform)**: Enables remote programming of materials and jobs
-- **MQTT Broker**: Manages message queuing and communication between system components
-- **MongoDB**: Stores parts, jobs, material data, and historical information
+- **MQTT Broker**: Manages message queuing and communication between system components with bridge configuration support
+- **MongoDB**: Stores parts, jobs, material data, and historical information with custom configuration support
 - **Watchtower**: Automatically updates Docker containers with the latest available images
 
 All components are containerized using Docker and orchestrated with Docker Compose for simplified deployment and management.
@@ -50,6 +49,10 @@ Each model is available in both standard and SCT (Smart Cut Technology) variants
 - **Performance Tracking**: Monitor cut time and CPU on time for productivity analysis
 - **Material Handling**: Advanced material handling capabilities integrated with the control system
 - **Smart Cut Technology (SCT)**: Available on all models for optimized cutting performance
+- **Alarm Management**: Comprehensive alarm system with JSON-based configuration for condition monitoring
+- **Message Events**: Real-time service and switch status monitoring through message event data items
+- **Enhanced Logging**: Comprehensive logging support across all components with log repair utilities
+- **Docker Compose V2 Support**: Full compatibility with both Docker Compose V1 and V2 commands with auto-detection
 - **Containerized Deployment**: All components run in Docker containers for easy installation and updates
 
 ## Installation and Management
@@ -80,16 +83,18 @@ sudo bash ssUpgrade.sh
 
 Edit the `env.sh` file to set the default installation file names for your specific installation, or run the `ssInstall.sh`/`ssUpgrade.sh` script with the appropriate options. The chosen files will be defined in the `env.sh` file, allowing for persistence of these settings across all updates and installs on that machine.
 
+The system automatically detects whether you're using Docker Compose V1 or V2 and adjusts commands accordingly. You can also force a specific version using the `-v` option if needed.
+
 ### Management Scripts
 
 The system includes several management scripts for installation, updates, and maintenance:
 
 #### ssInstall.sh
 
-Installs the MTConnect components, including the Agent, Adapter, ODS, MQTT Broker, and MongoDB.
+Installs the MTConnect components, including the Agent, Adapter, ODS, DEVCTL, MQTT Broker, and MongoDB.
 
 ```bash
-Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-f]
+Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-f]
 
 options:
 -a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
@@ -98,24 +103,33 @@ options:
 -c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json
 -u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw
 -b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf
+-v version            Force Docker Compose version (1 or 2); Defaults to auto-detect
 -f                    Force install of the files
 -h                    Print this Help.
 ```
 
+**Note**: The system supports MTConnect protocol version 2.3+ and uses standard port configurations:
+- MTConnect Agent: Port 5000 (HTTP)
+- HEMsaw Adapter: Port 7878 (TCP)
+- MQTT Broker: Port 1883 (MQTT), Port 9001 (WebSocket)
+- ODS: Port 9625 (HTTP)
+- MongoDB: Port 27017 (Internal only, bound to localhost)
+
 #### ssUpgrade.sh
 
-Upgrades existing components and restarts services.
+Upgrades existing components and restarts services. The upgrade process now runs in parallel for improved performance and includes support for reinitializing MongoDB parts and job databases.
 
 ```bash
-Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-b|-m|-i|-h]
 
 options:
--A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, and Mongodb application
+-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl, and Mongodb application
 -a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
 -j File_Name      Declare the JSON file name; Defaults to - SmartSaw_alarms.json
 -d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 -c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json
 -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
+-v version        Force Docker Compose version (1 or 2); Defaults to auto-detect
 -b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf
 -m                Update the MongoDB database with default materials
 -i                ReInit the MongoDB parts and job databases
@@ -147,6 +161,12 @@ options:
 
 Checks the status of all system components.
 
+#### Log Management
+
+The system includes comprehensive logging capabilities with automatic log rotation (10MB max size, 3 files) and repair utilities. Use the `-L` option in `ssClean.sh` to repair logs with NULL or control characters.
+
+All containers use JSON file logging driver with size and rotation limits to prevent disk space issues.
+
 ## System Components Details
 
 ### MTConnect Agent
@@ -171,14 +191,112 @@ The MQTT Broker manages message queuing and communication between system compone
 
 ### MongoDB
 
-MongoDB serves as the database backend for the system, storing parts, jobs, material data, and historical information. It provides a flexible and scalable way to manage this data.
+MongoDB serves as the database backend for the system, storing parts, jobs, material data, and historical information. It uses MongoDB 4.4 with custom configuration support and automatic material database initialization. The database is only accessible from localhost for security.
+
+## Recent Updates
+
+### Version 3.1.2 (May 2025)
+- Added auto-detection for Docker Compose version with option to force specific version
+- Enhanced compatibility with both Docker Compose V1 and V2
+
+### Version 3.1.0 - 3.1.1 (April-May 2025)
+- Added logs folder support to DEVCTL component
+- Fixed DEVCTL configuration file JSON syntax issues
+
+### Version 3.0.0 (March 2025)
+- Major refactoring of upgrade and install scripts for Docker Compose V2 support
+- Parallel execution support in upgrade scripts for improved performance
+- Deprecated legacy Docker Compose version options
 
 ## Troubleshooting
 
-- If components don't start properly, check the logs with `docker-compose logs [service_name]`
+- If components don't start properly, check the logs with `docker-compose logs [service_name]` or `docker compose logs [service_name]` (V2)
 - Use the ssStatus.sh script to check the status of all components
 - Ensure proper permissions on configuration files and directories
 - Verify network connectivity between components
+- Use the log repair functionality (`ssClean.sh -L`) for corrupted log files
+- Check the ChangeLog.md for recent updates and known issues
+- Verify Docker and Docker Compose are properly installed and running
+- Ensure all required directories have proper permissions (adapter, agent, ods, devctl, mongodb, mqtt)
+- For Ubuntu 24.04+ systems, Docker Compose V2 is automatically detected and used
+
+## Configuration and Directory Structure
+
+The system uses a well-defined directory structure for configuration and data storage:
+
+### Configuration Files Structure
+
+```
+/etc/
+├── adapter/
+│   ├── config/          # AFG files (e.g., SmartSaw_DC_HA.afg)
+│   ├── data/            # JSON alarm files (e.g., SmartSaw_alarms.json)
+│   └── log/             # Adapter log files
+├── mtconnect/
+│   ├── config/          # agent.cfg and device XML files
+│   └── data/ruby/       # Ruby scripts and styles
+├── mqtt/
+│   ├── config/          # mosquitto.conf, bridge configurations
+│   ├── data/            # ACL files
+│   └── certs/           # SSL certificates
+├── ods/
+│   └── config/          # ODS configuration files
+├── devctl/
+│   ├── config/          # devctl_json_config.json
+│   └── logs/            # Device control logs
+└── mongodb/
+    ├── config/          # mongod.conf
+    └── data/db/         # Database files
+```
+
+### Key Configuration Files
+
+- **AFG Files**: Adapter configuration files defining data collection parameters
+- **Device XML Files**: MTConnect device definitions (must have device name on line 11)
+- **JSON Alarm Files**: Alarm condition definitions for monitoring
+- **Agent Configuration**: MTConnect agent settings and device mappings
+- **MQTT Configuration**: Message broker settings and bridge configurations
+- **MongoDB Configuration**: Database settings and connection parameters
+
+### Environment Configuration
+
+The `env.sh` file defines default configuration file names:
+- `Afg_File`: Default AFG configuration file
+- `Json_File`: Default JSON alarm file
+- `Device_File`: Default MTConnect device XML file
+- `Serial_Number`: Default serial number for UUID generation
+- `DevCTL_File`: Default device control configuration file
+
+## MTConnect Data Items and Features
+
+The SmartSaw MTConnect implementation provides comprehensive data collection and monitoring capabilities:
+
+### Supported Data Items
+
+- **Axis Position Data**: Real-time position feedback for X (saw head), Z (feed), and A (rotation) axes
+- **Servo Control**: Position commands and feedback for precise movement control
+- **Band Motor**: Motor status, speed, and health monitoring
+- **Door States**: Drive and idle door position monitoring for safety compliance
+- **Performance Metrics**: Cut time tracking and CPU on-time monitoring
+- **System Status**: Machine operational state and mode information
+- **Condition Monitoring**: Axis conditions, communication status, hydraulic levels, and end-of-bar detection
+- **Message Events**: Service status and switch status reporting
+- **Work Envelope**: Dimensional constraints and operational boundaries
+
+### MTConnect Protocol Support
+
+- **Protocol Version**: MTConnect 2.3+ compliant
+- **Schema Support**: Full MTConnect device schema implementation
+- **Data Streaming**: Real-time data streaming with configurable buffer sizes
+- **Asset Management**: Support for cutting tool and material asset tracking
+- **Condition Handling**: Comprehensive alarm and condition management system
+
+### Advanced Features
+
+- **Generic Condition Functions**: Configurable condition monitoring through JSON alarm files
+- **Custom Data Items**: Support for saw-specific data items and measurements
+- **Historical Data**: Integration with MongoDB for historical data storage and retrieval
+- **Remote Control**: Device control capabilities through DEVCTL platform
 
 ## Support
 

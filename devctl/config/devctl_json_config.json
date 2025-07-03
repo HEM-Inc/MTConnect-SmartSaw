@@ -1,6 +1,6 @@
 {
   "name": "Devctl",
-  "org": "HEMSaw",
+  "org": "Hemsaw",
   "site": "OK1",
   "user": "devctl",
   "db": {
@@ -58,7 +58,16 @@
             "base": "control",
             "subtending": "Yes",
             "interprete": "devctljson"
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "synctriggerresponse",
+            "base": "control",
+            "subtending": "Yes",
+            "interprete": "devctljson"
           }
+
         ],
         "publish-topics": [
           {
@@ -81,6 +90,14 @@
             "enable": "Yes",
             "type": "devicectl",
             "name": "devsyncresponse",
+            "base": "monitor",
+            "subtending": "Yes",
+            "interprete": "devctljson"
+          },
+          {
+            "enable": "Yes",
+            "type": "devicectl",
+            "name": "devsynctrigger",
             "base": "monitor",
             "subtending": "Yes",
             "interprete": "devctljson"
