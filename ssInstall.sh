@@ -185,6 +185,29 @@ force_docker_compose_version=""
 
 # Process the input options. Add options as needed.
 ############################################################
+
+# Validate arguments for common mistakes
+for arg in "$@"; do
+    if [[ "$arg" == "-" ]]; then
+        echo "ERROR[1] - Invalid option format: standalone dash detected"
+        echo "Did you use a space between dash and option letter?"
+        echo "Correct format: -d (not - d)"
+        Help
+        exit 1
+    fi
+done
+
+# Check for standalone letters that might be mistyped options
+for arg in "$@"; do
+    if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
+        echo "ERROR[1] - Standalone letter '$arg' detected"
+        echo "Did you mean to use '-$arg' instead of '- $arg'?"
+        echo "Options should have no space between the dash and letter"
+        Help
+        exit 1
+    fi
+done
+
 # Get the options
 while getopts ":a:j:d:c:u:v:bhf:" option; do
     case ${option} in
@@ -218,11 +241,26 @@ while getopts ":a:j:d:c:u:v:bhf:" option; do
                 exit 1
             fi;;
         \?) # Invalid option
-            echo "ERROR[1] - Invalid option chosen"
+            echo "ERROR[1] - Invalid option chosen: -$OPTARG"
+            echo "Use -h for help and list of valid options"
             Help
             exit 1;;
     esac
 done
+
+# Check for any remaining unprocessed arguments that might be malformed options
+shift $((OPTIND-1))
+if [[ $# -gt 0 ]]; then
+    for remaining_arg in "$@"; do
+        if [[ "$remaining_arg" =~ ^[A-Za-z]$ ]]; then
+            echo "ERROR[1] - Unrecognized argument '$remaining_arg'"
+            echo "Did you mean to use '-$remaining_arg'?"
+            echo "Check for spaces between dash and option letters"
+            Help
+            exit 1
+        fi
+    done
+fi
 
 # Auto-detect Docker Compose version if not forced
 if [[ -z "$force_docker_compose_version" ]]; then
