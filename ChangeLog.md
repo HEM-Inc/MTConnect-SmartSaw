@@ -26,6 +26,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+## [3.2.0] - 2025/10/15 - emkarthikb
+
+### Added
+
+- Added Devctl logging configuration via the configuration file.
+
 ## [3.1.2] - 2025/05/27 - Max Harris
 
 ### Added
