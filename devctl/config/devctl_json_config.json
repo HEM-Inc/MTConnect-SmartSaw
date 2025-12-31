@@ -105,5 +105,10 @@
         ]
       }
     }
-  ]
+  ],
+  "logger_config": {
+    "logging_level": "debug",
+    "file_logging" : "Yes"
+  }
+
 }
