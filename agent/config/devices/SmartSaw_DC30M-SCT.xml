@@ -511,6 +511,17 @@
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
+                        <DataItem id="saw_maintenance_list" type="MAINTENANCE_LIST" category="EVENT" representation="TABLE" discrete="FALSE">
+                            <Definition>
+                                <Description>Maintenance List Items</Description>
+                                <CellDefinitions>
+                                    <CellDefinition key="Name"/>
+                                    <CellDefinition key="Value"/>
+                                    <CellDefinition key="Units"/>
+                                    <CellDefinition key="Direction"/>
+                                </CellDefinitions>
+                            </Definition>
+                        </DataItem>
                     </DataItems>
                     <Components>
                         <Path id="saw_control" name="Saw_Controller">
@@ -637,7 +648,7 @@
                             <DataItems>
                                 <DataItem id="saw_operator" type="USER" subType="OPERATOR"
                                     category="EVENT"/>
-                                <DataItem id="saw_maintence" type="USER" subType="MAINTENANCE"
+                                <DataItem id="saw_maintenance" type="USER" subType="MAINTENANCE"
                                     category="EVENT"/>
                             </DataItems>
                         </Personnel>
