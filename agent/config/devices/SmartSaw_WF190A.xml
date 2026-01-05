@@ -490,11 +490,11 @@
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem id="saw_time_till_next_service" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="time_till_next_service">
+                        <!--<DataItem id="saw_time_till_next_service" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="time_till_next_service">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
-                        </DataItem>
+                        </DataItem>-->
                         <DataItem id="saw_cut_time" type="EQUIPMENT_TIMER" subType="WORKING" units="SECOND" category="SAMPLE" name="cut_time">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
