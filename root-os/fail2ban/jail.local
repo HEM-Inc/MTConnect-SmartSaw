@@ -282,8 +282,6 @@ enabled = true
 port    = ssh
 backend = systemd
 maxretry = 3
-findtime = 300
-bantime = 3600
+findtime = 5m
+bantime = 1h
 ignoreip = 127.0.0.1
-
-
