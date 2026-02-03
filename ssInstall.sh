@@ -80,7 +80,7 @@ InstallMTCAgent(){
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
-            cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         else
@@ -93,7 +93,7 @@ InstallMTCAgent(){
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
-            cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
