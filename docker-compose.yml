@@ -62,7 +62,7 @@ services:
         max-file: "3"
     ports:
       - 1883:1883/tcp
-      - 9001:9001/tcp
+      - 8883:8883/tcp
     restart: unless-stopped
 
   ods:

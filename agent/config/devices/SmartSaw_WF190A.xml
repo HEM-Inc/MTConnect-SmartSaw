@@ -475,8 +475,8 @@
                 <Controller id="saw_plc" name="PLC">
                     <DataItems>
                         <DataItem id="saw_estop" type="EMERGENCY_STOP" category="EVENT" name="estop"/>
-			<DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
-			<DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
+                        <DataItem id="saw_switch_status" type="MESSAGE" category="EVENT" name="switch_status"/>
+                        <DataItem id="saw_service_status" type="MESSAGE" category="EVENT" name="service_status"/>
                         <DataItem id="saw_condition" type="SYSTEM" category="CONDITION" name="system_condition"/>
                         <DataItem id="saw_comms_cond" type="COMMUNICATIONS" category="CONDITION" name="comms_condition"/>
 
@@ -490,11 +490,11 @@
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
                         </DataItem>
-                        <DataItem id="saw_time_till_next_service" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="time_till_next_service">
+                        <!--<DataItem id="saw_time_till_next_service" type="EQUIPMENT_TIMER" subType="OPERATING" units="SECOND" category="SAMPLE" name="time_till_next_service">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
-                        </DataItem>
+                        </DataItem>-->
                         <DataItem id="saw_cut_time" type="EQUIPMENT_TIMER" subType="WORKING" units="SECOND" category="SAMPLE" name="cut_time">
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
@@ -504,6 +504,17 @@
                             <Filters>
                                 <Filter type="MINIMUM_DELTA">60</Filter>
                             </Filters>
+                        </DataItem>
+                        <DataItem id="saw_maintenance_list" type="MAINTENANCE_LIST" category="EVENT" representation="TABLE" discrete="FALSE">
+                            <Definition>
+                                <Description>Maintenance List Items</Description>
+                                <CellDefinitions>
+                                    <CellDefinition key="Name"/>
+                                    <CellDefinition key="Value"/>
+                                    <CellDefinition key="Units"/>
+                                    <CellDefinition key="Direction"/>
+                                </CellDefinitions>
+                            </Definition>
                         </DataItem>
                     </DataItems>
                     <Components>
@@ -627,7 +638,7 @@
                             <DataItems>
                                 <DataItem id="saw_operator" type="USER" subType="OPERATOR"
                                     category="EVENT"/>
-                                <DataItem id="saw_maintence" type="USER" subType="MAINTENANCE"
+                                <DataItem id="saw_maintenance" type="USER" subType="MAINTENANCE"
                                     category="EVENT"/>
                             </DataItems>
                         </Personnel>

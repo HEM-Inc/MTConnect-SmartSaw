@@ -146,6 +146,16 @@ Update_Adapter(){
             echo "Adapter JSON file already up to date"
         fi
 
+        # Remove any other AFG files so only the selected remains
+        if [ -d /etc/adapter/config ]; then
+            find /etc/adapter/config -maxdepth 1 -type f -name "*.afg" ! -name "$Afg_File" -exec rm -f {} +
+        fi
+
+        # Remove any other JSON files so only the selected remains
+        if [ -d /etc/adapter/data ]; then
+            find /etc/adapter/data -maxdepth 1 -type f -name "*.json" ! -name "$Json_File" -exec rm -f {} +
+        fi
+
         # Clear logs - always do this
         rm -rf /etc/adapter/log/*
     else
@@ -181,6 +191,11 @@ Update_Agent(){
             sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
         else
             echo "MTConnect device file already up to date"
+        fi
+
+        # Ensure only the selected device XML remains
+        if [ -d /etc/mtconnect/config ]; then
+            find /etc/mtconnect/config -maxdepth 1 -type f -name "*.xml" ! -name "$Device_File" -exec rm -f {} +
         fi
 
         # Check if ruby scripts need updating
@@ -222,9 +237,9 @@ Update_MQTT_Broker(){
             fi
 
             # Check if ACL needs updating
-            if files_differ "./mqtt/data/acl_bridge" "/etc/mqtt/data/acl"; then
+            if files_differ "./mqtt/data/acl" "/etc/mqtt/data/acl"; then
                 echo "Updating MQTT bridge ACL..."
-                cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+                cp -r ./mqtt/data/acl /etc/mqtt/data/acl
                 chmod 0700 /etc/mqtt/data/acl
             else
                 echo "MQTT bridge ACL already up to date"
@@ -247,7 +262,7 @@ Update_MQTT_Broker(){
             cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
 
-            cp -r ./mqtt/data/acl_bridge /etc/mqtt/data/acl
+            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi

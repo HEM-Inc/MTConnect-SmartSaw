@@ -27,6 +27,15 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 ## [Unreleased]
 
 =======
+
+## [3.3.0] - 2026/01/08 - maxharris
+
+### Added
+
+- Added saw_maintenance_list to the Adapter AFG.
+- Added saw_maintenance_list to the Agent XML.
+- Added TLS support for MQTT bridge on 8883.
+
 ## [3.2.0] - 2025/10/15 - emkarthikb
 
 ### Added

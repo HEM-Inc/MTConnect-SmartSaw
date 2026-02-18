@@ -115,10 +115,17 @@ saw_condition = cond system_condition(generalFault = gMachineErrorLevels.Fatal, 
 saw_comms_cond = cond generic_condition(ipcCommsError = gMTConnectData.IPCError, nativeCode = "alarm_50")
 saw_blade_life = gMachineTime.TotalBladeLifeSeconds
 saw_hydraulic_life = gMachineTime.TotalHydraulicsOnTimeSeconds
-saw_time_till_next_service = gMachineTime.HoursTillNextServiceSeconds
+// saw_time_till_next_service = gMachineTime.HoursTillNextServiceSeconds
 saw_cut_time = gMachineTime.PresentCutTimeHours
 saw_cpu_on_time = gMachineTime.TotalMachineOnTimeSeconds
-
+saw_maintenance_list = {
+    next_service_time_remaining = {
+        name = "Hours Till Next Service",
+        value = gMachineTime.HoursTillNextServiceSeconds,
+        units = "seconds",
+        direction = "down"
+    }
+}
 
 // *** Path
 saw_execution = gMTConnectData.SawExecutionState
@@ -167,4 +174,4 @@ laserlight = gMTConnectData.VIO_LaserLight
 material_id = gActiveJobBuffer.JobData.Material.Name
 // *** Personnel
 saw_operator = gTSVariables.OperatorLoggedIn
-saw_maintence = gTSVariables.SupervisorLoggedIn
+saw_maintenance = gTSVariables.SupervisorLoggedIn
