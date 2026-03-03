@@ -8,7 +8,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-b|-i|-m|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -16,7 +16,6 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-v version        Force Docker Compose version (1 or 2); Defaults to auto-detect"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
@@ -71,19 +70,12 @@ dir_needs_update() {
         return 0  # Needs update if destination doesn't exist
     fi
 
-    # Compare files in both directories
-    local different=0
-    find "$src" -type f | while read srcfile; do
-        local relpath="${srcfile#$src/}"
-        local destfile="$dest/$relpath"
-
-        if files_differ "$srcfile" "$destfile"; then
-            different=1
-            break
-        fi
-    done
-
-    return $different
+    # Compare directories; returns 0 (needs update) if they differ
+    if diff -rq "$src" "$dest" > /dev/null 2>&1; then
+        return 1  # Directories are identical
+    else
+        return 0  # Directories differ
+    fi
 }
 
 ############################################################
@@ -93,34 +85,18 @@ dir_needs_update() {
 RunDocker(){
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
-        if $Use_Docker_Compose_v1; then
-            echo "Using Docker Compose v1 commands"
-            docker-compose down
+        docker compose down
 
-            echo "Pulling latest Docker images..."
-            docker-compose pull
+        echo "Pulling latest Docker images..."
+        docker compose pull
 
-            echo "Starting up the Docker containers..."
-            docker-compose up --remove-orphans -d
-        else
-            echo "Using Docker Compose v2 commands"
-            docker compose down
-
-            echo "Pulling latest Docker images..."
-            docker compose pull
-
-            echo "Starting up the Docker containers..."
-            docker compose up --remove-orphans -d
-        fi
+        echo "Starting up the Docker containers..."
+        docker compose up --remove-orphans -d
     fi
 
     # Display logs
     echo "Displaying container logs..."
-    if $Use_Docker_Compose_v1; then
-        docker-compose logs mtc_adapter mtc_agent mosquitto ods devctl
-    else
-        docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
-    fi
+    docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
 }
 
 ############################################################
@@ -186,9 +162,8 @@ Update_Agent(){
         # Check if device file needs updating
         if files_differ "./agent/config/devices/$Device_File" "/etc/mtconnect/config/$Device_File"; then
             echo "Updating MTConnect device file..."
-            rm -rf /etc/mtconnect/config/*.xml
-            cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
-            sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
+            cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
+            sed -i "11 s|.*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/$Device_File
         else
             echo "MTConnect device file already up to date"
         fi
@@ -211,10 +186,10 @@ Update_Agent(){
         mkdir -p /etc/mtconnect/config/
         mkdir -p /etc/mtconnect/data/
 
-        cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
+        cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
         sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
-        cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
-        sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
+        cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
+        sed -i "11 s|.*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/$Device_File
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
     fi
 
@@ -324,7 +299,7 @@ Update_Devctl(){
         if files_differ "./devctl/config/$DevCTL_File" "/etc/devctl/config/devctl_json_config.json"; then
             echo "Updating Devctl configuration..."
             cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
-            sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
+            sed -i "18 s|.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
         else
             echo "Devctl configuration already up to date"
         fi
@@ -374,12 +349,12 @@ Update_Mongodb(){
 Init_Jobs_Parts(){
     if python3 -c "import pymongo" &> /dev/null; then
         echo "Reseting the Parts and Jobs..."
-        sudo python3 /etc/mongodb/data/jobs_parts_init.py
+        python3 /etc/mongodb/data/jobs_parts_init.py
     else
         echo "Reseting the Parts and Jobs..."
-        sudo pip3 install pyaml --break-system-packages
-        sudo pip3 install pymongo --break-system-packages
-        sudo python3 /etc/mongodb/data/jobs_parts_init.py
+        pip3 install pyaml --break-system-packages
+        pip3 install pymongo --break-system-packages
+        python3 /etc/mongodb/data/jobs_parts_init.py
     fi
 }
 
@@ -387,12 +362,12 @@ Init_Jobs_Parts(){
 Update_Materials(){
     if python3 -c "import pymongo" &> /dev/null; then
         echo "Updating or reseting the materials to default..."
-        sudo python3 /etc/mongodb/data/upload_materials.py
+        python3 /etc/mongodb/data/upload_materials.py
     else
         echo "Updating or reseting the materials to default..."
-        sudo pip3 install pyaml --break-system-packages
-        sudo pip3 install pymongo --break-system-packages
-        sudo python3 /etc/mongodb/data/upload_materials.py
+        pip3 install pyaml --break-system-packages
+        pip3 install pymongo --break-system-packages
+        python3 /etc/mongodb/data/upload_materials.py
     fi
 }
 
@@ -429,7 +404,6 @@ run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
 run_install=false
-force_docker_compose_version=""
 
 #####################################################
 # Process the input options. Add options as needed. #
@@ -458,7 +432,7 @@ for arg in "$@"; do
 done
 
 # Get the options
-while getopts ":a:j:d:c:u:v:Ahbmi" option; do
+while getopts ":a:j:d:c:u:Ahbmi" option; do
     case ${option} in
         h) # display Help
             Help
@@ -472,26 +446,19 @@ while getopts ":a:j:d:c:u:v:Ahbmi" option; do
             run_update_mongodb=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
-            sed -i "4 s/.*/export Afg_File=\"$Afg_File\"/" env.sh;;
+            [[ -f env.sh ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" env.sh;;
         j) # Enter JSON file name
             Json_File=$OPTARG;
-            sed -i "5 s/.*/export Json_File=\"$Json_File\"/" env.sh;;
+            [[ -f env.sh ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" env.sh;;
         d) # Enter a Device file name
             Device_File=$OPTARG
-            sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
+            [[ -f env.sh ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" env.sh;;
         c) # Enter a Device file name
             DevCTL_File=$OPTARG
-            sed -i "8 s/.*/export DevCTL_File=\"$DevCTL_File\"/" env.sh;;
+            [[ -f env.sh ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" env.sh;;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
-            sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
-        v) # Force Docker Compose version
-            if [[ "$OPTARG" == "1" || "$OPTARG" == "2" ]]; then
-                force_docker_compose_version=$OPTARG
-            else
-                echo "ERROR[1] - Invalid Docker Compose version. Must be 1 or 2"
-                exit 1
-            fi;;
+            [[ -f env.sh ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" env.sh;;
         m) # Update Mongodb materials
             run_update_materials=true;;
         i) # Init Mongodb jobs and parts
@@ -520,51 +487,14 @@ if [[ $# -gt 0 ]]; then
     done
 fi
 
-# Auto-detect Docker Compose version if not forced
-if [[ -z "$force_docker_compose_version" ]]; then
-    if docker compose version &> /dev/null; then
-        # Docker Compose v2 is available
-        Use_Docker_Compose_v1=false
-    else
-        if command -v docker-compose &> /dev/null; then
-            # Docker Compose v1 is available
-            Use_Docker_Compose_v1=true
-        else
-            # No Docker Compose available - default to v2 format
-            echo "WARNING: Docker Compose not detected."
-            # Check if docker-compose-v2 is available in apt
-            if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-                echo "Installing docker-compose-v2..."
-                apt install -y docker-compose-v2 python3-pip --fix-missing
-                Use_Docker_Compose_v1=false
-            else
-                echo "docker-compose-v2 not available, falling back to docker-compose..."
-                apt install -y docker-compose python3-pip --fix-missing
-                Use_Docker_Compose_v1=true
-            fi
-            apt clean
-        fi
-    fi
-else
-    # Use forced version
-    if [[ "$force_docker_compose_version" == "1" ]]; then
-        Use_Docker_Compose_v1=true
-        if ! command -v docker-compose &> /dev/null; then
-            echo "Installing docker-compose v1..."
-            apt update --fix-missing && apt upgrade --fix-missing -y
-            apt install -y docker-compose python3-pip --fix-missing
-            apt clean
-        fi
-    elif [[ "$force_docker_compose_version" == "2" ]]; then
-        Use_Docker_Compose_v1=false
-        if ! docker compose version &> /dev/null; then
-            echo "Installing docker-compose v2..."
-            apt update --fix-missing && apt upgrade --fix-missing -y
-            apt install -y docker-compose-v2 python3-pip --fix-missing
-            apt clean
-        fi
-    else
-        echo "Invalid docker compose version specified"
+# Require Docker Compose v2 - install if not present
+if ! docker compose version &> /dev/null; then
+    echo "Docker Compose v2 not found, installing docker-compose-v2..."
+    apt update --fix-missing && apt install -y docker-compose-v2 --fix-missing
+    apt clean
+    if ! docker compose version &> /dev/null; then
+        echo "ERROR: Failed to install docker-compose-v2. Please install it manually: apt install docker-compose-v2"
+        exit 1
     fi
 fi
 
@@ -593,7 +523,7 @@ fi
 if $run_install; then
     echo "Running Install script..."
     if $run_update_mqtt_bridge; then
-        bash ssInstall.sh -b $Bridge_File
+        bash ssInstall.sh -b
     else
         bash ssInstall.sh
     fi
@@ -608,7 +538,7 @@ else
     echo "Update Mongodb set to run = "$run_update_mongodb
     echo "Update Materials set to run = "$run_update_materials
     echo "Init Jobs and Parts set to run = "$run_init_jp
-    echo "Docker Compose Version = " $([ "$Use_Docker_Compose_v1" = true ] && echo "1" || echo "2")
+    echo "Docker Compose Version = 2"
     echo ""
 
     echo "Printing the settings..."
@@ -648,11 +578,7 @@ else
     # Shutdown any old Docker containers before updating files
     if service_exists docker; then
         echo "Shutting down any old Docker containers"
-        if $Use_Docker_Compose_v1; then
-            docker-compose down
-        else
-            docker compose down
-        fi
+        docker compose down
     fi
     echo ""
 
@@ -684,27 +610,27 @@ else
 
     # Wait for all background processes to complete
     if $run_update_adapter; then
-        wait $ADAPTER_PID
+        wait $ADAPTER_PID || { echo "ERROR: Adapter update failed"; exit 1; }
         echo "Adapter update completed"
     fi
     if $run_update_agent; then
-        wait $AGENT_PID
+        wait $AGENT_PID || { echo "ERROR: Agent update failed"; exit 1; }
         echo "Agent update completed"
     fi
     if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
-        wait $MQTT_PID
+        wait $MQTT_PID || { echo "ERROR: MQTT update failed"; exit 1; }
         echo "MQTT update completed"
     fi
     if $run_update_ods; then
-        wait $ODS_PID
+        wait $ODS_PID || { echo "ERROR: ODS update failed"; exit 1; }
         echo "ODS update completed"
     fi
     if $run_update_devctl; then
-        wait $DEVCTL_PID
+        wait $DEVCTL_PID || { echo "ERROR: Devctl update failed"; exit 1; }
         echo "Devctl update completed"
     fi
     if $run_update_mongodb; then
-        wait $MONGODB_PID
+        wait $MONGODB_PID || { echo "ERROR: MongoDB update failed"; exit 1; }
         echo "MongoDB update completed"
     fi
 
