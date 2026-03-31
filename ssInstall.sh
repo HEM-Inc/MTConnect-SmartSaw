@@ -38,6 +38,103 @@ service_exists() {
     fi
 }
 
+
+#awk function to update the client id
+update_remote_clientid() {
+    local CONFIG_FILE="/etc/mqtt/config/mosquitto.conf"
+
+    if [[ -z "$Serial_Number" ]]; then
+        echo "ERROR: Serial_Number is not set. Aborting."
+        return 1
+    fi
+
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        echo "ERROR: Config file not found: $CONFIG_FILE"
+        return 1
+    fi
+
+    echo "Updating remote_clientid and local_clientid in $CONFIG_FILE"
+
+    awk -v serial="$Serial_Number" '
+
+    # flush_block: called at end-of-block or EOF.
+    # Only injects client IDs here if no address line was seen
+    # (they would have been injected inline after address otherwise).
+    function flush_block(    i) {
+        if (!in_conn) return
+
+        for (i = 0; i < block_len; i++) {
+            print block_lines[i]
+
+            # Inject after connection line if no address line in block
+            if (!found_address && i == 0) {
+                print "remote_clientid HEMSaw-" serial "-MQTT"
+                print "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
+            }
+        }
+
+        # Reset state
+        block_len     = 0
+        found_address = 0
+        conn_name     = ""
+        in_conn       = 0
+    }
+
+    # New connection block detected
+    /^connection [^ ]/ {
+        flush_block()
+
+        in_conn       = 1
+        found_address = 0
+        block_len     = 0
+        conn_name     = $2
+
+        block_lines[block_len++] = $0
+        next
+    }
+
+    # Inside a connection block
+    in_conn {
+
+        # Suppress existing remote_clientid / local_clientid anywhere
+        # in the block — correct values are injected after address line
+        if ($0 ~ /^[[:space:]]*(#[[:space:]]*)?remote_clientid([[:space:]]|$)/ ||
+            $0 ~ /^[[:space:]]*(#[[:space:]]*)?local_clientid([[:space:]]|$)/) {
+            next
+        }
+
+        # Address line found: buffer it, then immediately inject client IDs
+        if ($0 ~ /^[[:space:]]*address[[:space:]]/) {
+            found_address = 1
+            block_lines[block_len++] = $0
+            block_lines[block_len++] = "remote_clientid HEMSaw-" serial "-MQTT"
+            block_lines[block_len++] = "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
+            next
+        }
+
+        block_lines[block_len++] = $0
+        next
+    }
+
+    # Lines outside any connection block — print as-is
+    { print }
+
+    END { flush_block() }
+
+    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
+
+    if [[ $? -ne 0 ]]; then
+        echo "ERROR: awk processing failed. Original file unchanged."
+        rm -f "${CONFIG_FILE}.tmp"
+        return 1
+    fi
+
+    cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
+    mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
+    echo "Updated mosquitto config file successfully."
+}
+
+
 ############################################################
 # Installers                                               #
 ############################################################
@@ -77,7 +174,8 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+	    update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -90,7 +188,8 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+	    update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
