@@ -1,0 +1,25 @@
+{
+    "name": "IPC Dashboard",
+    "type": "fastapi",
+    "timezone": "Asia/Kolkata",
+    "logger_config": {
+        "logging_level": "INFO",
+        "file_logging": "No"
+    },
+    "fastapi": {
+        "enable": "Yes",
+        "host": "0.0.0.0",
+        "port": 8000,
+        "domain_names": [],
+        "security": {
+            "enable": "No",
+            "type": "ssl",
+            "ca_file": "",
+            "cert_file": "",
+            "key_file": ""
+        }
+    },
+    "certs": {
+        "ca_cert_path": "/etc/mqtt/certs/ca.crt"
+    }
+}

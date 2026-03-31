@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IPC Dashboard</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Moment.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+
+<!-- Moment Timezone -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.45/moment-timezone-with-data.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <!-- Logo -->
+        <!-- <div class="logo-section">
+            <img src="/images/logo.png" alt="Logo" class="logo">
+        </div> -->
+        <div class="logo-section">
+            <!-- <img src="/images/logo.png" class="logo" /> -->
+
+            <div class="toggle-btn" id="toggleSidebar">
+                <span id="toggleIcon">&lt;</span>
+            </div>
+            <img src="/images/logo1.svg" class="logo" />
+            <img src="/images/logo3.jfif" class="logo-small" />
+            <!-- <img src="/images/logo1.svg" class="logo-small" /> -->
+        </div>
+
+        <!-- Menu -->
+        <ul class="menu">
+            <!-- <li class="active" id="securityTab">
+                <i class="fa-solid fa-shield-halved"></i>
+                Security
+            </li>
+
+            <li id="configTab">
+                <i class="fa-solid fa-gear"></i>
+                Config
+            </li>
+
+            <li id="deviceTab">
+                <i class="fa-solid fa-gear"></i>
+                Device Info
+            </li> -->
+            <li class="active" id="securityTab">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Security</span>
+            </li>
+
+            <li id="configTab">
+                <i class="fa-solid fa-gear"></i>
+                <span>Config</span>
+            </li>
+
+            <li id="deviceTab">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Device Info</span>
+            </li>
+        </ul>
+
+        <!-- Logout -->
+        <div class="sidebar-footer">
+            <!-- <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button> -->
+
+            <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+
+        
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <!-- Topbar -->
+        <!-- <div class="topbar">
+            <span class="title">IPC Dashboard</span>
+
+            <div class="top-right">
+                <div class="timezone" onclick="openTimezoneModal()">
+                    <span>Timezone: </span>
+                    <span id="userTimezone">UTC</span>
+                </div>
+
+                <div class="profile">
+                    <div class="profile-info">
+                        <span id="userName">User</span>
+                        <small id="userRole"></small>
+                    </div>
+                    <div class="avatar">👤</div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="topbar">
+            <span class="title">IPC Dashboard</span>
+
+            <div class="top-right">
+
+                <!-- Profile -->
+                <div class="profile" id="profileMenu">
+
+                    <div class="profile-info">
+                        <span id="userName">User</span>
+                        <small id="userRole"></small>
+                    </div>
+
+                    <!-- ICON -->
+                    <div class="avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <!-- DROPDOWN -->
+                    <div class="profile-dropdown" id="profileDropdown">
+
+                        <div class="dropdown-item" onclick="openTimezoneModal()">
+                            <i class="fa-solid fa-clock"></i>
+                            Update Timezone
+                            <small id="userTimezoneText"></small>
+                        </div>
+
+                        <div class="dropdown-item logout" onclick="logout()">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div id="content">
+
+            <!-- Security -->
+            <div id="securityPage">
+                <h2>Security</h2>
+                <p>Manage certificates and security configurations</p>
+                <div id="certCardContainer"></div>
+            </div>
+
+            <!-- Config -->
+            <div id="configPage" style="display:none;">
+                <h2>Configuration</h2>
+                <p>Coming soon...</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modals (unchanged) -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-body">
+            <h3>Certificate Details</h3>
+            <div id="modalData"></div>
+            <button onclick="downloadCert()">Download ca.crt</button>
+        </div>
+    </div>
+</div>
+
+<!-- <div id="timezoneModal" class="modal">
+    <div class="modal-content">
+        <h3>Select Timezone</h3>
+        <select id="timezoneSelect"></select>
+        <div class="modal-actions">
+            <button class="btn yes" onclick="submitTimezone()">Submit</button>
+            <button class="btn no" onclick="closeTimezoneModal()">Cancel</button>
+        </div>
+    </div>
+</div> -->
+<div id="timezoneModal" class="modal">
+    <div class="modal-content timezone-box">
+        <h3>Select Timezone</h3>
+
+        <select id="timezoneSelect" class="timezone-dropdown"></select>
+
+        <div class="modal-actions">
+            <button class="btn primary" onclick="submitTimezone()">Submit</button>
+            <button class="btn secondary" onclick="closeTimezoneModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="logoutModal" class="modal">
+    <div class="modal-content logout-box">
+        <h3>Confirm Logout</h3>
+        <p>Are you sure you want to logout?</p>
+
+        <div class="modal-actions">
+            <button class="btn logout-yes" onclick="confirmLogout()">Yes</button>
+            <button class="btn logout-no" onclick="closeLogoutModal()">No</button>
+        </div>
+    </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>
