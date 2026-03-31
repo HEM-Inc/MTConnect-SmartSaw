@@ -175,7 +175,7 @@ InstallMTCAgent(){
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
-	    update_remote_clientid
+            update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
@@ -189,7 +189,7 @@ InstallMTCAgent(){
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
-	    update_remote_clientid
+            update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
