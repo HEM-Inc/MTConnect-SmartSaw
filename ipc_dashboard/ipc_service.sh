@@ -64,8 +64,8 @@ install_service() {
         IPCDB_UV_BIN="$(command -v uv)"
     elif python3 -m uv --version &>/dev/null 2>&1; then
         IPCDB_UV_BIN="/usr/bin/python3 -m uv"
-    elif [ -x "${HOME}/.local/bin/uv" ]; then
-        IPCDB_UV_BIN="${HOME}/.local/bin/uv"
+    elif [ -x "$(getent passwd hemsaw | cut -d: -f6)/.local/bin/uv" ]; then
+        IPCDB_UV_BIN="$(getent passwd hemsaw | cut -d: -f6)/.local/bin/uv"
     else
         echo "ERROR: uv not found (tried PATH, pip, pipx). Install uv first."
         exit 1
