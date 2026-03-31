@@ -56,9 +56,30 @@ files_differ() {
 install_service() {
     echo "Checking systemd service file..."
 
-    if files_differ "$LOCAL_SERVICE_PATH" "$SYSTEMD_PATH/$SERVICE_FILE"; then
+    # Resolve working directory (fastapi/ subdirectory)
+    IPCDB_DIR="$(cd "$(dirname "$0")" && pwd)/backend/fastapi"
+
+    # Detect uv: standalone binary → pip module → pipx binary
+    if command -v uv &>/dev/null; then
+        IPCDB_UV_BIN="$(command -v uv)"
+    elif python3 -m uv --version &>/dev/null 2>&1; then
+        IPCDB_UV_BIN="/usr/bin/python3 -m uv"
+    elif [ -x "${HOME}/.local/bin/uv" ]; then
+        IPCDB_UV_BIN="${HOME}/.local/bin/uv"
+    else
+        echo "ERROR: uv not found (tried PATH, pip, pipx). Install uv first."
+        exit 1
+    fi
+
+    # Produce a resolved copy of the service file for comparison and install
+    RESOLVED_SERVICE="/tmp/${SERVICE_FILE}.resolved"
+    sed -e "s|IPCDB_WORKING_DIR|${IPCDB_DIR}|g" \
+        -e "s|IPCDB_UV_BIN|${IPCDB_UV_BIN}|g" \
+        "$LOCAL_SERVICE_PATH" > "$RESOLVED_SERVICE"
+
+    if files_differ "$RESOLVED_SERVICE" "$SYSTEMD_PATH/$SERVICE_FILE"; then
         echo "Updating service file..."
-        cp "$LOCAL_SERVICE_PATH" "$SYSTEMD_PATH/"
+        cp "$RESOLVED_SERVICE" "$SYSTEMD_PATH/$SERVICE_FILE"
         chmod 644 "$SYSTEMD_PATH/$SERVICE_FILE"
 
         echo "Reloading systemd..."
