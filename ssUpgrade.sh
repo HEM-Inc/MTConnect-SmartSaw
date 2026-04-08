@@ -452,28 +452,22 @@ Update_Mongodb(){
 
 # Function to initialize jobs and parts
 Init_Jobs_Parts(){
-    if python3 -c "import pymongo" &> /dev/null; then
-        echo "Reseting the Parts and Jobs..."
-        python3 /etc/mongodb/data/jobs_parts_init.py
-    else
-        echo "Reseting the Parts and Jobs..."
-        pip3 install pyaml --break-system-packages
-        pip3 install pymongo --break-system-packages
-        python3 /etc/mongodb/data/jobs_parts_init.py
+    echo "Reseting the Parts and Jobs..."
+    if [ ! -f /etc/mongodb/venv/bin/python ]; then
+        python3 -m venv /etc/mongodb/venv
+        /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
     fi
+    /etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
 }
 
 # Function to update the materials to default stored in the csv
 Update_Materials(){
-    if python3 -c "import pymongo" &> /dev/null; then
-        echo "Updating or reseting the materials to default..."
-        python3 /etc/mongodb/data/upload_materials.py
-    else
-        echo "Updating or reseting the materials to default..."
-        pip3 install pyaml --break-system-packages
-        pip3 install pymongo --break-system-packages
-        python3 /etc/mongodb/data/upload_materials.py
+    echo "Updating or reseting the materials to default..."
+    if [ ! -f /etc/mongodb/venv/bin/python ]; then
+        python3 -m venv /etc/mongodb/venv
+        /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
     fi
+    /etc/mongodb/venv/bin/python /etc/mongodb/data/upload_materials.py
 }
 
 ############################################################

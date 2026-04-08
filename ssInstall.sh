@@ -160,9 +160,9 @@ InstallMTCAgent(){
     mkdir -p /etc/mtconnect/data/
 
     cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
-    sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
+    awk -v dev="$Device_File" 'NR==1{print "Devices = /mtconnect/config/" dev} {print}' /etc/mtconnect/config/agent.cfg > /tmp/agent.cfg.tmp && mv /tmp/agent.cfg.tmp /etc/mtconnect/config/agent.cfg
     cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
-    sed -i "11 s|.*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/$Device_File
+    awk -v serial="$Serial_Number" 'NR==11{print "        <Device id=\"saw\" uuid=\"HEMSaw-" serial "\" name=\"Saw\">"; next} {print}' /etc/mtconnect/config/"$Device_File" > /tmp/device.xml.tmp && mv /tmp/device.xml.tmp /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
@@ -226,7 +226,7 @@ InstallDevctl(){
     mkdir -p /etc/devctl/config/
     mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
-    sed -i "18 s|.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
+    awk -v serial="$Serial_Number" 'NR==18{print "        \"device_uid\" : \"HEMSaw-" serial "\","; next} {print}' /etc/devctl/config/devctl_json_config.json > /tmp/devctl.json.tmp && mv /tmp/devctl.json.tmp /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
@@ -240,10 +240,8 @@ InstallMongodb(){
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    if command -v pip3 &> /dev/null; then
-        pip3 install pyaml --break-system-packages
-        pip3 install pymongo --break-system-packages
-    fi
+    python3 -m venv /etc/mongodb/venv
+    /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
 }
 
 
@@ -421,8 +419,8 @@ docker compose up --remove-orphans -d
 docker compose logs
 
 echo ""
-python3 /etc/mongodb/data/jobs_parts_init.py
-python3 /etc/mongodb/data/upload_materials.py
+/etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
+/etc/mongodb/venv/bin/python /etc/mongodb/data/upload_materials.py
 
 
 echo ""
