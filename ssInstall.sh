@@ -1,5 +1,8 @@
 #!/bin/sh
 
+SCRIPT_DIR="$(dirname "$0")"
+source "$SCRIPT_DIR/lib.sh"
+
 ############################################################
 # Help                                                     #
 ############################################################
@@ -39,102 +42,6 @@ service_exists() {
 }
 
 
-#awk function to update the client id
-update_remote_clientid() {
-    local CONFIG_FILE="/etc/mqtt/config/mosquitto.conf"
-
-    if [[ -z "$Serial_Number" ]]; then
-        echo "ERROR: Serial_Number is not set. Aborting."
-        return 1
-    fi
-
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-        echo "ERROR: Config file not found: $CONFIG_FILE"
-        return 1
-    fi
-
-    echo "Updating remote_clientid and local_clientid in $CONFIG_FILE"
-
-    awk -v serial="$Serial_Number" '
-
-    # flush_block: called at end-of-block or EOF.
-    # Only injects client IDs here if no address line was seen
-    # (they would have been injected inline after address otherwise).
-    function flush_block(    i) {
-        if (!in_conn) return
-
-        for (i = 0; i < block_len; i++) {
-            print block_lines[i]
-
-            # Inject after connection line if no address line in block
-            if (!found_address && i == 0) {
-                print "remote_clientid HEMSaw-" serial "-MQTT"
-                print "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
-            }
-        }
-
-        # Reset state
-        block_len     = 0
-        found_address = 0
-        conn_name     = ""
-        in_conn       = 0
-    }
-
-    # New connection block detected
-    /^connection [^ ]/ {
-        flush_block()
-
-        in_conn       = 1
-        found_address = 0
-        block_len     = 0
-        conn_name     = $2
-
-        block_lines[block_len++] = $0
-        next
-    }
-
-    # Inside a connection block
-    in_conn {
-
-        # Suppress existing remote_clientid / local_clientid anywhere
-        # in the block — correct values are injected after address line
-        if ($0 ~ /^[[:space:]]*(#[[:space:]]*)?remote_clientid([[:space:]]|$)/ ||
-            $0 ~ /^[[:space:]]*(#[[:space:]]*)?local_clientid([[:space:]]|$)/) {
-            next
-        }
-
-        # Address line found: buffer it, then immediately inject client IDs
-        if ($0 ~ /^[[:space:]]*address[[:space:]]/) {
-            found_address = 1
-            block_lines[block_len++] = $0
-            block_lines[block_len++] = "remote_clientid HEMSaw-" serial "-MQTT"
-            block_lines[block_len++] = "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
-            next
-        }
-
-        block_lines[block_len++] = $0
-        next
-    }
-
-    # Lines outside any connection block — print as-is
-    { print }
-
-    END { flush_block() }
-
-    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
-
-    if [[ $? -ne 0 ]]; then
-        echo "ERROR: awk processing failed. Original file unchanged."
-        rm -f "${CONFIG_FILE}.tmp"
-        return 1
-    fi
-
-    cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
-    mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
-    echo "Updated mosquitto config file successfully."
-}
-
-
 ############################################################
 # Installers                                               #
 ############################################################
@@ -160,7 +67,7 @@ InstallMTCAgent(){
     mkdir -p /etc/mtconnect/data/
 
     cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
-    awk -v dev="$Device_File" 'NR==1{print "Devices = /mtconnect/config/" dev} {print}' /etc/mtconnect/config/agent.cfg > /tmp/agent.cfg.tmp && mv /tmp/agent.cfg.tmp /etc/mtconnect/config/agent.cfg
+    update_agent_cfg
     cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
     awk -v serial="$Serial_Number" 'NR==11{print "        <Device id=\"saw\" uuid=\"HEMSaw-" serial "\" name=\"Saw\">"; next} {print}' /etc/mtconnect/config/"$Device_File" > /tmp/device.xml.tmp && mv /tmp/device.xml.tmp /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
@@ -174,7 +81,6 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
             update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
@@ -188,7 +94,6 @@ InstallMTCAgent(){
 
             # Load the Broker UUID
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
             update_remote_clientid
 
             cp -p ./mqtt/data/acl /etc/mqtt/data/acl
@@ -241,7 +146,7 @@ InstallMongodb(){
     chown -R 1000:1000 /etc/mongodb/
 
     python3 -m venv /etc/mongodb/venv
-    /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
+    /etc/mongodb/venv/bin/pip install --quiet pymongo
 }
 
 
@@ -262,9 +167,9 @@ fi
 
 ## Set default variables
 # Source the env.sh file
-if [[ -f "./env.sh" ]]; then
+if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
     set -a
-    source ./env.sh
+    source "$SCRIPT_DIR/env.sh"
     set +a
 else
     echo "env.sh file not found. Using default values."
@@ -311,19 +216,19 @@ while getopts ":a:j:d:c:u:bhf" option; do
             exit;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
             Json_File=$OPTARG;
-            [[ -f env.sh ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
             Device_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
             DevCTL_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
-            [[ -f env.sh ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
         b) # Run MQTT Bridge
             Use_MQTT_Bridge=true;;
         f) # Force install files

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+SCRIPT_DIR="$(dirname "$0")"
+source "$SCRIPT_DIR/lib.sh"
+
 ############################################################
 # Help                                                     #
 ############################################################
@@ -79,101 +82,6 @@ dir_needs_update() {
 }
 
 
-#awk function to update the client id
-update_remote_clientid() {
-    local CONFIG_FILE="/etc/mqtt/config/mosquitto.conf"
-
-    if [[ -z "$Serial_Number" ]]; then
-        echo "ERROR: Serial_Number is not set. Aborting."
-        return 1
-    fi
-
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-        echo "ERROR: Config file not found: $CONFIG_FILE"
-        return 1
-    fi
-
-    echo "Updating remote_clientid and local_clientid in $CONFIG_FILE"
-
-    awk -v serial="$Serial_Number" '
-
-    # flush_block: called at end-of-block or EOF.
-    # Only injects client IDs here if no address line was seen
-    # (they would have been injected inline after address otherwise).
-    function flush_block(    i) {
-        if (!in_conn) return
-
-        for (i = 0; i < block_len; i++) {
-            print block_lines[i]
-
-            # Inject after connection line if no address line in block
-            if (!found_address && i == 0) {
-                print "remote_clientid HEMSaw-" serial "-MQTT"
-                print "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
-            }
-        }
-
-        # Reset state
-        block_len     = 0
-        found_address = 0
-        conn_name     = ""
-        in_conn       = 0
-    }
-
-    # New connection block detected
-    /^connection [^ ]/ {
-        flush_block()
-
-        in_conn       = 1
-        found_address = 0
-        block_len     = 0
-        conn_name     = $2
-
-        block_lines[block_len++] = $0
-        next
-    }
-
-    # Inside a connection block
-    in_conn {
-
-        # Suppress existing remote_clientid / local_clientid anywhere
-        # in the block — correct values are injected after address line
-        if ($0 ~ /^[[:space:]]*(#[[:space:]]*)?remote_clientid([[:space:]]|$)/ ||
-            $0 ~ /^[[:space:]]*(#[[:space:]]*)?local_clientid([[:space:]]|$)/) {
-            next
-        }
-
-        # Address line found: buffer it, then immediately inject client IDs
-        if ($0 ~ /^[[:space:]]*address[[:space:]]/) {
-            found_address = 1
-            block_lines[block_len++] = $0
-            block_lines[block_len++] = "remote_clientid HEMSaw-" serial "-MQTT"
-            block_lines[block_len++] = "local_clientid local.HEMSaw-" serial "-MQTT-" conn_name
-            next
-        }
-
-        block_lines[block_len++] = $0
-        next
-    }
-
-    # Lines outside any connection block — print as-is
-    { print }
-
-    END { flush_block() }
-
-    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
-
-    if [[ $? -ne 0 ]]; then
-        echo "ERROR: awk processing failed. Original file unchanged."
-        rm -f "${CONFIG_FILE}.tmp"
-        return 1
-    fi
-
-    cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
-    mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
-    echo "Updated mosquitto config file successfully."
-}
-
 
 ############################################################
 # Docker                                                   #
@@ -251,8 +159,8 @@ Update_Agent(){
         # Check if agent.cfg needs updating
         if files_differ "./agent/config/agent.cfg" "/etc/mtconnect/config/agent.cfg"; then
             echo "Updating MTConnect Agent configuration..."
-            cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
-            sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
+            cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
+            update_agent_cfg
         else
             echo "MTConnect Agent configuration already up to date"
         fi
@@ -285,7 +193,7 @@ Update_Agent(){
         mkdir -p /etc/mtconnect/data/
 
         cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
-        sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
+        update_agent_cfg
         cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
         sed -i "11 s|.*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/$Device_File
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
@@ -304,8 +212,7 @@ Update_MQTT_Broker(){
             # Check if mosquitto.conf needs updating
             if files_differ "./mqtt/config/mosq_bridge.conf" "/etc/mqtt/config/mosquitto.conf"; then
                 echo "Updating MQTT bridge configuration..."
-                cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-                #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+                cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             else
                 echo "MQTT bridge configuration already up to date"
             fi
@@ -336,10 +243,7 @@ Update_MQTT_Broker(){
             mkdir -p /etc/mqtt/certs/
 
             # Load the Broker UUID
-            cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            #sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
-
-            #Update the remote client id
+            cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             update_remote_clientid
 
             cp -r ./mqtt/data/acl /etc/mqtt/data/acl
@@ -453,20 +357,14 @@ Update_Mongodb(){
 # Function to initialize jobs and parts
 Init_Jobs_Parts(){
     echo "Reseting the Parts and Jobs..."
-    if [ ! -f /etc/mongodb/venv/bin/python ]; then
-        python3 -m venv /etc/mongodb/venv
-        /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
-    fi
+    ensure_venv
     /etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
 }
 
 # Function to update the materials to default stored in the csv
 Update_Materials(){
     echo "Updating or reseting the materials to default..."
-    if [ ! -f /etc/mongodb/venv/bin/python ]; then
-        python3 -m venv /etc/mongodb/venv
-        /etc/mongodb/venv/bin/pip install --quiet pyaml pymongo
-    fi
+    ensure_venv
     /etc/mongodb/venv/bin/python /etc/mongodb/data/upload_materials.py
 }
 
@@ -480,9 +378,9 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUpgrade.sh as sudo" ; exit 1 ;
 
 ## Set default variables
 # Source the env.sh file
-if [[ -f "./env.sh" ]]; then
+if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
     set -a
-    source ./env.sh
+    source "$SCRIPT_DIR/env.sh"
     set +a
 else
     echo "env.sh file not found. Using default values."
@@ -545,19 +443,19 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
             run_update_mongodb=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
             Json_File=$OPTARG;
-            [[ -f env.sh ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
             Device_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
             DevCTL_File=$OPTARG
-            [[ -f env.sh ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
-            [[ -f env.sh ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" env.sh;;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
         m) # Update Mongodb materials
             run_update_materials=true;;
         i) # Init Mongodb jobs and parts
