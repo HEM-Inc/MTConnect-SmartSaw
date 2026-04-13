@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh"
@@ -145,8 +145,7 @@ InstallMongodb(){
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    python3 -m venv /etc/mongodb/venv
-    /etc/mongodb/venv/bin/pip install --quiet pymongo
+    ensure_venv
 }
 
 

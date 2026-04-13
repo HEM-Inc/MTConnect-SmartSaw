@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh"
@@ -213,12 +213,10 @@ Update_MQTT_Broker(){
             if files_differ "./mqtt/config/mosq_bridge.conf" "/etc/mqtt/config/mosquitto.conf"; then
                 echo "Updating MQTT bridge configuration..."
                 cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+                update_remote_clientid
             else
                 echo "MQTT bridge configuration already up to date"
             fi
-
-            #Update the remote client id
-            update_remote_clientid
 
             # Check if ACL needs updating
             if files_differ "./mqtt/data/acl" "/etc/mqtt/data/acl"; then
