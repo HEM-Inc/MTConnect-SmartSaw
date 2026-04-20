@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "$0")"
-source "$SCRIPT_DIR/lib.sh"
+source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
 
 ############################################################
 # Help                                                     #
@@ -355,14 +355,14 @@ Update_Mongodb(){
 # Function to initialize jobs and parts
 Init_Jobs_Parts(){
     echo "Reseting the Parts and Jobs..."
-    ensure_venv
+    ensure_venv || return 1
     /etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
 }
 
 # Function to update the materials to default stored in the csv
 Update_Materials(){
     echo "Updating or reseting the materials to default..."
-    ensure_venv
+    ensure_venv || return 1
     /etc/mongodb/venv/bin/python /etc/mongodb/data/upload_materials.py
 }
 

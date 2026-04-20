@@ -7,8 +7,8 @@
 # Create /etc/mongodb/venv and install Python deps if not already present.
 ensure_venv() {
     if [ ! -f /etc/mongodb/venv/bin/python ]; then
-        python3 -m venv /etc/mongodb/venv
-        /etc/mongodb/venv/bin/pip install --quiet pymongo
+        python3 -m venv /etc/mongodb/venv || { echo "ERROR: Failed to create venv at /etc/mongodb/venv"; return 1; }
+        /etc/mongodb/venv/bin/pip install --quiet pymongo || { echo "ERROR: Failed to install pymongo"; return 1; }
     fi
 }
 
@@ -28,9 +28,11 @@ update_agent_cfg() {
         return 1
     fi
 
-    awk -v dev="$Device_File" \
-        'NR==1{print "Devices = /mtconnect/config/" dev} {print}' \
-        "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
+    awk -v dev="$Device_File" '
+        NR==1 && /^Devices[[:space:]]*=/ { print "Devices = /mtconnect/config/" dev; next }
+        NR==1 { print "Devices = /mtconnect/config/" dev; print; next }
+        { print }
+    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
 
     if [[ $? -ne 0 ]]; then
         echo "ERROR: awk processing failed. Original file unchanged."

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "$0")"
-source "$SCRIPT_DIR/lib.sh"
+source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
 
 ############################################################
 # Help                                                     #
@@ -69,7 +69,7 @@ InstallMTCAgent(){
     cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
     update_agent_cfg
     cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
-    awk -v serial="$Serial_Number" 'NR==11{print "        <Device id=\"saw\" uuid=\"HEMSaw-" serial "\" name=\"Saw\">"; next} {print}' /etc/mtconnect/config/"$Device_File" > /tmp/device.xml.tmp && mv /tmp/device.xml.tmp /etc/mtconnect/config/"$Device_File"
+    awk -v serial="$Serial_Number" '/<Device[[:space:]].*id="saw"/{print "        <Device id=\"saw\" uuid=\"HEMSaw-" serial "\" name=\"Saw\">"; next} {print}' /etc/mtconnect/config/"$Device_File" > /etc/mtconnect/config/"${Device_File}.tmp" && mv /etc/mtconnect/config/"${Device_File}.tmp" /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
@@ -131,7 +131,7 @@ InstallDevctl(){
     mkdir -p /etc/devctl/config/
     mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
-    awk -v serial="$Serial_Number" 'NR==18{print "        \"device_uid\" : \"HEMSaw-" serial "\","; next} {print}' /etc/devctl/config/devctl_json_config.json > /tmp/devctl.json.tmp && mv /tmp/devctl.json.tmp /etc/devctl/config/devctl_json_config.json
+    awk -v serial="$Serial_Number" '/"device_uid"[[:space:]]*:/{print "        \"device_uid\" : \"HEMSaw-" serial "\","; next} {print}' /etc/devctl/config/devctl_json_config.json > /etc/devctl/config/devctl_json_config.json.tmp && mv /etc/devctl/config/devctl_json_config.json.tmp /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
@@ -145,7 +145,7 @@ InstallMongodb(){
     cp -r ./mongodb/data/* /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    ensure_venv
+    ensure_venv || exit 1
 }
 
 
