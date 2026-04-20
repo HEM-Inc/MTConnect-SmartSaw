@@ -29,20 +29,6 @@ Help(){
 }
 
 ############################################################
-# Utilities                                                #
-############################################################
-# Function to check if a service exists
-service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-
-############################################################
 # Installers                                               #
 ############################################################
 
@@ -69,7 +55,7 @@ InstallMTCAgent(){
     cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
     update_agent_cfg
     cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
-    awk -v serial="$Serial_Number" '/<Device[[:space:]].*id="saw"/{print "        <Device id=\"saw\" uuid=\"HEMSaw-" serial "\" name=\"Saw\">"; next} {print}' /etc/mtconnect/config/"$Device_File" > /etc/mtconnect/config/"${Device_File}.tmp" && mv /etc/mtconnect/config/"${Device_File}.tmp" /etc/mtconnect/config/"$Device_File"
+    sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
@@ -131,7 +117,7 @@ InstallDevctl(){
     mkdir -p /etc/devctl/config/
     mkdir -p /etc/devctl/logs/
     cp -r ./devctl/config/* /etc/devctl/config/
-    awk -v serial="$Serial_Number" '/"device_uid"[[:space:]]*:/{print "        \"device_uid\" : \"HEMSaw-" serial "\","; next} {print}' /etc/devctl/config/devctl_json_config.json > /etc/devctl/config/devctl_json_config.json.tmp && mv /etc/devctl/config/devctl_json_config.json.tmp /etc/devctl/config/devctl_json_config.json
+    sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
@@ -215,19 +201,19 @@ while getopts ":a:j:d:c:u:bhf" option; do
             exit;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "4 s|.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Afg_File=.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
             Json_File=$OPTARG;
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "5 s|.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Json_File=.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
             Device_File=$OPTARG
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "6 s|.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Device_File=.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
             DevCTL_File=$OPTARG
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "8 s|.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export DevCTL_File=.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "7 s|.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
         b) # Run MQTT Bridge
             Use_MQTT_Bridge=true;;
         f) # Force install files

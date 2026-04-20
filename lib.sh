@@ -4,6 +4,51 @@
 # Shared library — sourced by ssInstall.sh and ssUpgrade.sh
 ############################################################
 
+# Check if a systemd service exists.
+service_exists() {
+    local n=$1
+    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+
+# Return 0 if src and dest files differ or dest does not exist.
+files_differ() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -f "$dest" ]; then
+        return 0  # Files differ if destination doesn't exist
+    fi
+
+    if cmp -s "$src" "$dest"; then
+        return 1  # Files are identical
+    else
+        return 0  # Files differ
+    fi
+}
+
+
+# Return 0 if src and dest directories differ or dest does not exist.
+dir_needs_update() {
+    local src="$1"
+    local dest="$2"
+
+    if [ ! -d "$dest" ]; then
+        return 0  # Needs update if destination doesn't exist
+    fi
+
+    if diff -rq "$src" "$dest" > /dev/null 2>&1; then
+        return 1  # Directories are identical
+    else
+        return 0  # Directories differ
+    fi
+}
+
+
 # Create /etc/mongodb/venv and install Python deps if not already present.
 ensure_venv() {
     if [ ! -f /etc/mongodb/venv/bin/python ]; then
@@ -13,7 +58,7 @@ ensure_venv() {
 }
 
 
-# Prepend "Devices = /mtconnect/config/<Device_File>" to agent.cfg.
+# Set (or replace) "Devices = /mtconnect/config/<Device_File>" on line 1 of agent.cfg.
 # Relies on global: Device_File
 update_agent_cfg() {
     local CONFIG_FILE="/etc/mtconnect/config/agent.cfg"
@@ -32,13 +77,7 @@ update_agent_cfg() {
         NR==1 && /^Devices[[:space:]]*=/ { print "Devices = /mtconnect/config/" dev; next }
         NR==1 { print "Devices = /mtconnect/config/" dev; print; next }
         { print }
-    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
-
-    if [[ $? -ne 0 ]]; then
-        echo "ERROR: awk processing failed. Original file unchanged."
-        rm -f "${CONFIG_FILE}.tmp"
-        return 1
-    fi
+    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" || { echo "ERROR: awk processing failed. Original file unchanged."; rm -f "${CONFIG_FILE}.tmp"; return 1; }
 
     mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
 }
@@ -128,13 +167,7 @@ update_remote_clientid() {
 
     END { flush_block() }
 
-    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp"
-
-    if [[ $? -ne 0 ]]; then
-        echo "ERROR: awk processing failed. Original file unchanged."
-        rm -f "${CONFIG_FILE}.tmp"
-        return 1
-    fi
+    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" || { echo "ERROR: awk processing failed. Original file unchanged."; rm -f "${CONFIG_FILE}.tmp"; return 1; }
 
     cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
     mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"

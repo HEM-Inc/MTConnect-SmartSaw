@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+SCRIPT_DIR="$(dirname "$0")"
+source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
 
 ############################################################
 # Help                                                     #
@@ -113,19 +116,23 @@ Uninstall_Docker(){
 }
 
 Uninstall_Daemon(){
-    if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-        echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services..."
-        systemctl stop adapter
-        systemctl stop ods
-        systemctl stop mongod
+    for svc in adapter ods; do
+        if service_exists "$svc"; then
+            echo "Removing $svc systemd service..."
+            systemctl stop    "$svc"
+            systemctl disable "$svc"
+            rm -f "/etc/systemd/system/$svc.service"
+        fi
+    done
+
+    if service_exists mongod; then
+        echo "Disabling mongod systemd service..."
+        systemctl stop    mongod
+        systemctl disable mongod
     fi
 
-    echo "Disabling the systemd services..."
-    systemctl disable adapter
-    systemctl disable ods
-    systemctl disable mongod
-
     systemctl daemon-reload
+    systemctl reset-failed
     echo "<<Done>>"
     echo ""
 }
@@ -268,20 +275,6 @@ if [[ $# -gt 0 ]]; then
         fi
     done
 fi
-
-############################################################
-# Service exists function                                  #
-############################################################
-
-service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 
 ############################################################
 ############################################################
