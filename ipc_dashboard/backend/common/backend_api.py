@@ -10,11 +10,15 @@ from backend_config import *
 from backend_logger import *
 from beapi_certdownload import *
 from beapi_userauth import * 
+from beapi_ipcstatus import *
+from beapi_ipcupgrade import *
 
 
 class BackendApi(BackendCertDownloadApi,
                  BackendUserAuthApi,
-                 BackendConfig
+                 BackendConfig,
+                 BackendIpcUpgrade,
+                 BackendIpcStatus,
                  ):
 
     _instance = None
@@ -33,6 +37,9 @@ class BackendApi(BackendCertDownloadApi,
             self.config           = None
             self.config_init_done = False
             self.env_file         = None
+            self._ipc_update       = None
+            self._ipc_status       = None
+
 
     def cleanup(self):
         log_debug("Backend Api cleanup")
@@ -132,3 +139,17 @@ class BackendApi(BackendCertDownloadApi,
         set_key(self.env_file, f"{user_uid.upper()}_PASSWORD", password_hash)
 
         log_info(f"User created: {user_uid}")
+
+    @property
+    def ipc_status(self):
+        if self._ipc_status is None:
+            log_info("Lazy init: BackendIpcStatus")
+            self._ipc_status = BackendIpcStatus()
+        return self._ipc_status
+
+    @property
+    def ipc_update(self):
+        if self._ipc_update is None:
+            log_info("Lazy init: BackendIpcUpgrade")
+            self._ipc_update = BackendIpcUpgrade()
+        return self._ipc_update

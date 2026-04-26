@@ -43,3 +43,14 @@ def show_data(in_data, subject="", prefix="", indent=""):
         log_debug(f"{subject} list has {len(in_data)} entries")
         for v in in_data:
             log_debug(f"{indent}{prefix} {v}")
+
+def string_none_or_empty(param):
+    if param == None:
+        return True
+    if not isinstance(param, str):
+        return True
+    if param == "":
+        return True
+    if param.strip() == "":
+        return True
+    return False

@@ -22,6 +22,8 @@ from backend_logger import *
 from fastapi_backend import *
 from fastapi_userauth import *
 from fastapi_certdownload import *
+from fastapi_ipcupgrade import *
+from fastapi_ipcstatus import *
 
 if __name__ == "__main__":
     init_logger(module_name="IPCDashboard", folder_name="ipc", log_level=logging.INFO)
