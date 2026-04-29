@@ -254,7 +254,7 @@ Update_Devctl(){
         # Check if DevCTL config needs updating
         if files_differ "./devctl/config/$DevCTL_File" "/etc/devctl/config/devctl_json_config.json"; then
             echo "Updating Devctl configuration..."
-            cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+            cp -p ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
             sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
         else
             echo "Devctl configuration already up to date"
@@ -264,7 +264,7 @@ Update_Devctl(){
         mkdir -p /etc/devctl/
         mkdir -p /etc/devctl/config/
         mkdir -p /etc/devctl/logs/
-        cp -r ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+        cp -p ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
         sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
     fi
     chown -R 1300:1300 /etc/devctl/
