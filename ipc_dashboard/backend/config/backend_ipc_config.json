@@ -1,7 +1,7 @@
 {
     "name": "IPC Dashboard",
     "type": "fastapi",
-    "timezone": "Asia/Kolkata",
+    "timezone": "America/Chicago",
     "logger_config": {
         "logging_level": "INFO",
         "file_logging": "No"
