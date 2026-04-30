@@ -1,0 +1,233 @@
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  background: #f8fafc;
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════ */
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #ffffff;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════ */
+.page-header {
+  flex-shrink: 0;
+  padding: 14px 18px 0;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+/* ═══════════════════════════════════════
+   MODERN TAB SYSTEM
+═══════════════════════════════════════ */
+.page-tabs {
+  margin-top: 6px;
+  position: relative;
+}
+
+.tab-track {
+  display: flex;
+  gap: 6px;
+  position: relative;
+  padding: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tab Button */
+.page-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+
+  border-radius: 10px;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+  position: relative;
+  /* z-index: 2; */
+  white-space: nowrap;
+}
+
+.page-tab .tab-icon {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Hover */
+.page-tab:hover {
+  background: #ffffff;
+  color: #334155;
+  transform: translateY(-1px);
+}
+
+/* Active */
+.page-tab.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #455ca8, #5b74d6);
+  box-shadow: 0 6px 18px rgba(69, 92, 168, 0.25);
+}
+
+/* Animated indicator */
+.tab-indicator {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, #455ca8, #22c55e);
+  border-radius: 999px;
+  transition: all 0.25s ease;
+  /* z-index: 1; */
+}
+
+/* ═══════════════════════════════════════════
+   CONTENT AREA
+═══════════════════════════════════════════ */
+#content {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+#content > * {
+  flex: 1;
+  min-height: 0;
+}
+
+.tab-single-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   COMMON PANELS (Reusable)
+═══════════════════════════════════════════ */
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 9px 14px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.panel-header-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn-save {
+  padding: 8px 22px;
+  background: #4c66af;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-save:hover {
+  background: #3b54a0;
+}
+
+.btn-discard {
+  padding: 8px 22px;
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  background: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-discard:hover {
+  background: rgba(239, 68, 68, 0.06);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════ */
+.panel-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.panel-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

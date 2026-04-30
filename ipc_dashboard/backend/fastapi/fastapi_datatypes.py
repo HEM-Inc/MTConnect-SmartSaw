@@ -2,31 +2,34 @@
 fastapi_datatypes.py - Pydantic models for request / response bodies
 """
 
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional, List, Dict, Any
 
 
 class LoginRequest(BaseModel):
     user_uid: str
     password: str
 
+class ComponentConfig(BaseModel):
+    name: str
+    config_file: Optional[str] = ""
+    data_file: Optional[str] = ""
+    serial_number: Optional[str] = ""
+    bridge: Optional[bool] = False
+    reinit: Optional[bool] = False
+    materials: Optional[bool] = False
+    version: Optional[str] = ""
 
-class LoginResponse(BaseModel):
-    token:    str
-    user_uid: str
-    role:     str
-    name:     str
+
+class UpdateRequest(BaseModel):
+    command: str
+    components: Optional[List[Dict[str, Any]]] = Field(default=None)
+    sudo_password: Optional[str] = Field(default=None)
 
 
-class LogoutRequest(BaseModel):
-    token: str
+class FileInfoSave(BaseModel):
+    path: str
+    content: str
 
 
-class CertInfoResponse(BaseModel):
-    path:            str
-    filename:        str
-    file_size_bytes: int
-    file_size_kb:    float
-    last_modified:   str
-    cert_details:    dict
-    available:       bool
+

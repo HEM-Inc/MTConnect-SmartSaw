@@ -1,25 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>IPC Login</title>
     <!-- <link rel="stylesheet" href="../css/login.css"> -->
-    <link rel="stylesheet" href="/css/login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="login-page">
+      <!-- Background shapes -->
+      <div class="bg-shape"></div>
 
-<div class="login-page">
-
-    <!-- Background shapes -->
-    <div class="bg-shape"></div>
-
-    <!-- Login Box -->
-    <div class="login-box">
-
+      <!-- Login Box -->
+      <div class="login-box">
         <!-- Logo -->
         <!-- <img src="/images/logo.png" alt="Logo" class="login-logo"> -->
-        <img src="/images/logo.png" alt="Logo" class="login-logo">
+        <img src="/images/logo.png" alt="Logo" class="login-logo" />
 
         <!-- <p class="sub-title">IPC Login</p> -->
         <h2>IPC Dashboard Login</h2>
@@ -50,42 +50,38 @@
         </form> -->
 
         <form id="loginForm">
+          <label>User ID</label>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter username"
+              required
+            />
+          </div>
 
-            <label>User ID</label>
-            <div class="input-group">
-                <i class="fa fa-user"></i>
-                <input 
-                    type="text" 
-                    id="username" 
-                    placeholder="Enter username"
-                    required
-                >
-            </div>
+          <label>Password</label>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter password"
+              required
+            />
+            <span id="togglePassword"><i class="fa fa-eye"></i></span>
+          </div>
 
-            <label>Password</label>
-            <div class="input-group">
-                <i class="fa fa-lock"></i>
-                <input 
-                    type="password" 
-                    id="password" 
-                    placeholder="Enter password"
-                    required
-                >
-                <span id="togglePassword"><i class="fa fa-eye"></i></span>
-            </div>
-
-            <button type="submit">Login</button>
-
+          <button type="submit">Login</button>
         </form>
 
         <p id="errorMsg"></p>
-
+      </div>
     </div>
 
-</div>
+    <div id="toastContainer"></div>
 
-<div id="toastContainer"></div>
-
-<script src="../js/login.js"></script>
-</body>
+    <script type="module" src="./js/core/login.js"></script>
+  </body>
 </html>

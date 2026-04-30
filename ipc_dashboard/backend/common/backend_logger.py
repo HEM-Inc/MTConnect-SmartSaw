@@ -142,6 +142,10 @@ def init_logger(log_level=None,
     logger.info("Logger initiated with log level:{}, file logging:{}".format(
         log_level_names.get(log_level), enable_file_logging))
 
+def _get_level_name(level):
+    if isinstance(level, int):
+        return log_level_names.get(level, str(level))
+    return str(level)
 
 def configure_file_logger(log_level=None, enable_file_logging=False):
     global logger_obj
@@ -157,6 +161,7 @@ def configure_file_logger(log_level=None, enable_file_logging=False):
         if isinstance(log_level, str):
             level_map = {v: k for k, v in log_level_names.items()}
             log_level = level_map.get(log_level.upper(), logging.DEBUG)
+
         if isinstance(log_level, int):
             logger.setLevel(log_level)
             for h in logger.handlers:
@@ -224,7 +229,7 @@ def set_log_level(log_level):
         logger_obj.setLevel(log_level)
         for handler in logger_obj.handlers:
             handler.setLevel(log_level)
-        logger_obj.info("Log level changed to {}".format(log_level_names.get(log_level)))
+        logger_obj.info("Log level changed to {}".format(log_level))
     except Exception as e:
         logger_obj.error("Failed to update the log level, Exception occurred")
         logger_obj.error("Exception error msg: {}".format(str(e)))
