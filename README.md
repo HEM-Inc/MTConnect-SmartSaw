@@ -14,7 +14,9 @@ This standardized approach enables:
 
 ## System Architecture
 
-The SmartSaw MTConnect system consists of the following containerized components:
+The SmartSaw MTConnect system consists of the following components:
+
+### Containerized Services (Docker Compose)
 
 - **MTConnect Agent**: Central component that receives and processes data from the adapter and serves it to client applications using the MTConnect protocol
 - **HEMsaw Adapter**: Interfaces with the saw control system to collect real-time operational data
@@ -23,7 +25,11 @@ The SmartSaw MTConnect system consists of the following containerized components
 - **MongoDB**: Stores parts, jobs, material data, and historical information with custom configuration support
 - **Watchtower**: Automatically updates Docker containers with the latest available images
 
-All components are containerized using Docker and orchestrated with Docker Compose for simplified deployment and management.
+All containerized components are orchestrated with Docker Compose for simplified deployment and management.
+
+### Host-Level Services
+
+- **IPC Dashboard** (optional): A FastAPI-based web dashboard for local management of the SmartSaw IPC. Provides real-time container status, web-based install/upgrade/clean controls, certificate management, and user authentication. Runs as a systemd service on port 8000. Planned to become a core component in a future release.
 
 ## Supported SmartSaw Models
 
@@ -54,6 +60,7 @@ Each model is available in both standard and SCT (Smart Cut Technology) variants
 - **Enhanced Logging**: Comprehensive logging support across all components with log repair utilities
 - **Docker Compose V2 Support**: Full compatibility with both Docker Compose V1 and V2 commands with auto-detection
 - **Containerized Deployment**: All components run in Docker containers for easy installation and updates
+- **IPC Dashboard** (optional): Browser-based management interface for container status, upgrades, certificate management, and system control
 
 ## Installation and Management
 
@@ -114,6 +121,7 @@ options:
 - MQTT Broker: Port 1883 (MQTT), Port 9001 (WebSocket)
 - ODS: Port 9625 (HTTP)
 - MongoDB: Port 27017 (Internal only, bound to localhost)
+- IPC Dashboard: Port 8000 (HTTP, optional, host-level)
 
 #### ssUpgrade.sh
 
@@ -193,20 +201,18 @@ The MQTT Broker manages message queuing and communication between system compone
 
 MongoDB serves as the database backend for the system, storing parts, jobs, material data, and historical information. It uses MongoDB 4.4 with custom configuration support and automatic material database initialization. The database is only accessible from localhost for security.
 
-## Recent Updates
+### IPC Dashboard (Optional)
 
-### Version 3.1.2 (May 2025)
-- Added auto-detection for Docker Compose version with option to force specific version
-- Enhanced compatibility with both Docker Compose V1 and V2
+The IPC Dashboard is a FastAPI-based web management interface for the SmartSaw IPC. It runs as a host-level systemd service (not a Docker container) and provides the following capabilities:
+- **Real-time Container Status**: View status of all Docker containers through a browser UI
+- **System Control**: Web-based interface for install, upgrade, and clean operations
+- **Certificate Management**: Download and manage MQTT TLS bridge certificates
+- **User Authentication**: Role-based access control with session management
+- **Live Updates**: Server-Sent Events (SSE) for real-time status streams
+- **Port**: `8000`
+- **Service Script**: `ipc_dashboard/ipc_service.sh`
 
-### Version 3.1.0 - 3.1.1 (April-May 2025)
-- Added logs folder support to DEVCTL component
-- Fixed DEVCTL configuration file JSON syntax issues
-
-### Version 3.0.0 (March 2025)
-- Major refactoring of upgrade and install scripts for Docker Compose V2 support
-- Parallel execution support in upgrade scripts for improved performance
-- Deprecated legacy Docker Compose version options
+For detailed dashboard documentation, see `ipc_dashboard/README.md`.
 
 ## Troubleshooting
 
@@ -247,6 +253,14 @@ The system uses a well-defined directory structure for configuration and data st
 └── mongodb/
     ├── config/          # mongod.conf
     └── data/db/         # Database files
+
+### Dashboard Configuration Directory
+
+The IPC Dashboard (optional) stores its configuration in the repository directory:
+- `ipc_dashboard/backend/config/` — Dashboard configuration (`backend_ipc_config.json`)
+- `ipc_dashboard/backend/common/` — Backend API modules
+- `ipc_dashboard/backend/fastapi/` — FastAPI route handlers
+- `ipc_dashboard/frontend/` — Static web assets (HTML, CSS, JS, images)
 ```
 
 ### Key Configuration Files

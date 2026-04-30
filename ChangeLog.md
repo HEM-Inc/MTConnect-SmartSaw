@@ -28,6 +28,20 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 =======
 
+## [Unreleased] - 2026/04/30 - maxharris
+
+### Added
+
+- Added IPC Dashboard — a FastAPI-based web dashboard for local management of the SmartSaw IPC.
+  - Real-time Docker container status via browser UI
+  - Web-based control for install, upgrade, and clean operations
+  - User authentication with role-based access control
+  - Certificate download for MQTT TLS bridge setup
+  - Server-Sent Events (SSE) for live status updates
+  - Runs as a host-level systemd service on port 8000
+- Added `ipc_dashboard/` directory containing backend (FastAPI), frontend (HTML/JS/CSS), and service management (`ipc_service.sh`).
+- Added `ipc-dashboard.service` systemd unit template for dashboard deployment.
+
 ## [3.3.0] - 2026/01/08 - maxharris
 
 ### Added
