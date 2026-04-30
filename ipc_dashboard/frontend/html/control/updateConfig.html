@@ -1,0 +1,146 @@
+<div class="content-grid">
+  <!-- COL 1: File Explorer -->
+  <div class="panel col-explorer">
+    <div class="panel-header">
+      <div class="panel-header-title">
+        <span class="material-symbols-outlined icon">folder_open</span>
+        Workspace
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="explorer-body">
+        <div
+          class="tree-root-label"
+          onclick="toggleSection('compTree', 'compArrow')"
+        >
+          <svg
+            class="tree-arrow"
+            id="compArrow"
+            fill="none"
+            stroke="#64748b"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M19 9l-7 7-7-7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+          <span>Components</span>
+          <button class="upload-btn" onclick="openUploadModal()">
+            <span class="material-symbols-outlined">upload</span>
+            Upload
+          </button>
+        </div>
+        <div id="compTree"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COL 2: File Editor -->
+  <div class="panel">
+    <div
+      class="panel-header"
+      style="display: flex; align-items: center; justify-content: space-between"
+    >
+      <div class="editor-breadcrumb">
+        <span class="breadcrumb-parent" id="bcParent">—</span>
+        <svg
+          width="10"
+          height="10"
+          fill="none"
+          stroke="#cbd5e1"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M9 5l7 7-7 7"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          />
+        </svg>
+        <span class="breadcrumb-file" id="bcFile">—</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <!-- ✅ NEW: Edit toggle button -->
+        <button
+          id="btnEditToggle"
+          class="btn-edit-toggle"
+          onclick="handleEditToggle()"
+        >
+          <span class="material-symbols-outlined icon">edit</span>
+          <span>Edit</span>
+        </button>
+        <span class="editor-status-badge" id="editorStatus">● unsaved</span>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <div class="editor-content" id="editorContent">
+        <div class="editor-placeholder">Select a file to view its contents</div>
+      </div>
+    </div>
+
+    <div class="panel-footer editor-actions">
+      <button class="btn-discard" onclick="handleDiscard()">Discard</button>
+      <button class="btn-save" onclick="handleSave()">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- COL 3: Actions -->
+  <div class="col-actions-wrap">
+    <div class="update-panel">
+      <div class="panel-header">
+        <div class="panel-header-title">Update &amp; Restart</div>
+      </div>
+
+      <!-- ✅ Dynamic list — built by JS -->
+      <div class="update-list" id="updateList"></div>
+
+      <div class="update-footer">
+        <!-- ✅ Restart hint -->
+        <div id="restartHint" class="restart-hint"></div>
+        <div class="warning-box">
+          <div class="warning-title">Safety Warning</div>
+          <div class="warning-text">
+            Restarting interrupts machine polling for approx. 12.5 seconds.
+          </div>
+        </div>
+        <button
+          class="btn-restart"
+          id="btnRestart"
+          onclick="handleRestart()"
+          disabled
+        >
+          <span class="material-symbols-outlined icon">restart_alt</span>
+          Restart System
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="uploadModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        Upload File
+        <button onclick="closeUploadModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-label">Select Destination Folder</div>
+
+        <div id="uploadTree" class="upload-tree"></div>
+
+        <div id="filePickerArea" style="display: none">
+          <div class="modal-label">Choose File</div>
+
+          <input type="file" id="uploadInput" />
+
+          <button class="btn-save" onclick="submitUpload()">
+            Submit Upload
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

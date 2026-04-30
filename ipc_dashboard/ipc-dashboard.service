@@ -1,0 +1,21 @@
+[Unit]
+Description=IPC Dashboard Server
+After=network.target 
+
+[Service]
+Type=simple
+User=hemsaw
+Group=hemsaw
+WorkingDirectory=IPCDB_WORKING_DIR
+ExecStart=IPCDB_UV_BIN run fastapi_main.py
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ipc-dashboard
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
