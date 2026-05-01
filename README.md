@@ -101,7 +101,7 @@ The system includes several management scripts for installation, updates, and ma
 Installs the MTConnect components, including the Agent, Adapter, ODS, DEVCTL, MQTT Broker, and MongoDB.
 
 ```bash
-Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-f]
+Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-f]
 
 options:
 -a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg
@@ -110,7 +110,6 @@ options:
 -c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json
 -u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw
 -b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf
--v version            Force Docker Compose version (1 or 2); Defaults to auto-detect
 -f                    Force install of the files
 -h                    Print this Help.
 ```
@@ -125,10 +124,10 @@ options:
 
 #### ssUpgrade.sh
 
-Upgrades existing components and restarts services. The upgrade process now runs in parallel for improved performance and includes support for reinitializing MongoDB parts and job databases.
+Upgrades existing components and restarts services. The upgrade process now runs in parallel for improved performance and includes support for reinitializing MongoDB parts and job databases. Passing `-u` with a new serial number triggers a full component update so the serial number propagates to all configuration files.
 
 ```bash
-Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-b|-m|-i|-h]
+Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-m|-i|-h]
 
 options:
 -A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl, and Mongodb application
@@ -137,7 +136,7 @@ options:
 -d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml
 -c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json
 -u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw
--v version        Force Docker Compose version (1 or 2); Defaults to auto-detect
+                  Triggers a full update so the serial number propagates to all configs
 -b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf
 -m                Update the MongoDB database with default materials
 -i                ReInit the MongoDB parts and job databases

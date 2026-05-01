@@ -19,6 +19,7 @@ Help(){
     echo "-d File_Name      Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
+    echo "                  Triggers a full update so the serial number propagates to all configs"
     echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
@@ -348,6 +349,7 @@ run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
 run_install=false
+run_full_update=false
 
 #####################################################
 # Process the input options. Add options as needed. #
@@ -382,12 +384,7 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
             Help
             exit;;
         A) # Update All Containers
-            run_update_mqtt_broker=true
-            run_update_adapter=true
-            run_update_agent=true
-            run_update_ods=true
-            run_update_devctl=true
-            run_update_mongodb=true;;
+            run_full_update=true;;
         a) # Enter an AFG file name
             Afg_File=$OPTARG
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Afg_File=.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
@@ -402,7 +399,9 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export DevCTL_File=.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
-            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh"
+            # Serial changes must propagate to all configs; trigger a full update
+            run_full_update=true;;
         m) # Update Mongodb materials
             run_update_materials=true;;
         i) # Init Mongodb jobs and parts
@@ -429,6 +428,16 @@ if [[ $# -gt 0 ]]; then
             exit 1
         fi
     done
+fi
+
+# Expand a full-update request into individual component flags
+if $run_full_update; then
+    run_update_mqtt_broker=true
+    run_update_adapter=true
+    run_update_agent=true
+    run_update_ods=true
+    run_update_devctl=true
+    run_update_mongodb=true
 fi
 
 # Require Docker Compose v2 - install if not present
