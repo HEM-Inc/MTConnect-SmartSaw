@@ -99,7 +99,9 @@ Uninstall_Docker(){
         docker-compose down
 
         echo "Uninstalling Docker containers and volumes..."
-        docker system prune --all --force --volumes
+        docker compose down --volumes --remove-orphans
+        # Optionally remove only this project's images:
+        docker compose rm -f
 
         echo "To fully uninstall Docker, run: 'apt purge -y docker-compose-v2 docker.io'"
     else
@@ -107,7 +109,9 @@ Uninstall_Docker(){
         docker compose down
 
         echo "Uninstalling Docker containers and volumes..."
-        docker system prune --all --force --volumes
+        docker compose down --volumes --remove-orphans
+        # Optionally remove only this project's images:
+        docker compose rm -f
 
         echo "To fully uninstall Docker, run: 'apt purge -y docker-compose docker'"
     fi
@@ -171,7 +175,7 @@ CleanLog(){
 ############################################################
 ############################################################
 
-if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssUninstall.sh as sudo" ; exit 1 ; fi
+if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssClean.sh as sudo" ; exit 1 ; fi
 
 # Set default variables
 run_uninstall_adapter=false
@@ -182,6 +186,7 @@ run_uninstall_devctl=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
+Use_Docker_Compose_v1=false
 clean_logs=false
 
 # Auto-detect Docker Compose version
@@ -199,27 +204,7 @@ fi
 # Process the input options. Add options as needed.        #
 ############################################################
 
-# Validate arguments for common mistakes
-for arg in "$@"; do
-    if [[ "$arg" == "-" ]]; then
-        echo "ERROR[1] - Invalid option format: standalone dash detected"
-        echo "Did you use a space between dash and option letter?"
-        echo "Correct format: -A (not - A)"
-        Help
-        exit 1
-    fi
-done
-
-# Check for standalone letters that might be mistyped options
-for arg in "$@"; do
-    if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
-        echo "ERROR[1] - Standalone letter '$arg' detected"
-        echo "Did you mean to use '-$arg' instead of '- $arg'?"
-        echo "Options should have no space between the dash and letter"
-        Help
-        exit 1
-    fi
-done
+validate_args "$@" || { Help; exit 1; }
 
 # Get the options
 while getopts ":L:HaAMDhOCSd" option; do

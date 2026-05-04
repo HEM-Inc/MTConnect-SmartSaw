@@ -10,7 +10,7 @@ Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
@@ -18,7 +18,6 @@ Help(){
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
-    echo "-f                    Force install of the files"
     echo "-h                    Print this Help."
     echo "AFG files"
     ls adapter/config/
@@ -105,30 +104,34 @@ InstallMTCAgent(){
 
 InstallODS(){
     echo "Installing ODS..."
+    rm -rf /etc/ods/config
     mkdir -p /etc/ods/
     mkdir -p /etc/ods/config/
-    cp -r ./ods/config/* /etc/ods/config/
+    cp -r ./ods/config/. /etc/ods/config/
     chown -R 1200:1200 /etc/ods/
 }
 
 InstallDevctl(){
     echo "Installing Devctl..."
+    rm -rf /etc/devctl/config
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
     mkdir -p /etc/devctl/logs/
-    cp -r ./devctl/config/* /etc/devctl/config/
+    cp -r ./devctl/config/. /etc/devctl/config/
     sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
 InstallMongodb(){
     echo "Installing Mongodb..."
+    rm -rf /etc/mongodb/config
+    rm -rf /etc/mongodb/data
     mkdir -p /etc/mongodb/
     mkdir -p /etc/mongodb/config/
     mkdir -p /etc/mongodb/data/
     mkdir -p /etc/mongodb/data/db
-    cp -r ./mongodb/config/* /etc/mongodb/config/
-    cp -r ./mongodb/data/* /etc/mongodb/data/
+    cp -r ./mongodb/config/. /etc/mongodb/config/
+    cp -r ./mongodb/data/. /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
     ensure_venv || exit 1
@@ -143,11 +146,25 @@ InstallMongodb(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services.."
-    systemctl stop adapter
-    systemctl stop ods
-    systemctl stop mongod
+# Detect and disable legacy systemd services during daemon -> Docker migration
+if service_exists adapter || service_exists ods || service_exists mongod; then
+    echo "Legacy systemd services detected. Disabling them for Docker migration..."
+    for svc in adapter ods; do
+        if service_exists "$svc"; then
+            echo "Stopping and disabling $svc.service..."
+            systemctl stop "$svc" 2>/dev/null || true
+            systemctl disable "$svc" 2>/dev/null || true
+            rm -f "/etc/systemd/system/$svc.service"
+        fi
+    done
+    if service_exists mongod; then
+        echo "Stopping and disabling mongod.service..."
+        systemctl stop mongod 2>/dev/null || true
+        systemctl disable mongod 2>/dev/null || true
+    fi
+    systemctl daemon-reload
+    systemctl reset-failed
+    echo "Legacy systemd services disabled."
 fi
 
 ## Set default variables
@@ -165,36 +182,15 @@ else
     DevCTL_File="devctl_json_config.json"
 fi
 
-Use_MQTT_Bridge=false
-force_install_files=false
+Use_MQTT_Bridge=${Use_MQTT_Bridge:-false}
 
 # Process the input options. Add options as needed.
 ############################################################
 
-# Validate arguments for common mistakes
-for arg in "$@"; do
-    if [[ "$arg" == "-" ]]; then
-        echo "ERROR[1] - Invalid option format: standalone dash detected"
-        echo "Did you use a space between dash and option letter?"
-        echo "Correct format: -d (not - d)"
-        Help
-        exit 1
-    fi
-done
-
-# Check for standalone letters that might be mistyped options
-for arg in "$@"; do
-    if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
-        echo "ERROR[1] - Standalone letter '$arg' detected"
-        echo "Did you mean to use '-$arg' instead of '- $arg'?"
-        echo "Options should have no space between the dash and letter"
-        Help
-        exit 1
-    fi
-done
+validate_args "$@" || { Help; exit 1; }
 
 # Get the options
-while getopts ":a:j:d:c:u:bhf" option; do
+while getopts ":a:j:d:c:u:bh" option; do
     case ${option} in
         h) # display Help
             Help
@@ -215,9 +211,15 @@ while getopts ":a:j:d:c:u:bhf" option; do
             Serial_Number=$OPTARG
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
         b) # Run MQTT Bridge
-            Use_MQTT_Bridge=true;;
-        f) # Force install files
-            force_install_files=true;;
+            Use_MQTT_Bridge=true
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"true\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="true"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen: -$OPTARG"
             echo "Use -h for help and list of valid options"
@@ -238,6 +240,15 @@ if [[ $# -gt 0 ]]; then
             exit 1
         fi
     done
+fi
+
+# Persist the final bridge preference so upgrades remember it
+if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+    if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+        sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"$Use_MQTT_Bridge\"|" "$SCRIPT_DIR/env.sh"
+    else
+        echo "export Use_MQTT_Bridge=\"$Use_MQTT_Bridge\"" >> "$SCRIPT_DIR/env.sh"
+    fi
 fi
 
 # Require Docker Compose v2 - install if not present

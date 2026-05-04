@@ -65,7 +65,7 @@ Update_Adapter(){
         # Check if config file needs updating
         if files_differ "./adapter/config/$Afg_File" "/etc/adapter/config/$Afg_File"; then
             echo "Updating adapter config file..."
-            rsync -a --checksum "./adapter/config/$Afg_File" "/etc/adapter/config/"
+            cp -p "./adapter/config/$Afg_File" "/etc/adapter/config/"
         else
             echo "Adapter config file already up to date"
         fi
@@ -73,7 +73,7 @@ Update_Adapter(){
         # Check if JSON file needs updating
         if files_differ "./adapter/data/$Json_File" "/etc/adapter/data/$Json_File"; then
             echo "Updating adapter JSON file..."
-            rsync -a --checksum "./adapter/data/$Json_File" "/etc/adapter/data/"
+            cp -p "./adapter/data/$Json_File" "/etc/adapter/data/"
         else
             echo "Adapter JSON file already up to date"
         fi
@@ -132,7 +132,9 @@ Update_Agent(){
         # Check if ruby scripts need updating
         if dir_needs_update "./agent/data/ruby" "/etc/mtconnect/data/ruby"; then
             echo "Updating MTConnect ruby scripts..."
-            rsync -a --checksum "./agent/data/ruby/." "/etc/mtconnect/data/ruby/"
+            rm -rf /etc/mtconnect/data/ruby
+            mkdir -p /etc/mtconnect/data/ruby
+            cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
         else
             echo "MTConnect ruby scripts already up to date"
         fi
@@ -180,7 +182,9 @@ Update_MQTT_Broker(){
             # Check if certs need updating
             if dir_needs_update "./mqtt/certs" "/etc/mqtt/certs"; then
                 echo "Updating MQTT certificates..."
-                rsync -a --checksum "./mqtt/certs/." "/etc/mqtt/certs/"
+                rm -rf /etc/mqtt/certs
+                mkdir -p /etc/mqtt/certs
+                cp -r ./mqtt/certs/. /etc/mqtt/certs/
             else
                 echo "MQTT certificates already up to date"
             fi
@@ -236,7 +240,9 @@ Update_ODS(){
         # Check if ODS config needs updating
         if dir_needs_update "./ods/config" "/etc/ods/config"; then
             echo "Updating ODS configuration..."
-            rsync -a --checksum "./ods/config/." "/etc/ods/config/"
+            rm -rf /etc/ods/config
+            mkdir -p /etc/ods/config
+            cp -r ./ods/config/. /etc/ods/config/
         else
             echo "ODS configuration already up to date"
         fi
@@ -278,7 +284,9 @@ Update_Mongodb(){
         # Check if MongoDB config needs updating
         if dir_needs_update "./mongodb/config" "/etc/mongodb/config"; then
             echo "Updating MongoDB configuration..."
-            rsync -a --checksum "./mongodb/config/." "/etc/mongodb/config/"
+            rm -rf /etc/mongodb/config
+            mkdir -p /etc/mongodb/config
+            cp -r ./mongodb/config/. /etc/mongodb/config/
         else
             echo "MongoDB configuration already up to date"
         fi
@@ -286,7 +294,9 @@ Update_Mongodb(){
         # Check if MongoDB data needs updating
         if dir_needs_update "./mongodb/data" "/etc/mongodb/data"; then
             echo "Updating MongoDB data files..."
-            rsync -a --checksum "./mongodb/data/." "/etc/mongodb/data/"
+            rm -rf /etc/mongodb/data
+            mkdir -p /etc/mongodb/data
+            cp -r ./mongodb/data/. /etc/mongodb/data/
         else
             echo "MongoDB data files already up to date"
         fi
@@ -296,8 +306,8 @@ Update_Mongodb(){
         mkdir -p /etc/mongodb/config/
         mkdir -p /etc/mongodb/data/
         mkdir -p /etc/mongodb/data/db
-        cp -r ./mongodb/config/* /etc/mongodb/config/
-        cp -r ./mongodb/data/* /etc/mongodb/data/
+        cp -r ./mongodb/config/. /etc/mongodb/config/
+        cp -r ./mongodb/data/. /etc/mongodb/data/
     fi
     chown -R 1000:1000 /etc/mongodb/
 }
@@ -355,27 +365,7 @@ run_full_update=false
 # Process the input options. Add options as needed. #
 #####################################################
 
-# Validate arguments for common mistakes
-for arg in "$@"; do
-    if [[ "$arg" == "-" ]]; then
-        echo "ERROR[1] - Invalid option format: standalone dash detected"
-        echo "Did you use a space between dash and option letter?"
-        echo "Correct format: -A (not - A)"
-        Help
-        exit 1
-    fi
-done
-
-# Check for standalone letters that might be mistyped options
-for arg in "$@"; do
-    if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
-        echo "ERROR[1] - Standalone letter '$arg' detected"
-        echo "Did you mean to use '-$arg' instead of '- $arg'?"
-        echo "Options should have no space between the dash and letter"
-        Help
-        exit 1
-    fi
-done
+validate_args "$@" || { Help; exit 1; }
 
 # Get the options
 while getopts ":a:j:d:c:u:Ahbmi" option; do
@@ -407,7 +397,15 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
         i) # Init Mongodb jobs and parts
             run_init_jp=true;;
         b) # Enter MQTT Bridge file name
-            run_update_mqtt_bridge=true;;
+            run_update_mqtt_bridge=true
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"true\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="true"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen: -$OPTARG"
             echo "Use -h for help and list of valid options"
@@ -438,6 +436,12 @@ if $run_full_update; then
     run_update_ods=true
     run_update_devctl=true
     run_update_mongodb=true
+fi
+
+# If doing a full update and bridge mode wasn't explicitly toggled,
+# restore the persisted preference from env.sh.
+if $run_full_update && [[ "${Use_MQTT_Bridge:-false}" == "true" ]]; then
+    run_update_mqtt_bridge=true
 fi
 
 # Require Docker Compose v2 - install if not present
@@ -475,11 +479,7 @@ fi
 
 if $run_install; then
     echo "Running Install script..."
-    if $run_update_mqtt_bridge; then
-        bash ssInstall.sh -b
-    else
-        bash ssInstall.sh
-    fi
+    bash "$SCRIPT_DIR/ssInstall.sh" -a "$Afg_File" -j "$Json_File" -d "$Device_File" -c "$DevCTL_File" -u "$Serial_Number" ${Use_MQTT_Bridge:+-b}
 else
     echo "Printing the options..."
     echo "Update Adapter set to run = "$run_update_adapter
@@ -536,56 +536,43 @@ else
     echo ""
 
     # Run update functions in parallel
+    declare -A PIDS=()
     if $run_update_adapter; then
         Update_Adapter &
-        ADAPTER_PID=$!
+        PIDS[adapter]=$!
     fi
     if $run_update_agent; then
         Update_Agent &
-        AGENT_PID=$!
+        PIDS[agent]=$!
     fi
     if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
         Update_MQTT_Broker &
-        MQTT_PID=$!
+        PIDS[mqtt]=$!
     fi
     if $run_update_ods; then
         Update_ODS &
-        ODS_PID=$!
+        PIDS[ods]=$!
     fi
     if $run_update_devctl; then
         Update_Devctl &
-        DEVCTL_PID=$!
+        PIDS[devctl]=$!
     fi
     if $run_update_mongodb; then
         Update_Mongodb &
-        MONGODB_PID=$!
+        PIDS[mongodb]=$!
     fi
 
     # Wait for all background processes to complete
-    if $run_update_adapter; then
-        wait $ADAPTER_PID || { echo "ERROR: Adapter update failed"; exit 1; }
-        echo "Adapter update completed"
-    fi
-    if $run_update_agent; then
-        wait $AGENT_PID || { echo "ERROR: Agent update failed"; exit 1; }
-        echo "Agent update completed"
-    fi
-    if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
-        wait $MQTT_PID || { echo "ERROR: MQTT update failed"; exit 1; }
-        echo "MQTT update completed"
-    fi
-    if $run_update_ods; then
-        wait $ODS_PID || { echo "ERROR: ODS update failed"; exit 1; }
-        echo "ODS update completed"
-    fi
-    if $run_update_devctl; then
-        wait $DEVCTL_PID || { echo "ERROR: Devctl update failed"; exit 1; }
-        echo "Devctl update completed"
-    fi
-    if $run_update_mongodb; then
-        wait $MONGODB_PID || { echo "ERROR: MongoDB update failed"; exit 1; }
-        echo "MongoDB update completed"
-    fi
+    failed=0
+    for name in "${!PIDS[@]}"; do
+        if ! wait "${PIDS[$name]}"; then
+            echo "ERROR: $name update failed" >&2
+            failed=1
+        else
+            echo "$name update completed"
+        fi
+    done
+    (( failed )) && exit 1
 
     echo ""
     # Run Docker after all updates

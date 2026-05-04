@@ -15,6 +15,28 @@ service_exists() {
 }
 
 
+# Validate command-line arguments for common formatting mistakes.
+# Prints an error and returns 1 if a standalone dash or standalone
+# letter (likely a mistyped option) is found.
+validate_args() {
+    local arg
+    for arg in "$@"; do
+        if [[ "$arg" == "-" ]]; then
+            echo "ERROR[1] - Invalid option format: standalone dash detected"
+            echo "Did you use a space between dash and option letter?"
+            echo "Correct format: -d (not - d)"
+            return 1
+        fi
+        if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
+            echo "ERROR[1] - Standalone letter '$arg' detected"
+            echo "Did you mean to use '-$arg' instead of '- $arg'?"
+            echo "Options should have no space between the dash and letter"
+            return 1
+        fi
+    done
+}
+
+
 # Return 0 if src and dest files differ or dest does not exist.
 files_differ() {
     local src="$1"
@@ -73,11 +95,18 @@ update_agent_cfg() {
         return 1
     fi
 
-    awk -v dev="$Device_File" '
-        NR==1 && /^Devices[[:space:]]*=/ { print "Devices = /mtconnect/config/" dev; next }
-        NR==1 { print "Devices = /mtconnect/config/" dev; print; next }
-        { print }
-    ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" || { echo "ERROR: awk processing failed. Original file unchanged."; rm -f "${CONFIG_FILE}.tmp"; return 1; }
+    if grep -qE '^Devices[[:space:]]*=' "$CONFIG_FILE"; then
+        awk -v dev="$Device_File" '
+            /^Devices[[:space:]]*=/ && !found {
+                print "Devices = /mtconnect/config/" dev
+                found = 1
+                next
+            }
+            { print }
+        ' "$CONFIG_FILE" > "${CONFIG_FILE}.tmp" || { echo "ERROR: awk processing failed. Original file unchanged."; rm -f "${CONFIG_FILE}.tmp"; return 1; }
+    else
+        { echo "Devices = /mtconnect/config/$Device_File"; cat "$CONFIG_FILE"; } > "${CONFIG_FILE}.tmp" || { echo "ERROR: failed to prepend Devices line. Original file unchanged."; rm -f "${CONFIG_FILE}.tmp"; return 1; }
+    fi
 
     mv "${CONFIG_FILE}.tmp" "$CONFIG_FILE"
 }
