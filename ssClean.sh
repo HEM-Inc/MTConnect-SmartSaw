@@ -96,24 +96,14 @@ Uninstall_Mongodb(){
 Uninstall_Docker(){
     if $Use_Docker_Compose_v1; then
         echo "Shutting down Docker containers using Docker Compose v1"
-        docker-compose down
+        docker-compose down --volumes --remove-orphans
 
-        echo "Uninstalling Docker containers and volumes..."
-        docker compose down --volumes --remove-orphans
-        # Optionally remove only this project's images:
-        docker compose rm -f
-
-        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose-v2 docker.io'"
+        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose docker.io'"
     else
         echo "Shutting down Docker containers using Docker Compose v2"
-        docker compose down
-
-        echo "Uninstalling Docker containers and volumes..."
         docker compose down --volumes --remove-orphans
-        # Optionally remove only this project's images:
-        docker compose rm -f
 
-        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose docker'"
+        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose-v2 docker.io'"
     fi
     echo "<<Done>>"
     echo ""

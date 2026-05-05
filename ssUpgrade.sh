@@ -11,7 +11,7 @@ Help(){
     echo "This function updates HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo "Any associated device files for MTConnect and Adapter files are updated as per this repo."
     echo
-    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-i|-m|-h]"
+    echo "Syntax: ssUpgrade.sh [-A|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-B|-i|-m|-h]"
     echo "options:"
     echo "-A                Update the MTConnect Agent, HEMsaw adapter, ODS, MQTT, Devctl and Mongodb application"
     echo "-a File_Name      Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
@@ -20,7 +20,8 @@ Help(){
     echo "-c File_Name      Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number  Declare the serial number for the uuid; Defaults to - SmartSaw"
     echo "                  Triggers a full update so the serial number propagates to all configs"
-    echo "-b                Update the MQTT broker to use the bridge configuration; runs - mosq_bridge.conf"
+    echo "-b                Enable MQTT bridge mode; persists ON in env.sh"
+    echo "-B                Disable MQTT bridge mode (standard broker); persists OFF in env.sh"
     echo "-i                ReInit the MongoDB parts and job databases"
     echo "-m                Update the MongoDB database with default materials"
     echo "-h                Print this Help."
@@ -51,7 +52,7 @@ RunDocker(){
 
     # Display logs
     echo "Displaying container logs..."
-    docker compose logs mtc_adapter mtc_agent mosquitto ods devctl
+    docker compose logs mtc_adapter mtc_agent mosquitto ods devctl mongodb
 }
 
 
@@ -96,8 +97,8 @@ Update_Adapter(){
         mkdir -p /etc/adapter/config/
         mkdir -p /etc/adapter/data/
         mkdir -p /etc/adapter/log
-        cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-        cp -r ./adapter/data/$Json_File /etc/adapter/data/
+        cp -p ./adapter/config/$Afg_File /etc/adapter/config/
+        cp -p ./adapter/data/$Json_File /etc/adapter/data/
     fi
     chown -R 1100:1100 /etc/adapter/
 }
@@ -173,7 +174,7 @@ Update_MQTT_Broker(){
             # Check if ACL needs updating
             if files_differ "./mqtt/data/acl" "/etc/mqtt/data/acl"; then
                 echo "Updating MQTT bridge ACL..."
-                cp -r ./mqtt/data/acl /etc/mqtt/data/acl
+                cp -p ./mqtt/data/acl /etc/mqtt/data/acl
                 chmod 0700 /etc/mqtt/data/acl
             else
                 echo "MQTT bridge ACL already up to date"
@@ -198,7 +199,7 @@ Update_MQTT_Broker(){
             cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
             update_remote_clientid
 
-            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
+            cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
@@ -209,7 +210,7 @@ Update_MQTT_Broker(){
             # Check if mosquitto.conf needs updating
             if files_differ "./mqtt/config/mosquitto.conf" "/etc/mqtt/config/mosquitto.conf"; then
                 echo "Updating MQTT configuration..."
-                cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+                cp -p ./mqtt/config/mosquitto.conf /etc/mqtt/config/
             else
                 echo "MQTT configuration already up to date"
             fi
@@ -217,7 +218,7 @@ Update_MQTT_Broker(){
             # Check if ACL needs updating
             if files_differ "./mqtt/data/acl" "/etc/mqtt/data/acl"; then
                 echo "Updating MQTT ACL..."
-                cp -r ./mqtt/data/acl /etc/mqtt/data/
+                cp -p ./mqtt/data/acl /etc/mqtt/data/
                 chmod 0700 /etc/mqtt/data/acl
             else
                 echo "MQTT ACL already up to date"
@@ -226,8 +227,8 @@ Update_MQTT_Broker(){
             echo "Installing MQTT files..."
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
-            cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
-            cp -r ./mqtt/data/acl /etc/mqtt/data/
+            cp -p ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+            cp -p ./mqtt/data/acl /etc/mqtt/data/
             chmod 0700 /etc/mqtt/data/acl
         fi
     fi
@@ -291,11 +292,9 @@ Update_Mongodb(){
             echo "MongoDB configuration already up to date"
         fi
 
-        # Check if MongoDB data needs updating
-        if dir_needs_update "./mongodb/data" "/etc/mongodb/data"; then
+        # Check if MongoDB data needs updating (exclude runtime db/ directory)
+        if dir_needs_update "./mongodb/data" "/etc/mongodb/data" "db"; then
             echo "Updating MongoDB data files..."
-            rm -rf /etc/mongodb/data
-            mkdir -p /etc/mongodb/data
             cp -r ./mongodb/data/. /etc/mongodb/data/
         else
             echo "MongoDB data files already up to date"
@@ -368,7 +367,7 @@ run_full_update=false
 validate_args "$@" || { Help; exit 1; }
 
 # Get the options
-while getopts ":a:j:d:c:u:Ahbmi" option; do
+while getopts ":a:j:d:c:u:AbBhmi" option; do
     case ${option} in
         h) # display Help
             Help
@@ -396,13 +395,25 @@ while getopts ":a:j:d:c:u:Ahbmi" option; do
             run_update_materials=true;;
         i) # Init Mongodb jobs and parts
             run_init_jp=true;;
-        b) # Enter MQTT Bridge file name
+        b) # Enable MQTT Bridge
             run_update_mqtt_bridge=true
+            Use_MQTT_Bridge=true
             if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
                 if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
                     sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"true\"|" "$SCRIPT_DIR/env.sh"
                 else
                     echo 'export Use_MQTT_Bridge="true"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
+        B) # Disable MQTT Bridge
+            run_update_mqtt_bridge=false
+            Use_MQTT_Bridge=false
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"false\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="false"' >> "$SCRIPT_DIR/env.sh"
                 fi
             fi
             ;;
@@ -591,17 +602,16 @@ fi
 echo ""
 echo "Check to verify containers are running:"
 
-# Smart pruning instead of aggressive pruning
-# Only prune containers that haven't been used in the last 24 hours
-# and always prune volumes that aren't being used by any containers
-echo "Pruning unused Docker resources (older than 24h)..."
-if docker system prune --filter "until=24h" --force > /dev/null; then
-    echo "Container pruning completed successfully"
+# Project-scoped pruning: only remove dangling images and unused volumes
+# created by this project's compose stack. Safer if other Docker projects
+# are ever added to the host.
+echo "Pruning dangling images from this project..."
+if docker image prune --filter "dangling=true" --force > /dev/null; then
+    echo "Dangling image pruning completed successfully"
 else
-    echo "No containers to prune or pruning failed"
+    echo "No dangling images to prune or pruning failed"
 fi
 
-# Always prune unused volumes
 echo "Pruning unused Docker volumes..."
 if docker volume prune --force > /dev/null; then
     echo "Volume pruning completed successfully"

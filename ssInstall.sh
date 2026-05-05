@@ -10,14 +10,15 @@ Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-B]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
+    echo "-b                    Use the MQTT bridge configuration; persists ON in env.sh"
+    echo "-B                    Use the standard MQTT configuration; persists OFF in env.sh"
     echo "-h                    Print this Help."
     echo "AFG files"
     ls adapter/config/
@@ -190,7 +191,7 @@ Use_MQTT_Bridge=${Use_MQTT_Bridge:-false}
 validate_args "$@" || { Help; exit 1; }
 
 # Get the options
-while getopts ":a:j:d:c:u:bh" option; do
+while getopts ":a:j:d:c:u:bBh" option; do
     case ${option} in
         h) # display Help
             Help
@@ -210,13 +211,23 @@ while getopts ":a:j:d:c:u:bh" option; do
         u) # Enter a serial number for the UUID
             Serial_Number=$OPTARG
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
-        b) # Run MQTT Bridge
+        b) # Enable MQTT Bridge
             Use_MQTT_Bridge=true
             if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
                 if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
                     sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"true\"|" "$SCRIPT_DIR/env.sh"
                 else
                     echo 'export Use_MQTT_Bridge="true"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
+        B) # Disable MQTT Bridge
+            Use_MQTT_Bridge=false
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"false\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="false"' >> "$SCRIPT_DIR/env.sh"
                 fi
             fi
             ;;

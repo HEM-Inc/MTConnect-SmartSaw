@@ -55,18 +55,28 @@ files_differ() {
 
 
 # Return 0 if src and dest directories differ or dest does not exist.
+# Optional third argument: exclude pattern passed to diff --exclude.
 dir_needs_update() {
     local src="$1"
     local dest="$2"
+    local exclude="$3"
 
     if [ ! -d "$dest" ]; then
         return 0  # Needs update if destination doesn't exist
     fi
 
-    if diff -rq "$src" "$dest" > /dev/null 2>&1; then
-        return 1  # Directories are identical
+    if [ -n "$exclude" ]; then
+        if diff -rq --exclude="$exclude" "$src" "$dest" > /dev/null 2>&1; then
+            return 1  # Directories are identical
+        else
+            return 0  # Directories differ
+        fi
     else
-        return 0  # Directories differ
+        if diff -rq "$src" "$dest" > /dev/null 2>&1; then
+            return 1  # Directories are identical
+        else
+            return 0  # Directories differ
+        fi
     fi
 }
 
