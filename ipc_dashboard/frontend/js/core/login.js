@@ -1,4 +1,3 @@
-// login.js
 import { API_BASE } from "../../utils.js";
 
 /* --------------------------------------------------
@@ -11,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /* --------------------------------------------------
    LOGIN PAGE ONLY
 -------------------------------------------------- */
+
 function initLoginPage() {
   const toggleBtn = document.getElementById("togglePassword");
   const loginForm = document.getElementById("loginForm");
@@ -23,8 +23,17 @@ function initLoginPage() {
     const passwordInput = document.getElementById("password");
     if (!passwordInput) return;
 
-    passwordInput.type =
-      passwordInput.type === "password" ? "text" : "password";
+    const eyeIcon = toggleBtn.querySelector("i");
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      eyeIcon?.classList.remove("fa-eye");
+      eyeIcon?.classList.add("fa-eye-slash");
+    } else {
+      passwordInput.type = "password";
+      eyeIcon?.classList.remove("fa-eye-slash");
+      eyeIcon?.classList.add("fa-eye");
+    }
   });
 
   /* Handle login submit */
@@ -126,4 +135,10 @@ export async function loadUserInfo() {
     if (controlTab) controlTab.style.display = "none";
     if (deviceTab) deviceTab.style.display = "none";
   }
+
+  window.addEventListener("timezoneChanged", (e) => {
+    if (timezone && e.detail?.timezone) {
+      timezone.innerText = e.detail.timezone;
+    }
+  });
 }

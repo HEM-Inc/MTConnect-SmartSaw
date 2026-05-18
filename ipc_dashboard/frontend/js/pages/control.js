@@ -1,5 +1,10 @@
 import { loadLayout } from "../../js/core/layout.js";
 import { loadUserInfo } from "../core/login.js";
+import {
+  openTimezoneModal,
+  closeTimezoneModal,
+  submitTimezone,
+} from "./timezone.js";
 
 const TAB_BASE = "./control/";
 
@@ -102,6 +107,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadLayout("controlTab");
     await loadUserInfo();
     await loadDefaultTab();
+
+    // Expose timezone functions for onclick attributes
+    window.openTimezoneModal = openTimezoneModal;
+    window.closeTimezoneModal = closeTimezoneModal;
+    window.submitTimezone = submitTimezone;
 
     document.body.classList.add("app-ready");
   } catch (err) {

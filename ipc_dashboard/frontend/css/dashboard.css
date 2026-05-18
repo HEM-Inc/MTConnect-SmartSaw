@@ -353,7 +353,6 @@ body {
 .card-footer button {
   width: 100%;
   padding: 8px;
-  background: #3b82f6;
   border: none;
   color: white;
   border-radius: 8px;
@@ -679,4 +678,56 @@ body {
 
 .menu li.active a {
   color: #1e293b;
+}
+
+.empty-cert-card {
+  border: 1px solid #fecaca;
+  background: linear-gradient(to bottom, #ffffff, #fff7f7);
+}
+
+.empty-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.danger-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.error-text {
+  color: #dc2626;
+}
+
+.empty-message {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.disabled-btn {
+  width: 100%;
+  padding: 8px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #d31c2b;
+  color: #b89494;
+
+  cursor: not-allowed;
+
+  font-size: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  cursor: not-allowed !important;
+
+  pointer-events: none;
+
+  opacity: 0.9;
 }

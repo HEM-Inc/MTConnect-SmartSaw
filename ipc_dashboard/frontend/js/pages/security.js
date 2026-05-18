@@ -2,9 +2,20 @@ import { loadLayout } from "../core/layout.js";
 import { apiFetch } from "../core/api.js";
 import { convertToUserTimezone } from "../core/layout.js";
 import { loadUserInfo } from "../core/login.js";
+import { API_BASE } from "../../utils.js";
+import {
+  openTimezoneModal,
+  closeTimezoneModal,
+  submitTimezone,
+} from "./timezone.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadLayout("securityTab"); // 1. load UI first
+  await loadLayout("securityTab");
+
+  // Expose timezone functions for onclick attributes
+  window.openTimezoneModal = openTimezoneModal;
+  window.closeTimezoneModal = closeTimezoneModal;
+  window.submitTimezone = submitTimezone;
 
   initSecurity(); // 2. then logic
 });
@@ -69,80 +80,72 @@ function renderCard(cert) {
   });
 }
 
+function renderEmptyCertificateState(message) {
+  const container = document.getElementById("certCardContainer");
+
+  container.innerHTML = `
+    <div class="modern-card empty-cert-card">
+      
+      <div class="card-header">
+        <div class="card-icon empty-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <div>
+          <h3>No Certificate</h3>
+          <span class="badge danger-badge">Self-signed Not Configured</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="label">Status</div>
+        <div class="expiry error-text">
+          Certificate not found
+        </div>
+        <p class="empty-message">
+          ${message}
+        </p>
+      </div>
+      <div class="card-footer">
+        <button class="disabled-btn" disabled>
+          <i class="fa-solid fa-download"></i>
+          Download Unavailable
+        </button>
+      </div>
+      </div>
+  `;
+}
+
 async function loadCertInfo() {
   try {
     console.log("Calling cert info API...");
-
-    // a = b
-
-    // const res = await fetch(`${API_BASE}/api/certs/info`, {
-    //     method: "GET",
-    //     credentials: "include"
-    // });
-
-    // console.log("Status:", res.status);
-
-    // if (!res.ok) {
-    //     console.error("API failed:", res.status);
-    //     return;
-    // }
 
     const response = await apiFetch("/api/certs/info", {
       method: "GET",
     });
 
-    if (!response) return; // stop if redirected
+    if (!response) return;
 
     const data = await response.json();
     console.log("Response:", data);
 
-    if (data.status === "Success") {
+    if (data.status === "Success" && data.data) {
       renderCard(data.data);
     } else {
-      alert("Failed: " + data.message);
+      showToast(data.message || "Failed to load certificate info", "error");
+      renderEmptyCertificateState(data.message || "Certificate not found");
     }
   } catch (err) {
     console.error("Error:", err);
+
+    showToast("Failed to load certificate info", "error");
+    renderEmptyCertificateState("Certificate not found");
   }
 }
 
-async function submitTimezone() {
-  const selectedTZ = document.getElementById("timezoneSelect").value;
-
-  try {
-    const res = await fetch(`${API_BASE}/api/timezone`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(selectedTZ),
-    });
-
-    const data = await res.json();
-
-    // console.log("API response:", data);
-
-    if (data.status === "Success") {
-      const user = JSON.parse(localStorage.getItem("user"));
-      user.timezone = selectedTZ;
-      localStorage.setItem("user", JSON.stringify(user));
-
-      document.getElementById("userTimezoneText").innerText = selectedTZ;
-
-      await loadCertInfo();
-
-      showToast(data.message || "Timezone updated successfully", "success");
-
-      closeTimezoneModal();
-    } else {
-      showToast(data.message || "Failed to update timezone", "error");
-    }
-  } catch (err) {
-    console.error(err);
-    showToast("Server error. Try again.", "error");
-  }
-}
+window.addEventListener("timezoneChanged", () => {
+  loadCertInfo();
+});
 
 function openModal(data) {
   // document.getElementById("modal").style.display = "block";
@@ -193,6 +196,10 @@ function closeModal() {
 
 window.closeModal = closeModal;
 
+const btn = document.getElementById("downloadBtn");
+
+btn.addEventListener("click", downloadCert);
+
 // Download Certificate
 async function downloadCert() {
   try {
@@ -216,49 +223,6 @@ async function downloadCert() {
   } catch (err) {
     console.error(err);
   }
-}
-
-async function openTimezoneModal() {
-  // document.getElementById("timezoneModal").style.display = "block";
-
-  document.getElementById("timezoneModal").classList.add("show");
-
-  try {
-    const res = await fetch(`${API_BASE}/api/timezones`, {
-      method: "GET",
-      credentials: "include",
-    });
-
-    const data = await res.json();
-
-    const select = document.getElementById("timezoneSelect");
-    select.innerHTML = "";
-
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    const timezones = data.data || {};
-
-    Object.entries(timezones).forEach(([label, value]) => {
-      const option = document.createElement("option");
-
-      option.value = value; // actual value to send
-      option.textContent = label; // display text
-
-      if (value === user.timezone) {
-        option.selected = true;
-      }
-
-      select.appendChild(option);
-    });
-  } catch (err) {
-    console.error("Timezone fetch error:", err);
-  }
-}
-
-function closeTimezoneModal() {
-  // document.getElementById("timezoneModal").style.display = "none";
-  // document.getElementById("timezoneModal").style.display = "flex";
-  document.getElementById("timezoneModal").classList.remove("show");
 }
 
 function showToast(message, type = "success") {

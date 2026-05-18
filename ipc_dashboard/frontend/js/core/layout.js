@@ -38,6 +38,10 @@ export const loadLayout = async (activeTab) => {
     "logoutModalContainer",
     "/html/components/logoutModal.html",
   );
+  await loadComponent(
+    "timezoneModalContainer",
+    "/html/components/timezoneModal.html",
+  );
 
   initTopbar();
 
