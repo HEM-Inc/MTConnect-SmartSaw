@@ -90,6 +90,28 @@ ensure_venv() {
 }
 
 
+# Acquire an exclusive advisory lock on /var/lock/HEMsaw-mtconnect.lock
+# so only one install OR upgrade instance runs at a time.
+# If HEMSAW_UPGRADE_LOCKED is already set, this function is a no-op
+# (the parent upgrade process already holds the lock).
+acquire_upgrade_lock() {
+    if [ -n "${HEMSAW_UPGRADE_LOCKED:-}" ]; then
+        return 0
+    fi
+
+    mkdir -p /var/lock
+    local lock_file="/var/lock/HEMsaw-mtconnect.lock"
+
+    exec 200> "$lock_file"
+    if ! flock -n 200; then
+        echo "ERROR: Another install or upgrade is already in progress." >&2
+        exit 1
+    fi
+
+    HEMSAW_UPGRADE_LOCKED=1
+    export HEMSAW_UPGRADE_LOCKED
+}
+
 # Set (or replace) "Devices = /mtconnect/config/<Device_File>" on line 1 of agent.cfg.
 # Relies on global: Device_File
 update_agent_cfg() {

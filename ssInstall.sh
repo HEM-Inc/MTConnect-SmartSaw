@@ -2,6 +2,7 @@
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
+acquire_upgrade_lock
 
 ############################################################
 # Help                                                     #
@@ -125,13 +126,28 @@ InstallDevctl(){
 
 InstallMongodb(){
     echo "Installing Mongodb..."
+
+    # Config: always replace from repo (static assets)
     rm -rf /etc/mongodb/config
-    rm -rf /etc/mongodb/data
-    mkdir -p /etc/mongodb/
     mkdir -p /etc/mongodb/config/
+    cp -r ./mongodb/config/. /etc/mongodb/config/
+
+    # Data: preserve db/ directory; remove stale repo files, copy fresh ones
     mkdir -p /etc/mongodb/data/
     mkdir -p /etc/mongodb/data/db
-    cp -r ./mongodb/config/. /etc/mongodb/config/
+
+    if [ -d /etc/mongodb/data ]; then
+        for item in /etc/mongodb/data/* /etc/mongodb/data/.*; do
+            [ -e "$item" ] || continue
+            local name
+            name=$(basename "$item")
+            [ "$name" = "." ] && continue
+            [ "$name" = ".." ] && continue
+            [ "$name" = "db" ] && continue
+            rm -rf "$item"
+        done
+    fi
+
     cp -r ./mongodb/data/. /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 

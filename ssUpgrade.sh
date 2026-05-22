@@ -357,7 +357,6 @@ run_update_devctl=false
 run_update_mongodb=false
 run_update_materials=false
 run_init_jp=false
-run_install=false
 run_full_update=false
 
 #####################################################
@@ -466,12 +465,16 @@ if ! docker compose version &> /dev/null; then
     fi
 fi
 
+acquire_upgrade_lock
+
 # check if install or upgrade
 if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then
-    echo 'MTConnect agent.cfg not found, running bash ssInstall.sh instead'; run_install=true
-else
-    echo 'MTConnect agent.cfg found, continuing upgrade...'
+    echo 'ERROR: System appears not to be installed (/etc/mtconnect/config/agent.cfg missing).'
+    echo 'Run ssInstall.sh to install, then use ssUpgrade.sh for updates.'
+    exit 1
 fi
+
+echo 'MTConnect agent.cfg found, continuing upgrade...'
 
 echo ""
 
@@ -488,115 +491,122 @@ fi
 # Continue Main program                       #
 ###############################################
 
-if $run_install; then
-    echo "Running Install script..."
-    bash "$SCRIPT_DIR/ssInstall.sh" -a "$Afg_File" -j "$Json_File" -d "$Device_File" -c "$DevCTL_File" -u "$Serial_Number" ${Use_MQTT_Bridge:+-b}
-else
-    echo "Printing the options..."
-    echo "Update Adapter set to run = "$run_update_adapter
-    echo "Update MTConnect Agent set to run = "$run_update_agent
-    echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
-    echo "Update MQTT Bridge set to run = "$run_update_mqtt_bridge
-    echo "Update ODS set to run = "$run_update_ods
-    echo "Update Devctl set to run = "$run_update_devctl
-    echo "Update Mongodb set to run = "$run_update_mongodb
-    echo "Update Materials set to run = "$run_update_materials
-    echo "Init Jobs and Parts set to run = "$run_init_jp
-    echo "Docker Compose Version = 2"
-    echo ""
+echo "Printing the options..."
+echo "Update Adapter set to run = "$run_update_adapter
+echo "Update MTConnect Agent set to run = "$run_update_agent
+echo "Update MQTT Broker set to run = "$run_update_mqtt_broker
+echo "Update MQTT Bridge set to run = "$run_update_mqtt_bridge
+echo "Update ODS set to run = "$run_update_ods
+echo "Update Devctl set to run = "$run_update_devctl
+echo "Update Mongodb set to run = "$run_update_mongodb
+echo "Update Materials set to run = "$run_update_materials
+echo "Init Jobs and Parts set to run = "$run_init_jp
+echo "Docker Compose Version = 2"
+echo ""
 
-    echo "Printing the settings..."
-    echo "AFG file = "$Afg_File
-    echo "JSON file = "$Json_File
-    echo "MTConnect Agent file = "$Device_File
-    echo "MTConnect UUID = HEMSaw-"$Serial_Number
-    echo "Device Control file = "$DevCTL_File
-    echo ""
+echo "Printing the settings..."
+echo "AFG file = "$Afg_File
+echo "JSON file = "$Json_File
+echo "MTConnect Agent file = "$Device_File
+echo "MTConnect UUID = HEMSaw-"$Serial_Number
+echo "Device Control file = "$DevCTL_File
+echo ""
 
-    # check if files are correct
-    if [[ ! -f ./agent/config/devices/$Device_File ]]; then
-        echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
-        echo "Available MTConnect Device files..."
-        ls agent/config/devices
-        exit 1
-    fi
-    if [[ ! -f ./adapter/config/$Afg_File ]]; then
-        echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
-        echo "Available Adapter config files..."
-        ls adapter/config
-        exit 1
-    fi
-    if [[ ! -f ./adapter/data/$Json_File ]]; then
-        echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
-        echo "Available Adapter alarm json files..."
-        ls adapter/data
-        exit 1
-    fi
-    if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
-        echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
-        echo "Available Device Control files..."
-        ls devctl/config
-        exit 1
-    fi
+# check if files are correct
+if [[ ! -f ./agent/config/devices/$Device_File ]]; then
+    echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
+    echo "Available MTConnect Device files..."
+    ls agent/config/devices
+    exit 1
+fi
+if [[ ! -f ./adapter/config/$Afg_File ]]; then
+    echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
+    echo "Available Adapter config files..."
+    ls adapter/config
+    exit 1
+fi
+if [[ ! -f ./adapter/data/$Json_File ]]; then
+    echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
+    echo "Available Adapter alarm json files..."
+    ls adapter/data
+    exit 1
+fi
+if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
+    echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
+    echo "Available Device Control files..."
+    ls devctl/config
+    exit 1
+fi
 
-    # Shutdown any old Docker containers before updating files
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        docker compose down
-    fi
-    echo ""
+# Shutdown any old Docker containers before updating files
+if service_exists docker; then
+    echo "Shutting down any old Docker containers"
+    docker compose down
+fi
+echo ""
 
-    # Run update functions in parallel
-    declare -A PIDS=()
-    if $run_update_adapter; then
-        Update_Adapter &
-        PIDS[adapter]=$!
+cleanup_on_interrupt() {
+    echo "Interrupted — terminating background updates..." >&2
+    if [ "${#PIDS[@]}" -gt 0 ]; then
+        for pid in "${PIDS[@]}"; do
+            kill "$pid" 2>/dev/null || true
+        done
+        wait 2>/dev/null || true
     fi
-    if $run_update_agent; then
-        Update_Agent &
-        PIDS[agent]=$!
-    fi
-    if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
-        Update_MQTT_Broker &
-        PIDS[mqtt]=$!
-    fi
-    if $run_update_ods; then
-        Update_ODS &
-        PIDS[ods]=$!
-    fi
-    if $run_update_devctl; then
-        Update_Devctl &
-        PIDS[devctl]=$!
-    fi
-    if $run_update_mongodb; then
-        Update_Mongodb &
-        PIDS[mongodb]=$!
-    fi
+    exit 130
+}
+trap 'cleanup_on_interrupt' INT TERM
 
-    # Wait for all background processes to complete
-    failed=0
-    for name in "${!PIDS[@]}"; do
-        if ! wait "${PIDS[$name]}"; then
-            echo "ERROR: $name update failed" >&2
-            failed=1
-        else
-            echo "$name update completed"
-        fi
-    done
-    (( failed )) && exit 1
+# Run update functions in parallel
+declare -A PIDS=()
+if $run_update_adapter; then
+    Update_Adapter &
+    PIDS[adapter]=$!
+fi
+if $run_update_agent; then
+    Update_Agent &
+    PIDS[agent]=$!
+fi
+if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
+    Update_MQTT_Broker &
+    PIDS[mqtt]=$!
+fi
+if $run_update_ods; then
+    Update_ODS &
+    PIDS[ods]=$!
+fi
+if $run_update_devctl; then
+    Update_Devctl &
+    PIDS[devctl]=$!
+fi
+if $run_update_mongodb; then
+    Update_Mongodb &
+    PIDS[mongodb]=$!
+fi
 
-    echo ""
-    # Run Docker after all updates
-    RunDocker
+# Wait for all background processes to complete
+failed=0
+for name in "${!PIDS[@]}"; do
+    if ! wait "${PIDS[$name]}"; then
+        echo "ERROR: $name update failed" >&2
+        failed=1
+    else
+        echo "$name update completed"
+    fi
+done
+(( failed )) && exit 1
 
-    echo ""
-    # These operations are sequential as they depend on the running containers
-    if $run_init_jp; then
-        Init_Jobs_Parts
-    fi
-    if $run_update_materials; then
-        Update_Materials
-    fi
+echo ""
+# Run Docker after all updates
+RunDocker
+
+echo ""
+# These operations are sequential as they depend on the running containers
+if $run_init_jp; then
+    Init_Jobs_Parts
+fi
+if $run_update_materials; then
+    Update_Materials
 fi
 
 echo ""
