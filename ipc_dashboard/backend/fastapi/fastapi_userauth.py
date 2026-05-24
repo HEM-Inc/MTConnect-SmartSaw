@@ -3,6 +3,8 @@ fastapi_userauth.py - Authentication routes + role-based dependency
 """
 
 import copy
+import time
+from collections import defaultdict
 from fastapi import Request, Cookie, Depends, HTTPException, status, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
@@ -14,6 +16,21 @@ from fastapi_datatypes import *
 from backend_logger import *
 
 _bearer = HTTPBearer(auto_error=True)
+
+# -- Rate limiter -----------------------------------------------------------
+_MAX_LOGIN_ATTEMPTS = 5
+_LOGIN_WINDOW_SECONDS = 15 * 60  # 15 minutes
+_login_attempts = defaultdict(list)
+
+def _check_rate_limit(client_host: str) -> bool:
+    now = time.time()
+    attempts = _login_attempts[client_host]
+    # Keep only attempts within the window
+    attempts[:] = [t for t in attempts if now - t < _LOGIN_WINDOW_SECONDS]
+    if len(attempts) >= _MAX_LOGIN_ATTEMPTS:
+        return False
+    attempts.append(now)
+    return True
 
 # -- Session dependency -------------------------------------------------------
 
@@ -82,10 +99,16 @@ def require_role(*allowed_roles: str):
 # -- Routes -------------------------------------------------------------------
 @ipc_fast_api.post("/api/auth/login")
 async def user_login_request(
+    request: Request,
     user_data: LoginRequest = Body(...),
     befa: IpcBackendFastApi = Depends(get_be_fastapi_obj)
 ):
     log_debug("FAPI User login request for {}".format(user_data.user_uid))
+
+    client_host = request.client.host if request.client else "unknown"
+    if not _check_rate_limit(client_host):
+        log_warning("FAPI Rate limit exceeded for {}".format(client_host))
+        return fapi_error_response("user-login", "Too many login attempts. Please try again later.")
 
     beapi_params = {
         "user_uid" : user_data.user_uid,

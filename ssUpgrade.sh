@@ -119,7 +119,7 @@ Update_Agent(){
         # Check if device file needs updating
         if files_differ "./agent/config/devices/$Device_File" "/etc/mtconnect/config/$Device_File"; then
             echo "Updating MTConnect device file..."
-            cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
+            cp -p ./agent/config/devices/"$Device_File" /etc/mtconnect/config/
             sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
         else
             echo "MTConnect device file already up to date"
@@ -147,7 +147,7 @@ Update_Agent(){
 
         cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
         update_agent_cfg
-        cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
+        cp -p ./agent/config/devices/"$Device_File" /etc/mtconnect/config/
         sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
     fi
@@ -262,7 +262,7 @@ Update_Devctl(){
         # Check if DevCTL config needs updating
         if files_differ "./devctl/config/$DevCTL_File" "/etc/devctl/config/devctl_json_config.json"; then
             echo "Updating Devctl configuration..."
-            cp -p ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+            cp -p ./devctl/config/"$DevCTL_File" /etc/devctl/config/devctl_json_config.json
             sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
         else
             echo "Devctl configuration already up to date"
@@ -272,7 +272,7 @@ Update_Devctl(){
         mkdir -p /etc/devctl/
         mkdir -p /etc/devctl/config/
         mkdir -p /etc/devctl/logs/
-        cp -p ./devctl/config/$DevCTL_File /etc/devctl/config/devctl_json_config.json
+        cp -p ./devctl/config/"$DevCTL_File" /etc/devctl/config/devctl_json_config.json
         sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
     fi
     chown -R 1300:1300 /etc/devctl/
@@ -374,19 +374,19 @@ while getopts ":a:j:d:c:u:AbBhmi" option; do
         A) # Update All Containers
             run_full_update=true;;
         a) # Enter an AFG file name
-            Afg_File=$OPTARG
+            Afg_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Afg_File=.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
-            Json_File=$OPTARG;
+            Json_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Json_File=.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
-            Device_File=$OPTARG
+            Device_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Device_File=.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
-            DevCTL_File=$OPTARG
+            DevCTL_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export DevCTL_File=.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
-            Serial_Number=$OPTARG
+            Serial_Number="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh"
             # Serial changes must propagate to all configs; trigger a full update
             run_full_update=true;;
@@ -425,7 +425,7 @@ while getopts ":a:j:d:c:u:AbBhmi" option; do
 done
 
 # Check for any remaining unprocessed arguments that might be malformed options
-shift $((OPTIND-1))
+shift "$((OPTIND-1))"
 if [[ $# -gt 0 ]]; then
     for remaining_arg in "$@"; do
         if [[ "$remaining_arg" =~ ^[A-Za-z]$ ]]; then
@@ -439,7 +439,7 @@ if [[ $# -gt 0 ]]; then
 fi
 
 # Expand a full-update request into individual component flags
-if $run_full_update; then
+if [[ "$run_full_update" == true ]]; then
     run_update_mqtt_broker=true
     run_update_adapter=true
     run_update_agent=true
@@ -450,7 +450,7 @@ fi
 
 # If doing a full update and bridge mode wasn't explicitly toggled,
 # restore the persisted preference from env.sh.
-if $run_full_update && [[ "${Use_MQTT_Bridge:-false}" == "true" ]]; then
+if [[ "$run_full_update" == true ]] && [[ "${Use_MQTT_Bridge:-false}" == "true" ]]; then
     run_update_mqtt_bridge=true
 fi
 
@@ -559,27 +559,27 @@ trap 'cleanup_on_interrupt' INT TERM
 
 # Run update functions in parallel
 declare -A PIDS=()
-if $run_update_adapter; then
+if [[ "$run_update_adapter" == true ]]; then
     Update_Adapter &
     PIDS[adapter]=$!
 fi
-if $run_update_agent; then
+if [[ "$run_update_agent" == true ]]; then
     Update_Agent &
     PIDS[agent]=$!
 fi
-if $run_update_mqtt_broker || $run_update_mqtt_bridge; then
+if [[ "$run_update_mqtt_broker" == true ]] || [[ "$run_update_mqtt_bridge" == true ]]; then
     Update_MQTT_Broker &
     PIDS[mqtt]=$!
 fi
-if $run_update_ods; then
+if [[ "$run_update_ods" == true ]]; then
     Update_ODS &
     PIDS[ods]=$!
 fi
-if $run_update_devctl; then
+if [[ "$run_update_devctl" == true ]]; then
     Update_Devctl &
     PIDS[devctl]=$!
 fi
-if $run_update_mongodb; then
+if [[ "$run_update_mongodb" == true ]]; then
     Update_Mongodb &
     PIDS[mongodb]=$!
 fi
@@ -602,10 +602,10 @@ RunDocker
 
 echo ""
 # These operations are sequential as they depend on the running containers
-if $run_init_jp; then
+if [[ "$run_init_jp" == true ]]; then
     Init_Jobs_Parts
 fi
-if $run_update_materials; then
+if [[ "$run_update_materials" == true ]]; then
     Update_Materials
 fi
 

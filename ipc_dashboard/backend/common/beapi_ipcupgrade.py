@@ -2,6 +2,7 @@ import subprocess
 import threading
 import time
 import os
+import re
 import mimetypes
 from datetime import datetime, timedelta, timezone
 from typing import List
@@ -10,8 +11,21 @@ from backend_ssemanager import *
 from backend_logger import *
 from backend_utils import *
 
+_SAFE_FILENAME_RE = re.compile(r'^[A-Za-z0-9_.-]+$')
+_SAFE_SERIAL_RE   = re.compile(r'^[A-Za-z0-9_-]+$')
+
 
 class BackendIpcUpgrade:
+
+    def _validate_safe_string(self, value: str, pattern, field_name: str):
+        if not value:
+            return True, None
+        if not isinstance(value, str):
+            return False, f"{field_name} must be a string"
+        if not pattern.match(value):
+            return False, f"Invalid characters in {field_name}"
+        return True, None
+
     def __init__(self):
         self.process = None
         self.is_running = False
@@ -48,6 +62,19 @@ class BackendIpcUpgrade:
 
                 if name not in valid_names:
                     return False, f"Invalid component: {name}"
+
+                # Validate string fields to prevent shell injection
+                for field, pattern, label in [
+                    ("config_file", _SAFE_FILENAME_RE, "config_file"),
+                    ("data_file", _SAFE_FILENAME_RE, "data_file"),
+                    ("serial_number", _SAFE_SERIAL_RE, "serial_number"),
+                    ("version", _SAFE_FILENAME_RE, "version"),
+                ]:
+                    val = comp.get(field)
+                    if val:
+                        ok, err = self._validate_safe_string(val, pattern, label)
+                        if not ok:
+                            return False, err
 
                 if name == "agent" and not comp.get("config_file"):
                     return False, "agent requires config_file"
@@ -525,7 +552,10 @@ class BackendIpcUpgrade:
             if not os.path.isdir(dir_path):
                 return False, "Directory not found"
 
-            full_path = os.path.join(dir_path, filename)
+            safe_name = os.path.basename(filename)
+            full_path = os.path.normpath(os.path.join(dir_path, safe_name))
+            if not full_path.startswith(os.path.normpath(dir_path)):
+                return False, "Invalid filename"
 
             if os.path.exists(full_path):
                 return False, "File already exists"

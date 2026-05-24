@@ -40,8 +40,8 @@ InstallAdapter(){
     mkdir -p /etc/adapter/config/
     mkdir -p /etc/adapter/data/
     mkdir -p /etc/adapter/log/
-    cp -p ./adapter/config/$Afg_File /etc/adapter/config/
-    cp -p ./adapter/data/$Json_File /etc/adapter/data/
+    cp -p ./adapter/config/"$Afg_File" /etc/adapter/config/
+    cp -p ./adapter/data/"$Json_File" /etc/adapter/data/
     chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
@@ -55,14 +55,14 @@ InstallMTCAgent(){
 
     cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
     update_agent_cfg
-    cp -p ./agent/config/devices/$Device_File /etc/mtconnect/config/
+    cp -p ./agent/config/devices/"$Device_File" /etc/mtconnect/config/
     sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
 
 
-    if $Use_MQTT_Bridge; then
+    if [[ "$Use_MQTT_Bridge" == true ]]; then
         if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT bridge files"
 
@@ -213,19 +213,19 @@ while getopts ":a:j:d:c:u:bBh" option; do
             Help
             exit;;
         a) # Enter an AFG file name
-            Afg_File=$OPTARG
+            Afg_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Afg_File=.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
-            Json_File=$OPTARG;
+            Json_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Json_File=.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
-            Device_File=$OPTARG
+            Device_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Device_File=.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
-            DevCTL_File=$OPTARG
+            DevCTL_File="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export DevCTL_File=.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
-            Serial_Number=$OPTARG
+            Serial_Number="$OPTARG"
             [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
         b) # Enable MQTT Bridge
             Use_MQTT_Bridge=true
@@ -256,7 +256,7 @@ while getopts ":a:j:d:c:u:bBh" option; do
 done
 
 # Check for any remaining unprocessed arguments that might be malformed options
-shift $((OPTIND-1))
+shift "$((OPTIND-1))"
 if [[ $# -gt 0 ]]; then
     for remaining_arg in "$@"; do
         if [[ "$remaining_arg" =~ ^[A-Za-z]$ ]]; then
@@ -304,25 +304,25 @@ echo "Docker Compose Version = 2"
 echo ""
 
 # check if files are correct
-if [[ ! -f ./agent/config/devices/$Device_File ]]; then
+if [[ ! -f ./agent/config/devices/"$Device_File" ]]; then
     echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
     echo "Available MTConnect Device files..."
     ls agent/config/devices
     exit 1
 fi
-if [[ ! -f ./adapter/config/$Afg_File ]]; then
+if [[ ! -f ./adapter/config/"$Afg_File" ]]; then
     echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
     echo "Available Adapter config files..."
     ls adapter/config
     exit 1
 fi
-if [[ ! -f ./adapter/data/$Json_File ]]; then
+if [[ ! -f ./adapter/data/"$Json_File" ]]; then
     echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
     echo "Available Adapter alarm json files..."
     ls adapter/data
     exit 1
 fi
-if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
+if [[ ! -f ./devctl/config/"$DevCTL_File" ]]; then
     echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
     echo "Available Device Control files..."
     ls devctl/config
