@@ -54,3 +54,21 @@ def string_none_or_empty(param):
     if param.strip() == "":
         return True
     return False
+
+def validate_safe_string(self, value: str, pattern, field_name: str):
+    if not value:
+        return True, None
+    if not isinstance(value, str):
+        return False, f"{field_name} must be a string"
+    if not pattern.match(value):
+        return False, f"Invalid characters in {field_name}"
+    return True, None
+
+def get_parent_directory_name(levels: int):
+
+    path = os.getcwd()
+
+    for _ in range(levels):
+        path = os.path.dirname(path)
+
+    return os.path.basename(path)

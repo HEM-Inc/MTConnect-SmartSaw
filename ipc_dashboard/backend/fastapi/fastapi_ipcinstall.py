@@ -1,7 +1,3 @@
-"""
-fastapi_update.py - FastAPI routes for system update operations
-"""
-
 import json
 import asyncio
 from fastapi import Depends, Body, UploadFile, File, Form, Query
@@ -14,46 +10,36 @@ from backend_logger import *
 from fastapi_datatypes import *
 
 
-# Update — POST /api/update-start
-@ipc_fast_api.post("/api/update-start")
-async def start_update(
-        update_request: UpdateRequest = Body(...),
+# Update — POST /api/install-start
+@ipc_fast_api.post("/api/install")
+async def start_install(
+        install_request: UpdateRequest = Body(...),
         current_user: dict = Depends(require_role("admin")),
         befa=Depends(get_be_fastapi_obj)
 ):
-    log_debug(f"FAPI start update requested by {current_user['user_uid']}")
+    log_debug(f"FAPI start install requested by {current_user['user_uid']}")
 
     params = {
-        "command"      : update_request.command,
-        "components"   : update_request.components,
-        "sudo_password": update_request.sudo_password
+        "command"      : install_request.command,
+        "components"   : install_request.components,
+        "sudo_password": install_request.sudo_password
     }
 
     status, result = await befa.thread_pool_exec(
-        befa.api.start_update,
+        befa.api.start_install,
         params
     )
 
     if not status:
-        log_error(f"FAPI start update failed: {result}")
-        return fapi_error_response("update", "Failed to start update", result)
+        log_error(f"FAPI start install failed: {result}")
+        return fapi_error_response("install", "Failed to start install", result)
 
     buffer, finished = result
 
     async def stream():
-        """
-        Drain the buffer produced by run_script() and forward every dict
-        as a properly JSON-encoded SSE event.
-
-        Every entry in buffer is guaranteed to be a dict:
-            {"type": "output"|"error"|"complete", "message": str, ...}
-
-        The stream ends when a "complete" or "error" type event is seen,
-        OR when finished["done"] is True and the buffer is empty.
-        """
         try:
             # Immediate "started" ping so the browser knows the pipe is open
-            yield f"data: {json.dumps({'type': 'start', 'message': 'Update started'})}\n\n"
+            yield f"data: {json.dumps({'type': 'start', 'message': 'Install started'})}\n\n"
 
             while True:
                 # Drain everything currently queued
@@ -89,10 +75,10 @@ async def start_update(
                 await asyncio.sleep(0.2)
 
         except asyncio.CancelledError:
-            log_debug("FAPI update stream cancelled by client")
+            log_debug("FAPI install stream cancelled by client")
 
         except Exception as e:
-            log_error(f"FAPI update stream error: {e}")
+            log_error(f"FAPI install stream error: {e}")
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
             yield "data: [DONE]\n\n"
 

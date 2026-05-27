@@ -1,7 +1,3 @@
-"""
-fastapi_update.py - FastAPI routes for system update operations
-"""
-
 import json
 import asyncio
 from fastapi import Depends, Body, UploadFile, File, Form, Query
@@ -14,29 +10,29 @@ from backend_logger import *
 from fastapi_datatypes import *
 
 
-# Update — POST /api/update-start
-@ipc_fast_api.post("/api/update-start")
-async def start_update(
-        update_request: UpdateRequest = Body(...),
+# Update — POST /api/clean-start
+@ipc_fast_api.post("/api/clean")
+async def start_clean(
+        clean_request: UpdateRequest = Body(...),
         current_user: dict = Depends(require_role("admin")),
         befa=Depends(get_be_fastapi_obj)
 ):
-    log_debug(f"FAPI start update requested by {current_user['user_uid']}")
+    log_debug(f"FAPI start clean requested by {current_user['user_uid']}")
 
     params = {
-        "command"      : update_request.command,
-        "components"   : update_request.components,
-        "sudo_password": update_request.sudo_password
+        "command"      : clean_request.command,
+        "components"   : clean_request.components,
+        "sudo_password": clean_request.sudo_password
     }
 
     status, result = await befa.thread_pool_exec(
-        befa.api.start_update,
+        befa.api.start_clean,
         params
     )
 
     if not status:
-        log_error(f"FAPI start update failed: {result}")
-        return fapi_error_response("update", "Failed to start update", result)
+        log_error(f"FAPI start clean failed: {result}")
+        return fapi_error_response("clean", "Failed to start clean", result)
 
     buffer, finished = result
 
@@ -53,7 +49,7 @@ async def start_update(
         """
         try:
             # Immediate "started" ping so the browser knows the pipe is open
-            yield f"data: {json.dumps({'type': 'start', 'message': 'Update started'})}\n\n"
+            yield f"data: {json.dumps({'type': 'start', 'message': 'Clean started'})}\n\n"
 
             while True:
                 # Drain everything currently queued
@@ -89,10 +85,10 @@ async def start_update(
                 await asyncio.sleep(0.2)
 
         except asyncio.CancelledError:
-            log_debug("FAPI update stream cancelled by client")
+            log_debug("FAPI clean stream cancelled by client")
 
         except Exception as e:
-            log_error(f"FAPI update stream error: {e}")
+            log_error(f"FAPI clean stream error: {e}")
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
             yield "data: [DONE]\n\n"
 
@@ -105,4 +101,5 @@ async def start_update(
             "X-Accel-Buffering": "no"
         }
     )
+    
 

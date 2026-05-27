@@ -123,7 +123,8 @@ class IpcBackendFastApi:
             allow_methods=["*"],
             allow_headers=["*"],
         )
-
+        '''
+        #enable this upon Frontend changes"
         @ipc_fast_api.middleware("http")
         async def add_security_headers(request, call_next):
             response = await call_next(request)
@@ -134,7 +135,7 @@ class IpcBackendFastApi:
                 "connect-src 'self'; img-src 'self'; font-src 'self';"
             )
             return response
-
+        '''
         # ── Serve vanilla JS frontend ──────────────
         frontend_dir = os.path.join(_FASTAPI_DIR, "../../frontend")
         if os.path.isdir(frontend_dir):
@@ -162,7 +163,7 @@ class IpcBackendFastApi:
         host = self.fapi_config.get("host", "0.0.0.0")
         port = int(self.fapi_config.get("port", 8000))
 
-        kwargs = dict(host=host, port=port, log_level="info")
+        kwargs = dict(host=host, port=port, log_level="info", timeout_keep_alive = 3600,)
         if sec.get("enable") == "Yes":
             kwargs["ssl_keyfile"]  = sec["key_file"]
             kwargs["ssl_certfile"] = sec["cert_file"]

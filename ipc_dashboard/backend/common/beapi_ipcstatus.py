@@ -87,6 +87,9 @@ class BackendIpcStatus:
     
     # CONTAINER LIST
     def get_container_list(self):
+
+        compose_name  = get_parent_directory_name(levels = 3).lower()
+
         if not self.client:
             log_error("get_container_list: docker client not available")
             return []
@@ -104,6 +107,13 @@ class BackendIpcStatus:
                 c.reload()
 
                 attrs = c.attrs
+                labels = attrs.get("Config", {}).get("Labels", {})
+
+                compose_project = labels.get("com.docker.compose.project")
+                compose_service = labels.get("com.docker.compose.service")
+                if compose_project != compose_name:
+                    continue
+
                 state = attrs.get("State", {})
                 config = attrs.get("Config", {})
                 network = attrs.get("NetworkSettings", {})
@@ -172,23 +182,31 @@ class BackendIpcStatus:
             cpu_stats = stats.get("cpu_stats", {})
             precpu_stats = stats.get("precpu_stats", {})
 
-            cpu_delta = cpu_stats.get("cpu_usage", {}).get("total_usage", 0) - \
-                        precpu_stats.get("cpu_usage", {}).get("total_usage", 0)
+            cpu_usage = cpu_stats.get("cpu_usage", {}).get("total_usage", 0)
+            precpu_usage = precpu_stats.get("cpu_usage", {}).get("total_usage", 0)
 
-            system_delta = cpu_stats.get("system_cpu_usage", 0) - \
-                           precpu_stats.get("system_cpu_usage", 0)
+            system_cpu = cpu_stats.get("system_cpu_usage", 0)
+            precpu_system = precpu_stats.get("system_cpu_usage", 0)
+
+            cpu_delta = cpu_usage - precpu_usage
+            system_delta = system_cpu - precpu_system
 
             online_cpus = cpu_stats.get("online_cpus") or 1
 
             if system_delta > 0 and cpu_delta > 0:
-                return round((cpu_delta / system_delta) * online_cpus * 100, 2)
+
+                # true docker ratio
+                raw_percent = (cpu_delta / system_delta) * online_cpus * 100.0
+
+                ui_percent = min(raw_percent, 100.0)
+
+                return round(ui_percent, 2)
 
             return 0.0
 
         except Exception as e:
             log_error(f"calculate_cpu error: {e}")
             return 0.0
-
     
     # MEMORY
     def calculate_memory(self, stats):

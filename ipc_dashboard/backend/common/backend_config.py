@@ -15,6 +15,13 @@ class BackendConfig:
         self.fastapi_config      = None
         self.logger_config       = None
         self.certs_config        = {}
+        self.ipc_script_running_lock = allocate_lock()
+
+    def get_ipc_script_running_lock(self):  
+        self.ipc_script_running_lock.acquire()
+    
+    def give_ipc_script_running_lock(self): 
+        self.ipc_script_running_lock.release()
 
     def config_load_and_init(self, be_config_file="../config/backend_ipc_config.json"):
         log_debug("Backend config init in progress")

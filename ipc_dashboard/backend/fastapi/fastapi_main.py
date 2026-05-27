@@ -24,6 +24,10 @@ from fastapi_userauth import *
 from fastapi_certdownload import *
 from fastapi_ipcupgrade import *
 from fastapi_ipcstatus import *
+from fastapi_filemanager import *
+from fastapi_ipcinstall import *
+from fastapi_ipcclean import *
+from fastapi_ipclogs import *
 
 if __name__ == "__main__":
     init_logger(module_name="IPCDashboard", folder_name="ipc", log_level=logging.INFO)
