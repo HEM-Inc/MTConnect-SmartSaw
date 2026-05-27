@@ -1,9 +1,7 @@
 import { API_BASE } from "../../utils.js";
 import { apiRequest } from "./apiClient.js";
 
-// ------------------------------------
 // FILE TREE API
-// ------------------------------------
 export async function getWorkspace() {
   const json = await apiRequest("/api/files-structure", {
     method: "GET",
@@ -17,9 +15,7 @@ export async function getWorkspace() {
   };
 }
 
-// ------------------------------------
 // FILE CONTENT API
-// ------------------------------------
 export async function getFileContent(path) {
   return await apiRequest(
     `/api/files-content?path=${encodeURIComponent(path)}`,
@@ -28,32 +24,6 @@ export async function getFileContent(path) {
     },
   );
 }
-
-export async function saveFileContent(filename, content) {
-  // later: await fetch(`/api/files/${filename}`, { method: "PUT", body: JSON.stringify({ content }) });
-  console.log(`[MOCK SAVE] ${filename}:`, content);
-  return { success: true };
-}
-
-// Maps update panel component flags to their workspace folder names
-export const COMPONENT_FOLDER_MAP = {
-  "-A": null, // ALL — special case
-  "-a": "ADAPTER",
-  "-d": "AGENT", // MTConnect Agent uses AGENT folder
-  "-b": "MQTT", // MQTT Security Relay
-  "-g": null, // IPC Gateway — no config files
-};
-
-// export async function acquireFileLock(file_path) {
-//   return fetch(`${API_BASE}/api/file-edit`, {
-//     method: "POST",
-//     credentials: "include",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(file_path),
-//   }).then((r) => r.json());
-// }
 
 export function acquireFileLock(file_path) {
   return apiRequest("/api/file-edit", {
@@ -78,17 +48,6 @@ export async function discardFile(file_path) {
     body: JSON.stringify(file_path),
   });
 }
-
-// export async function fileHeartbeat(file_path) {
-//   return fetch(`${API_BASE}/api/file-heartbeat`, {
-//     method: "POST",
-//     credentials: "include",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(file_path),
-//   }).then((r) => r.json());
-// }
 
 export function fileHeartbeat(file_path) {
   return apiRequest("/api/file-heartbeat", {
@@ -117,32 +76,6 @@ export async function uploadFile(dir_path, file) {
   return await res.json();
 }
 
-// ========================================
-// ADD THIS IN control_api.js
-// Separate API for Update + Restart
-// ========================================
-
-// export async function startUpdate(command, components, sudo_password) {
-//   const res = await fetch(`${API_BASE}/api/update-start`, {
-//     method: "POST",
-//     credentials: "include",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       command,
-//       components,
-//       sudo_password,
-//     }),
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("Failed to start update");
-//   }
-
-//   return res;
-// }
-
 export async function startUpdate(command, components, sudo_password) {
   const params = {
     command,
@@ -151,6 +84,45 @@ export async function startUpdate(command, components, sudo_password) {
   };
 
   const res = await fetch(`${API_BASE}/api/update-start`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (res.status === 401) {
+    showToast("Session expired", "error");
+    window.location.href = "/login.html";
+    return;
+  }
+
+  const contentType = res.headers.get("content-type") || "";
+
+  // If backend returned JSON = failure
+  if (contentType.includes("application/json")) {
+    const json = await res.json();
+
+    if (json.status === "Failed") {
+      throw new Error(json.data || json.message || "Update failed");
+    }
+
+    throw new Error("Unexpected JSON response");
+  }
+
+  // If stream response
+  return res;
+}
+
+export async function startInstall(command, components, sudo_password) {
+  const params = {
+    command,
+    components,
+    sudo_password,
+  };
+
+  const res = await fetch(`${API_BASE}/api/install`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -172,6 +144,5 @@ export async function startUpdate(command, components, sudo_password) {
     throw new Error("Unexpected JSON response");
   }
 
-  // If stream response
   return res;
 }

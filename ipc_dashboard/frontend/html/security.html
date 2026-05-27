@@ -1,5 +1,7 @@
 <head>
-  <link rel="stylesheet" href="../css/dashboard.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/loader.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -15,7 +17,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.45/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
-  <div class="container">
+  <div id="pageLoader" class="page-loader">
+    <div class="loader"></div>
+    <p>Loading...</p>
+  </div>
+  <div class="container hidden" id="appContainer">
     <div id="sidebarContainer"></div>
 
     <div class="main">
@@ -35,7 +41,7 @@
           <div class="modal-body">
             <h3>Certificate Details</h3>
             <div id="modalData"></div>
-            <button id="downloadBtn">Download ca.crt</button>
+            <button id="modaldownloadBtn">Download ca.crt</button>
           </div>
         </div>
       </div>

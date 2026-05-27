@@ -12,7 +12,7 @@ const escHtml = (str) => {
 };
 
 const renderConfig = (content) => {
-  content = safeText(content);
+  content = safeText(content).replace(/\n+$/, ""); // ← strip trailing newline
 
   return content
     .split("\n")
@@ -42,12 +42,8 @@ const renderConfig = (content) => {
       if (eq !== -1) {
         const key = line.substring(0, eq + 1);
         const val = line.substring(eq + 1);
-
-        return `
-        <div class="editor-line">
-          <span class="e-key">${escHtml(key)}</span>
-          <span class="e-str">${escHtml(val)}</span>
-        </div>`;
+        // ← no leading newline in the template literal
+        return `<div class="editor-line"><span class="e-key">${escHtml(key)}</span><span class="e-str">${escHtml(val)}</span></div>`;
       }
 
       return `<div class="editor-line">${escHtml(line)}</div>`;
@@ -57,7 +53,6 @@ const renderConfig = (content) => {
 
 const renderJSON = (content) => {
   content = safeText(content);
-
   try {
     const pretty = JSON.stringify(JSON.parse(content), null, 2);
     return renderPlain(pretty);
@@ -67,8 +62,7 @@ const renderJSON = (content) => {
 };
 
 const renderCode = (content) => {
-  content = safeText(content);
-
+  content = safeText(content).replace(/\n+$/, "");
   return content
     .split("\n")
     .map((line) => {
@@ -84,8 +78,7 @@ const renderCode = (content) => {
 };
 
 const renderPlain = (content) => {
-  content = safeText(content);
-
+  content = safeText(content).replace(/\n+$/, "");
   return content
     .split("\n")
     .map(
@@ -94,9 +87,7 @@ const renderPlain = (content) => {
     .join("");
 };
 
-// ----------------------
 // MAIN
-// ----------------------
 export const renderFormattedContent = (content, type = "") => {
   type = safeText(type).toLowerCase().trim();
 

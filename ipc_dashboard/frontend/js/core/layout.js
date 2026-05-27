@@ -43,6 +43,35 @@ export const loadLayout = async (activeTab) => {
     "/html/components/timezoneModal.html",
   );
 
+  const sidebar = document.querySelector(".sidebar");
+  const toggleBtn = document.getElementById("toggleSidebar");
+  const icon = document.getElementById("toggleIcon");
+  const mobileBtn = document.getElementById("mobileMenuBtn");
+  const overlay = document.getElementById("sidebarOverlay");
+
+  if (mobileBtn) {
+    mobileBtn.addEventListener("click", () => {
+      sidebar.classList.add("mobile-open");
+      overlay?.classList.add("show");
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", () => {
+      sidebar.classList.remove("mobile-open");
+      overlay.classList.remove("show");
+    });
+  }
+
+  const closeBtn = document.getElementById("mobileCloseBtn");
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      sidebar.classList.remove("mobile-open");
+      overlay?.classList.remove("show");
+    });
+  }
+
   initTopbar();
 
   initLogout();
@@ -51,10 +80,6 @@ export const loadLayout = async (activeTab) => {
     const el = document.getElementById(activeTab);
     if (el) el.classList.add("active");
   }
-
-  const sidebar = document.querySelector(".sidebar");
-  const toggleBtn = document.getElementById("toggleSidebar");
-  const icon = document.getElementById("toggleIcon");
 
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {

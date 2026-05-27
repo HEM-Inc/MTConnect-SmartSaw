@@ -1,8 +1,15 @@
 <div class="topbar">
+  <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="fa-solid fa-bars"></i>
+  </button>
   <span class="title">IPC Dashboard</span>
 
   <div class="top-right">
     <div class="profile" id="profileMenu">
+      <div class="timezone-display">
+        <span class="timezone-label">Timezone :</span>
+        <small id="userTimezoneText"></small>
+      </div>
       <div class="profile-info">
         <span id="userName"></span>
         <small id="userRole"></small>
@@ -16,7 +23,6 @@
         <div class="dropdown-item" onclick="openTimezoneModal()">
           <i class="fa-solid fa-clock"></i>
           Update Timezone
-          <small id="userTimezoneText"></small>
         </div>
 
         <div class="dropdown-item logout">

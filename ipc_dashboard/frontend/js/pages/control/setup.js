@@ -37,12 +37,6 @@ let selectedUploadPath = "";
 // UPDATE ITEMS
 const UPDATE_ITEMS = [
   {
-    label: "Full System Update",
-    description: "Update all components",
-    flag: "-A",
-    type: "nofiles",
-  },
-  {
     label: "AFG Configuration File",
     description: "Select the .afg configuration file",
     flag: "-a",
@@ -79,26 +73,14 @@ const UPDATE_ITEMS = [
   },
   {
     label: "Enable MQTT Bridge Mode",
-    description: "Update system to operate in MQTT bridge mode",
+    description: "Install using MQTT bridge configuration",
     flag: "-b",
     type: "nofiles",
   },
   {
-    label: "Disable MQTT Bridge Mode",
-    description: "Update system to use standard MQTT broker mode",
+    label: "Use Standard MQTT Mode",
+    description: "Install using standard MQTT broker configuration",
     flag: "-B",
-    type: "nofiles",
-  },
-  {
-    label: "Reinitialize Production Databases",
-    description: "Recreate MongoDB parts and jobs databases",
-    flag: "-i",
-    type: "nofiles",
-  },
-  {
-    label: "Load Default Materials",
-    description: "Import default material records into MongoDB",
-    flag: "-m",
     type: "nofiles",
   },
 ];
@@ -155,19 +137,17 @@ async function handleEditToggle() {
     showToast("Select file first", "error");
     return;
   }
-
   const saveBtn = document.getElementById("btnSave");
   const discardBtn = document.getElementById("btnDiscard");
-
   const editor = document.getElementById("editorContent");
   const btn = document.getElementById("btnEditToggle");
 
   try {
     if (!isEditMode) {
       await acquireFileLock(currentPath);
+      isEditMode = true;
       saveBtn?.classList.remove("hidden");
       discardBtn?.classList.remove("hidden");
-      isEditMode = true;
       editor.contentEditable = "true";
       // Add this in handleEditToggle, after editor.contentEditable = "true"
       editor._keydownHandler = (e) => {
@@ -224,67 +204,15 @@ async function handleEditToggle() {
       editor._pasteHandler = (e) => {
         e.preventDefault();
 
-        const text = (e.clipboardData || window.clipboardData)
-          .getData("text/plain")
-          .replace(/\r\n/g, "\n") // normalize Windows line endings
-          .replace(/\r/g, "\n"); // normalize old Mac line endings
+        // Get plain text only
+        const text = (e.clipboardData || window.clipboardData).getData(
+          "text/plain",
+        );
 
-        const lines = text.split("\n");
+        // This inserts raw text without any HTML formatting
+        document.execCommand("insertText", false, text);
 
-        const sel = window.getSelection();
-        if (!sel.rangeCount) return;
-
-        const range = sel.getRangeAt(0);
-        range.deleteContents();
-
-        // Find which editor-line the cursor is in
-        const anchorLine =
-          range.startContainer.closest?.(".editor-line") ??
-          range.startContainer.parentElement?.closest(".editor-line");
-
-        if (!anchorLine) return;
-
-        // Single-line paste — just insert text normally
-        if (lines.length === 1) {
-          const textNode = document.createTextNode(lines[0]);
-          range.insertNode(textNode);
-          range.setStartAfter(textNode);
-          range.collapse(true);
-          sel.removeAllRanges();
-          sel.addRange(range);
-          currentContent = getEditorText(editor);
-          return;
-        }
-
-        // Multi-line paste
-        // Get text after cursor in current line (to append to last pasted line)
-        const afterRange = document.createRange();
-        afterRange.setStart(range.startContainer, range.startOffset);
-        afterRange.setEndAfter(anchorLine.lastChild ?? anchorLine);
-        const afterText = afterRange.toString();
-        afterRange.deleteContents();
-
-        // Insert first line's text into current anchor line
-        const firstNode = document.createTextNode(lines[0]);
-        range.insertNode(firstNode);
-
-        // Build new divs for lines[1..end]
-        let lastLine = anchorLine;
-        for (let i = 1; i < lines.length; i++) {
-          const div = document.createElement("div");
-          div.className = "editor-line";
-          const lineText =
-            i === lines.length - 1 ? lines[i] + afterText : lines[i];
-          // Use &nbsp; for empty lines so the div has height
-          div.innerText = lineText === "" ? "\u00A0" : lineText;
-          lastLine.insertAdjacentElement("afterend", div);
-          lastLine = div;
-        }
-
-        // Place cursor at end of last inserted line (before the afterText)
-        const cursorOffset = lines[lines.length - 1].length;
-        placeCursorAtOffset(lastLine, cursorOffset);
-
+        // After insert, sync currentContent and re-render
         currentContent = getEditorText(editor);
       };
 
@@ -313,7 +241,7 @@ async function handleEditToggle() {
       btn.innerHTML = `<span class="material-symbols-outlined icon">visibility</span><span>View</span>`;
       btn.classList.add("active");
       editor.oninput = () => {
-        currentContent = getEditorText(editor);
+        currentContent = editor.innerText;
       };
       heartbeatTimer = setInterval(() => fileHeartbeat(currentPath), 10000);
       showToast("Edit mode enabled", "success");
@@ -373,6 +301,98 @@ async function handleSave() {
     }
 
     editor.contentEditable = "false";
+    // Store file type for re-rendering
+    const fileType = currentPath?.split(".").pop() ?? "";
+
+    // Intercept paste to normalize content
+    editor._pasteHandler = (e) => {
+      e.preventDefault();
+
+      const text = (e.clipboardData || window.clipboardData)
+        .getData("text/plain")
+        .replace(/\r\n/g, "\n") // normalize Windows line endings
+        .replace(/\r/g, "\n"); // normalize old Mac line endings
+
+      const lines = text.split("\n");
+
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+
+      const range = sel.getRangeAt(0);
+      range.deleteContents();
+
+      // Find which editor-line the cursor is in
+      const anchorLine =
+        range.startContainer.closest?.(".editor-line") ??
+        range.startContainer.parentElement?.closest(".editor-line");
+
+      if (!anchorLine) return;
+
+      // Single-line paste — just insert text normally
+      if (lines.length === 1) {
+        const textNode = document.createTextNode(lines[0]);
+        range.insertNode(textNode);
+        range.setStartAfter(textNode);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        currentContent = getEditorText(editor);
+        return;
+      }
+
+      // Multi-line paste
+      // Get text after cursor in current line (to append to last pasted line)
+      const afterRange = document.createRange();
+      afterRange.setStart(range.startContainer, range.startOffset);
+      afterRange.setEndAfter(anchorLine.lastChild ?? anchorLine);
+      const afterText = afterRange.toString();
+      afterRange.deleteContents();
+
+      // Insert first line's text into current anchor line
+      const firstNode = document.createTextNode(lines[0]);
+      range.insertNode(firstNode);
+
+      // Build new divs for lines[1..end]
+      let lastLine = anchorLine;
+      for (let i = 1; i < lines.length; i++) {
+        const div = document.createElement("div");
+        div.className = "editor-line";
+        const lineText =
+          i === lines.length - 1 ? lines[i] + afterText : lines[i];
+        // Use &nbsp; for empty lines so the div has height
+        div.innerText = lineText === "" ? "\u00A0" : lineText;
+        lastLine.insertAdjacentElement("afterend", div);
+        lastLine = div;
+      }
+
+      // Place cursor at end of last inserted line (before the afterText)
+      const cursorOffset = lines[lines.length - 1].length;
+      placeCursorAtOffset(lastLine, cursorOffset);
+
+      currentContent = getEditorText(editor);
+    };
+
+    editor.addEventListener("paste", editor._pasteHandler);
+    // Ensure at least one editor-line always exists
+    editor._emptyGuard = new MutationObserver(() => {
+      if (editor.innerHTML.trim() === "" || editor.childNodes.length === 0) {
+        editor.innerHTML = '<div class="editor-line">\u200B</div>';
+        // Move caret to the line
+        const sel = window.getSelection();
+        const range = document.createRange();
+        const line = editor.querySelector(".editor-line");
+        range.setStart(line, 0);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+
+    editor._emptyGuard.observe(editor, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
     editor.oninput = null;
     const btn = document.getElementById("btnEditToggle");
 
@@ -416,6 +436,8 @@ async function handleDiscard() {
 
     const editor = document.getElementById("editorContent");
     const btn = document.getElementById("btnEditToggle");
+
+    editor.contentEditable = "false";
     // Clean up edit-mode handlers
     if (editor._pasteHandler) {
       editor.removeEventListener("paste", editor._pasteHandler);
@@ -429,7 +451,6 @@ async function handleDiscard() {
       editor.removeEventListener("keydown", editor._keydownHandler);
       editor._keydownHandler = null;
     }
-    editor.contentEditable = "false";
     editor.oninput = null;
 
     document.getElementById("btnSave")?.classList.add("hidden");
@@ -474,12 +495,9 @@ function toggleSection(treeId, arrowId) {
   arrow.classList.toggle("collapsed", hide);
 }
 
-// RESTART FLOW
 function buildUpdatePayload() {
   const components = [];
 
-  if (document.querySelector(`.app-chk[data-flag="-A"]`)?.checked)
-    components.push({ name: "all" });
   if (document.querySelector(`.app-chk[data-flag="-b"]`)?.checked)
     components.push({ name: "mqtt", bridge: true });
 
@@ -507,18 +525,17 @@ function buildUpdatePayload() {
     const item = UPDATE_ITEMS[i];
     if (item.flag === "-u")
       components.push({ name: "serial_number", serial_number: val });
-    if (item.flag === "-v") components.push({ name: "docker", version: val });
   });
 
   return components;
 }
 
-function handleRestart() {
+function handleInstall() {
   showPasswordPrompt(
     buildUpdatePayload(),
-    "updateConfig",
-    "update",
-    "✔ Update completed.",
+    "setup",
+    "install",
+    "✔ Install completed.",
   );
 }
 
@@ -593,22 +610,23 @@ async function submitUpload() {
   }
 }
 
-window.handleRestart = handleRestart;
+// GLOBALS — only static onclick attrs in setup.html
+window.handleInstall = handleInstall;
 window.toggleSection = toggleSection;
 window.openUploadModal = openUploadModal;
 window.closeUploadModal = closeUploadModal;
 window.submitUpload = submitUpload;
 
 // INIT
-export async function initUpdateConfig() {
+export async function initSetup() {
   const data = await getWorkspace();
   loadWorkspace(data);
   buildUpdateList(data, UPDATE_ITEMS, updateRestartHint);
 
-  const restored = restoreExistingConsole("updateConfig");
+  const restored = restoreExistingConsole("setup");
 
-  const stream = window.activeStreams?.["updateConfig"];
-  updateActionButtonState("updateConfig", stream?.running === true);
+  const stream = window.activeStreams?.["setup"];
+  updateActionButtonState("setup", stream?.running === true);
 
   if (restored) {
     return;
@@ -628,6 +646,6 @@ export async function initUpdateConfig() {
   if (bcParent) bcParent.textContent = "—";
 
   updateRestartHint();
-  showLiveConsole("updateConfig", false);
-  appendConsoleLine("updateConfig", "System console ready...");
+  showLiveConsole("setup", false);
+  appendConsoleLine("setup", "System console ready...");
 }

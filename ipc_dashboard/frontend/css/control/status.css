@@ -320,3 +320,219 @@
     font-size: 26px;
   }
 }
+
+/* LARGE SCREENS */
+@media (max-width: 1400px) {
+  .status-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .status-page {
+    padding: 16px;
+  }
+}
+
+/* MEDIUM LAPTOPS */
+@media (max-width: 1100px) {
+  .status-page {
+    padding: 14px;
+  }
+
+  .status-title {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+
+  .status-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .summary-card {
+    padding: 14px;
+  }
+
+  .summary-card .count {
+    font-size: 26px;
+  }
+
+  .status-card {
+    padding: 14px;
+  }
+}
+
+/* TABLETS */
+@media (max-width: 850px) {
+  .status-page {
+    padding: 12px;
+    overflow-y: auto;
+  }
+
+  .status-title {
+    font-size: 20px;
+  }
+
+  .status-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .summary-card {
+    border-radius: 14px;
+    padding: 12px;
+  }
+
+  .summary-card .count {
+    font-size: 24px;
+  }
+
+  .summary-card .label {
+    font-size: 11px;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-right: 2px;
+  }
+
+  .status-card {
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .card-title {
+    font-size: 14px;
+  }
+
+  .card-id {
+    font-size: 10px;
+  }
+
+  .metric {
+    font-size: 11px;
+  }
+
+  .card-image {
+    font-size: 11px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .status-page {
+    padding: 10px;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .status-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .status-summary {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .summary-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .summary-card .count {
+    font-size: 22px;
+  }
+
+  .summary-card .label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+  }
+
+  .status-grid {
+    gap: 10px;
+  }
+
+  .status-card {
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .badge {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    word-break: break-word;
+  }
+
+  .card-id {
+    font-size: 9px;
+    word-break: break-all;
+  }
+
+  .card-image {
+    padding: 8px;
+    font-size: 10px;
+    border-radius: 10px;
+  }
+
+  .metric {
+    font-size: 10px;
+    margin-top: 8px;
+  }
+
+  .progress {
+    height: 6px;
+  }
+}
+
+/* VERY SMALL DEVICES */
+@media (max-width: 400px) {
+  .status-page {
+    padding: 8px;
+  }
+
+  .status-title {
+    font-size: 16px;
+  }
+
+  .summary-card .count {
+    font-size: 20px;
+  }
+
+  .status-card {
+    padding: 10px;
+  }
+
+  .card-title {
+    font-size: 12px;
+  }
+
+  .metric {
+    font-size: 9px;
+  }
+
+  .badge {
+    font-size: 9px;
+  }
+
+  .card-image {
+    font-size: 9px;
+  }
+}

@@ -10,14 +10,27 @@ import {
 } from "./timezone.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadLayout("securityTab");
+  try {
+    await loadLayout("securityTab");
 
-  // Expose timezone functions for onclick attributes
-  window.openTimezoneModal = openTimezoneModal;
-  window.closeTimezoneModal = closeTimezoneModal;
-  window.submitTimezone = submitTimezone;
+    // Expose timezone functions
+    window.openTimezoneModal = openTimezoneModal;
+    window.closeTimezoneModal = closeTimezoneModal;
+    window.submitTimezone = submitTimezone;
 
-  initSecurity(); // 2. then logic
+    await initSecurity();
+
+    // Show app after everything loads
+    document.getElementById("pageLoader").style.display = "none";
+
+    document.getElementById("appContainer").classList.remove("hidden");
+  } catch (err) {
+    console.error("Page load error:", err);
+
+    document.getElementById("pageLoader").style.display = "none";
+
+    showToast("Failed to load page", "error");
+  }
 });
 
 async function initSecurity() {
@@ -102,17 +115,20 @@ function renderEmptyCertificateState(message) {
         <div class="expiry error-text">
           Certificate not found
         </div>
+
         <p class="empty-message">
           ${message}
         </p>
       </div>
+
       <div class="card-footer">
         <button class="disabled-btn" disabled>
           <i class="fa-solid fa-download"></i>
           Download Unavailable
         </button>
       </div>
-      </div>
+
+    </div>
   `;
 }
 
@@ -156,8 +172,6 @@ function openModal(data) {
   const user = JSON.parse(localStorage.getItem("user"));
   const userTimezone = user?.timezone || "UTC";
 
-  console.log("data expirty date is ", data.expiry_date);
-
   const formattedExpiry = convertToUserTimezone(data.expiry_date, userTimezone);
 
   // const issuerHTML = Object.entries(issuer)
@@ -196,11 +210,10 @@ function closeModal() {
 
 window.closeModal = closeModal;
 
-const btn = document.getElementById("downloadBtn");
+const btn = document.getElementById("modaldownloadBtn");
 
 btn.addEventListener("click", downloadCert);
 
-// Download Certificate
 async function downloadCert() {
   try {
     const res = await fetch(`${API_BASE}/api/certs/ca`, {
@@ -209,7 +222,7 @@ async function downloadCert() {
     });
 
     if (!res.ok) {
-      alert("Download failed");
+      showToast("Failed to download certificate", "error");
       return;
     }
 
@@ -222,6 +235,7 @@ async function downloadCert() {
     a.click();
   } catch (err) {
     console.error(err);
+    showToast("Failed to download certificate", "error");
   }
 }
 

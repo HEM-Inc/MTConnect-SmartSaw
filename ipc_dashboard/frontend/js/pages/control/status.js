@@ -1,3 +1,5 @@
+import { showToast } from "../../core/toast.js";
+
 let eventSource = null;
 let isStatusActive = false;
 
@@ -25,19 +27,31 @@ function renderStatus(data) {
 
   grid.innerHTML = data
     .map((item) => {
-      if (item.state === "running") running++;
-      else if (item.state === "exited") stopped++;
-      else error++;
+      let stateClass = "error";
+
+      if (item.state === "running") {
+        running++;
+        stateClass = "running";
+      } else if (item.state === "exited") {
+        stopped++;
+        stateClass = "exited";
+      } else {
+        error++;
+        stateClass = "error";
+      }
 
       return `
-      <div class="status-card ${item.state}">
+      <div class="status-card ${stateClass}">
 
         <div class="card-header">
           <div>
             <div class="card-title">${item.name}</div>
             <div class="card-id">${item.id.substring(0, 8)}</div>
           </div>
-          <span class="badge ${item.state}">${item.state}</span>
+
+          <span class="badge ${stateClass}">
+            ${item.state}
+          </span>
         </div>
 
         <div class="card-image">${item.image}</div>
@@ -45,19 +59,26 @@ function renderStatus(data) {
         <div class="metric"><b>Status:</b> ${item.status}</div>
         <div class="metric"><b>Created:</b> ${item.created}</div>
 
-        <div class="metric"><b>Ports:</b> ${item.ports.length ? item.ports.join(", ") : "-"}</div>
+        <div class="metric">
+          <b>Ports:</b>
+          ${item.ports.length ? item.ports.join(", ") : "-"}
+        </div>
 
         <div class="metric">
           CPU (${item.cpu.toFixed(2)}%)
           <div class="progress">
-            <div class="progress-bar cpu" style="width:${Math.min(item.cpu, 100)}%"></div>
+            <div class="progress-bar cpu"
+              style="width:${Math.min(item.cpu, 100)}%">
+            </div>
           </div>
         </div>
 
         <div class="metric">
           Memory (${item.memory.toFixed(2)}%)
           <div class="progress">
-            <div class="progress-bar memory" style="width:${Math.min(item.memory, 100)}%"></div>
+            <div class="progress-bar memory"
+              style="width:${Math.min(item.memory, 100)}%">
+            </div>
           </div>
         </div>
 
@@ -99,6 +120,7 @@ function startSSE() {
         renderStatus(payload.data);
       }
     } catch (err) {
+      showToast(`Failed : ${err.message}`, "error");
       console.error("SSE parse error:", err);
     }
   };

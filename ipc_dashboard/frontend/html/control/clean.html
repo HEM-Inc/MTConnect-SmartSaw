@@ -1,10 +1,161 @@
-<div class="tab-single-layout">
-  <h3>Setup & Install</h3>
+<div class="uip-panel-root">
+  <!-- ── LEFT: Option Cards ── -->
+  <div class="uip-lhs">
+    <div class="uip-lhs-header">
+      <i
+        class="ti ti-adjustments-horizontal"
+        style="font-size: 15px; color: #bbb"
+      ></i>
+      <span class="uip-lhs-title">Uninstall Options</span>
+    </div>
 
-  <div class="setup-grid">
-    <div class="setup-step-card">
-      CLean
+    <div class="uip-lhs-cards" id="uipOptCards">
+      <div class="uip-opt-card" data-flag="-A" data-name="all">
+        <div class="uip-opt-flag">-A</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">Uninstall ALL</div>
+          <div class="uip-opt-desc">Remove every component</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-H" data-name="adapter">
+        <div class="uip-opt-flag">-H</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">HEMsaw Adapter</div>
+          <div class="uip-opt-desc">Adapter application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-a" data-name="agent">
+        <div class="uip-opt-flag">-a</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">MTConnect Agent</div>
+          <div class="uip-opt-desc">Agent application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-M" data-name="mqtt">
+        <div class="uip-opt-flag">-M</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">MQTT Broker</div>
+          <div class="uip-opt-desc">Broker application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-O" data-name="ods">
+        <div class="uip-opt-flag">-O</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">HEMsaw ODS</div>
+          <div class="uip-opt-desc">ODS application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-C" data-name="devctl">
+        <div class="uip-opt-flag">-C</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">HEMsaw DevCtl</div>
+          <div class="uip-opt-desc">devctl application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-S" data-name="mongodb">
+        <div class="uip-opt-flag">-S</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">HEMsaw MongoDB</div>
+          <div class="uip-opt-desc">MongoDB application</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-d" data-name="disable">
+        <div class="uip-opt-flag">-d</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">Disable Daemons</div>
+          <div class="uip-opt-desc">mongod, ods, agent</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-D" data-name="docker">
+        <div class="uip-opt-flag">-D</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">Uninstall Docker</div>
+          <div class="uip-opt-desc">Docker engine</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <div class="uip-opt-card" data-flag="-L" data-name="container">
+        <div class="uip-opt-flag">-L</div>
+        <div class="uip-opt-info">
+          <div class="uip-opt-label">Log Repair</div>
+          <div class="uip-opt-desc">Fix NULL / ^@ chars in logs</div>
+        </div>
+        <div class="uip-opt-check"><i class="ti ti-check"></i></div>
+      </div>
+
+      <!-- Container name input — shown only when -L is selected -->
+      <div class="uip-container-input-wrap" id="uipContainerWrap">
+        <div class="uip-container-input-inner">
+          <i
+            class="ti ti-box"
+            style="font-size: 13px; color: #94a3b8; flex-shrink: 0"
+          ></i>
+          <input
+            class="uip-container-name-input"
+            id="uipContainerName"
+            type="text"
+            placeholder="Enter container name"
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
       </div>
     </div>
+
+    <div class="uip-lhs-actions">
+      <button class="uip-btn-clear-lhs" id="uipBtnClearLhs">Clear</button>
+      <button class="uip-btn-submit-lhs" id="uipBtnSubmitLhs">
+        <i class="ti ti-bolt" style="font-size: 13px"></i> Clean
+      </button>
+    </div>
+  </div>
+
+  <!-- ── RIGHT: Console ── -->
+  <div class="uip-rhs">
+    <div class="uip-console-header">
+      <span class="uip-console-bolt">⚡</span>
+      <span class="uip-console-title">Live Update Console</span>
+      <!-- Clear button -->
+      <button
+        class="uip-console-btn uip-btn-clear-console"
+        id="uipBtnClearConsole"
+      >
+        <i class="ti ti-eraser" style="font-size: 12px"></i>
+        <span class="uip-btn-label"> Clear</span>
+      </button>
+      <!-- Copy button — distinct style from the submit/run button -->
+      <button
+        class="uip-console-btn uip-btn-copy-console"
+        id="uipBtnCopyConsole"
+      >
+        <i class="ti ti-copy" style="font-size: 12px"></i>
+        <span class="uip-btn-label"> Copy</span>
+      </button>
+    </div>
+
+    <div class="uip-console-body" id="uipConsoleBody">
+      <span class="uip-t-line uip-t-ready"
+        >System console ready...<span class="uip-cursor"></span
+      ></span>
+    </div>
+
+    <!-- <div class="uip-console-input-row"></div> -->
   </div>
 </div>

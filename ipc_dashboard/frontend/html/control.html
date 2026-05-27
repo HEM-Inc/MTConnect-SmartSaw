@@ -1,9 +1,13 @@
 <head>
-  <link rel="stylesheet" href="../css/dashboard.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/loader.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
   <link rel="stylesheet" href="../css/control.css" />
   <link rel="stylesheet" href="../css/toast.css" />
   <link rel="stylesheet" href="../css/control/updateConfig.css" />
   <link rel="stylesheet" href="../css/control/status.css" />
+  <link rel="stylesheet" href="../css/control/logs.css" />
+  <link rel="stylesheet" href="../css/control/clean.css" defer />
   <link
     rel="preload"
     as="style"
@@ -13,7 +17,6 @@
       this.rel = 'stylesheet';
     "
   />
-
   <link
     rel="preload"
     as="style"
@@ -23,7 +26,6 @@
       this.rel = 'stylesheet';
     "
   />
-
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet"
@@ -38,22 +40,13 @@
 
   <!-- Moment Timezone -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.45/moment-timezone-with-data.min.js"></script>
-
-  <style>
-    body {
-      visibility: hidden;
-      opacity: 0;
-    }
-
-    body.app-ready {
-      visibility: visible;
-      opacity: 1;
-      transition: opacity 0.25s ease;
-    }
-  </style>
 </head>
 <body>
-  <div class="container">
+  <div id="pageLoader" class="page-loader">
+    <div class="loader"></div>
+    <p>Loading...</p>
+  </div>
+  <div class="container hidden" id="appContainer">
     <div id="sidebarContainer"></div>
     <div id="logoutModalContainer"></div>
     <div id="timezoneModalContainer"></div>
@@ -91,10 +84,10 @@
               <span>Logs</span>
             </button>
 
-            <button class="page-tab" onclick="switchTab('env', this)">
+            <!-- <button class="page-tab" onclick="switchTab('env', this)">
               <span class="tab-icon">🌐</span>
               <span>Env</span>
-            </button>
+            </button> -->
 
             <div class="tab-indicator"></div>
           </div>
