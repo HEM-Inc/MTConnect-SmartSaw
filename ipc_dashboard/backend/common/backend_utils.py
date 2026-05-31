@@ -55,7 +55,7 @@ def string_none_or_empty(param):
         return True
     return False
 
-def validate_safe_string(self, value: str, pattern, field_name: str):
+def validate_safe_string(value: str, pattern, field_name: str) -> tuple:
     if not value:
         return True, None
     if not isinstance(value, str):
