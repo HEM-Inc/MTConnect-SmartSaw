@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MTConnectDevices
-    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.3 http://schemas.mtconnect.org/schemas/MTConnectDevices_2.3.xsd"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="urn:mtconnect.org:MTConnectDevices:2.3"
-    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.3">
+    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.7 https://schemas.mtconnect.org/schemas/MTConnectDevices_2.7.xsd"
+    xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+    xmlns="urn:mtconnect.org:MTConnectDevices:2.7"
+    xmlns:m="urn:mtconnect.org:MTConnectDevices:2.7">
 
-    <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.4.0.0"
+    <Header bufferSize="8096" assetCount="8096" assetBufferSize="8096" version="2.7.0.0"
         instanceId="1520711514" sender="HEMSaw" creationTime="2018-03-10T19:52:01Z" deviceModelChangeTime="2018-03-10T19:52:01Z"/>
     <Devices>
         <Device id="saw" uuid="HEMSaw_DC_SmartSaw" name="Saw">
