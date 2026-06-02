@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MTConnectDevices
-    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.7 https://schemas.mtconnect.org/schemas/MTConnectDevices_2.7.xsd"
+    xsi:schemaLocation="urn:mtconnect.org:MTConnectDevices:2.7 http://schemas.mtconnect.org/schemas/MTConnectDevices_2.7.xsd"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="urn:mtconnect.org:MTConnectDevices:2.7"
     xmlns:m="urn:mtconnect.org:MTConnectDevices:2.7">
