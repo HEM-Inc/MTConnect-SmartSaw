@@ -5,22 +5,21 @@
   <span class="title">IPC Dashboard</span>
 
   <div class="top-right">
-    <div class="profile" id="profileMenu">
-      <div class="timezone-display">
+    <div class="profile">
+      <div class="timezone-display update-timezone-btn">
         <span class="timezone-label">Timezone :</span>
         <small id="userTimezoneText"></small>
       </div>
-      <div class="profile-info">
+      <div class="profile-info" id="profileMenu">
         <span id="userName"></span>
         <small id="userRole"></small>
-      </div>
-
-      <div class="avatar">
-        <i class="fa-solid fa-user"></i>
+        <div class="avatar">
+          <i class="fa-solid fa-user"></i>
+        </div>
       </div>
 
       <div class="profile-dropdown" id="profileDropdown">
-        <div class="dropdown-item" onclick="openTimezoneModal()">
+        <div class="dropdown-item update-timezone-btn">
           <i class="fa-solid fa-clock"></i>
           Update Timezone
         </div>

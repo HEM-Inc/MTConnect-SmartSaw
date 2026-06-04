@@ -125,12 +125,8 @@ function renderContent(filename, content, fileType = "") {
     bcParent.textContent = parent || filename.split(".")[0].toUpperCase();
   }
   if (bcFile) bcFile.textContent = filename;
-  if (status) {
-    status.textContent = "● unsaved";
-    status.className = "editor-status-badge";
-  }
   if (editBtn) {
-    editBtn.innerHTML = `<span class="material-symbols-outlined icon">edit</span><span>Edit</span>`;
+    editBtn.innerHTML = `<span class="fa-solid fa-pen icon"></span><span>Edit</span>`;
     editBtn.classList.remove("active");
   }
 
@@ -310,7 +306,7 @@ async function handleEditToggle() {
         characterData: true,
       });
       editor.focus();
-      btn.innerHTML = `<span class="material-symbols-outlined icon">visibility</span><span>View</span>`;
+      btn.innerHTML = `<span class="fa-solid fa-eye icon"></span><span>View</span>`;
       btn.classList.add("active");
       editor.oninput = () => {
         currentContent = getEditorText(editor);
@@ -335,7 +331,7 @@ async function handleEditToggle() {
       saveBtn?.classList.add("hidden");
       discardBtn?.classList.add("hidden");
       isEditMode = false;
-      btn.innerHTML = `<span class="material-symbols-outlined icon">edit</span><span>Edit</span>`;
+      btn.innerHTML = `<span class="fa-solid fa-pen icon"></span><span>Edit</span>`;
       btn.classList.remove("active");
       clearInterval(heartbeatTimer);
       heartbeatTimer = null;
@@ -377,7 +373,7 @@ async function handleSave() {
     const btn = document.getElementById("btnEditToggle");
 
     btn.innerHTML = `
-  <span class="material-symbols-outlined icon">edit</span>
+  <span class="fa-solid fa-pen icon"></span>
   <span>Edit</span>
 `;
 
@@ -385,19 +381,8 @@ async function handleSave() {
     document.getElementById("btnSave")?.classList.add("hidden");
     document.getElementById("btnDiscard")?.classList.add("hidden");
 
-    if (s) {
-      s.textContent = "✓ saved";
-      s.classList.add("saved");
-    }
     showToast("File saved successfully", "success");
     await renderFileFromAPI(currentPath);
-
-    setTimeout(() => {
-      if (s) {
-        s.textContent = "● unsaved";
-        s.classList.remove("saved");
-      }
-    }, 2500);
   } catch {
     showToast("Save failed", "error");
   }
@@ -436,7 +421,7 @@ async function handleDiscard() {
     document.getElementById("btnDiscard")?.classList.add("hidden");
 
     btn.innerHTML = `
-      <span class="material-symbols-outlined icon">edit</span>
+      <span class="fa-solid fa-pen icon"></span>
       <span>Edit</span>
     `;
     btn.classList.remove("active");
@@ -482,6 +467,12 @@ function buildUpdatePayload() {
     components.push({ name: "all" });
   if (document.querySelector(`.app-chk[data-flag="-b"]`)?.checked)
     components.push({ name: "mqtt", bridge: true });
+  if (document.querySelector(`.app-chk[data-flag="-B"]`)?.checked)
+    components.push({ name: "mqtt", bridge: false });
+  if (document.querySelector(`.app-chk[data-flag="-i"]`)?.checked)
+    components.push({ name: "reinit_jobs", reinit: true });
+  if (document.querySelector(`.app-chk[data-flag="-m"]`)?.checked)
+    components.push({ name: "material_update", materials: true });
 
   document.querySelectorAll(".update-block").forEach((block, index) => {
     const checked = block.querySelector(".file-chk:checked");
@@ -501,13 +492,18 @@ function buildUpdatePayload() {
       components.push({ name: "devctl", config_file: fileName });
   });
 
-  document.querySelectorAll(".update-inline-input").forEach((input, i) => {
+  document.querySelectorAll(".update-inline-input").forEach((input) => {
     const val = input.value.trim();
     if (!val) return;
-    const item = UPDATE_ITEMS[i];
-    if (item.flag === "-u")
-      components.push({ name: "serial_number", serial_number: val });
-    if (item.flag === "-v") components.push({ name: "docker", version: val });
+
+    const flag = input.dataset.flag;
+
+    if (flag === "-u") {
+      components.push({
+        name: "serial_number",
+        serial_number: val,
+      });
+    }
   });
 
   return components;
@@ -545,7 +541,7 @@ function renderUploadTree(data, parent, path = "") {
       row.className = "upload-folder";
       row.innerHTML = `
         <span class="upload-arrow">▶</span>
-        <span class="material-symbols-outlined">folder</span>
+        <span class="fa-solid fa-folder-open icon"></span>
         <span>${name}</span>
       `;
       const children = document.createElement("div");
@@ -599,11 +595,45 @@ window.openUploadModal = openUploadModal;
 window.closeUploadModal = closeUploadModal;
 window.submitUpload = submitUpload;
 
+function loadEventListeners() {
+  document.getElementById("treeRootLabel")?.addEventListener("click", () => {
+    toggleSection("compTree", "compArrow");
+  });
+
+  document
+    .getElementById("btnUpload")
+    ?.addEventListener("click", openUploadModal);
+
+  document
+    .getElementById("btnSubmitUpload")
+    ?.addEventListener("click", submitUpload);
+
+  document
+    .getElementById("btnEditToggle")
+    ?.addEventListener("click", handleEditToggle);
+
+  document
+    .getElementById("btnCloseUpload")
+    ?.addEventListener("click", closeUploadModal);
+
+  document
+    .getElementById("btnRestart")
+    ?.addEventListener("click", handleRestart);
+
+  document.getElementById("btnSave")?.addEventListener("click", handleSave);
+
+  document
+    .getElementById("btnDiscard")
+    ?.addEventListener("click", handleDiscard);
+}
+
 // INIT
 export async function initUpdateConfig() {
   const data = await getWorkspace();
   loadWorkspace(data);
   buildUpdateList(data, UPDATE_ITEMS, updateRestartHint);
+
+  loadEventListeners();
 
   const restored = restoreExistingConsole("updateConfig");
 

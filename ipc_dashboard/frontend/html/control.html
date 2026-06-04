@@ -8,38 +8,15 @@
   <link rel="stylesheet" href="../css/control/status.css" />
   <link rel="stylesheet" href="../css/control/logs.css" />
   <link rel="stylesheet" href="../css/control/clean.css" defer />
-  <link
-    rel="preload"
-    as="style"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    onload="
-      this.onload = null;
-      this.rel = 'stylesheet';
-    "
-  />
-  <link
-    rel="preload"
-    as="style"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    onload="
-      this.onload = null;
-      this.rel = 'stylesheet';
-    "
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="stylesheet" href="../public/fonts.css" />
+
+  <link rel="stylesheet" href="../public/css/all.min.css" />
 
   <!-- Moment.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+  <script src="../public/js//moment.min.js"></script>
 
   <!-- Moment Timezone -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.45/moment-timezone-with-data.min.js"></script>
+  <script src="../public/js/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
   <div id="pageLoader" class="page-loader">
@@ -55,31 +32,26 @@
       <div id="topbarContainer"></div>
 
       <div class="page-header">
-        <h2 class="page-title">Control</h2>
-
         <nav class="page-tabs">
           <div class="tab-track">
-            <button
-              class="page-tab active"
-              onclick="switchTab('updateConfig', this)"
-            >
+            <button class="page-tab active" data-tab="updateConfig">
               <span class="tab-icon">🔄</span>
               <span>Update Config</span>
             </button>
-            <button class="page-tab" onclick="switchTab('status', this)">
+            <button class="page-tab" data-tab="status">
               <span class="tab-icon">📊</span>
               <span>Status</span>
             </button>
-            <button class="page-tab" onclick="switchTab('setup', this)">
+            <button class="page-tab" data-tab="setup">
               <span class="tab-icon">⚙️</span>
-              <span>Setup</span>
+              <span>Install</span>
             </button>
-            <button class="page-tab" onclick="switchTab('clean', this)">
+            <button class="page-tab" data-tab="clean">
               <span class="tab-icon">🧹</span>
               <span>Clean</span>
             </button>
 
-            <button class="page-tab" onclick="switchTab('logs', this)">
+            <button class="page-tab" data-tab="logs">
               <span class="tab-icon">📜</span>
               <span>Logs</span>
             </button>

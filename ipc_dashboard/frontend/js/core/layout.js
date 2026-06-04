@@ -1,5 +1,10 @@
 import { apiValidateSession, confirmLogout } from "../core/auth.js";
 import { showToast } from "../core/toast.js";
+import {
+  openTimezoneModal,
+  closeTimezoneModal,
+  submitTimezone,
+} from "../pages/timezone.js";
 
 async function loadComponent(id, file) {
   const res = await fetch(file);
@@ -122,4 +127,22 @@ function initTopbar() {
       dropdown.classList.remove("show");
     }
   });
+}
+
+export function loadUpdateTimezoneBtn() {
+  document
+    .querySelectorAll(".update-timezone-btn")
+    .forEach((btn) => btn.addEventListener("click", openTimezoneModal));
+
+  const closeTimezoneBtn = document.getElementById("closeTimezoneModalBtn");
+
+  const submitTimezoneBtn = document.getElementById("btnSubmitTimezone");
+
+  if (closeTimezoneBtn) {
+    closeTimezoneBtn.addEventListener("click", closeTimezoneModal);
+  }
+
+  if (submitTimezoneBtn) {
+    submitTimezoneBtn.addEventListener("click", submitTimezone);
+  }
 }

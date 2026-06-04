@@ -27,6 +27,9 @@
   border-bottom: 1px solid #e2e8f0;
   background: #f8fafc;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .panel-header-title {
   font-size: 9px;
@@ -50,6 +53,16 @@
 }
 .panel-footer {
   flex-shrink: 0;
+}
+
+.editBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-picker-area {
+  display: none;
 }
 
 /* ─── COL 1: Explorer ─── */
@@ -185,15 +198,6 @@
 .breadcrumb-file {
   color: #455ca8;
   font-weight: 700;
-}
-.editor-status-badge {
-  font-size: 10px;
-  color: #94a3b8;
-  font-family: "JetBrains Mono", monospace;
-  margin-left: auto;
-}
-.editor-status-badge.saved {
-  color: #22c55e;
 }
 .editor-content {
   padding: 16px 18px;
@@ -896,6 +900,30 @@ input[type="checkbox"] {
 .console-line {
   white-space: pre-wrap;
   margin-bottom: 4px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* default log */
+.console-line.info {
+  color: #16a34a;
+}
+
+/* success */
+.console-line.success {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* warning */
+.console-line.warning {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+/* error */
+.console-line.error {
+  color: #ef4444;
+  font-weight: 600;
 }
 
 .live-header {

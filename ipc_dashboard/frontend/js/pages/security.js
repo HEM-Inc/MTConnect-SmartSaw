@@ -1,22 +1,19 @@
-import { loadLayout } from "../core/layout.js";
+import { loadLayout, loadUpdateTimezoneBtn } from "../core/layout.js";
 import { apiFetch } from "../core/api.js";
 import { convertToUserTimezone } from "../core/layout.js";
 import { loadUserInfo } from "../core/login.js";
 import { API_BASE } from "../../utils.js";
-import {
-  openTimezoneModal,
-  closeTimezoneModal,
-  submitTimezone,
-} from "./timezone.js";
+import { showToast } from "../core/toast.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await loadLayout("securityTab");
 
-    // Expose timezone functions
-    window.openTimezoneModal = openTimezoneModal;
-    window.closeTimezoneModal = closeTimezoneModal;
-    window.submitTimezone = submitTimezone;
+    // Close modal button
+    document
+      .getElementById("closeSecurityModalBtn")
+      .addEventListener("click", closeModal);
+    loadUpdateTimezoneBtn();
 
     await initSecurity();
 
@@ -237,19 +234,4 @@ async function downloadCert() {
     console.error(err);
     showToast("Failed to download certificate", "error");
   }
-}
-
-function showToast(message, type = "success") {
-  const container = document.getElementById("toastContainer");
-
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.innerText = message;
-
-  container.appendChild(toast);
-
-  // Auto remove after 3 sec
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
 }

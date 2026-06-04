@@ -33,6 +33,11 @@ body {
 
 .profile-info {
   text-align: right;
+  display: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Content */
@@ -994,11 +999,6 @@ body {
   .modern-card {
     width: 100%;
     box-sizing: border-box;
-  }
-
-  /* profile */
-  .profile-info {
-    display: none;
   }
 
   .profile-dropdown {
