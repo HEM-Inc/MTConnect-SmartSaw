@@ -123,8 +123,7 @@ class IpcBackendFastApi:
             allow_methods=["*"],
             allow_headers=["*"],
         )
-        '''
-        #enable this upon Frontend changes"
+        
         @ipc_fast_api.middleware("http")
         async def add_security_headers(request, call_next):
             response = await call_next(request)
@@ -135,7 +134,7 @@ class IpcBackendFastApi:
                 "connect-src 'self'; img-src 'self'; font-src 'self';"
             )
             return response
-        '''
+        
         # ── Serve vanilla JS frontend ──────────────
         frontend_dir = os.path.join(_FASTAPI_DIR, "../../frontend")
         if os.path.isdir(frontend_dir):
