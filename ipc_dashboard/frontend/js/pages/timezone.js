@@ -24,13 +24,6 @@ export async function openTimezoneModal() {
       if (value === user.timezone) option.selected = true;
       select.appendChild(option);
     });
-
-    window.addEventListener("timezoneChanged", () => {
-      const updatedUser = JSON.parse(localStorage.getItem("user"));
-      if (timezone && updatedUser?.timezone) {
-        timezone.innerText = updatedUser.timezone;
-      }
-    });
   } catch (err) {
     console.error("Timezone fetch error:", err);
   }

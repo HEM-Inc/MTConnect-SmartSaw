@@ -114,7 +114,7 @@ export function uipInit() {
           .then(() => {
             const orig = btnCopy.innerHTML;
             btnCopy.innerHTML =
-              '<i class="ti ti-check" style="font-size:12px"></i> Copied!';
+              '<i class="ti ti-check"></i> Copied!';
             btnCopy.style.color = "#4ade80";
             setTimeout(() => {
               btnCopy.innerHTML = orig;

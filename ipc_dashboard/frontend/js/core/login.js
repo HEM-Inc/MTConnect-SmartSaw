@@ -1,4 +1,5 @@
 import { API_BASE } from "../../utils.js";
+import { showToast } from "./toast.js";
 
 /* --------------------------------------------------
    PAGE INIT
@@ -87,25 +88,6 @@ function initLoginPage() {
       showToast("Server error. Try again.", "error");
     }
   });
-}
-
-/* --------------------------------------------------
-   TOAST
--------------------------------------------------- */
-function showToast(message, type = "success") {
-  const container = document.getElementById("toastContainer");
-
-  if (!container) return;
-
-  const toast = document.createElement("div");
-  toast.className = `toast ${type}`;
-  toast.innerText = message;
-
-  container.appendChild(toast);
-
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
 }
 
 /* --------------------------------------------------

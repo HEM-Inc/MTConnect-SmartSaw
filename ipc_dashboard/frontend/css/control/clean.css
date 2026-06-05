@@ -3,11 +3,7 @@
   display: flex;
   width: 100%;
   height: 660px;
-  border: 1px solid #e8e8e8;
-  border-radius: 14px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
 }
 
 /* ───── LEFT PANEL ───── */
@@ -18,6 +14,9 @@
   border-right: 1px solid #ebebeb;
   display: flex;
   flex-direction: column;
+  margin: 5px;
+  border: 1px solid #e9eaec;
+  border-radius: 8px;
 }
 
 .uip-lhs-header {
@@ -136,6 +135,41 @@
   display: block;
 }
 
+.ti.ti-adjustments-horizontal {
+  font-size: 15px;
+  color: #bbb;
+}
+
+.ti.ti-box {
+  font-size: 13px;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.ti.ti-bolt {
+  font-size: 13px;
+}
+
+.ti.ti-eraser {
+  font-size: 12px;
+}
+
+.ti.ti-copy {
+  font-size: 12px;
+}
+
+.ti.ti-check {
+  font-size: 12px;
+}
+
+.uip-btn-label {
+  color: rgb(17, 97, 245);
+}
+
+.uip-btn-label.clear {
+  color: rgb(252, 4, 24);
+}
+
 /* ── Container name input ── */
 .uip-container-input-wrap {
   display: none;
@@ -224,6 +258,9 @@
   flex-direction: column;
   overflow: hidden;
   min-width: 0; /* prevent flex overflow */
+  margin: 5px;
+  border: 1px solid #e9eaec;
+  border-radius: 8px;
 }
 
 /* ── Console header ── */
@@ -298,7 +335,7 @@
   font-size: 13px;
   line-height: 1.8;
   word-break: break-word;
-  background: #eaeaea;
+  background: #eef0f5;
 }
 
 .uip-console-body::-webkit-scrollbar {
@@ -314,7 +351,7 @@
   display: block;
 }
 .uip-t-ready {
-  color: #22c55e;
+  color: #077e33;
 }
 .uip-t-prompt {
   color: #94a3b8;

@@ -34,6 +34,7 @@ const DUMMY_CONTAINERS = [
   "mongodb",
   "mqtt",
   "ods",
+  "watchtower",
 ];
 
 const DUMMY_LOGS = {
@@ -135,32 +136,36 @@ let dom = {};
 ============================================================ */
 
 async function fetchContainers() {
-  if (CONFIG.useDummy) return DUMMY_CONTAINERS;
-
-  const res = await fetch(CONFIG.containersEndpoint);
-
-  if (res.status === 401) {
-    localStorage.clear();
-    window.location.href = "/index.html";
-    return null;
+  try {
+    if (CONFIG) return DUMMY_CONTAINERS;
+  } catch (e) {
+    throw new Error("Unexpected error occured", e);
   }
 
-  if (!res.ok) throw new Error(`HTTP ${res.status} — ${res.statusText}`);
+  // const res = await fetch(CONFIG.containersEndpoint);
 
-  const json = await res.json();
+  // if (res.status === 401) {
+  //   localStorage.clear();
+  //   window.location.href = "/index.html";
+  //   return null;
+  // }
 
-  if (
-    json?.data &&
-    typeof json.data === "object" &&
-    !Array.isArray(json.data)
-  ) {
-    return Object.keys(json.data);
-  }
+  // if (!res.ok) throw new Error(`HTTP ${res.status} — ${res.statusText}`);
 
-  if (Array.isArray(json?.data)) return json.data;
-  if (Array.isArray(json)) return json;
+  // const json = await res.json();
 
-  throw new Error("Unexpected containers response shape");
+  // if (
+  //   json?.data &&
+  //   typeof json.data === "object" &&
+  //   !Array.isArray(json.data)
+  // ) {
+  //   return Object.keys(json.data);
+  // }
+
+  // if (Array.isArray(json?.data)) return json.data;
+  // if (Array.isArray(json)) return json;
+
+  // throw new Error("Unexpected containers response shape");
 }
 
 function streamDummyLogs(name, onLine, onError) {
@@ -280,7 +285,7 @@ function onSelectContainer(name) {
 ============================================================ */
 
 function loadLogs(name) {
-  dom.consoleTitle.textContent = `Live Update Console — ${name}`;
+  dom.consoleTitle.textContent = `Live Logs Console — ${name}`;
   dom.logOutput.innerHTML = `<span class="lv-ready-line">Connecting to log stream for ${esc(name)}…</span>\n`;
   state.lines = [];
 
@@ -374,7 +379,7 @@ export function initLogs() {
   dom.clearBtn.addEventListener("click", () => {
     state.lines = [];
     dom.logOutput.innerHTML = `<span class="lv-ready-line">System console ready...</span>\n`;
-    dom.consoleTitle.textContent = "Live Update Console";
+    dom.consoleTitle.textContent = "Live Logs Console";
     closeStream();
     state.active = null;
     // Deselect active container in sidebar

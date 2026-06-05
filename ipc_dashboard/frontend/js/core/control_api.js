@@ -1,5 +1,6 @@
 import { API_BASE } from "../../utils.js";
 import { apiRequest } from "./apiClient.js";
+import { showToast } from "./toast.js";
 
 // FILE TREE API
 export async function getWorkspace() {

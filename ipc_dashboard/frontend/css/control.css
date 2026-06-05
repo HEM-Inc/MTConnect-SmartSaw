@@ -33,14 +33,7 @@ body {
 /*  PAGE HEADER*/
 .page-header {
   flex-shrink: 0;
-  padding: 14px 18px 0;
-}
-
-.page-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: #0f172a;
-  margin-bottom: 10px;
+  padding: 0px 12px;
 }
 
 /*  MODERN TAB SYSTEM */
@@ -111,9 +104,9 @@ body {
 .tab-indicator {
   position: absolute;
   bottom: 4px;
-  left: 0;
+  width: var(--tab-width);
+  left: var(--tab-left);
   height: 3px;
-  width: 0;
   background: linear-gradient(90deg, #455ca8, #22c55e);
   border-radius: 999px;
   transition: all 0.25s ease;
@@ -187,6 +180,11 @@ body {
   background: #3b54a0;
 }
 
+.tabload-error {
+  padding: 20px;
+  color: red;
+}
+
 .btn-discard {
   padding: 8px 22px;
   border: 1.5px solid #ef4444;
@@ -223,6 +221,12 @@ body {
   color: #64748b;
 }
 
+.editor-actions-inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 /* RESPONSIVE DESIGN */
 /*  LARGE SCREEN  */
 @media (min-width: 1200px) {
@@ -247,11 +251,7 @@ body {
   }
 
   .page-header {
-    padding: 12px;
-  }
-
-  .page-title {
-    font-size: 18px;
+    padding: 10px;
   }
 
   .page-tab {
@@ -334,10 +334,6 @@ body {
     gap: 10px;
   }
 
-  .profile-info {
-    display: none;
-  }
-
   /* MOBILE MENU BUTTON */
   .mobile-menu-btn {
     width: 38px;
@@ -355,12 +351,7 @@ body {
 
   /* PAGE HEADER */
   .page-header {
-    padding: 10px;
-  }
-
-  .page-title {
-    font-size: 17px;
-    margin-bottom: 8px;
+    padding: 8px;
   }
 
   /* TABS */
@@ -421,10 +412,6 @@ body {
 
   .title {
     font-size: 15px;
-  }
-
-  .page-title {
-    font-size: 16px;
   }
 
   .page-tab {

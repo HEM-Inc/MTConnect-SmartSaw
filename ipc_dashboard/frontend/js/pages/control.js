@@ -1,10 +1,5 @@
-import { loadLayout } from "../../js/core/layout.js";
+import { loadLayout, loadUpdateTimezoneBtn } from "../../js/core/layout.js";
 import { loadUserInfo } from "../core/login.js";
-import {
-  openTimezoneModal,
-  closeTimezoneModal,
-  submitTimezone,
-} from "./timezone.js";
 import { startUpdate } from "../core/control_api.js";
 import { startInstall } from "../core/control_api.js";
 import { showToast } from "../../js/core/toast.js";
@@ -70,14 +65,13 @@ async function switchTab(tabName, btn) {
   } catch (err) {
     console.error(err);
     document.getElementById("content").innerHTML =
-      `<div style="padding:20px;color:red;">Failed to load ${tabName}</div>`;
+      `<div class="tabload-error">Failed to load ${tabName}</div>`;
   }
 }
 
 async function loadDefaultTab() {
   const firstTab = "updateConfig";
-  const firstBtn = document.querySelector(`.page-tab[onclick*="${firstTab}"]`);
-
+  const firstBtn = document.querySelector(`.page-tab[data-tab="${firstTab}"]`);
   document
     .querySelectorAll(".page-tab")
     .forEach((t) => t.classList.remove("active"));
@@ -101,8 +95,17 @@ function moveIndicator(el) {
   const parent = document.querySelector(".tab-track");
   const rect = el.getBoundingClientRect();
   const parentRect = parent.getBoundingClientRect();
-  indicator.style.width = rect.width + "px";
-  indicator.style.left = rect.left - parentRect.left + "px";
+  indicator.style.setProperty("--tab-width", rect.width + "px");
+  indicator.style.setProperty("--tab-left", rect.left - parentRect.left + "px");
+}
+
+function loadEventListeners() {
+  document.querySelectorAll(".page-tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tabName = btn.dataset.tab;
+      switchTab(tabName, btn);
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -111,13 +114,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("pageLoader")?.classList.remove("hidden");
 
     await loadLayout("controlTab");
+
     await loadUserInfo();
     await loadDefaultTab();
 
-    // Timezone modal functions
-    window.openTimezoneModal = openTimezoneModal;
-    window.closeTimezoneModal = closeTimezoneModal;
-    window.submitTimezone = submitTimezone;
+    loadEventListeners();
+
+    loadUpdateTimezoneBtn();
 
     // Hide loader
     document.getElementById("pageLoader")?.classList.add("hidden");
@@ -163,9 +166,19 @@ export function showLiveConsole(tab, isRunning = false) {
     footer: panel.querySelector(".panel-footer").innerHTML,
   };
 
-  panel.querySelector(".panel-header").innerHTML = `
+  const TAB_DISPLAY_NAMES = {
+    setup: "Install and Run",
+    updateConfig: "Update",
+  };
+
+  const displayName = TAB_DISPLAY_NAMES[tab] || tab;
+
+  panel.querySelector(".panel-header").innerHTML =
+    `
     <div class="live-header">
-      <span>⚡ Live Update Console</span>
+      <span>⚡ Live ` +
+    displayName +
+    ` Console</span>
       ${isRunning ? `<span class="pulse-dot"></span>` : ""}
     </div>
   `;
@@ -192,15 +205,14 @@ export function restoreEditorPanel(handlers = {}) {
   panel.querySelector(".panel-header").innerHTML = `
     <div class="editor-breadcrumb">
       <span class="breadcrumb-parent" id="bcParent">—</span>
-      <span>›</span>
+      <span></span>
       <span class="breadcrumb-file" id="bcFile">—</span>
     </div>
-    <div style="display:flex;gap:8px;align-items:center">
+    <div class="editor-actions-inline">
       <button id="btnEditToggle" class="btn-edit-toggle">
-        <span class="material-symbols-outlined icon">edit</span>
+        <span class="fa-solid fa-pen icon"></span>
         <span>Edit</span>
       </button>
-      <span class="editor-status-badge" id="editorStatus">● unsaved</span>
     </div>
   `;
   panel.querySelector(".panel-body").innerHTML = `
@@ -232,11 +244,33 @@ export function appendConsoleLine(tab, text) {
   const box = document.getElementById("liveConsole");
 
   if (!box) return;
-
   if (box.dataset.tab !== tab) return;
 
   const row = document.createElement("div");
-  row.className = "console-line";
+
+  let type = "info";
+
+  const lower = text.toLowerCase();
+
+  if (
+    lower.includes("error") ||
+    lower.includes("failed") ||
+    lower.includes("exception") ||
+    lower.includes("✖")
+  ) {
+    type = "error";
+  } else if (lower.includes("warning") || lower.includes("warn")) {
+    type = "warning";
+  } else if (
+    lower.includes("success") ||
+    lower.includes("completed") ||
+    lower.includes("done") ||
+    lower.includes("✔")
+  ) {
+    type = "success";
+  }
+
+  row.className = `console-line ${type}`;
   row.textContent = text;
 
   box.appendChild(row);
@@ -264,6 +298,27 @@ export function updateRestartHint() {
   if (btn) btn.disabled = false;
 }
 
+export function installHint() {
+  const appChecked = [...document.querySelectorAll(".app-chk")].some(
+    (c) => c.checked,
+  );
+  const fileChecked = [...document.querySelectorAll(".file-chk")].some(
+    (c) => c.checked,
+  );
+  const inputFilled = [
+    ...document.querySelectorAll(".update-inline-input"),
+  ].some((i) => i.value.trim() !== "");
+  const hasSelection = appChecked || fileChecked || inputFilled;
+
+  const hint = document.getElementById("installHint");
+  const btn = document.getElementById("btnInstall");
+  if (hint)
+    hint.textContent = hasSelection
+      ? "Ready to install selected components"
+      : "";
+  if (btn) btn.disabled = false;
+}
+
 // SHARED RESTART / STREAMING FLOW
 export function showPasswordPrompt(
   components,
@@ -272,6 +327,7 @@ export function showPasswordPrompt(
   doneLabel = "✔ Completed.",
 ) {
   const panel = _getEditorPanel();
+  console.log("Panel for password prompt:", components, tab, command, panel);
   if (!panel) return;
 
   panel.querySelector(".panel-header").innerHTML = `
@@ -306,7 +362,7 @@ export function showPasswordPrompt(
     .addEventListener("click", () => restoreEditorPanel());
 }
 
-function resetUpdateSelections() {
+function resetUpdateSelections(tab) {
   // uncheck app checkboxes
   document.querySelectorAll(".app-chk").forEach((chk) => {
     chk.checked = false;
@@ -322,8 +378,11 @@ function resetUpdateSelections() {
     input.value = "";
   });
 
-  // refresh restart hint
-  updateRestartHint();
+  if (tab === "updateConfig") {
+    updateRestartHint();
+  } else if (tab === "setup") {
+    installHint();
+  }
 }
 
 export function updateActionButtonState(tab, running) {
@@ -334,7 +393,7 @@ export function updateActionButtonState(tab, running) {
   }
 
   if (tab === "setup") {
-    btn = document.getElementById("btnRestart");
+    btn = document.getElementById("btnInstall");
   }
 
   if (!btn) return;
@@ -346,14 +405,14 @@ export function updateActionButtonState(tab, running) {
 
     if (tab === "updateConfig") {
       btn.innerHTML = `
-        <span class="material-symbols-outlined icon">sync</span>
+        <span class="fa-solid fa-rotate icon"></span>
         Updating...
       `;
     }
 
     if (tab === "setup") {
       btn.innerHTML = `
-        <span class="material-symbols-outlined icon">sync</span>
+        <span class="fa-solid fa-rotate icon"></span>
         Installing...
       `;
     }
@@ -362,14 +421,14 @@ export function updateActionButtonState(tab, running) {
 
     if (tab === "updateConfig") {
       btn.innerHTML = `
-        <span class="material-symbols-outlined icon">restart_alt</span>
+        <span class="fa-solid fa-rotate-right icon"></span>
         Restart System
       `;
     }
 
     if (tab === "setup") {
       btn.innerHTML = `
-        <span class="material-symbols-outlined icon">restart_alt</span>
+        <span class="fa-solid fa-rotate-right icon"></span>
         Install
       `;
     }
@@ -442,7 +501,7 @@ async function _streamUpdate(components, tab, command, password, doneLabel) {
 
     if (window.activeStreams?.[tab]?.sessionId === mySession) {
       appendConsoleLine(tab, doneLabel);
-      resetUpdateSelections();
+      resetUpdateSelections(tab);
       const footer = _getEditorPanel()?.querySelector(".panel-footer");
       if (footer) {
         footer.innerHTML = `<button class="btn-save" id="btnCloseConsole">Close Console</button>`;
@@ -658,6 +717,7 @@ ${
       const input = document.createElement("input");
       input.className = "update-inline-input";
       input.placeholder = item.placeholder;
+      input.dataset.flag = item.flag;
       input.oninput = onAnyChange;
       wrap.appendChild(input);
     }
@@ -684,7 +744,24 @@ ${
   });
 
   document.querySelectorAll(".app-chk").forEach((chk) => {
-    chk.onchange = onAnyChange;
+    chk.onchange = (e) => {
+      // Mutually exclusive pairs: checking one unchecks the other
+      const MUTEX_PAIRS = [["-b", "-B"]];
+      MUTEX_PAIRS.forEach(([flagA, flagB]) => {
+        if (e.target.dataset.flag === flagA && e.target.checked) {
+          const other = document.querySelector(
+            `.app-chk[data-flag="${flagB}"]`,
+          );
+          if (other) other.checked = false;
+        } else if (e.target.dataset.flag === flagB && e.target.checked) {
+          const other = document.querySelector(
+            `.app-chk[data-flag="${flagA}"]`,
+          );
+          if (other) other.checked = false;
+        }
+      });
+      onAnyChange(e);
+    };
   });
 
   if (typeof onAnyChange === "function") onAnyChange();

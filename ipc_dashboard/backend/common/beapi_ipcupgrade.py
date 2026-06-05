@@ -103,8 +103,11 @@ class BackendIpcUpgrade:
                     cmd.extend(["-d", comp["config_file"]])
 
                 elif name == "mqtt":
-                    if comp.get("bridge"):
+                    if comp.get("bridge") == True:
                         cmd.append("-b")
+                    elif comp.get("bridge") == False:
+                        cmd.append("-B")
+                    
 
                 elif name == "adapter":
                     if comp.get("config_file"):

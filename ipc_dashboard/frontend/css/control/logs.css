@@ -27,6 +27,9 @@
   border-right: 1px solid #e2e4e9;
   overflow: hidden;
   transition: width 0.22s ease;
+  border: 1px solid #e2e4e9;
+  border-radius: 8px;
+  margin: 5px;
 }
 
 /* Collapsed state — icon-width only */
@@ -169,6 +172,9 @@
   background: #fff;
   overflow: hidden;
   min-width: 0;
+  border: 1px solid #e9eaec;
+  border-radius: 8px;
+  margin: 5px;
 }
 
 .lv-console-header {
@@ -221,7 +227,7 @@
   border-radius: 5px;
   font-size: 11.5px;
   font-weight: 600;
-  color: #6b7280;
+  color: rgb(252, 4, 24);
   cursor: pointer;
   transition:
     background 0.15s,
@@ -256,7 +262,7 @@
   overflow-y: auto;
   padding: 16px 20px;
   /* background: #f9fafb; */
-  background: #eaeaea;
+  background: #eef0f5;
 }
 .lv-console-body::-webkit-scrollbar {
   width: 6px;
@@ -279,7 +285,7 @@
 }
 
 .lv-ready-line {
-  color: #22c55e;
+  color: #077e33;
 }
 
 /* Log line types */

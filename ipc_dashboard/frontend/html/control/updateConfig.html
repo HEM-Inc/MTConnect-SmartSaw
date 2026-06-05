@@ -3,16 +3,13 @@
   <div class="panel col-explorer">
     <div class="panel-header">
       <div class="panel-header-title">
-        <span class="material-symbols-outlined icon">folder_open</span>
+        <span class="fa-solid fa-folder-open icon"></span>
         Workspace
       </div>
     </div>
     <div class="panel-body">
       <div class="explorer-body">
-        <div
-          class="tree-root-label"
-          onclick="toggleSection('compTree', 'compArrow')"
-        >
+        <div class="tree-root-label" id="treeRootLabel">
           <svg
             class="tree-arrow"
             id="compArrow"
@@ -28,8 +25,8 @@
             />
           </svg>
           <span>Components</span>
-          <button class="upload-btn" onclick="openUploadModal()">
-            <span class="material-symbols-outlined">upload</span>
+          <button class="upload-btn" id="btnUpload">
+            <span class="fa-solid fa-upload"></span>
             Upload
           </button>
         </div>
@@ -40,10 +37,7 @@
 
   <!-- COL 2: File Editor -->
   <div class="panel">
-    <div
-      class="panel-header"
-      style="display: flex; align-items: center; justify-content: space-between"
-    >
+    <div class="panel-header">
       <div class="editor-breadcrumb">
         <span class="breadcrumb-parent" id="bcParent">—</span>
         <svg
@@ -62,17 +56,12 @@
         </svg>
         <span class="breadcrumb-file" id="bcFile">—</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px">
+      <div class="editBtn">
         <!-- ✅ NEW: Edit toggle button -->
-        <button
-          id="btnEditToggle"
-          class="btn-edit-toggle"
-          onclick="handleEditToggle()"
-        >
-          <span class="material-symbols-outlined icon">edit</span>
+        <button id="btnEditToggle" class="btn-edit-toggle">
+          <span class="fa-solid fa-pen icon">edit</span>
           <span>Edit</span>
         </button>
-        <span class="editor-status-badge" id="editorStatus">● unsaved</span>
       </div>
     </div>
 
@@ -83,8 +72,8 @@
     </div>
 
     <div class="panel-footer editor-actions">
-      <button class="btn-discard" onclick="handleDiscard()">Discard</button>
-      <button class="btn-save" onclick="handleSave()">Save Changes</button>
+      <button class="btn-discard" id="btnDiscard">Discard</button>
+      <button class="btn-save" id="btnSave">Save Changes</button>
     </div>
   </div>
 
@@ -99,13 +88,8 @@
 
       <div class="update-footer">
         <div id="restartHint" class="restart-hint"></div>
-        <button
-          class="btn-restart"
-          id="btnRestart"
-          onclick="handleRestart()"
-          disabled
-        >
-          <span class="material-symbols-outlined icon">restart_alt</span>
+        <button class="btn-restart" id="btnRestart" disabled>
+          <span class="fa-solid fa-rotate-right icon">restart_alt</span>
           Restart System
         </button>
       </div>
@@ -115,7 +99,7 @@
     <div class="modal-box">
       <div class="modal-header">
         Upload File
-        <button onclick="closeUploadModal()">✕</button>
+        <button id="btnCloseUpload">✕</button>
       </div>
 
       <div class="modal-body">
@@ -123,14 +107,12 @@
 
         <div id="uploadTree" class="upload-tree"></div>
 
-        <div id="filePickerArea" style="display: none">
+        <div id="filePickerArea" class="file-picker-area">
           <div class="modal-label">Choose File</div>
 
           <input type="file" id="uploadInput" />
 
-          <button class="btn-save" onclick="submitUpload()">
-            Submit Upload
-          </button>
+          <button class="btn-save" id="btnSubmitUpload">Submit Upload</button>
         </div>
       </div>
     </div>
