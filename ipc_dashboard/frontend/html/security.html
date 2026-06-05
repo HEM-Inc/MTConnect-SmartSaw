@@ -1,0 +1,46 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../css/loader.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="../public/css/all.min.css" />
+  <link rel="stylesheet" href="../public/fonts.css" />
+  <!-- Moment.js -->
+  <script src="../public/js/moment.min.js"></script>
+
+  <!-- Moment Timezone -->
+  <script src="../public/js/moment-timezone-with-data.min.js"></script>
+</head>
+<body>
+  <div id="pageLoader" class="page-loader">
+    <div class="loader"></div>
+    <p>Loading...</p>
+  </div>
+  <div class="container hidden" id="appContainer">
+    <div id="sidebarContainer"></div>
+
+    <div class="main">
+      <div id="topbarContainer"></div>
+      <div id="logoutModalContainer"></div>
+      <div id="timezoneModalContainer"></div>
+      <div id="content">
+        <h2>Security</h2>
+        <p>Manage certificates and security configurations</p>
+        <div id="certCardContainer"></div>
+      </div>
+      <div id="toastContainer"></div>
+      <!-- MODAL -->
+      <div id="modal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="closeSecurityModalBtn">&times;</span>
+          <div class="modal-body">
+            <h3>Certificate Details</h3>
+            <div id="modalData"></div>
+            <button id="modaldownloadBtn">Download ca.crt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/js/pages/security.js"></script>
+</body>

@@ -26,7 +26,52 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+
+
 =======
+
+# [Released]
+
+## [4.0.0] - 2026/06/04 - max harris
+
+### Added
+
+- Added IPC Dashboard — a FastAPI-based web dashboard for local management of the SmartSaw IPC.
+  - Real-time Docker container status via browser UI
+  - Web-based control for install, upgrade, and clean operations
+  - User authentication with role-based access control
+  - Certificate download for MQTT TLS bridge setup
+  - Server-Sent Events (SSE) for live status updates
+  - Runs as a Docker container on port 8000
+- Added `ipc_dashboard/` directory containing backend (FastAPI), frontend (HTML/JS/CSS), and service management (`ipc_service.sh`).
+- Added IPC Dashboard Control page with full frontend implementation: setup, logs, clean, and updateConfig views.
+- Added IPC Dashboard backend API modules: install (`beapi_ipcinstall`), clean (`beapi_ipcclean`), logs (`beapi_ipclogs`), file manager (`beapi_filemanager`), and IPC manager (`beapi_ipcmanager`).
+- Added IPC Dashboard timezone modal and certificate download on the Security page.
+- Added security headers to the IPC Dashboard FastAPI backend.
+- Added CIP protocol support to SmartSaw adapter configs to match adapter 1.7.0, with backward-compatible Sysmac platform configuration.
+- Added exclusive `flock` lock on `/var/lock/HEMsaw-mtconnect.lock` in `ssInstall.sh` and `ssUpgrade.sh` to prevent concurrent invocations from CLI or the IPC Dashboard.
+- Added `SIGINT`/`SIGTERM` trap in `ssUpgrade.sh` to kill background update jobs before releasing the lock, preventing partial upgrades.
+- Added container exclude support (`-x`) and persistent `Use_MQTT_Bridge` env variable for MQTT bridge preference across installs and upgrades.
+- Added architecture decision records in `docs/adr/` (ADR-0001: preserve MongoDB data on install; ADR-0002: single-instance lock; ADR-0003: no conditional upgrade-to-install fallback) and domain glossary in `docs/CONTEXT.md`.
+
+### Changed
+
+- Bumped MTConnect schema from 2.5 to 2.7 in `agent.cfg` and all device XML config files.
+- Changed schema namespace URLs from HTTPS to HTTP across all device config files.
+- Migrated IPC Dashboard from a host-level systemd service to a Docker container.
+- `ssUpgrade.sh` `-u` flag now triggers a full stack update; deprecated `-v` flag removed.
+- Refactored `ssInstall.sh`, `ssUpgrade.sh`, and `ssClean.sh` to use shared `lib.sh` with centralized CLI argument validation and MQTT bridge detection logic.
+- Replaced `rsync` with `rm + cp` in upgrade scripts for more predictable file replacement.
+- Updated MQTT TLS certificates.
+
+### Fixed
+
+- `InstallMongodb()` now preserves `/etc/mongodb/data/db/` (production data) during upgrades and reinstalls, preventing accidental data loss.
+- Removed automatic fallback from `ssUpgrade` to `ssInstall` when `agent.cfg` is missing, preventing surprise full reinstalls during selective upgrades.
+- Fixed shell script path quoting in `ssInstall.sh` and `ssUpgrade.sh`.
+- Fixed `cp` globbing to include hidden files (`cp -r dir/.` instead of `dir/*`) during upgrade.
+- Fixed `update_agent_cfg` to handle a missing `Devices` line.
+- Fixed `ssClean.sh` error message that referenced the wrong script name.
 
 ## [3.3.0] - 2026/01/08 - maxharris
 

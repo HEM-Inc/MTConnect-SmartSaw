@@ -1,4 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+
+SCRIPT_DIR="$(dirname "$0")"
+source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
+acquire_upgrade_lock
 
 ############################################################
 # Help                                                     #
@@ -7,16 +11,15 @@ Help(){
     # Display Help
     echo "This function installs the HEMSaw MTConnect-SmartAdapter, ODS, Devctl, MTconnect Agent and MQTT."
     echo
-    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-v version|-f]"
+    echo "Syntax: ssInstall.sh [-h|-a File_Name|-j File_Name|-d File_Name|-c File_Name|-u Serial_number|-b|-B]"
     echo "options:"
     echo "-a File_Name          Declare the afg file name; Defaults to - SmartSaw_DC_HA.afg"
     echo "-j File_Name          Declare the JSON file name; Defaults to - SmartSaw_alarms.json"
     echo "-d File_Name          Declare the MTConnect agent device file name; Defaults to - SmartSaw_DC_HA.xml"
     echo "-c File_Name          Declare the Device control config file name; Defaults to - devctl_json_config.json"
     echo "-u Serial_number      Declare the serial number for the uuid; Defaults to - SmartSaw"
-    echo "-b                    Use the MQTT bridge configuration file name; Defaults to - mosq_bridge.conf"
-    echo "-v version            Force Docker Compose version (1 or 2); Defaults to auto-detect"
-    echo "-f                    Force install of the files"
+    echo "-b                    Use the MQTT bridge configuration; persists ON in env.sh"
+    echo "-B                    Use the standard MQTT configuration; persists OFF in env.sh"
     echo "-h                    Print this Help."
     echo "AFG files"
     ls adapter/config/
@@ -24,19 +27,6 @@ Help(){
     echo "MTConnect Device files"
     ls agent/config/devices
     echo ""
-}
-
-############################################################
-# Utilities                                                #
-############################################################
-# Function to check if a service exists
-service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
 }
 
 ############################################################
@@ -50,8 +40,8 @@ InstallAdapter(){
     mkdir -p /etc/adapter/config/
     mkdir -p /etc/adapter/data/
     mkdir -p /etc/adapter/log/
-    cp -r ./adapter/config/$Afg_File /etc/adapter/config/
-    cp -r ./adapter/data/$Json_File /etc/adapter/data/
+    cp -p ./adapter/config/"$Afg_File" /etc/adapter/config/
+    cp -p ./adapter/data/"$Json_File" /etc/adapter/data/
     chown -R 1100:1100 /etc/adapter/
 
     echo "MTConnect Adapter Up and Running"
@@ -63,24 +53,24 @@ InstallMTCAgent(){
     mkdir -p /etc/mtconnect/config/
     mkdir -p /etc/mtconnect/data/
 
-    cp -r ./agent/config/agent.cfg /etc/mtconnect/config/
-    sed -i '1 i\Devices = /mtconnect/config/'$Device_File /etc/mtconnect/config/agent.cfg
-    cp -r ./agent/config/devices/$Device_File /etc/mtconnect/config/
-    sed -i "11 s/.*/        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">/" /etc/mtconnect/config/$Device_File
+    cp -p ./agent/config/agent.cfg /etc/mtconnect/config/
+    update_agent_cfg
+    cp -p ./agent/config/devices/"$Device_File" /etc/mtconnect/config/
+    sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
     cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
 
     chown -R 1000:1000 /etc/mtconnect/
 
 
-    if $Use_MQTT_Bridge; then
+    if [[ "$Use_MQTT_Bridge" == true ]]; then
         if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT bridge files"
 
             # Load the Broker UUID
-            cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            update_remote_clientid
 
-            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
+            cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         else
@@ -90,25 +80,25 @@ InstallMTCAgent(){
             mkdir -p /etc/mqtt/certs/
 
             # Load the Broker UUID
-            cp -r ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
-            sed -i "27 i\remote_clientid HEMSaw-$Serial_Number" /etc/mqtt/config/mosquitto.conf
+            cp -p ./mqtt/config/mosq_bridge.conf /etc/mqtt/config/mosquitto.conf
+            update_remote_clientid
 
-            cp -r ./mqtt/data/acl /etc/mqtt/data/acl
+            cp -p ./mqtt/data/acl /etc/mqtt/data/acl
             cp -r ./mqtt/certs/. /etc/mqtt/certs/
             chmod 0700 /etc/mqtt/data/acl
         fi
     else
         if [[ -d /etc/mqtt/config/ ]]; then
             echo "Updating MQTT files..."
-            cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
-            cp -r ./mqtt/data/acl /etc/mqtt/data/
+            cp -p ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+            cp -p ./mqtt/data/acl /etc/mqtt/data/
             chmod 0700 /etc/mqtt/data/acl
         else
             echo "Updating MQTT files..."
             mkdir -p /etc/mqtt/config/
             mkdir -p /etc/mqtt/data/
-            cp -r ./mqtt/config/mosquitto.conf /etc/mqtt/config/
-            cp -r ./mqtt/data/acl /etc/mqtt/data/
+            cp -p ./mqtt/config/mosquitto.conf /etc/mqtt/config/
+            cp -p ./mqtt/data/acl /etc/mqtt/data/
             chmod 0700 /etc/mqtt/data/acl
         fi
     fi
@@ -116,36 +106,52 @@ InstallMTCAgent(){
 
 InstallODS(){
     echo "Installing ODS..."
+    rm -rf /etc/ods/config
     mkdir -p /etc/ods/
     mkdir -p /etc/ods/config/
-    cp -r ./ods/config/* /etc/ods/config/
+    cp -r ./ods/config/. /etc/ods/config/
     chown -R 1200:1200 /etc/ods/
 }
 
 InstallDevctl(){
     echo "Installing Devctl..."
+    rm -rf /etc/devctl/config
     mkdir -p /etc/devctl/
     mkdir -p /etc/devctl/config/
     mkdir -p /etc/devctl/logs/
-    cp -r ./devctl/config/* /etc/devctl/config/
-    sed -i "18 s/.*/        \"device_uid\" : \"HEMSaw-$Serial_Number\",/" /etc/devctl/config/devctl_json_config.json
+    cp -r ./devctl/config/. /etc/devctl/config/
+    sed -i "s|\"device_uid\"[[:space:]]*:.*|        \"device_uid\" : \"HEMSaw-$Serial_Number\",|" /etc/devctl/config/devctl_json_config.json
     chown -R 1300:1300 /etc/devctl/
 }
 
 InstallMongodb(){
     echo "Installing Mongodb..."
-    mkdir -p /etc/mongodb/
+
+    # Config: always replace from repo (static assets)
+    rm -rf /etc/mongodb/config
     mkdir -p /etc/mongodb/config/
+    cp -r ./mongodb/config/. /etc/mongodb/config/
+
+    # Data: preserve db/ directory; remove stale repo files, copy fresh ones
     mkdir -p /etc/mongodb/data/
     mkdir -p /etc/mongodb/data/db
-    cp -r ./mongodb/config/* /etc/mongodb/config/
-    cp -r ./mongodb/data/* /etc/mongodb/data/
+
+    if [ -d /etc/mongodb/data ]; then
+        for item in /etc/mongodb/data/* /etc/mongodb/data/.*; do
+            [ -e "$item" ] || continue
+            local name
+            name=$(basename "$item")
+            [ "$name" = "." ] && continue
+            [ "$name" = ".." ] && continue
+            [ "$name" = "db" ] && continue
+            rm -rf "$item"
+        done
+    fi
+
+    cp -r ./mongodb/data/. /etc/mongodb/data/
     chown -R 1000:1000 /etc/mongodb/
 
-    if pip3 &> /dev/null; then
-        pip3 install pyaml --break-system-packages
-        pip3 install pymongo --break-system-packages
-    fi
+    ensure_venv || exit 1
 }
 
 
@@ -157,18 +163,32 @@ InstallMongodb(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-if systemctl is-active --quiet adapter || systemctl is-active --quiet ods || systemctl is-active --quiet mongod; then
-    echo "Adapter, ODS and/or Mongodb is running as a systemd service, stopping the systemd services.."
-    systemctl stop adapter
-    systemctl stop ods
-    systemctl stop mongod
+# Detect and disable legacy systemd services during daemon -> Docker migration
+if service_exists adapter || service_exists ods || service_exists mongod; then
+    echo "Legacy systemd services detected. Disabling them for Docker migration..."
+    for svc in adapter ods; do
+        if service_exists "$svc"; then
+            echo "Stopping and disabling $svc.service..."
+            systemctl stop "$svc" 2>/dev/null || true
+            systemctl disable "$svc" 2>/dev/null || true
+            rm -f "/etc/systemd/system/$svc.service"
+        fi
+    done
+    if service_exists mongod; then
+        echo "Stopping and disabling mongod.service..."
+        systemctl stop mongod 2>/dev/null || true
+        systemctl disable mongod 2>/dev/null || true
+    fi
+    systemctl daemon-reload
+    systemctl reset-failed
+    echo "Legacy systemd services disabled."
 fi
 
 ## Set default variables
 # Source the env.sh file
-if [[ -f "./env.sh" ]]; then
+if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
     set -a
-    source ./env.sh
+    source "$SCRIPT_DIR/env.sh"
     set +a
 else
     echo "env.sh file not found. Using default values."
@@ -179,67 +199,54 @@ else
     DevCTL_File="devctl_json_config.json"
 fi
 
-Use_MQTT_Bridge=false
-force_install_files=false
-force_docker_compose_version=""
+Use_MQTT_Bridge=${Use_MQTT_Bridge:-false}
 
 # Process the input options. Add options as needed.
 ############################################################
 
-# Validate arguments for common mistakes
-for arg in "$@"; do
-    if [[ "$arg" == "-" ]]; then
-        echo "ERROR[1] - Invalid option format: standalone dash detected"
-        echo "Did you use a space between dash and option letter?"
-        echo "Correct format: -d (not - d)"
-        Help
-        exit 1
-    fi
-done
-
-# Check for standalone letters that might be mistyped options
-for arg in "$@"; do
-    if [[ "$arg" =~ ^[A-Za-z]$ ]]; then
-        echo "ERROR[1] - Standalone letter '$arg' detected"
-        echo "Did you mean to use '-$arg' instead of '- $arg'?"
-        echo "Options should have no space between the dash and letter"
-        Help
-        exit 1
-    fi
-done
+validate_args "$@" || { Help; exit 1; }
 
 # Get the options
-while getopts ":a:j:d:c:u:v:bhf:" option; do
+while getopts ":a:j:d:c:u:bBh" option; do
     case ${option} in
         h) # display Help
             Help
             exit;;
         a) # Enter an AFG file name
-            Afg_File=$OPTARG
-            sed -i "4 s/.*/export Afg_File=\"$Afg_File\"/" env.sh;;
+            Afg_File="$OPTARG"
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Afg_File=.*|export Afg_File=\"$Afg_File\"|" "$SCRIPT_DIR/env.sh";;
         j) # Enter JSON file name
-            Json_File=$OPTARG;
-            sed -i "5 s/.*/export Json_File=\"$Json_File\"/" env.sh;;
+            Json_File="$OPTARG"
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Json_File=.*|export Json_File=\"$Json_File\"|" "$SCRIPT_DIR/env.sh";;
         d) # Enter a Device file name
-            Device_File=$OPTARG
-            sed -i "6 s/.*/export Device_File=\"$Device_File\"/" env.sh;;
+            Device_File="$OPTARG"
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Device_File=.*|export Device_File=\"$Device_File\"|" "$SCRIPT_DIR/env.sh";;
         c) # Enter a Device file name
-            DevCTL_File=$OPTARG
-            sed -i "8 s/.*/export DevCTL_File=\"$DevCTL_File\"/" env.sh;;
+            DevCTL_File="$OPTARG"
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export DevCTL_File=.*|export DevCTL_File=\"$DevCTL_File\"|" "$SCRIPT_DIR/env.sh";;
         u) # Enter a serial number for the UUID
-            Serial_Number=$OPTARG
-            sed -i "7 s/.*/export Serial_Number=\"$Serial_Number\"/" env.sh;;
-        b) # Run MQTT Bridge
-            Use_MQTT_Bridge=true;;
-        f) # Force install files
-            force_install_files=true;;
-        v) # Force Docker Compose version
-            if [[ "$OPTARG" == "1" || "$OPTARG" == "2" ]]; then
-                force_docker_compose_version=$OPTARG
-            else
-                echo "ERROR[1] - Invalid Docker Compose version. Must be 1 or 2"
-                exit 1
-            fi;;
+            Serial_Number="$OPTARG"
+            [[ -f "$SCRIPT_DIR/env.sh" ]] && sed -i "s|^export Serial_Number=.*|export Serial_Number=\"$Serial_Number\"|" "$SCRIPT_DIR/env.sh";;
+        b) # Enable MQTT Bridge
+            Use_MQTT_Bridge=true
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"true\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="true"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
+        B) # Disable MQTT Bridge
+            Use_MQTT_Bridge=false
+            if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+                if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+                    sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"false\"|" "$SCRIPT_DIR/env.sh"
+                else
+                    echo 'export Use_MQTT_Bridge="false"' >> "$SCRIPT_DIR/env.sh"
+                fi
+            fi
+            ;;
         \?) # Invalid option
             echo "ERROR[1] - Invalid option chosen: -$OPTARG"
             echo "Use -h for help and list of valid options"
@@ -249,7 +256,7 @@ while getopts ":a:j:d:c:u:v:bhf:" option; do
 done
 
 # Check for any remaining unprocessed arguments that might be malformed options
-shift $((OPTIND-1))
+shift "$((OPTIND-1))"
 if [[ $# -gt 0 ]]; then
     for remaining_arg in "$@"; do
         if [[ "$remaining_arg" =~ ^[A-Za-z]$ ]]; then
@@ -262,51 +269,24 @@ if [[ $# -gt 0 ]]; then
     done
 fi
 
-# Auto-detect Docker Compose version if not forced
-if [[ -z "$force_docker_compose_version" ]]; then
-    if docker compose version &> /dev/null; then
-        # Docker Compose v2 is available
-        Use_Docker_Compose_v1=false
+# Persist the final bridge preference so upgrades remember it
+if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
+    if grep -q "^export Use_MQTT_Bridge=" "$SCRIPT_DIR/env.sh"; then
+        sed -i "s|^export Use_MQTT_Bridge=.*|export Use_MQTT_Bridge=\"$Use_MQTT_Bridge\"|" "$SCRIPT_DIR/env.sh"
     else
-        if command -v docker-compose &> /dev/null; then
-            # Docker Compose v1 is available
-            Use_Docker_Compose_v1=true
-        else
-            apt update --fix-missing && apt upgrade --fix-missing -y
-
-            # No Docker Compose available - default to v2 format
-            echo "WARNING: Docker Compose not detected."
-            # Check if docker-compose-v2 is available in apt
-            if apt-cache show docker-compose-v2 >/dev/null 2>&1; then
-                echo "Installing docker-compose-v2..."
-                apt install -y docker-compose-v2 python3-pip --fix-missing
-                Use_Docker_Compose_v1=false
-            else
-                echo "docker-compose-v2 not available, falling back to docker-compose..."
-                apt install -y docker-compose python3-pip --fix-missing
-                Use_Docker_Compose_v1=true
-            fi
-            apt clean
-        fi
+        echo "export Use_MQTT_Bridge=\"$Use_MQTT_Bridge\"" >> "$SCRIPT_DIR/env.sh"
     fi
-else
-    # Use forced version
-    if [[ "$force_docker_compose_version" == "1" ]]; then
-        Use_Docker_Compose_v1=true
-        if ! command -v docker-compose &> /dev/null; then
-            echo "Installing docker-compose v1..."
-            apt update --fix-missing && apt upgrade --fix-missing -y
-            apt install -y docker-compose python3-pip --fix-missing
-            apt clean
-        fi
-    else
-        Use_Docker_Compose_v1=false
-        if ! docker compose version &> /dev/null; then
-            echo "Installing docker-compose v2..."
-            apt update --fix-missing && apt upgrade --fix-missing -y
-            apt install -y docker-compose-v2 python3-pip --fix-missing
-            apt clean
-        fi
+fi
+
+# Require Docker Compose v2 - install if not present
+if ! docker compose version &> /dev/null; then
+    echo "Docker Compose v2 not found, installing docker-compose-v2..."
+    apt update --fix-missing && apt install -y docker-compose-v2 --fix-missing
+    apt clean
+    if ! docker compose version &> /dev/null; then
+        echo "ERROR: Failed to install docker-compose-v2."
+        echo "Please install it manually: apt install docker-compose-v2 on Ubuntu"
+        exit 1
     fi
 fi
 
@@ -320,29 +300,29 @@ echo "JSON file = "$Json_File
 echo "MTConnect Agent file = "$Device_File
 echo "MTConnect UUID = HEMSaw-"$Serial_Number
 echo "Device Control file = "$DevCTL_File
-echo "Docker Compose Version = " $([ "$Use_Docker_Compose_v1" = true ] && echo "1" || echo "2")
+echo "Docker Compose Version = 2"
 echo ""
 
 # check if files are correct
-if [[ ! -f ./agent/config/devices/$Device_File ]]; then
+if [[ ! -f ./agent/config/devices/"$Device_File" ]]; then
     echo 'ERROR[1] - MTConnect device file not found, check file name! Exiting install...'
     echo "Available MTConnect Device files..."
     ls agent/config/devices
     exit 1
 fi
-if [[ ! -f ./adapter/config/$Afg_File ]]; then
+if [[ ! -f ./adapter/config/"$Afg_File" ]]; then
     echo 'ERROR[1] - Adapter config file not found, check file name! Exiting install...'
     echo "Available Adapter config files..."
     ls adapter/config
     exit 1
 fi
-if [[ ! -f ./adapter/data/$Json_File ]]; then
+if [[ ! -f ./adapter/data/"$Json_File" ]]; then
     echo 'ERROR[1] - Adapter alarm json file not found, check file name! Exiting install...'
     echo "Available Adapter alarm json files..."
     ls adapter/data
     exit 1
 fi
-if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
+if [[ ! -f ./devctl/config/"$DevCTL_File" ]]; then
     echo 'ERROR[1] - Device Control file not found, check file name! Exiting install...'
     echo "Available Device Control files..."
     ls devctl/config
@@ -351,13 +331,7 @@ fi
 
 if service_exists docker; then
     echo "Shutting down any old Docker containers"
-    if $Use_Docker_Compose_v1; then
-        echo "Using Docker Compose v1 commands"
-        docker-compose down
-    else
-        echo "Using Docker Compose v2 commands"
-        docker compose down
-    fi
+    docker compose down
 fi
 echo ""
 
@@ -369,22 +343,14 @@ InstallMongodb
 echo ""
 
 echo "Starting up the Docker image"
-if $Use_Docker_Compose_v1; then
-    echo "Using Docker Compose v1 commands"
-    docker-compose up --remove-orphans -d
-    docker-compose logs
-else
-    echo "Using Docker Compose v2 commands"
-    docker compose up --remove-orphans -d
-    docker compose logs
-fi
+docker compose up --remove-orphans -d
+docker compose logs
 
 echo ""
-python3 /etc/mongodb/data/jobs_parts_init.py
-python3 /etc/mongodb/data/upload_materials.py
+/etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
+/etc/mongodb/venv/bin/python /etc/mongodb/data/upload_materials.py
 
 
 echo ""
 echo "Check to verify containers are running:"
-docker system prune --all --force --volumes
 docker ps

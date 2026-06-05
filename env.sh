@@ -6,5 +6,6 @@ export Json_File="SmartSaw_alarms.json"
 export Device_File="SmartSaw_DC_HA.xml"
 export Serial_Number="SmartSaw"
 export DevCTL_File="devctl_json_config.json"
+export Use_MQTT_Bridge="false"
 echo 'Done'
 echo ' '
