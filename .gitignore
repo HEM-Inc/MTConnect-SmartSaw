@@ -4,6 +4,12 @@
 .icloud
 [Tt]humbs.db
 
+# Local folder
+.claude/
+.ruff_cache/
+graphify-out/
+
+
 # VIM
 .*.swp
 
