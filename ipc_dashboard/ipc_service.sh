@@ -129,7 +129,7 @@ if [[ $# -eq 0 ]]; then
     exit 1
 fi
 
-while getopts ":IST RUh" option; do
+while getopts ":ISTRUh" option; do
     case ${option} in
         I)
             install_service
