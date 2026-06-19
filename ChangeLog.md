@@ -32,6 +32,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 # [Released]
 
+## [4.1.0] - 2026/06/19 - emnidhish
+
+### Changed
+
+- Added new topics to devctl configuration to support heartbeat feature.
+
 ## [4.0.0] - 2026/06/04 - max harris
 
 ### Added
