@@ -94,8 +94,26 @@ The dashboard is **optional** in the current release. It is not installed automa
 
 - Ubuntu 20.04+ (or compatible Linux distribution)
 - Python 3.10+
-- `uv` package manager (preferred) or `pip`
+- [`uv`](https://docs.astral.sh/uv/) package manager
 - Docker and Docker Compose V2 installed
+
+### Dependency Management
+
+Dependencies are managed with `uv` via `pyproject.toml`. This is the single source of truth — there is no `requirements.txt`.
+
+```bash
+# Install / sync the virtual environment
+cd ipc_dashboard
+uv sync
+
+# Add a new dependency
+uv add <package>
+
+# Show installed packages
+uv pip list
+```
+
+The `.venv` is created automatically by `uv sync` inside `ipc_dashboard/`. The systemd service runs via `uv run fastapi_main.py`, which uses this environment without needing to activate it explicitly.
 
 ### Manual Install
 

@@ -101,7 +101,31 @@
             "base": "monitor",
             "subtending": "Yes",
             "interprete": "devctljson"
-          }
+          },
+          {
+						"enable": "Yes",
+						"type" : "devicectl",
+						"name" : "devicedownmsg",
+						"base" : "monitor",
+						"subtending" : "Yes",
+						"interprete" : "devctljson"
+					},
+					{
+						"enable": "Yes",
+						"type" : "devicectl",
+						"name" : "deviceactivemsg",
+						"base" : "monitor",
+						"subtending" : "Yes",
+						"interprete" : "devctljson"
+					},
+					{
+						"enable": "Yes",
+						"type" : "devicectl",
+						"name" : "deviceheartbeat",
+						"base" : "monitor",
+						"subtending" : "Yes",
+						"interprete" : "devctljson"
+					}
         ]
       }
     }
