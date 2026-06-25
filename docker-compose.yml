@@ -112,7 +112,7 @@ services:
     hostname: mongodb
     image: mongo:4.4
     labels:
-      - "com.centurylinklabs.watchtower.enable=true"
+      - "com.centurylinklabs.watchtower.enable=false"
     volumes:
       - "/etc/mongodb/data/db:/data/db"
       - "/etc/mongodb/config/:/etc/mongo/"
@@ -140,7 +140,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/timezone:/etc/timezone:ro
     environment:
+      - DOCKER_API_VERSION=1.44
       - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true
       - WATCHTOWER_REMOVE_VOLUMES=true
       - WATCHTOWER_INCLUDE_RESTARTING=true
       - WATCHTOWER_ROLLING_RESTART=true
