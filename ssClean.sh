@@ -2,6 +2,7 @@
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
+detect_container_runtime
 
 ############################################################
 # Help                                                     #
@@ -21,7 +22,7 @@ Help(){
     echo "-C                    Uninstall the HEMsaw devctl application"
     echo "-S                    Uninstall the HEMSaw MongoDB application"
     echo "-d                    Disable mongod, ods, and agent daemons"
-    echo "-D                    Uninstall Docker"
+    echo "-D                    Uninstall container runtime (Docker or Podman)"
     echo "-L Container_Name     Log repair for any NULL or ^@ char"
     echo "-h                    Print this Help."
 }
@@ -94,15 +95,12 @@ Uninstall_Mongodb(){
 }
 
 Uninstall_Docker(){
-    if $Use_Docker_Compose_v1; then
-        echo "Shutting down Docker containers using Docker Compose v1"
-        docker-compose down --volumes --remove-orphans
+    echo "Shutting down containers..."
+    $COMPOSE_CMD down --volumes --remove-orphans
 
-        echo "To fully uninstall Docker, run: 'apt purge -y docker-compose docker.io'"
+    if [[ "$CONTAINER_RUNTIME" == "podman" ]]; then
+        echo "To fully uninstall Podman, run: 'apt purge -y podman docker-compose-v2'"
     else
-        echo "Shutting down Docker containers using Docker Compose v2"
-        docker compose down --volumes --remove-orphans
-
         echo "To fully uninstall Docker, run: 'apt purge -y docker-compose-v2 docker.io'"
     fi
     echo "<<Done>>"
@@ -133,7 +131,7 @@ Uninstall_Daemon(){
 
 CleanLog(){
     # Get the log path for the specified container
-    log_path=$(docker inspect --format='{{.LogPath}}' "$container_name")
+    log_path=$($CONTAINER_RUNTIME inspect --format='{{.LogPath}}' "$container_name")
 
     # Check if the log path was successfully retrieved
     if [ -z "$log_path" ]; then
@@ -176,19 +174,7 @@ run_uninstall_devctl=false
 run_uninstall_mongodb=false
 run_uninstall_docker=false
 run_uninstall_daemon=false
-Use_Docker_Compose_v1=false
 clean_logs=false
-
-# Auto-detect Docker Compose version
-if docker compose version &> /dev/null; then
-    # Docker Compose v2 is available
-    Use_Docker_Compose_v1=false
-else
-    if command -v docker-compose &> /dev/null; then
-        # Docker Compose v1 is available
-        Use_Docker_Compose_v1=true
-    fi
-fi
 
 ############################################################
 # Process the input options. Add options as needed.        #
@@ -266,10 +252,9 @@ echo "uninstall MQTT Broker = "$run_uninstall_mqtt
 echo "uninstall ODS = "$run_uninstall_ods
 echo "uninstall Devctl = "$run_uninstall_devctl
 echo "uninstall Mongodb = "$run_uninstall_mongodb
-echo "uninstall Docker = "$run_uninstall_docker
+echo "uninstall container runtime = "$run_uninstall_docker
 echo "disable Systemctl Daemons = "$run_uninstall_daemon
-echo "Run Docker Compose V1 commands = " $Use_Docker_Compose_v1
-echo "Clean the docker log for container (" $container_name ") = " $clean_logs
+echo "Clean the container log for container (" $container_name ") = " $clean_logs
 
 echo ""
 if $clean_logs; then

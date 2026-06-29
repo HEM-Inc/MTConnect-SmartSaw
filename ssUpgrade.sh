@@ -2,6 +2,7 @@
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
+detect_container_runtime
 
 ############################################################
 # Help                                                     #
@@ -39,20 +40,20 @@ Help(){
 ############################################################
 # Function to install and run Docker
 RunDocker(){
-    if service_exists docker; then
-        echo "Shutting down any old Docker containers"
-        docker compose down
+    if command -v "$CONTAINER_RUNTIME" &> /dev/null; then
+        echo "Shutting down any old containers"
+        $COMPOSE_CMD down
 
-        echo "Pulling latest Docker images..."
-        docker compose pull
+        echo "Pulling latest images..."
+        $COMPOSE_CMD pull
 
-        echo "Starting up the Docker containers..."
-        docker compose up --remove-orphans -d
+        echo "Starting up the containers..."
+        $COMPOSE_CMD up --remove-orphans -d
     fi
 
     # Display logs
     echo "Displaying container logs..."
-    docker compose logs mtc_adapter mtc_agent mosquitto ods devctl mongodb
+    $COMPOSE_CMD logs mtc_adapter mtc_agent mosquitto ods devctl mongodb
 }
 
 
@@ -454,13 +455,22 @@ if [[ "$run_full_update" == true ]] && [[ "${Use_MQTT_Bridge:-false}" == "true" 
     run_update_mqtt_bridge=true
 fi
 
-# Require Docker Compose v2 - install if not present
+# Require Docker Compose v2 - install if not present (used by both docker and podman compose)
 if ! docker compose version &> /dev/null; then
     echo "Docker Compose v2 not found, installing docker-compose-v2..."
     apt update --fix-missing && apt install -y docker-compose-v2 --fix-missing
     apt clean
     if ! docker compose version &> /dev/null; then
-        echo "ERROR: Failed to install docker-compose-v2. Please install it manually: apt install docker-compose-v2"
+        echo "ERROR: Failed to install docker-compose-v2."
+        exit 1
+    fi
+fi
+
+# When using Podman, verify podman compose can find docker-compose-v2 as a provider
+if [[ "$CONTAINER_RUNTIME" == "podman" ]]; then
+    if ! podman compose version &> /dev/null; then
+        echo "ERROR: podman compose failed even though podman and docker-compose-v2 are both installed."
+        echo "Ensure Podman v4.7+ is installed and docker-compose-v2 is accessible in PATH."
         exit 1
     fi
 fi
@@ -538,10 +548,10 @@ if [[ ! -f ./devctl/config/$DevCTL_File ]]; then
     exit 1
 fi
 
-# Shutdown any old Docker containers before updating files
-if service_exists docker; then
-    echo "Shutting down any old Docker containers"
-    docker compose down
+# Shutdown any old containers before updating files
+if command -v "$CONTAINER_RUNTIME" &> /dev/null; then
+    echo "Shutting down any old containers"
+    $COMPOSE_CMD down
 fi
 echo ""
 
@@ -616,17 +626,17 @@ echo "Check to verify containers are running:"
 # created by this project's compose stack. Safer if other Docker projects
 # are ever added to the host.
 echo "Pruning dangling images from this project..."
-if docker image prune --filter "dangling=true" --force > /dev/null; then
+if $CONTAINER_RUNTIME image prune --filter "dangling=true" --force > /dev/null; then
     echo "Dangling image pruning completed successfully"
 else
     echo "No dangling images to prune or pruning failed"
 fi
 
-echo "Pruning unused Docker volumes..."
-if docker volume prune --force > /dev/null; then
+echo "Pruning unused volumes..."
+if $CONTAINER_RUNTIME volume prune --force > /dev/null; then
     echo "Volume pruning completed successfully"
 else
     echo "No volumes to prune or pruning failed"
 fi
 
-docker ps
+$CONTAINER_RUNTIME ps

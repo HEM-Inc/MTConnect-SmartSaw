@@ -137,7 +137,7 @@ services:
         max-size: "10m"
         max-file: "3"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONTAINER_SOCKET}:/var/run/docker.sock
       - /etc/timezone:/etc/timezone:ro
     environment:
       - DOCKER_API_VERSION=1.44

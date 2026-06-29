@@ -4,6 +4,53 @@
 # Shared library — sourced by ssInstall.sh and ssUpgrade.sh
 ############################################################
 
+# Detect the container runtime and set CONTAINER_RUNTIME, COMPOSE_CMD,
+# and CONTAINER_SOCKET. Honors a CONTAINER_RUNTIME already set in env.sh
+# so operators can pin one explicitly. Otherwise prefers Podman over Docker.
+detect_container_runtime() {
+    if [[ -n "${CONTAINER_RUNTIME:-}" ]]; then
+        # Operator pinned a runtime — install it if not present.
+        if ! command -v "$CONTAINER_RUNTIME" &> /dev/null; then
+            if [[ "$CONTAINER_RUNTIME" != "podman" && "$CONTAINER_RUNTIME" != "docker" ]]; then
+                echo "ERROR: CONTAINER_RUNTIME is set to '$CONTAINER_RUNTIME' which is not a supported value (podman or docker)." >&2
+                exit 1
+            fi
+            echo "CONTAINER_RUNTIME pinned to '$CONTAINER_RUNTIME' but not found. Installing..."
+            apt update --fix-missing && apt install -y "$CONTAINER_RUNTIME" --fix-missing
+            apt clean
+            if ! command -v "$CONTAINER_RUNTIME" &> /dev/null; then
+                echo "ERROR: Failed to install $CONTAINER_RUNTIME." >&2
+                exit 1
+            fi
+        fi
+    elif command -v podman &> /dev/null; then
+        CONTAINER_RUNTIME=podman
+    elif command -v docker &> /dev/null; then
+        CONTAINER_RUNTIME=docker
+    else
+        echo "Neither podman nor docker found. Installing podman..."
+        apt update --fix-missing && apt install -y podman --fix-missing
+        apt clean
+        if ! command -v podman &> /dev/null; then
+            echo "ERROR: Failed to install podman. Please install a container runtime manually." >&2
+            exit 1
+        fi
+        CONTAINER_RUNTIME=podman
+    fi
+
+    if [[ "$CONTAINER_RUNTIME" == "podman" ]]; then
+        COMPOSE_CMD="podman compose"
+        CONTAINER_SOCKET="/run/podman/podman.sock"
+    else
+        COMPOSE_CMD="docker compose"
+        CONTAINER_SOCKET="/var/run/docker.sock"
+    fi
+
+    export CONTAINER_RUNTIME COMPOSE_CMD CONTAINER_SOCKET
+    echo "Container runtime: $CONTAINER_RUNTIME"
+}
+
+
 # Check if a systemd service exists.
 service_exists() {
     local n=$1

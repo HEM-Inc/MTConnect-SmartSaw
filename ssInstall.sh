@@ -2,6 +2,7 @@
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
+detect_container_runtime
 acquire_upgrade_lock
 
 ############################################################
@@ -278,14 +279,22 @@ if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
     fi
 fi
 
-# Require Docker Compose v2 - install if not present
+# Require Docker Compose v2 - install if not present (used by both docker and podman compose)
 if ! docker compose version &> /dev/null; then
     echo "Docker Compose v2 not found, installing docker-compose-v2..."
     apt update --fix-missing && apt install -y docker-compose-v2 --fix-missing
     apt clean
     if ! docker compose version &> /dev/null; then
         echo "ERROR: Failed to install docker-compose-v2."
-        echo "Please install it manually: apt install docker-compose-v2 on Ubuntu"
+        exit 1
+    fi
+fi
+
+# When using Podman, verify podman compose can find docker-compose-v2 as a provider
+if [[ "$CONTAINER_RUNTIME" == "podman" ]]; then
+    if ! podman compose version &> /dev/null; then
+        echo "ERROR: podman compose failed even though podman and docker-compose-v2 are both installed."
+        echo "Ensure Podman v4.7+ is installed and docker-compose-v2 is accessible in PATH."
         exit 1
     fi
 fi
@@ -329,9 +338,9 @@ if [[ ! -f ./devctl/config/"$DevCTL_File" ]]; then
     exit 1
 fi
 
-if service_exists docker; then
-    echo "Shutting down any old Docker containers"
-    docker compose down
+if command -v "$CONTAINER_RUNTIME" &> /dev/null; then
+    echo "Shutting down any old containers"
+    $COMPOSE_CMD down
 fi
 echo ""
 
@@ -342,9 +351,9 @@ InstallDevctl
 InstallMongodb
 echo ""
 
-echo "Starting up the Docker image"
-docker compose up --remove-orphans -d
-docker compose logs
+echo "Starting up the containers"
+$COMPOSE_CMD up --remove-orphans -d
+$COMPOSE_CMD logs
 
 echo ""
 /etc/mongodb/venv/bin/python /etc/mongodb/data/jobs_parts_init.py
@@ -353,4 +362,4 @@ echo ""
 
 echo ""
 echo "Check to verify containers are running:"
-docker ps
+$CONTAINER_RUNTIME ps
