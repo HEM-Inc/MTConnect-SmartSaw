@@ -84,17 +84,24 @@ dir_needs_update() {
 # Create /etc/mongodb/venv and install Python deps if not already present.
 ensure_venv() {
     if [ ! -x /etc/mongodb/venv/bin/python ]; then
-        if ! dpkg -s python3-venv >/dev/null 2>&1; then
-            apt-get update && apt-get install -y python3-venv || { echo "ERROR: Failed to install python3-venv"; return 1; }
+        if ! dpkg -s python3-venv python3-pip >/dev/null 2>&1; then
+            apt-get update && apt-get install -y python3-venv python3-pip || { echo "ERROR: Failed to install python3-venv/python3-pip"; return 1; }
         fi
         python3 -m venv /etc/mongodb/venv || { echo "ERROR: Failed to create venv at /etc/mongodb/venv"; return 1; }
+    fi
+
+    # Some distro python builds omit ensurepip's bundled wheels even with
+    # python3-venv installed (e.g. Install-Recommends disabled), leaving the
+    # venv without pip. Bootstrap it directly rather than failing.
+    if ! /etc/mongodb/venv/bin/python -m pip --version >/dev/null 2>&1; then
+        /etc/mongodb/venv/bin/python -m ensurepip --upgrade || { echo "ERROR: Failed to bootstrap pip in venv"; return 1; }
     fi
 
     # Check independently of venv creation above: a venv left over from a
     # prior failed attempt (e.g. python3-venv missing at the time) can have
     # bin/python but no pymongo, which would otherwise go unnoticed forever.
     if ! /etc/mongodb/venv/bin/python -c "import pymongo" >/dev/null 2>&1; then
-        /etc/mongodb/venv/bin/pip install --quiet pymongo || { echo "ERROR: Failed to install pymongo"; return 1; }
+        /etc/mongodb/venv/bin/python -m pip install --quiet pymongo || { echo "ERROR: Failed to install pymongo"; return 1; }
     fi
 }
 
