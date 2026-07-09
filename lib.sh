@@ -83,8 +83,17 @@ dir_needs_update() {
 
 # Create /etc/mongodb/venv and install Python deps if not already present.
 ensure_venv() {
-    if [ ! -f /etc/mongodb/venv/bin/python ]; then
+    if [ ! -x /etc/mongodb/venv/bin/python ]; then
+        if ! dpkg -s python3-venv >/dev/null 2>&1; then
+            apt-get update && apt-get install -y python3-venv || { echo "ERROR: Failed to install python3-venv"; return 1; }
+        fi
         python3 -m venv /etc/mongodb/venv || { echo "ERROR: Failed to create venv at /etc/mongodb/venv"; return 1; }
+    fi
+
+    # Check independently of venv creation above: a venv left over from a
+    # prior failed attempt (e.g. python3-venv missing at the time) can have
+    # bin/python but no pymongo, which would otherwise go unnoticed forever.
+    if ! /etc/mongodb/venv/bin/python -c "import pymongo" >/dev/null 2>&1; then
         /etc/mongodb/venv/bin/pip install --quiet pymongo || { echo "ERROR: Failed to install pymongo"; return 1; }
     fi
 }
