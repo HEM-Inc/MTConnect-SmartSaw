@@ -32,6 +32,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 # [Released]
 
+##[4.2.0] - 2026/07/23 - emprarthanak
+
+### Added
+
+- Added IPC Dashboard service management script, service file and configs 
+
 ## [4.1.0] - 2026/06/19 - emnidhish
 
 ### Changed

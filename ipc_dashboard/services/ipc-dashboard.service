@@ -1,0 +1,25 @@
+[Unit]
+Description=IPC Dashboard Server
+After=network.target
+ 
+[Service]
+Type=simple
+User=hemsaw
+Group=hemsaw
+ 
+WorkingDirectory=IPCDB_WORKING_DIR
+ExecStart=IPC_BINARY
+ 
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=5
+ 
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ipc-dashboard
+ 
+LimitNOFILE=65536
+ 
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+{
+    "deployment_path": "~/MTConnect-SmartSaw",
+    "name": "IPC Dashboard",
+    "type": "fastapi",
+    "timezone": "America/Chicago",
+    "logger_config": {
+        "logging_level": "INFO",
+        "file_logging": "No"
+    },
+    "fastapi": {
+        "enable": "Yes",
+        "host": "0.0.0.0",
+        "port": 8000,
+        "domain_names": [],
+        "security": {
+            "enable": "No",
+            "type": "ssl",
+            "ca_file": "ipc_dashboard/certs/ca.crt",
+            "cert_file": "ipc_dashboard/certs/server.crt",
+            "key_file": "ipc_dashboard/certs/server.key"
+        }
+    },
+    "certs": {
+        "ca_cert_path": "/etc/mqtt/certs/ca.crt"
+    }
+}
