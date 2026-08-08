@@ -1,24 +1,28 @@
 LICENSE AGREEMENT HE&MSAW SOFTWARE
-Revision (January 24, 2018)
+Original Revision: January 24, 2018 | Last Revised: August 7, 2026
 
-CUSTOMER’S AGREEMENT TO THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT ARE CONFIRMED BY USE OF THE PERAINING CODE OR USE OF THE EQUIPMENT
+CUSTOMER’S AGREEMENT TO THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT ARE CONFIRMED BY USE OF THE PERTAINING CODE OR USE OF THE EQUIPMENT
 PERTAINING THERETO.
 
-HE&MSAW SAW CONTROL PROGRAM ("Software")
+HE&MSAW MONITORING SOFTWARE ("Software")
 
-1.	License. In connection herewith HEM, INC. (“HE&MSAW “).  HE&MSAW has developed a SAW MONITERING PROGRAM, using MTConnect Software for
-    monitoring of the Saw ("Software").  Customer ("Customer") has requested that HE&MSAW grant it a single-user license (this “License”) to
-    use the Software for the sole purpose of managing its production monitering requirements in connection with use of the Saw. (“Purpose”).
+1.	License. In connection herewith HEM, INC. (“HE&MSAW “).  HE&MSAW has developed a MACHINE MONITORING PROGRAM, using MTConnect Software for
+    monitoring of a Machine ("Software").  "Machine" means the saw, machine tool, or other manufacturing equipment on which Customer installs
+    the Software, whether newly purchased from HE&MSAW, retrofitted to Customer's existing or previously-installed equipment, or used in
+    connection with an application other than a saw, and regardless of the Machine's manufacturer.  Customer ("Customer") has requested that
+    HE&MSAW grant it a single-user license (this “License”) to use the Software for the sole purpose of managing its production monitoring
+    requirements in connection with use of the Machine. (“Purpose”).  Any changes, alterations, additions, translations, or derivative works
+    Customer makes to the Software with HE&MSAW's prior written consent under Section 2 are referred to in this License as "Modifications."
 
-Single User License Grant: HEM, Inc. grants to Customer ("Customer") a nonexclusive and nontransferable license to monitor the HE&MSAW Software,
-    in its current form, solely on a single central processing control unit manufactured by HE&MSAW and owned or leased by Customer or otherwise
-    embedded in equipment and related accessories(“Equipment”) provided by HE&MSAW.  HE&MSAW assumes no obligation to provide Customer with any
-    and all future modification, alterations and improvements to the Software.
+Single User License Grant: HEM, Inc. grants to Customer ("Customer") a nonexclusive and nontransferable license to use the HE&MSAW Software,
+    in its current form, solely on a single central processing control unit installed on, or embedded in, the Machine and related accessories
+    (“Equipment”) owned or leased by Customer, whether the Equipment is manufactured or provided by HE&MSAW or by a third party.  HE&MSAW
+    assumes no obligation to provide Customer with any and all future modification, alterations and improvements to the Software.
 
 2.	Payment. Customer may only use the programs contained in the Software and make Modifications for its own risk solely for the disclosed Purpose
-    for which HE&MSAW has received the total purchase price for the Equipment. In the event Customer fails to pay the total purchase price when due,
-    HE&MSAW at its option, may terminate this license for failure to receive the balance due and suspend use of the Software pending receipt of
-    payment of the total purchase price of the Equipment.
+    for which HE&MSAW has received the total amount due for the Software (the "License Fee"), whether or not the License Fee is bundled with the
+    purchase price of any Equipment. In the event Customer fails to pay the License Fee when due, HE&MSAW at its option, may terminate this
+    license for failure to receive the balance due and suspend use of the Software pending receipt of payment of the License Fee.
 
 CUSTOMER SHALL NOT COPY, IN WHOLE OR IN PART, SOFTWARE OR DOCUMENTATION EXCEPT FOR ITS SOLE PURPOSE; OTHERWISE, MODIFY THE SOFTWARE WITHOUT THE
     CONSENT OF HE&MSAW; REVERSE COMPILE OR REVERSE ASSEMBLE ALL OR ANY PORTION OF THE SOFTWARE; OR RENT, LEASE, DISTRIBUTE, SELL, OR CREATE
@@ -28,17 +32,18 @@ CUSTOMER SHALL NOT COPY, IN WHOLE OR IN PART, SOFTWARE OR DOCUMENTATION EXCEPT F
     changes thereto, and the specific design and structure of individual programs, constitute trade secrets and/or copyrighted material is the
     property of HE&MSAW.  Customer agrees not to disclose, provide, or otherwise make available such trade secrets or copyrighted material in
     any form to any third party without the prior written consent of HE&MSAW. Customer agrees to implement reasonable security measures to protect
-    such trade secrets and copyrighted material. Upon request Customer agrees2 to provide HE&MSAW with a copy of any and all Modifications to the
+    such trade secrets and copyrighted material. Upon request Customer agrees to provide HE&MSAW with a copy of any and all Modifications to the
     Software. Title to Software including any Modifications, alterations, additions, improvements or changes thereto and documentation shall remain
     solely with HE&MSAW.
 
 4.	Limited Warranty, Release of Liability and Assumption of Risk. HE&MSAW warrants that for a period of ninety (90) days from the date of
-    shipment from HE&MSAW: (i) the media on which the Software is furnished will be free of defects in materials and workmanship under normal
-    use; and (ii) the Software substantially conforms to its published specifications. Except for the foregoing, the Software is provided AS IS.
-    This limited warranty extends only to Customer as the original licensee. Customer's exclusive remedy and the entire liability of HE&MSAW and
-    its suppliers under this limited warranty will be, at HE&MSAW or its service center's option, repair, replacement, or refund of the Software
-    if reported (or, upon request, returned) to the party supplying the Software to Customer. In no event does HE&MSAW warrant that the Software
-    is error free or that Customer will be able to operate the Software, with or without Modifications without problems or interruptions.
+    delivery or installation of the Software, whichever is earlier: (i) the media on which the Software is furnished will be free of defects in
+    materials and workmanship under normal use; and (ii) the Software substantially conforms to its published specifications. Except for the
+    foregoing, the Software is provided AS IS. This limited warranty extends only to Customer as the original licensee. Customer's exclusive
+    remedy and the entire liability of HE&MSAW and its suppliers under this limited warranty will be, at HE&MSAW or its service center's option,
+    repair, replacement, or refund of the Software if reported (or, upon request, returned) to the party supplying the Software to Customer.
+    In no event does HE&MSAW warrant that the Software is error free or that Customer will be able to operate the Software, with or without
+    Modifications without problems or interruptions.
 
 This warranty does not apply if the software (a) has been altered, except by HE&MSAW, (b) has not been installed, operated, repaired, or maintained
     in accordance with instructions supplied by HE&MSAW, (c) has been subjected to abnormal physical or electrical stress, misuse, negligence, or
@@ -54,12 +59,12 @@ IN NO EVENT WILL HE&MSAW OR ITS SUPPLIERS BE LIABLE FOR ANY LOST REVENUE, PROFIT
     in contract, tort (including negligence), or otherwise, exceed the price paid by Customer. The foregoing limitations shall apply even if the
     above-stated warranty fails of its essential purpose.
 
-CUSTOMER, FOR ITSELF, ITS EMPLOYEES, AGENTS, AND INVITEES ASSUMES ALL RISK IN THE USE OF THE SAW WITH MODIFICATION AND WAIVES ANY AND ALL CLAIMS,
-    INCLUDING ANY COST EXPENSE, PERSONAL INJURY, DEATH AND PROPERTY DAMAGE THAT IT MAY HAVE OR MAY HAVE IN THE FUTURE AGAINST HE&MSAW, ITS
-    EMPLOYEES AND AGENTS PERTAINING TO OR ARISING IN CONNECTION WITH USE OF THE SAW USING THE MODIFICATIONS. CUSTOMER AGREES TO INDEMNIFY,
-    HOLD HARMLESS AND DEFEND HE&MSAW FROM AND AGAINST PERTAINING TO OR ARISING IN CONNECTION WITH USE OF THE SAW USING THE MODIFICATIONS.
+CUSTOMER, FOR ITSELF, ITS EMPLOYEES, AGENTS, AND INVITEES ASSUMES ALL RISK IN THE USE OF THE MACHINE WITH MODIFICATION AND WAIVES ANY AND ALL
+    CLAIMS, INCLUDING ANY COST EXPENSE, PERSONAL INJURY, DEATH AND PROPERTY DAMAGE THAT IT MAY HAVE OR MAY HAVE IN THE FUTURE AGAINST HE&MSAW, ITS
+    EMPLOYEES AND AGENTS PERTAINING TO OR ARISING IN CONNECTION WITH USE OF THE MACHINE USING THE MODIFICATIONS. CUSTOMER AGREES TO INDEMNIFY,
+    HOLD HARMLESS AND DEFEND HE&MSAW FROM AND AGAINST PERTAINING TO OR ARISING IN CONNECTION WITH USE OF THE MACHINE USING THE MODIFICATIONS.
     ANY AND ALL CLAIMS, INCLUDING ANY COST EXPENSE, PERSONAL INJURY, DEATH AND PROPERTY DAMAGE TO ANY THIRD-PARTY PERTAINING TO OR ARISING IN
-    CONNECTION WITH USE OF THE SAW USING THE MODIFICATIONS
+    CONNECTION WITH USE OF THE MACHINE USING THE MODIFICATIONS
 
 5.	Term. This License is effective until terminated. Customer may terminate this License at any time by providing HE&MSAW all copies of the
     Modifications and destroying all copies of Software including any documentation. This License will terminate immediately without notice from
@@ -68,5 +73,19 @@ CUSTOMER, FOR ITSELF, ITS EMPLOYEES, AGENTS, AND INVITEES ASSUMES ALL RISK IN TH
 6.	Governing Law. This License shall be governed by and construed in accordance with the laws of the State of Oklahoma, United States of America
     as if performed wholly within the state and without giving effect to the principles of conflict of laws. If any portion hereof is found to be
     void or unenforceable, the remaining provisions of this License shall remain in full force and effect. This License constitutes the entire
-    License between the parties with respect to the use of the Software. This Agreement shall supplement the HE&M Terms and Conditions governing
-    the sale of the Saw.
+    License between the parties with respect to the use of the Software. This Agreement shall supplement any separate HE&M Terms and Conditions
+    governing the sale of the Equipment or Software, to the extent such terms apply to Customer's purchase.
+
+7.	Third-Party Components. The Software is used together with certain separately-licensed third-party and open-source components that are not
+    owned by HE&MSAW and are not licensed to Customer under this Agreement. Those components remain governed by their own respective license
+    terms, including, without limitation:
+
+    - MTConnect Agent (Apache License, Version 2.0) — provided by the MTConnect Institute
+    - Eclipse Mosquitto (dual-licensed under the Eclipse Public License 2.0 and the Eclipse Distribution License 1.0)
+    - MongoDB Community Server (Server Side Public License, SSPL) — deployed by Customer for internal use only and not offered as a
+      service to third parties
+    - PyMongo (Apache License, Version 2.0)
+    - Watchtower (Apache License, Version 2.0)
+
+    Customer's use of these components is subject to their respective license terms in addition to, and not in place of, this Agreement.
+    HE&MSAW makes no warranty with respect to third-party components beyond what is provided in their respective licenses.
