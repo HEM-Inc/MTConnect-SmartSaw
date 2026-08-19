@@ -35,6 +35,13 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 # [Released]
 
+##[4.2.1] - 2026/08/19 - emprarthanak
+
+### Changed
+
+- Updated IPC Dashboard service management script with safer binary updates, service user ownership handling, and restricted restart permissions
+- Added binary release repository configuration in IPC Dashboard config
+
 ##[4.2.0] - 2026/07/23 - emprarthanak
 
 ### Added

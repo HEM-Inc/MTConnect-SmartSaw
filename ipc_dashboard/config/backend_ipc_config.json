@@ -1,5 +1,9 @@
 {
     "deployment_path": "~/MTConnect-SmartSaw",
+    "binary_release_repository" : {
+	"repo_name": "ipc-dashboard-release",
+	"repo_owner": "HEM-Inc"
+    },
     "name": "IPC Dashboard",
     "type": "fastapi",
     "timezone": "America/Chicago",
