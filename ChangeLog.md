@@ -26,7 +26,10 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+### Changed
 
+- Bumped MTConnect schema from 2.7 to 2.8 in `agent.cfg` and all device XML config files.
+- Generalized the LICENSE to cover monitoring of any machine or equipment, clarified licensing/payment terms, corrected typos, and added a section disclosing third-party and open-source component licenses.
 
 =======
 
