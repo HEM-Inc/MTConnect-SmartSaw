@@ -7,9 +7,11 @@ SERVICE_FILE="${SERVICE_NAME}.service"
 SYSTEMD_PATH="/etc/systemd/system"
 
 SMARTSAW_DIR="$(cd "$(dirname "$0")" && pwd)"
+CONFIG_FILE="${SMARTSAW_DIR}/ipc_dashboard/config/backend_ipc_config.json"
 
-GITHUB_OWNER="HEM-Inc"
-GITHUB_REPO="ipc-dashboard-release"
+# Populated by load_release_repo_config() from CONFIG_FILE.
+GITHUB_OWNER=""
+GITHUB_REPO=""
 
 # Allows the IPC Dashboard backend to restart only this service.
 SUDOERS_FILE="/etc/sudoers.d/ipc-dashboard-update"
@@ -52,6 +54,38 @@ if [[ "$(id -u)" -ne 0 ]]; then
     echo "ERROR: Please run using sudo."
     exit 1
 fi
+
+
+############################################################
+# Load release repository config
+#
+# Reads binary_release_repository.repo_owner/repo_name from
+# CONFIG_FILE into GITHUB_OWNER/GITHUB_REPO.
+############################################################
+
+load_release_repo_config() {
+
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "ERROR: 'jq' is required but not installed."
+        echo "  Install it, e.g.: sudo apt install jq"
+        return 1
+    fi
+
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        echo "ERROR: Config file not found:"
+        echo "  $CONFIG_FILE"
+        return 1
+    fi
+
+    GITHUB_OWNER="$(jq -r '.binary_release_repository.repo_owner // empty' "$CONFIG_FILE")"
+    GITHUB_REPO="$(jq -r '.binary_release_repository.repo_name // empty' "$CONFIG_FILE")"
+
+    if [[ -z "$GITHUB_OWNER" || -z "$GITHUB_REPO" ]]; then
+        echo "ERROR: binary_release_repository.repo_owner/repo_name missing from:"
+        echo "  $CONFIG_FILE"
+        return 1
+    fi
+}
 
 
 # Get IPC Dashboard service user
@@ -114,19 +148,17 @@ set_ipc_ownership() {
 
     local service_user="$1"
     local service_group="$2"
+    local bin_dir="$3"
 
-    IPC_DIR="${SMARTSAW_DIR}/ipc_dashboard"
-    BIN_DIR="${IPC_DIR}/bin"
-
-    if [[ ! -d "$BIN_DIR" ]]; then
+    if [[ ! -d "$bin_dir" ]]; then
         echo "ERROR: IPC Dashboard bin directory not found:"
-        echo "  $BIN_DIR"
+        echo "  $bin_dir"
         return 1
     fi
 
     echo "Setting binary directory ownership..."
 
-    if ! chown -R "${service_user}:${service_group}" "$BIN_DIR"; then
+    if ! chown -R "${service_user}:${service_group}" "$bin_dir"; then
         echo "ERROR: Failed to set binary directory ownership."
         return 1
     fi
@@ -189,60 +221,84 @@ EOF
 
 download_binary() {
 
-    IPC_DIR="${SMARTSAW_DIR}/ipc_dashboard"
-    BIN_DIR="${IPC_DIR}/bin"
-    IPC_BINARY="${BIN_DIR}/ipc-dashboard"
-
-    local temp_binary="${IPC_BINARY}.download"
-    mkdir -p "$BIN_DIR"
-
     local version="${1:-latest}"
+    local bin_dir="$2"
+    local ipc_binary="$3"
+    local release_url
+    local release_json
+    local download_url
+    local expected_digest
+    local actual_digest
+    local temp_binary
+
+    if ! load_release_repo_config; then
+        return 1
+    fi
+
+    mkdir -p "$bin_dir"
 
     if [[ "$version" != "latest" ]]; then
-        RELEASE_URL="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${version}"
-
-        if ! curl -fsSL "$RELEASE_URL" > /dev/null; then
-            echo "ERROR: Release '${version}' does not exist."
-            return 1
-        fi
-
-        DOWNLOAD_URL="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/download/${version}/ipc-dashboard"
-
+        release_url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/tags/${version}"
     else
+        release_url="https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest"
+    fi
 
-        DOWNLOAD_URL="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest/download/ipc-dashboard"
+    if ! release_json="$(curl -fsSL "$release_url")"; then
+        echo "ERROR: Release '${version}' does not exist."
+        return 1
+    fi
 
+    download_url="$(echo "$release_json" | jq -r '.assets[] | select(.name == "ipc-dashboard") | .browser_download_url')"
+    expected_digest="$(echo "$release_json" | jq -r '.assets[] | select(.name == "ipc-dashboard") | .digest')"
+
+    if [[ -z "$download_url" ]]; then
+        echo "ERROR: No 'ipc-dashboard' asset found for release '${version}'."
+        return 1
     fi
 
     echo
     echo "Downloading IPC Dashboard ${version}..."
-    echo "$DOWNLOAD_URL"
+    echo "$download_url"
     echo
 
     # Download first to a temporary file.
-    # Existing binary remains untouched if download fails.
-    rm -f "$temp_binary"
+    # Existing binary remains untouched if download or verification fails.
+    temp_binary="$(mktemp "${bin_dir}/.ipc-dashboard.XXXXXX")"
 
-    if ! curl -fL -o "$temp_binary" "$DOWNLOAD_URL"; then
+    if ! curl -fL -o "$temp_binary" "$download_url"; then
         echo "ERROR: Failed to download binary."
         rm -f "$temp_binary"
         return 1
     fi
 
+    if [[ -n "$expected_digest" && "$expected_digest" != "null" ]]; then
+        actual_digest="sha256:$(sha256sum "$temp_binary" | awk '{print $1}')"
+
+        if [[ "$actual_digest" != "$expected_digest" ]]; then
+            echo "ERROR: Downloaded binary failed checksum verification."
+            echo "  Expected: $expected_digest"
+            echo "  Actual:   $actual_digest"
+            rm -f "$temp_binary"
+            return 1
+        fi
+
+        echo "Checksum verified."
+    else
+        echo "WARNING: No checksum published for this release; skipping verification."
+    fi
+
     chmod +x "$temp_binary"
 
-    # Replace the binary only after a successful download.
-    if ! mv -f "$temp_binary" "$IPC_BINARY"; then
+    # Replace the binary only after a successful, verified download.
+    if ! mv -f "$temp_binary" "$ipc_binary"; then
         echo "ERROR: Failed to replace IPC Dashboard binary."
         rm -f "$temp_binary"
         return 1
     fi
 
-    chmod +x "$IPC_BINARY"
-
     echo
     echo "IPC Dashboard ${version} installed successfully."
-    echo "Binary: $IPC_BINARY"
+    echo "Binary: $ipc_binary"
 
     return 0
 }
@@ -258,12 +314,11 @@ install_service() {
     local user_info
     local service_user
     local service_group
-    RESOLVED_SERVICE="/tmp/${SERVICE_FILE}.resolved"
-
-    IPC_DIR="${SMARTSAW_DIR}/ipc_dashboard"
-    BIN_DIR="${IPC_DIR}/bin"
-    IPC_BINARY="${BIN_DIR}/ipc-dashboard"
-    LOCAL_SERVICE_PATH="${IPC_DIR}/services/${SERVICE_FILE}"
+    local ipc_dir="${SMARTSAW_DIR}/ipc_dashboard"
+    local bin_dir="${ipc_dir}/bin"
+    local ipc_binary="${bin_dir}/ipc-dashboard"
+    local local_service_path="${ipc_dir}/services/${SERVICE_FILE}"
+    local resolved_service
 
     # Determine service user
     user_info="$(get_service_user)"
@@ -280,20 +335,20 @@ install_service() {
     echo "IPC Dashboard service group: ${service_group}"
 
     # Download binary
-    if ! download_binary "$version"; then
+    if ! download_binary "$version" "$bin_dir" "$ipc_binary"; then
         echo "ERROR: IPC Dashboard binary download failed."
         return 1
     fi
 
-    if [[ ! -x "$IPC_BINARY" ]]; then
+    if [[ ! -x "$ipc_binary" ]]; then
         echo "ERROR: Binary missing or not executable:"
-        echo "  $IPC_BINARY"
+        echo "  $ipc_binary"
         return 1
     fi
 
     # Set ownership
     # Allows the Python backend to write/update the binary.
-    if ! set_ipc_ownership "$service_user" "$service_group"; then
+    if ! set_ipc_ownership "$service_user" "$service_group" "$bin_dir"; then
         return 1
     fi
 
@@ -303,40 +358,42 @@ install_service() {
     fi
 
     # Install/update systemd service
-    if [[ ! -f "$LOCAL_SERVICE_PATH" ]]; then
+    if [[ ! -f "$local_service_path" ]]; then
         echo "ERROR: Service template not found:"
-        echo "  $LOCAL_SERVICE_PATH"
+        echo "  $local_service_path"
         return 1
     fi
+
+    resolved_service="$(mktemp "/tmp/${SERVICE_FILE}.XXXXXX")"
 
     if ! sed \
-        -e "s|IPCDB_WORKING_DIR|${IPC_DIR}|g" \
-        -e "s|IPC_BINARY|${IPC_BINARY}|g" \
-        "$LOCAL_SERVICE_PATH" \
-        > "$RESOLVED_SERVICE"; then
+        -e "s|IPCDB_WORKING_DIR|${ipc_dir}|g" \
+        -e "s|IPC_BINARY|${ipc_binary}|g" \
+        "$local_service_path" \
+        > "$resolved_service"; then
 
         echo "ERROR: Failed to generate systemd service file."
-        rm -f "$RESOLVED_SERVICE"
+        rm -f "$resolved_service"
         return 1
     fi
 
-    if files_differ "$RESOLVED_SERVICE" "${SYSTEMD_PATH}/${SERVICE_FILE}"; then
+    if files_differ "$resolved_service" "${SYSTEMD_PATH}/${SERVICE_FILE}"; then
 
         echo "Installing systemd service..."
 
-        if ! cp "$RESOLVED_SERVICE" "${SYSTEMD_PATH}/${SERVICE_FILE}"; then
+        if ! cp "$resolved_service" "${SYSTEMD_PATH}/${SERVICE_FILE}"; then
             echo "ERROR: Failed to install systemd service."
-            rm -f "$RESOLVED_SERVICE"
+            rm -f "$resolved_service"
             return 1
         fi
 
         chmod 644 "${SYSTEMD_PATH}/${SERVICE_FILE}"
 
-	if ! systemctl daemon-reload; then
-	    echo "ERROR: Failed to reload systemd configuration."
-	    rm -f "$RESOLVED_SERVICE"
-	    return 1
-	fi
+        if ! systemctl daemon-reload; then
+            echo "ERROR: Failed to reload systemd configuration."
+            rm -f "$resolved_service"
+            return 1
+        fi
 
     else
 
@@ -344,7 +401,7 @@ install_service() {
 
     fi
 
-    rm -f "$RESOLVED_SERVICE"
+    rm -f "$resolved_service"
 
     # Enable service
     if ! systemctl is-enabled --quiet "$SERVICE_NAME"; then
@@ -464,10 +521,10 @@ case "$OPTION" in
         fi
 
         if ! restart_service; then
-	    echo "ERROR: Failed to restart IPC Dashboard service."
-	    exit 1
+            echo "ERROR: Failed to restart IPC Dashboard service."
+            exit 1
         fi
-	;;
+        ;;
 
     -h)
         Help

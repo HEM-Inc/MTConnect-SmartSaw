@@ -93,40 +93,24 @@ The dashboard is **optional** in the current release. It is not installed automa
 ### Prerequisites
 
 - Ubuntu 20.04+ (or compatible Linux distribution)
-- Python 3.10+
-- [`uv`](https://docs.astral.sh/uv/) package manager
+- `curl` and `jq` (used by `dashService.sh` to fetch and verify releases)
 - Docker and Docker Compose V2 installed
 
-### Dependency Management
-
-Dependencies are managed with `uv` via `pyproject.toml`. This is the single source of truth — there is no `requirements.txt`.
-
-```bash
-# Install / sync the virtual environment
-cd ipc_dashboard
-uv sync
-
-# Add a new dependency
-uv add <package>
-
-# Show installed packages
-uv pip list
-```
-
-The `.venv` is created automatically by `uv sync` inside `ipc_dashboard/`. The systemd service runs via `uv run fastapi_main.py`, which uses this environment without needing to activate it explicitly.
+The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from the release repository configured in `config/backend_ipc_config.json` (`binary_release_repository`).
 
 ### Manual Install
 
 ```bash
-cd /path/to/MTConnect-SmartSaw/ipc_dashboard
-sudo bash ipc_service.sh -U
+cd /path/to/MTConnect-SmartSaw
+sudo ./dashService.sh -U
 ```
 
 This will:
-1. Detect the `uv` binary (PATH, pip module, or pipx)
-2. Resolve the backend working directory (`ipc_dashboard/backend/fastapi`)
-3. Generate and install `ipc-dashboard.service` to `/etc/systemd/system/`
-4. Start the service
+1. Determine the service user/group to run as
+2. Download the latest (or requested) `ipc-dashboard` binary release and verify its checksum
+3. Set ownership on `ipc_dashboard/bin/` so the backend can self-update
+4. Configure a restricted, passwordless `sudo systemctl restart ipc-dashboard.service` rule for the backend
+5. Generate and install `ipc-dashboard.service` to `/etc/systemd/system/`, then enable and start it
 
 ### Verify
 
@@ -143,33 +127,33 @@ Then open a browser to `http://<ipc-ip>:8000/`.
 ## Service Management
 
 ```bash
-cd /path/to/MTConnect-SmartSaw/ipc_dashboard
+cd /path/to/MTConnect-SmartSaw
 
 # Install / update service file and reload systemd
-sudo bash ipc_service.sh -I
+sudo ./dashService.sh -I
 
 # Start
-sudo bash ipc_service.sh -S
+sudo ./dashService.sh -S
 
 # Stop
-sudo bash ipc_service.sh -T
+sudo ./dashService.sh -T
 
 # Restart
-sudo bash ipc_service.sh -R
+sudo ./dashService.sh -R
 
 # Full update (install + restart)
-sudo bash ipc_service.sh -U
+sudo ./dashService.sh -U
 
 # Display help
-sudo bash ipc_service.sh -h
+sudo ./dashService.sh -h
 ```
 
 ### systemd Unit File
 
 The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
-- **User/Group**: `hemsaw` (created if missing)
-- **Working Directory**: `ipc_dashboard/backend/fastapi`
-- **ExecStart**: `uv run fastapi_main.py`
+- **User/Group**: `hemsaw`
+- **Working Directory**: `ipc_dashboard/`
+- **ExecStart**: `ipc_dashboard/bin/ipc-dashboard` (the downloaded binary)
 - **Restart**: Always, with 5-second backoff
 - **Logs**: Written to journald (`journalctl -u ipc-dashboard -f`)
 
@@ -179,35 +163,42 @@ The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
 
 ### Backend Configuration
 
-`backend/config/backend_ipc_config.json`:
+`config/backend_ipc_config.json`:
 
 ```json
 {
-  "name": "IPC Dashboard",
-  "type": "fastapi",
-  "timezone": "America/Chicago",
-  "logger_config": {
-    "logging_level": "INFO",
-    "file_logging": "No"
-  },
-  "fastapi": {
-    "enable": "Yes",
-    "host": "0.0.0.0",
-    "port": 8000,
-    "domain_names": [],
-    "security": {
-      "enable": "No",
-      "type": "ssl",
-      "ca_file": "",
-      "cert_file": "",
-      "key_file": ""
+    "deployment_path": "~/MTConnect-SmartSaw",
+    "binary_release_repository" : {
+        "repo_name": "ipc-dashboard-release",
+        "repo_owner": "HEM-Inc"
+    },
+    "name": "IPC Dashboard",
+    "type": "fastapi",
+    "timezone": "America/Chicago",
+    "logger_config": {
+        "logging_level": "INFO",
+        "file_logging": "No"
+    },
+    "fastapi": {
+        "enable": "Yes",
+        "host": "0.0.0.0",
+        "port": 8000,
+        "domain_names": [],
+        "security": {
+            "enable": "No",
+            "type": "ssl",
+            "ca_file": "ipc_dashboard/certs/ca.crt",
+            "cert_file": "ipc_dashboard/certs/server.crt",
+            "key_file": "ipc_dashboard/certs/server.key"
+        }
+    },
+    "certs": {
+        "ca_cert_path": "/etc/mqtt/certs/ca.crt"
     }
-  },
-  "certs": {
-    "ca_cert_path": "/etc/mqtt/certs/ca.crt"
-  }
 }
 ```
+
+`binary_release_repository` tells `dashService.sh` which GitHub repo to pull `ipc-dashboard` binary releases from.
 
 ### User Credentials
 

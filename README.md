@@ -209,7 +209,7 @@ The IPC Dashboard is a FastAPI-based web management interface for the SmartSaw I
 - **User Authentication**: Role-based access control with session management
 - **Live Updates**: Server-Sent Events (SSE) for real-time status streams
 - **Port**: `8000`
-- **Service Script**: `ipc_dashboard/ipc_service.sh`
+- **Service Script**: `dashService.sh` (repo root)
 
 For detailed dashboard documentation, see `ipc_dashboard/README.md`.
 
