@@ -7,11 +7,9 @@ SERVICE_FILE="${SERVICE_NAME}.service"
 SYSTEMD_PATH="/etc/systemd/system"
 
 SMARTSAW_DIR="$(cd "$(dirname "$0")" && pwd)"
-CONFIG_FILE="${SMARTSAW_DIR}/ipc_dashboard/config/backend_ipc_config.json"
 
-# Populated by load_release_repo_config() from CONFIG_FILE.
-GITHUB_OWNER=""
-GITHUB_REPO=""
+GITHUB_OWNER="HEM-Inc"
+GITHUB_REPO="ipc-dashboard-release"
 
 # Allows the IPC Dashboard backend to restart only this service.
 SUDOERS_FILE="/etc/sudoers.d/ipc-dashboard-update"
@@ -25,11 +23,11 @@ Help() {
     echo "IPC Dashboard Service Manager"
     echo
     echo "Syntax:"
-    echo "  sudo ./ipcDashboardService.sh -I [version]"
-    echo "  sudo ./ipcDashboardService.sh -U [version]"
-    echo "  sudo ./ipcDashboardService.sh -S"
-    echo "  sudo ./ipcDashboardService.sh -T"
-    echo "  sudo ./ipcDashboardService.sh -R"
+    echo "  sudo ./dashService.sh -I [version]"
+    echo "  sudo ./dashService.sh -U [version]"
+    echo "  sudo ./dashService.sh -S"
+    echo "  sudo ./dashService.sh -T"
+    echo "  sudo ./dashService.sh -R"
     echo
     echo "Options:"
     echo "  -I [version]  Install/update service and binary"
@@ -40,9 +38,9 @@ Help() {
     echo "  -h            Show help"
     echo
     echo "Examples:"
-    echo "  sudo ./ipcDashboardService.sh -I"
-    echo "  sudo ./ipcDashboardService.sh -I v1.1.10"
-    echo "  sudo ./ipcDashboardService.sh -U"
+    echo "  sudo ./dashService.sh -I"
+    echo "  sudo ./dashService.sh -I v1.1.10"
+    echo "  sudo ./dashService.sh -U"
 }
 
 
@@ -54,38 +52,6 @@ if [[ "$(id -u)" -ne 0 ]]; then
     echo "ERROR: Please run using sudo."
     exit 1
 fi
-
-
-############################################################
-# Load release repository config
-#
-# Reads binary_release_repository.repo_owner/repo_name from
-# CONFIG_FILE into GITHUB_OWNER/GITHUB_REPO.
-############################################################
-
-load_release_repo_config() {
-
-    if ! command -v jq >/dev/null 2>&1; then
-        echo "ERROR: 'jq' is required but not installed."
-        echo "  Install it, e.g.: sudo apt install jq"
-        return 1
-    fi
-
-    if [[ ! -f "$CONFIG_FILE" ]]; then
-        echo "ERROR: Config file not found:"
-        echo "  $CONFIG_FILE"
-        return 1
-    fi
-
-    GITHUB_OWNER="$(jq -r '.binary_release_repository.repo_owner // empty' "$CONFIG_FILE")"
-    GITHUB_REPO="$(jq -r '.binary_release_repository.repo_name // empty' "$CONFIG_FILE")"
-
-    if [[ -z "$GITHUB_OWNER" || -z "$GITHUB_REPO" ]]; then
-        echo "ERROR: binary_release_repository.repo_owner/repo_name missing from:"
-        echo "  $CONFIG_FILE"
-        return 1
-    fi
-}
 
 
 # Get IPC Dashboard service user
@@ -231,8 +197,16 @@ download_binary() {
     local actual_digest
     local temp_binary
 
-    if ! load_release_repo_config; then
-        return 1
+    # Require jq - install if not present
+    if ! command -v jq &> /dev/null; then
+        echo "jq not found, installing jq..."
+        apt update --fix-missing && apt install -y jq --fix-missing
+        apt clean
+        if ! command -v jq &> /dev/null; then
+            echo "ERROR: Failed to install jq."
+            echo "Please install it manually: apt install jq on Ubuntu"
+            return 1
+        fi
     fi
 
     mkdir -p "$bin_dir"

@@ -93,10 +93,10 @@ The dashboard is **optional** in the current release. It is not installed automa
 ### Prerequisites
 
 - Ubuntu 20.04+ (or compatible Linux distribution)
-- `curl` and `jq` (used by `dashService.sh` to fetch and verify releases)
+- `curl` (used by `dashService.sh` to fetch releases; `jq`, used to verify them, is installed automatically via `apt` if missing)
 - Docker and Docker Compose V2 installed
 
-The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from the release repository configured in `config/backend_ipc_config.json` (`binary_release_repository`).
+The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from `HEM-Inc/ipc-dashboard-release` on GitHub.
 
 ### Manual Install
 
@@ -198,7 +198,7 @@ The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
 }
 ```
 
-`binary_release_repository` tells `dashService.sh` which GitHub repo to pull `ipc-dashboard` binary releases from.
+`binary_release_repository` is metadata only — `dashService.sh` pulls `ipc-dashboard` binary releases from a hardcoded `GITHUB_OWNER`/`GITHUB_REPO` (`HEM-Inc`/`ipc-dashboard-release`) at the top of the script, not from this file.
 
 ### User Credentials
 
