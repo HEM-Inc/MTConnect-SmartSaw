@@ -252,15 +252,14 @@ The system uses a well-defined directory structure for configuration and data st
 └── mongodb/
     ├── config/          # mongod.conf
     └── data/db/         # Database files
+```
 
 ### Dashboard Configuration Directory
 
-The IPC Dashboard (optional) stores its configuration in the repository directory:
-- `ipc_dashboard/backend/config/` — Dashboard configuration (`backend_ipc_config.json`)
-- `ipc_dashboard/backend/common/` — Backend API modules
-- `ipc_dashboard/backend/fastapi/` — FastAPI route handlers
-- `ipc_dashboard/frontend/` — Static web assets (HTML, CSS, JS, images)
-```
+The IPC Dashboard (optional) stores only its deployment configuration in this repository; the application itself is a prebuilt binary downloaded from `HEM-Inc/ipc-dashboard-release`:
+- `ipc_dashboard/config/` — Dashboard configuration (`backend_ipc_config.json`)
+- `ipc_dashboard/services/` — systemd service template
+- `ipc_dashboard/bin/` — Binary installed at deploy time by `dashService.sh` (not stored in the repo)
 
 ### Key Configuration Files
 

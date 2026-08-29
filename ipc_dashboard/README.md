@@ -20,7 +20,7 @@ A FastAPI-based web management interface for the SmartSaw MTConnect IPC. The das
 
 ## Architecture
 
-The IPC Dashboard is a Python FastAPI application that runs as a **host-level systemd service**, not inside Docker. It communicates with the host Docker daemon and systemd to manage the MTConnect SmartSaw stack.
+The IPC Dashboard is a Python FastAPI application that runs as a **host-level systemd service**, not inside Docker. It communicates with the host Docker daemon and systemd to manage the MTConnect SmartSaw stack. It is deployed here as a prebuilt binary; the sections below describe the runtime behavior of that binary.
 
 ```
 User Browser
@@ -43,34 +43,17 @@ User Browser
     └─ /etc/ filesystem → Config viewing (read-only)
 ```
 
-### Backend Modules
+### Source Code and Releases
 
-| Module | Purpose |
-|---|---|
-| `backend_main.py` | Common backend entry point and bootstrap |
-| `fastapi_main.py` | FastAPI server initialization and startup |
-| `backend_api.py` | Core API business logic abstraction |
-| `backend_config.py` | Configuration management (`backend_ipc_config.json`) |
-| `backend_logger.py` | Structured logging with file rotation |
-| `backend_sessionmgr.py` | HTTP session creation and validation |
-| `backend_ssemanager.py` | Server-Sent Events (SSE) for live status |
-| `beapi_ipcstatus.py` | Docker container status queries |
-| `beapi_ipcupgrade.py` | Script execution (ssInstall, ssUpgrade, ssClean) |
-| `beapi_userauth.py` | Authentication and user profile management |
-| `beapi_certdownload.py` | MQTT TLS certificate download helpers |
-| `fastapi_*.py` | FastAPI route registration for each API area |
+The dashboard's application code (FastAPI backend and frontend) is **not maintained in this repository**. The source lives in the [`HEM-Inc/ipc-dashboard-release`](https://github.com/HEM-Inc/ipc-dashboard-release) repository, which also publishes prebuilt `ipc-dashboard` binary releases. This repo ships only the deployment pieces:
 
-### Frontend Pages
-
-| Page | Path | Purpose |
+| Item | Path | Purpose |
 |---|---|---|
-| Login | `index.html` | Username/password authentication |
-| Dashboard | `html/dashboard.html` | Real-time container status view |
-| Control | `html/control.html` | System control panel (install, upgrade, clean) |
-| Status | `html/control/status.html` | Detailed container listing |
-| Config | `html/control/updateConfig.html` | Configuration update interface |
-| Security | `html/security.html` | Certificate and TLS management |
-| Device | `html/device.html` | Device info view |
+| Install script | `dashService.sh` (repo root) | Downloads the binary, verifies its checksum, and manages the systemd service |
+| Service template | `services/ipc-dashboard.service` | systemd unit template resolved at install time |
+| Dashboard config | `config/backend_ipc_config.json` | Configuration consumed by the binary at runtime |
+
+Binary versions, release notes, and reporting for dashboard bugs live in the release repository.
 
 ---
 
@@ -96,7 +79,7 @@ The dashboard is **optional** in the current release. It is not installed automa
 - `curl` (used by `dashService.sh` to fetch releases; `jq`, used to verify them, is installed automatically via `apt` if missing)
 - Docker and Docker Compose V2 installed
 
-The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from `HEM-Inc/ipc-dashboard-release` on GitHub.
+The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from `HEM-Inc/ipc-dashboard-release` on GitHub. Available versions and release notes are published there.
 
 ### Manual Install
 
@@ -300,6 +283,9 @@ These paths are read by the dashboard backend and exposed through the `/api/cert
 - **Container status not updating**
   - Confirm the dashboard user has permission to read the Docker socket
   - Verify Docker is running: `sudo docker ps`
+
+- **Dashboard bugs or missing features**
+  - The application source is not in this repo — report issues in the `HEM-Inc/ipc-dashboard-release` repository
 
 ## License
 
