@@ -150,7 +150,7 @@ The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
 
 ```json
 {
-    "deployment_path": "~/MTConnect-SmartSaw",
+    "deployment_path": "/home/hemsaw/MTConnect-SmartSaw",
     "binary_release_repository" : {
         "repo_name": "ipc-dashboard-release",
         "repo_owner": "HEM-Inc"
