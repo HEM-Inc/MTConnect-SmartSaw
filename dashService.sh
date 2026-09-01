@@ -53,80 +53,29 @@ if [[ "$(id -u)" -ne 0 ]]; then
     exit 1
 fi
 
-#Validate IPC Dashboard service user
-check_service_user() {
-	
-    local service_user=$1
-    local service_group=$2
 
-    if ! id "$service_user" &>/dev/null; then
-        echo "ERROR: Required service account '$service_user' does not exist."
-        echo "Create it first, then re-run this script:"
-        echo "  sudo useradd --system --no-create-home --shell /usr/sbin/nologin $service_user"
+# Get IPC Dashboard service user
+get_service_user() {
+
+    local service_user
+    local service_group
+
+    # Use the user who executed sudo.
+    if [[ -n "$SUDO_USER" && "$SUDO_USER" != "root" ]]; then
+        service_user="$SUDO_USER"
+        service_group="$(id -gn "$SUDO_USER")"
+    else
+        # Fall back to the owner of the SmartSaw directory.
+        service_user="$(stat -c '%U' "$SMARTSAW_DIR")"
+        service_group="$(stat -c '%G' "$SMARTSAW_DIR")"
+    fi
+
+    if [[ -z "$service_user" || "$service_user" == "root" ]]; then
+        echo "ERROR: Could not determine IPC Dashboard service user."
         return 1
     fi
 
-    if ! getent group "$service_group" &>/dev/null; then
-        echo "ERROR: Required service group '$service_group' does not exist."
-        return 1
-    fi
-
-    return 0
-}
-
-############################################################
-# Configure service-user traversal permission
-#
-# The application is located under:
-#
-#   /home/<owner>/MTConnect-SmartSaw
-#
-# The service runs as a different user.
-#
-# Give the service user only execute/traverse permission
-# on the parent directory.
-############################################################
-
-set_service_user_access() {
-
-    local service_user="$1"
-    local parent_dir
-
-    parent_dir="$(dirname "$SMARTSAW_DIR")"
-
-    if [[ ! -d "$parent_dir" ]]; then
-        echo "ERROR: Parent directory not found:"
-        echo "  $parent_dir"
-        return 1
-    fi
-
-    # setfacl is provided by the acl package.
-    if ! command -v setfacl &>/dev/null; then
-
-        echo "setfacl not found. Installing acl package..."
-
-        if ! apt-get update; then
-            echo "ERROR: Failed to update package lists."
-            return 1
-        fi
-
-        if ! apt-get install -y acl; then
-            echo "ERROR: Failed to install acl package."
-            return 1
-        fi
-    fi
-
-    echo "Configuring traversal permission for ${service_user}..."
-    echo "Directory: ${parent_dir}"
-
-    if ! setfacl -m "u:${service_user}:--x" "$parent_dir"; then
-        echo "ERROR: Failed to configure ACL on ${parent_dir}."
-        return 1
-    fi
-
-    echo "Traversal permission configured successfully."
-
-    return 0
+    echo "${service_user}:${service_group}"
 }
 
 
@@ -155,36 +104,36 @@ files_differ() {
 
 
 ############################################################
-# Give service user ownership of application files, excluding .git.
+# Set IPC Dashboard ownership
+#
+# Required so the FastAPI backend can download and replace
+# the binary inside ipc_dashboard/bin.
 ############################################################
 
 set_ipc_ownership() {
 
     local service_user="$1"
     local service_group="$2"
-    local application_dir="$3"
+    local bin_dir="$3"
 
-    if [[ ! -d "$application_dir" ]]; then
-        echo "ERROR: Application directory not found:"
-        echo "  $application_dir"
+    if [[ ! -d "$bin_dir" ]]; then
+        echo "ERROR: IPC Dashboard bin directory not found:"
+        echo "  $bin_dir"
         return 1
     fi
 
-    echo "Setting application ownership..."
+    echo "Setting binary directory ownership..."
 
-    if ! find "$application_dir" \
-        -mindepth 1 \
-        -path "$application_dir/.git" -prune -o \
-        -exec chown "${service_user}:${service_group}" {} +; then
-
-        echo "ERROR: Failed to set application ownership."
+    if ! chown -R "${service_user}:${service_group}" "$bin_dir"; then
+        echo "ERROR: Failed to set binary directory ownership."
         return 1
     fi
 
-    echo "Application ownership configured successfully."
+    echo "Binary directory ownership configured successfully."
 
     return 0
 }
+
 
 ############################################################
 # Configure restricted sudo permission
@@ -200,9 +149,6 @@ setup_restart_permission() {
 
     local service_user="$1"
     local systemctl_path
-    local install_script
-    local upgrade_script
-    local clean_script
 
     if [[ -z "$service_user" ]]; then
         echo "ERROR: Service user is empty."
@@ -216,38 +162,11 @@ setup_restart_permission() {
         return 1
     fi
 
-    install_script="${SMARTSAW_DIR}/ssInstall.sh"
-    upgrade_script="${SMARTSAW_DIR}/ssUpgrade.sh"
-    clean_script="${SMARTSAW_DIR}/ssClean.sh"
-
-    if [[ ! -f "$install_script" ]]; then
-        echo "ERROR: Install script not found: ${install_script}"
-        return 1
-    fi
-
-    if [[ ! -f "$upgrade_script" ]]; then
-        echo "ERROR: Upgrade script not found: ${upgrade_script}"
-        return 1
-    fi
-
-    if [[ ! -f "$clean_script" ]]; then
-        echo "ERROR: Clean script not found: ${clean_script}"
-        return 1
-    fi
-    echo "Configuring service permissions for ${service_user}..."
+    echo "Configuring service restart permission for ${service_user}..."
 
     cat > "$SUDOERS_FILE" <<EOF
 # IPC Dashboard backend may restart only its own service.
 ${service_user} ALL=(root) NOPASSWD: ${systemctl_path} restart ${SERVICE_NAME}.service
-
-# IPC Dashboard backend may run the SmartSaw install script.
-${service_user} ALL=(root) NOPASSWD: /usr/bin/bash ${install_script} *
-
-# IPC Dashboard backend may run the SmartSaw upgrade script.
-${service_user} ALL=(root) NOPASSWD: /usr/bin/bash ${upgrade_script} *
-
-# IPC Dashboard backend may run the SmartSaw clean script.
-${service_user} ALL=(root) NOPASSWD: /usr/bin/bash ${clean_script} *
 EOF
 
     chmod 440 "$SUDOERS_FILE"
@@ -258,46 +177,7 @@ EOF
         return 1
     fi
 
-    echo "Service permissions configured successfully."
-}
-
-setup_docker_access() {
-
-    local service_user="$1"
-
-    if [[ -z "$service_user" ]]; then
-        echo "ERROR: Service user is empty."
-        return 1
-    fi
-
-    if ! getent group docker &>/dev/null; then
-        echo "Docker group does not exist."
-        echo "Skipping Docker group configuration."
-        return 0
-    fi
-
-    if id -nG "$service_user" | grep -qw docker; then
-        echo "${service_user} is already in the docker group."
-    else
-        echo "Adding ${service_user} to docker group..."
-
-        if ! usermod -aG docker "$service_user"; then
-            echo "ERROR: Failed to add ${service_user} to docker group."
-            return 1
-        fi
-
-        echo "Docker group added to ${service_user}."
-    fi
-
-    # Verify Docker access immediately using the docker group.
-    if sg docker -c "docker ps >/dev/null 2>&1"; then
-        echo "Docker usable inside script without sudo."
-    else
-        echo "ERROR: Docker is not accessible through the docker group."
-        return 1
-    fi
-
-    return 0
+    echo "Restricted restart permission configured successfully."
 }
 
 
@@ -405,25 +285,25 @@ download_binary() {
 install_service() {
 
     local version="$1"
-
-    local service_user="hemsaw"
-    local service_group="hemsaw"
-
+    local user_info
+    local service_user
+    local service_group
     local ipc_dir="${SMARTSAW_DIR}/ipc_dashboard"
     local bin_dir="${ipc_dir}/bin"
     local ipc_binary="${bin_dir}/ipc-dashboard"
     local local_service_path="${ipc_dir}/services/${SERVICE_FILE}"
     local resolved_service
 
-    # Validate service account
-    if ! check_service_user "$service_user" "$service_group"; then
+    # Determine service user
+    user_info="$(get_service_user)"
+
+    if [[ $? -ne 0 || -z "$user_info" ]]; then
+        echo "ERROR: Failed to determine IPC Dashboard service user."
         return 1
     fi
 
-    # Give service user traversal permission
-    if ! set_service_user_access "$service_user"; then
-        return 1
-    fi
+    service_user="${user_info%%:*}"
+    service_group="${user_info##*:}"
 
     echo "IPC Dashboard service user: ${service_user}"
     echo "IPC Dashboard service group: ${service_group}"
@@ -442,17 +322,12 @@ install_service() {
 
     # Set ownership
     # Allows the Python backend to write/update the binary.
-    if ! set_ipc_ownership "$service_user" "$service_group" "$SMARTSAW_DIR"; then
+    if ! set_ipc_ownership "$service_user" "$service_group" "$bin_dir"; then
         return 1
     fi
 
     # Configure backend restart permission
     if ! setup_restart_permission "$service_user"; then
-        return 1
-    fi
-    
-    # Configure Docker access for the actual service user.
-    if ! setup_docker_access "$service_user"; then
         return 1
     fi
 
@@ -466,12 +341,10 @@ install_service() {
     resolved_service="$(mktemp "/tmp/${SERVICE_FILE}.XXXXXX")"
 
     if ! sed \
-        -e "s|IPC_SERVICE_USER|${service_user}|g" \
-	-e "s|IPC_SERVICE_GROUP|${service_group}|g" \
-	-e "s|IPCDB_WORKING_DIR|${ipc_dir}|g" \
-	-e "s|IPC_BINARY|${ipc_binary}|g" \
-	"$local_service_path" \
-	> "$resolved_service"; then
+        -e "s|IPCDB_WORKING_DIR|${ipc_dir}|g" \
+        -e "s|IPC_BINARY|${ipc_binary}|g" \
+        "$local_service_path" \
+        > "$resolved_service"; then
 
         echo "ERROR: Failed to generate systemd service file."
         rm -f "$resolved_service"
@@ -514,6 +387,30 @@ install_service() {
             return 1
         fi
 
+    fi
+
+    # Docker sudo/group handling
+    if [ -n "$SUDO_USER" ]; then
+
+        if ! id -nG "$SUDO_USER" | grep -qw docker; then
+
+            echo "Adding $SUDO_USER to docker group..."
+
+            if ! usermod -aG docker "$SUDO_USER"; then
+                echo "ERROR: Failed to add $SUDO_USER to docker group."
+                return 1
+            fi
+
+            echo "Docker group added."
+
+            # Immediate usability inside script
+            sg docker -c "docker ps >/dev/null 2>&1" && \
+                echo "Docker usable inside script without sudo."
+
+        else
+
+            echo "User already in docker group."
+        fi
     fi
 
     echo
