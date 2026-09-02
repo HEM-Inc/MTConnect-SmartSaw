@@ -80,6 +80,48 @@ get_service_user() {
 
 
 ############################################################
+# Fail loudly if the resolved service user won't match who
+# the systemd unit actually runs the service as.
+#
+# get_service_user() resolves whoever ran sudo (or the
+# SmartSaw directory owner) so that ownership/restart rights
+# land on the right account. But the unit file hardcodes a
+# fixed User=/Group=. If those two disagree, ownership and
+# restart rights get granted to the wrong account and the
+# running service silently can't write its own binary or
+# restart itself.
+############################################################
+
+check_service_identity_match() {
+
+    local service_user="$1"
+    local service_group="$2"
+    local unit_file="$3"
+    local expected_user
+    local expected_group
+
+    if [[ ! -f "$unit_file" ]]; then
+        echo "ERROR: Service template not found:"
+        echo "  $unit_file"
+        return 1
+    fi
+
+    expected_user="$(sed -n 's/^User=//p' "$unit_file")"
+    expected_group="$(sed -n 's/^Group=//p' "$unit_file")"
+
+    if [[ "$service_user" != "$expected_user" || "$service_group" != "$expected_group" ]]; then
+        echo "ERROR: Resolved service identity (${service_user}:${service_group}) does not match"
+        echo "  the identity ${SERVICE_FILE} runs the service as (${expected_user}:${expected_group})."
+        echo "  Ownership and restart rights would be granted to the wrong account."
+        echo "  Log in as '${expected_user}' and re-run this installer from there."
+        return 1
+    fi
+
+    return 0
+}
+
+
+############################################################
 # Utility
 ############################################################
 
@@ -307,6 +349,12 @@ install_service() {
 
     echo "IPC Dashboard service user: ${service_user}"
     echo "IPC Dashboard service group: ${service_group}"
+
+    # Fail loudly here rather than silently granting ownership/restart
+    # rights to an account the systemd unit won't actually run as.
+    if ! check_service_identity_match "$service_user" "$service_group" "$local_service_path"; then
+        return 1
+    fi
 
     # Download binary
     if ! download_binary "$version" "$bin_dir" "$ipc_binary"; then
