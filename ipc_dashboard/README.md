@@ -20,7 +20,7 @@ A FastAPI-based web management interface for the SmartSaw MTConnect IPC. The das
 
 ## Architecture
 
-The IPC Dashboard is a Python FastAPI application that runs as a **host-level systemd service**, not inside Docker. It communicates with the host Docker daemon and systemd to manage the MTConnect SmartSaw stack.
+The IPC Dashboard is a Python FastAPI application that runs as a **host-level systemd service**, not inside Docker. It communicates with the host Docker daemon and systemd to manage the MTConnect SmartSaw stack. It is deployed here as a prebuilt binary; the sections below describe the runtime behavior of that binary.
 
 ```
 User Browser
@@ -43,34 +43,17 @@ User Browser
     └─ /etc/ filesystem → Config viewing (read-only)
 ```
 
-### Backend Modules
+### Source Code and Releases
 
-| Module | Purpose |
-|---|---|
-| `backend_main.py` | Common backend entry point and bootstrap |
-| `fastapi_main.py` | FastAPI server initialization and startup |
-| `backend_api.py` | Core API business logic abstraction |
-| `backend_config.py` | Configuration management (`backend_ipc_config.json`) |
-| `backend_logger.py` | Structured logging with file rotation |
-| `backend_sessionmgr.py` | HTTP session creation and validation |
-| `backend_ssemanager.py` | Server-Sent Events (SSE) for live status |
-| `beapi_ipcstatus.py` | Docker container status queries |
-| `beapi_ipcupgrade.py` | Script execution (ssInstall, ssUpgrade, ssClean) |
-| `beapi_userauth.py` | Authentication and user profile management |
-| `beapi_certdownload.py` | MQTT TLS certificate download helpers |
-| `fastapi_*.py` | FastAPI route registration for each API area |
+The dashboard's application code (FastAPI backend and frontend) is **not maintained in this repository**. The source lives in the [`HEM-Inc/ipc-dashboard-release`](https://github.com/HEM-Inc/ipc-dashboard-release) repository, which also publishes prebuilt `ipc-dashboard` binary releases. This repo ships only the deployment pieces:
 
-### Frontend Pages
-
-| Page | Path | Purpose |
+| Item | Path | Purpose |
 |---|---|---|
-| Login | `index.html` | Username/password authentication |
-| Dashboard | `html/dashboard.html` | Real-time container status view |
-| Control | `html/control.html` | System control panel (install, upgrade, clean) |
-| Status | `html/control/status.html` | Detailed container listing |
-| Config | `html/control/updateConfig.html` | Configuration update interface |
-| Security | `html/security.html` | Certificate and TLS management |
-| Device | `html/device.html` | Device info view |
+| Install script | `dashService.sh` (repo root) | Downloads the binary, verifies its checksum, and manages the systemd service |
+| Service template | `services/ipc-dashboard.service` | systemd unit template resolved at install time |
+| Dashboard config | `config/backend_ipc_config.json` | Configuration consumed by the binary at runtime |
+
+Binary versions, release notes, and reporting for dashboard bugs live in the release repository.
 
 ---
 
@@ -93,40 +76,24 @@ The dashboard is **optional** in the current release. It is not installed automa
 ### Prerequisites
 
 - Ubuntu 20.04+ (or compatible Linux distribution)
-- Python 3.10+
-- [`uv`](https://docs.astral.sh/uv/) package manager
+- `curl` (used by `dashService.sh` to fetch releases; `jq`, used to verify them, is installed automatically via `apt` if missing)
 - Docker and Docker Compose V2 installed
 
-### Dependency Management
-
-Dependencies are managed with `uv` via `pyproject.toml`. This is the single source of truth — there is no `requirements.txt`.
-
-```bash
-# Install / sync the virtual environment
-cd ipc_dashboard
-uv sync
-
-# Add a new dependency
-uv add <package>
-
-# Show installed packages
-uv pip list
-```
-
-The `.venv` is created automatically by `uv sync` inside `ipc_dashboard/`. The systemd service runs via `uv run fastapi_main.py`, which uses this environment without needing to activate it explicitly.
+The IPC Dashboard is distributed as a prebuilt binary — there is no local Python source, `pyproject.toml`, or virtual environment to manage in this repo. `dashService.sh` downloads it automatically from `HEM-Inc/ipc-dashboard-release` on GitHub. Available versions and release notes are published there.
 
 ### Manual Install
 
 ```bash
-cd /path/to/MTConnect-SmartSaw/ipc_dashboard
-sudo bash ipc_service.sh -U
+cd /path/to/MTConnect-SmartSaw
+sudo ./dashService.sh -U
 ```
 
 This will:
-1. Detect the `uv` binary (PATH, pip module, or pipx)
-2. Resolve the backend working directory (`ipc_dashboard/backend/fastapi`)
-3. Generate and install `ipc-dashboard.service` to `/etc/systemd/system/`
-4. Start the service
+1. Determine the service user/group to run as
+2. Download the latest (or requested) `ipc-dashboard` binary release and verify its checksum
+3. Set ownership on `ipc_dashboard/bin/` so the backend can self-update
+4. Configure a restricted, passwordless `sudo systemctl restart ipc-dashboard.service` rule for the backend
+5. Generate and install `ipc-dashboard.service` to `/etc/systemd/system/`, then enable and start it
 
 ### Verify
 
@@ -143,33 +110,33 @@ Then open a browser to `http://<ipc-ip>:8000/`.
 ## Service Management
 
 ```bash
-cd /path/to/MTConnect-SmartSaw/ipc_dashboard
+cd /path/to/MTConnect-SmartSaw
 
 # Install / update service file and reload systemd
-sudo bash ipc_service.sh -I
+sudo ./dashService.sh -I
 
 # Start
-sudo bash ipc_service.sh -S
+sudo ./dashService.sh -S
 
 # Stop
-sudo bash ipc_service.sh -T
+sudo ./dashService.sh -T
 
 # Restart
-sudo bash ipc_service.sh -R
+sudo ./dashService.sh -R
 
 # Full update (install + restart)
-sudo bash ipc_service.sh -U
+sudo ./dashService.sh -U
 
 # Display help
-sudo bash ipc_service.sh -h
+sudo ./dashService.sh -h
 ```
 
 ### systemd Unit File
 
 The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
-- **User/Group**: `hemsaw` (created if missing)
-- **Working Directory**: `ipc_dashboard/backend/fastapi`
-- **ExecStart**: `uv run fastapi_main.py`
+- **User/Group**: `hemsaw`
+- **Working Directory**: `ipc_dashboard/`
+- **ExecStart**: `ipc_dashboard/bin/ipc-dashboard` (the downloaded binary)
 - **Restart**: Always, with 5-second backoff
 - **Logs**: Written to journald (`journalctl -u ipc-dashboard -f`)
 
@@ -179,35 +146,42 @@ The generated service (`/etc/systemd/system/ipc-dashboard.service`) runs:
 
 ### Backend Configuration
 
-`backend/config/backend_ipc_config.json`:
+`config/backend_ipc_config.json`:
 
 ```json
 {
-  "name": "IPC Dashboard",
-  "type": "fastapi",
-  "timezone": "America/Chicago",
-  "logger_config": {
-    "logging_level": "INFO",
-    "file_logging": "No"
-  },
-  "fastapi": {
-    "enable": "Yes",
-    "host": "0.0.0.0",
-    "port": 8000,
-    "domain_names": [],
-    "security": {
-      "enable": "No",
-      "type": "ssl",
-      "ca_file": "",
-      "cert_file": "",
-      "key_file": ""
+    "deployment_path": "/home/hemsaw/MTConnect-SmartSaw",
+    "binary_release_repository" : {
+        "repo_name": "ipc-dashboard-release",
+        "repo_owner": "HEM-Inc"
+    },
+    "name": "IPC Dashboard",
+    "type": "fastapi",
+    "timezone": "America/Chicago",
+    "logger_config": {
+        "logging_level": "INFO",
+        "file_logging": "No"
+    },
+    "fastapi": {
+        "enable": "Yes",
+        "host": "0.0.0.0",
+        "port": 8000,
+        "domain_names": [],
+        "security": {
+            "enable": "No",
+            "type": "ssl",
+            "ca_file": "ipc_dashboard/certs/ca.crt",
+            "cert_file": "ipc_dashboard/certs/server.crt",
+            "key_file": "ipc_dashboard/certs/server.key"
+        }
+    },
+    "certs": {
+        "ca_cert_path": "/etc/mqtt/certs/ca.crt"
     }
-  },
-  "certs": {
-    "ca_cert_path": "/etc/mqtt/certs/ca.crt"
-  }
 }
 ```
+
+`binary_release_repository` is metadata only — `dashService.sh` pulls `ipc-dashboard` binary releases from a hardcoded `GITHUB_OWNER`/`GITHUB_REPO` (`HEM-Inc`/`ipc-dashboard-release`) at the top of the script, not from this file.
 
 ### User Credentials
 
@@ -309,6 +283,9 @@ These paths are read by the dashboard backend and exposed through the `/api/cert
 - **Container status not updating**
   - Confirm the dashboard user has permission to read the Docker socket
   - Verify Docker is running: `sudo docker ps`
+
+- **Dashboard bugs or missing features**
+  - The application source is not in this repo — report issues in the `HEM-Inc/ipc-dashboard-release` repository
 
 ## License
 

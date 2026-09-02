@@ -35,6 +35,13 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 # [Released]
 
+##[4.2.1] - 2026/08/19 - emprarthanak
+
+### Changed
+
+- Updated IPC Dashboard service management script with safer binary updates, service user ownership handling, and restricted restart permissions
+- Added binary release repository configuration in IPC Dashboard config
+
 ##[4.2.0] - 2026/07/23 - emprarthanak
 
 ### Added
@@ -58,7 +65,7 @@ For build level release notes see https://github.com/mtconnect/cppagent/
   - Certificate download for MQTT TLS bridge setup
   - Server-Sent Events (SSE) for live status updates
   - Runs as a Docker container on port 8000
-- Added `ipc_dashboard/` directory containing backend (FastAPI), frontend (HTML/JS/CSS), and service management (`ipc_service.sh`).
+- Added `ipc_dashboard/` directory containing backend (FastAPI), frontend (HTML/JS/CSS), and service management (`dashService.sh`).
 - Added IPC Dashboard Control page with full frontend implementation: setup, logs, clean, and updateConfig views.
 - Added IPC Dashboard backend API modules: install (`beapi_ipcinstall`), clean (`beapi_ipcclean`), logs (`beapi_ipclogs`), file manager (`beapi_filemanager`), and IPC manager (`beapi_ipcmanager`).
 - Added IPC Dashboard timezone modal and certificate download on the Security page.
