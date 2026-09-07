@@ -26,6 +26,10 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 ## [Unreleased]
 
+# [Released]
+
+## [4.2.2] - 2026/09/07 - max harris
+
 ### Changed
 
 - Bumped MTConnect schema from 2.7 to 2.8 in `agent.cfg` and all device XML config files.
@@ -36,10 +40,6 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 ### Fixed
 
 - `ssClean.sh` now acquires `/var/lock/HEMsaw-mtconnect.lock` before an uninstall, so a dashboard or CLI clean can no longer delete `/etc/*` trees or tear down Docker Compose state during an in-flight install or upgrade. `-L` log repair stays outside the lock.
-
-=======
-
-# [Released]
 
 ##[4.2.1] - 2026/08/19 - emprarthanak
 
