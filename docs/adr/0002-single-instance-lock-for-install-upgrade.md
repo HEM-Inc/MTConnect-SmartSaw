@@ -1,30 +1,32 @@
-# ADR 0002: Single-Instance Lock for Install and Upgrade
+# ADR 0002: Single-instance lock for install, upgrade, and clean
 
 ## Status
 Accepted
 
 ## Context
-The SmartSaw platform supports multiple entry points for triggering installs and upgrades:
-- **SSH/CLI:** Operators run `ssInstall.sh` or `ssUpgrade.sh` directly.
-- **IPC Dashboard:** Another team's Python backend (`beapi_ipcupgrade.py`) spawns `ssUpgrade.sh` via `subprocess.Popen`.
+The SmartSaw platform has several entry points that mutate deployment state:
+- SSH/CLI: operators run `ssInstall.sh`, `ssUpgrade.sh`, or `ssClean.sh` directly.
+- IPC Dashboard: another team's Python backend spawns those same scripts via `subprocess`, behind the `/api/ipc/install`, `/api/ipc/upgrade`, and `/api/ipc/clean` endpoints.
 
-Both entry points target the same `/etc/*` configuration directories and `docker compose` state. If an upgrade is already running (e.g., pulling Docker images on a slow network) and an operator or dashboard widget triggers a second concurrent invocation, the two bash processes will race to write `/etc/adapter/config/`, `/etc/mtconnect/config/`, and so on. The result is undefined: partial configs, truncated files, or a hung Docker Compose state.
-
-Additionally, `ssUpgrade.sh` contains a **Fallback** path: when it detects a missing `/etc/mtconnect/config/agent.cfg`, it delegates to `ssInstall.sh`. If a concurrent upgrade is already in progress when this fallback fires, the fallback must fail safely rather than join the race.
+All three scripts write the same `/etc/*` configuration directories and drive the same `docker compose` project. If an upgrade is already running (say, pulling images on a slow link) and an operator or a dashboard button starts a second run, the two bash processes race on `/etc/adapter/config/`, `/etc/mtconnect/config/`, and the rest. The outcome is undefined: partial configs, truncated files, a wedged Compose state, or in the case of a concurrent `ssClean.sh`, files deleted out from under a running install.
 
 No locking mechanism existed.
 
 ## Decision
-Both `ssInstall.sh` and `ssUpgrade.sh` shall acquire an **exclusive advisory file lock** (`flock`) on `/var/lock/HEMsaw-mtconnect.lock` before performing any filesystem or Docker operations.
+`ssInstall.sh`, `ssUpgrade.sh`, and `ssClean.sh` acquire an exclusive advisory file lock (`flock`) on `/var/lock/HEMsaw-mtconnect.lock` through the shared `acquire_upgrade_lock` helper in `lib.sh`.
 
-- If another instance already holds the lock, the script emits an error (`Another install or upgrade is already in progress`) and exits immediately.
-- When `ssUpgrade.sh` falls back to `ssInstall.sh`, the parent sets `HEMSAW_UPGRADE_LOCKED=1` (exported). `ssInstall.sh` detects this environment variable and skips its own `flock` call, relying on the parent process's open file descriptor, which remains held until the parent exits.
-- The lock is automatically released by the kernel when the holding script's process terminates, so stale locks from crashes are impossible.
+- Each script calls `acquire_upgrade_lock <op>` after argument parsing and before its first mutation. Parsing first means `-h` and malformed arguments exit without touching the lock. "First mutation" is whichever comes first: an `apt` install, a `docker compose` call, a `systemctl` change, or a write under `/etc`. In `ssUpgrade.sh` that is the `docker-compose-v2` bootstrap; in `ssInstall.sh` it is the legacy-daemon teardown, which was moved below argument parsing so it too is covered.
+- `ssClean.sh` takes the lock only when an uninstall is requested. `-L` log repair edits Docker log files and nothing else, so it stays outside the lock.
+- If another instance holds the lock, the script prints `Another install, upgrade, or clean is already in progress`, followed by a `Holder:` line naming the operation, pid, and start time recorded by the current holder, then exits 1. The exit code and the first line are a stable contract for the dashboard backend to match on.
+- The helper opens the lock file with `<>` (read-write, no truncate) so a blocked caller can read the holder line. The winner truncates and rewrites it after `flock` succeeds.
+- `HEMSAW_UPGRADE_LOCKED=1` (exported) makes `acquire_upgrade_lock` a no-op. This covers any case where one locked script execs another; `ssUpgrade.sh` no longer delegates to `ssInstall.sh` on a missing `agent.cfg` (it now errors and tells the operator to run `ssInstall.sh`), but the guard stays as cheap insurance.
+- The kernel releases the lock when the holding process exits, so a crash cannot leave a stale lock.
 
-The IPC Dashboard requires no changes; the protection is entirely within the shell scripts.
+The IPC Dashboard needs no change *as long as* every state-changing action it performs goes through one of these three scripts. A dashboard feature that writes `/etc/*` or runs `docker compose` from inside the backend binary would bypass the lock and needs its own handling. That has not been verified against the released `ipc-dashboard` binary and should be.
 
 ## Consequences
-- **Positive:** Eliminates undefined behavior from concurrent installs/upgrades whether triggered from CLI or dashboard.
-- **Positive:** The fallback path respects the same guard — a second upgrade attempt cannot sneak in while the first is mid-fallback.
-- **Neutral:** Stopping a long-running upgrade externally (e.g., via dashboard UI) still requires terminating the underlying child process tree; killing only the Python wrapper does not release the advisory lock held by the shell subprocess.
-- **Implication:** `flock` from `util-linux` must be present on the target IPC. Debian/Ubuntu systems ship this by default. If `flock` were ever absent, the script would need a fallback, but this is considered out of scope for current target environments.
+- Concurrent install, upgrade, and clean runs from CLI or dashboard can no longer corrupt each other.
+- A blocked caller now reports which operation holds the lock and since when, instead of a bare "in progress".
+- Stopping a long run from the dashboard UI still requires killing the whole child process tree. Killing only the Python wrapper leaves the bash child holding the lock until it finishes or dies.
+- `flock` from `util-linux` must be present on the IPC. Debian and Ubuntu ship it by default. `date -Is` is used for the holder timestamp with a plain `date` fallback.
+- Anything the dashboard runs outside these scripts is still unprotected. Closing that gap depends on the dashboard team.

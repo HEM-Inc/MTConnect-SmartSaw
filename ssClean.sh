@@ -272,6 +272,16 @@ echo "Run Docker Compose V1 commands = " $Use_Docker_Compose_v1
 echo "Clean the docker log for container (" $container_name ") = " $clean_logs
 
 echo ""
+
+# Any uninstall removes /etc/* trees and/or tears down docker compose state,
+# racing an in-flight install or upgrade. Take the shared lock before doing so.
+# Log repair (-L) alone touches none of that, so it stays outside the lock.
+if $run_uninstall_adapter || $run_uninstall_agent || $run_uninstall_mqtt || \
+   $run_uninstall_ods || $run_uninstall_devctl || $run_uninstall_mongodb || \
+   $run_uninstall_docker || $run_uninstall_daemon; then
+    acquire_upgrade_lock clean
+fi
+
 if $clean_logs; then
     CleanLog
 fi

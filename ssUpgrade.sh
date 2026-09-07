@@ -438,6 +438,11 @@ if [[ $# -gt 0 ]]; then
     done
 fi
 
+# Arguments are parsed and valid. Nothing below this point is safe to run
+# concurrently with another install/upgrade/clean, so take the lock before
+# the first mutation (apt, docker, systemd, or any write under /etc).
+acquire_upgrade_lock upgrade
+
 # Expand a full-update request into individual component flags
 if [[ "$run_full_update" == true ]]; then
     run_update_mqtt_broker=true
@@ -464,8 +469,6 @@ if ! docker compose version &> /dev/null; then
         exit 1
     fi
 fi
-
-acquire_upgrade_lock
 
 # check if install or upgrade
 if [[ ! -f /etc/mtconnect/config/agent.cfg ]]; then

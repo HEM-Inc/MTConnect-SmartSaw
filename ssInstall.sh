@@ -2,7 +2,6 @@
 
 SCRIPT_DIR="$(dirname "$0")"
 source "$SCRIPT_DIR/lib.sh" || { echo "ERROR: lib.sh not found at $SCRIPT_DIR/lib.sh"; exit 1; }
-acquire_upgrade_lock
 
 ############################################################
 # Help                                                     #
@@ -163,27 +162,6 @@ InstallMongodb(){
 
 if [[ $(id -u) -ne 0 ]] ; then echo "Please run ssInstall.sh as sudo" ; exit 1 ; fi
 
-# Detect and disable legacy systemd services during daemon -> Docker migration
-if service_exists adapter || service_exists ods || service_exists mongod; then
-    echo "Legacy systemd services detected. Disabling them for Docker migration..."
-    for svc in adapter ods; do
-        if service_exists "$svc"; then
-            echo "Stopping and disabling $svc.service..."
-            systemctl stop "$svc" 2>/dev/null || true
-            systemctl disable "$svc" 2>/dev/null || true
-            rm -f "/etc/systemd/system/$svc.service"
-        fi
-    done
-    if service_exists mongod; then
-        echo "Stopping and disabling mongod.service..."
-        systemctl stop mongod 2>/dev/null || true
-        systemctl disable mongod 2>/dev/null || true
-    fi
-    systemctl daemon-reload
-    systemctl reset-failed
-    echo "Legacy systemd services disabled."
-fi
-
 ## Set default variables
 # Source the env.sh file
 if [[ -f "$SCRIPT_DIR/env.sh" ]]; then
@@ -267,6 +245,32 @@ if [[ $# -gt 0 ]]; then
             exit 1
         fi
     done
+fi
+
+# Arguments are parsed and valid. Nothing below this point is safe to run
+# concurrently with another install/upgrade/clean, so take the lock before
+# the first mutation (systemd, apt, docker, or any write under /etc).
+acquire_upgrade_lock install
+
+# Detect and disable legacy systemd services during daemon -> Docker migration
+if service_exists adapter || service_exists ods || service_exists mongod; then
+    echo "Legacy systemd services detected. Disabling them for Docker migration..."
+    for svc in adapter ods; do
+        if service_exists "$svc"; then
+            echo "Stopping and disabling $svc.service..."
+            systemctl stop "$svc" 2>/dev/null || true
+            systemctl disable "$svc" 2>/dev/null || true
+            rm -f "/etc/systemd/system/$svc.service"
+        fi
+    done
+    if service_exists mongod; then
+        echo "Stopping and disabling mongod.service..."
+        systemctl stop mongod 2>/dev/null || true
+        systemctl disable mongod 2>/dev/null || true
+    fi
+    systemctl daemon-reload
+    systemctl reset-failed
+    echo "Legacy systemd services disabled."
 fi
 
 # Persist the final bridge preference so upgrades remember it
