@@ -41,14 +41,14 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 - `ssClean.sh` now acquires `/var/lock/HEMsaw-mtconnect.lock` before an uninstall, so a dashboard or CLI clean can no longer delete `/etc/*` trees or tear down Docker Compose state during an in-flight install or upgrade. `-L` log repair stays outside the lock.
 
-##[4.2.1] - 2026/08/19 - emprarthanak
+## [4.2.1] - 2026/08/19 - emprarthanak
 
 ### Changed
 
 - Updated IPC Dashboard service management script with safer binary updates, service user ownership handling, and restricted restart permissions
 - Added binary release repository configuration in IPC Dashboard config
 
-##[4.2.0] - 2026/07/23 - emprarthanak
+## [4.2.0] - 2026/07/23 - emprarthanak
 
 ### Added
 
