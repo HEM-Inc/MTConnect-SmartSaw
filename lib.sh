@@ -107,9 +107,19 @@ ensure_venv() {
 
 
 # Acquire an exclusive advisory lock on /var/lock/HEMsaw-mtconnect.lock
-# so only one install OR upgrade instance runs at a time.
-# If HEMSAW_UPGRADE_LOCKED is already set, this function is a no-op
-# (the parent upgrade process already holds the lock).
+# so only one install, upgrade, OR clean instance runs at a time —
+# whether triggered from the CLI or the IPC Dashboard.
+#
+# Call this AFTER argument parsing (so -h and malformed args exit
+# without taking the lock) and BEFORE the first mutation: package
+# installs, docker compose, systemd changes, or any write under /etc.
+#
+# Pass a short operation label ("install" | "upgrade" | "clean") so a
+# blocked caller can report what is holding the lock.
+#
+# If HEMSAW_UPGRADE_LOCKED is already set this is a no-op: a parent
+# script already holds the lock on a file descriptor this process
+# inherited. No script execs another today, but the guard is cheap.
 acquire_upgrade_lock() {
     if [ -n "${HEMSAW_UPGRADE_LOCKED:-}" ]; then
         return 0
@@ -117,12 +127,22 @@ acquire_upgrade_lock() {
 
     mkdir -p /var/lock
     local lock_file="/var/lock/HEMsaw-mtconnect.lock"
+    local op="${1:-operation}"
 
-    exec 200> "$lock_file"
+    # Open read-write without truncating, so a blocked caller can still
+    # read the current holder's details before it gives up.
+    exec 200<> "$lock_file"
     if ! flock -n 200; then
-        echo "ERROR: Another install or upgrade is already in progress." >&2
+        echo "ERROR: Another install, upgrade, or clean is already in progress." >&2
+        local holder
+        holder="$(cat "$lock_file" 2>/dev/null)"
+        [ -n "$holder" ] && echo "       Holder: $holder" >&2
         exit 1
     fi
+
+    # Lock is held now; record who holds it for the next caller.
+    : > "$lock_file"
+    printf '%s pid=%s started=%s\n' "$op" "$$" "$(date -Is 2>/dev/null || date)" >&200
 
     HEMSAW_UPGRADE_LOCKED=1
     export HEMSAW_UPGRADE_LOCKED

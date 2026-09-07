@@ -30,6 +30,12 @@ For build level release notes see https://github.com/mtconnect/cppagent/
 
 - Bumped MTConnect schema from 2.7 to 2.8 in `agent.cfg` and all device XML config files.
 - Generalized the LICENSE to cover monitoring of any machine or equipment, clarified licensing/payment terms, corrected typos, and added a section disclosing third-party and open-source component licenses.
+- Moved `acquire_upgrade_lock` in `ssInstall.sh` and `ssUpgrade.sh` to run after argument parsing and before the first mutation. `ssUpgrade.sh` previously locked after the `docker-compose-v2` bootstrap; `ssInstall.sh` locked before the root check and ran the legacy-daemon teardown on `-h`.
+- A blocked install/upgrade/clean now reports the holding operation, pid, and start time instead of a bare "in progress" message.
+
+### Fixed
+
+- `ssClean.sh` now acquires `/var/lock/HEMsaw-mtconnect.lock` before an uninstall, so a dashboard or CLI clean can no longer delete `/etc/*` trees or tear down Docker Compose state during an in-flight install or upgrade. `-L` log repair stays outside the lock.
 
 =======
 
