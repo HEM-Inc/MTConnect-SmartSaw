@@ -33,6 +33,8 @@ services:
     volumes:
       - "/etc/mtconnect/config/:/mtconnect/config/"
       - "/etc/mtconnect/data/ruby/:/mtconnect/data/ruby/"
+      - "/etc/mtconnect/data/styles/viewer.css:/mtconnect/data/styles/viewer.css:ro"
+      - "/etc/mtconnect/data/styles/mtc-app.js:/mtconnect/data/styles/mtc-app.js:ro"
     logging:
       driver: "json-file"
       options:
