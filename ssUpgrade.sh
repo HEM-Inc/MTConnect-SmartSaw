@@ -139,16 +139,6 @@ Update_Agent(){
         else
             echo "MTConnect ruby scripts already up to date"
         fi
-
-        # Check if viewer style overrides need updating
-        if dir_needs_update "./agent/data/styles" "/etc/mtconnect/data/styles"; then
-            echo "Updating MTConnect viewer styles..."
-            rm -rf /etc/mtconnect/data/styles
-            mkdir -p /etc/mtconnect/data/styles
-            cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
-        else
-            echo "MTConnect viewer styles already up to date"
-        fi
     else
         echo "Installing MTConnect Agent files..."
         mkdir -p /etc/mtconnect/
@@ -160,8 +150,6 @@ Update_Agent(){
         cp -p ./agent/config/devices/"$Device_File" /etc/mtconnect/config/
         sed -i "s|<Device[[:space:]].*id=\"saw\".*|        <Device id=\"saw\" uuid=\"HEMSaw-$Serial_Number\" name=\"Saw\">|" /etc/mtconnect/config/"$Device_File"
         cp -r ./agent/data/ruby/. /etc/mtconnect/data/ruby/
-        mkdir -p /etc/mtconnect/data/styles
-        cp -r ./agent/data/styles/. /etc/mtconnect/data/styles/
     fi
 
     chown -R 1000:1000 /etc/mtconnect/
