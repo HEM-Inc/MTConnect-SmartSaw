@@ -1,6 +1,6 @@
 # MTConnect SmartSaw Platform
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/HEM-Inc/MTConnect-SmartSaw)
+[![Ask DeepWiki](https://img.shields.io/badge/Ask-DeepWiki-blue)](https://deepwiki.com/HEM-Inc/MTConnect-SmartSaw)
 
 A comprehensive solution for connecting industrial saws to the MTConnect standard for real-time monitoring, data collection, and advanced control capabilities.
 
